@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/LoadingBar">
+        <file>loading/loading1-1.png</file>
+        <file>loading/loading1-2.png</file>
+        <file>loading/loading1-3.png</file>
+        <file>loading/loading1-4.png</file>
+        <file>loading/loading1-5.png</file>
+        <file>loading/loading1-6.png</file>
+        <file>loading/loading1-7.png</file>
+        <file>loading/loading1-8.png</file>
+    </qresource>
+</RCC>

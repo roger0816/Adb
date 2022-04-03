@@ -47,6 +47,81 @@
       <property name="spacing">
        <number>0</number>
       </property>
+      <item row="1" column="1">
+       <widget class="QWidget" name="widget_2" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(230, 230, 230);</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QStackedWidget" name="stackedWidget">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <widget class="StageCustomer" name="page">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+           <widget class="QWidget" name="page_2">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 237, 211);</string>
+            </property>
+           </widget>
+           <widget class="QWidget" name="page_3">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(207, 255, 252);</string>
+            </property>
+           </widget>
+           <widget class="QWidget" name="page_4">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(228, 215, 255);</string>
+            </property>
+           </widget>
+           <widget class="QWidget" name="page_5">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(255, 108, 240);</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QWidget" name="wTop" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>100</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(255, 255, 255);</string>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QWidget" name="wMenu" native="true">
         <property name="minimumSize">
@@ -70,11 +145,42 @@ background-color: rgb(0, 37, 88);
 QPushButton{
 color: rgb(255, 255, 255);
 	font: 700 20pt &quot;Microsoft JhengHei UI&quot;;
+}
+
+QPushButton { 
+	border:none; 
+/*    border-radius: 6px;*/ 
+    border-color: beige; 
+	font: 700 22px &quot;Microsoft JhengHei UI&quot;; 
+    min-width: 4em; 
+    min-height:1.2em; 
+	padding: 6px; 
+	color: rgb(255, 255, 255); 
+	}
+
+QPushButton:hover 
+{ 
+background-color: rgb(198, 200, 223); 
+border-style: outset; 
+border-width: 2px; 
+font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
+}
+QPushButton:pressed { 
+border-style: outset; 
+border-width: 2px; 
+font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
+background-color: rgb(67, 67, 67);
+}
+ QPushButton:checked { 
+background-color: rgb(67, 67, 67);
+border-style: outset; 
+border-width: 0px; 
+font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
 }</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <property name="spacing">
-          <number>10</number>
+          <number>0</number>
          </property>
          <property name="leftMargin">
           <number>0</number>
@@ -89,12 +195,18 @@ color: rgb(255, 255, 255);
           <number>0</number>
          </property>
          <item>
-          <widget class="QPushButton" name="btnOrder">
+          <widget class="QPushButton" name="btn0">
            <property name="styleSheet">
             <string notr="true"/>
            </property>
            <property name="text">
-            <string>建立訂單</string>
+            <string>客服專區</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
            <property name="flat">
             <bool>true</bool>
@@ -102,9 +214,15 @@ color: rgb(255, 255, 255);
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnStock">
+          <widget class="QPushButton" name="btn1">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
            <property name="text">
-            <string>庫存管理</string>
+            <string>訂單狀態</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
            <property name="flat">
             <bool>true</bool>
@@ -112,9 +230,12 @@ color: rgb(255, 255, 255);
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnDispatching">
+          <widget class="QPushButton" name="btn2">
            <property name="text">
-            <string>派工管理</string>
+            <string>會計檢視</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
            <property name="flat">
             <bool>true</bool>
@@ -122,39 +243,12 @@ color: rgb(255, 255, 255);
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btnQueryOrder">
+          <widget class="QPushButton" name="btn3">
            <property name="text">
-            <string>查看訂單</string>
+            <string>管理設定</string>
            </property>
-           <property name="flat">
+           <property name="checkable">
             <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnReport">
-           <property name="text">
-            <string>查看報表</string>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnFinance">
-           <property name="text">
-            <string>會計記帳</string>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btnManager">
-           <property name="text">
-            <string>管理維護</string>
            </property>
            <property name="flat">
             <bool>true</bool>
@@ -179,6 +273,9 @@ color: rgb(255, 255, 255);
            <property name="text">
             <string>帳號設定</string>
            </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
            <property name="flat">
             <bool>true</bool>
            </property>
@@ -187,71 +284,19 @@ color: rgb(255, 255, 255);
         </layout>
        </widget>
       </item>
-      <item row="1" column="1">
-       <widget class="QWidget" name="widget_2" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(230, 230, 230);</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <property name="spacing">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QStackedWidget" name="stackedWidget">
-           <widget class="QWidget" name="page">
-            <widget class="QTextEdit" name="textEdit">
-             <property name="geometry">
-              <rect>
-               <x>310</x>
-               <y>120</y>
-               <width>371</width>
-               <height>261</height>
-              </rect>
-             </property>
-            </widget>
-           </widget>
-           <widget class="QWidget" name="page_2"/>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="0" colspan="2">
-       <widget class="QWidget" name="widget_3" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>120</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>120</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>StageCustomer</class>
+   <extends>QWidget</extends>
+   <header>StageCustomer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -1,0 +1,17 @@
+obj/CSideMenu.o
+obj/DialogLogin.o
+obj/Global.o
+obj/StageCustomer.o
+obj/StageOrder.o
+obj/main.o
+obj/widget.o
+obj/CSqlClass.o
+obj/common.o
+obj/moc_CSideMenu.o
+obj/moc_DialogLogin.o
+obj/moc_Global.o
+obj/moc_StageCustomer.o
+obj/moc_StageOrder.o
+obj/moc_widget.o
+obj/moc_CSqlClass.o
+obj/moc_Common.o

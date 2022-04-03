@@ -3,8 +3,10 @@
 
 #include <QWidget>
 #include <QDebug>
-#include "Library.h"
 
+#include "Library.h"
+#include "CSideMenu.h"
+#include <QButtonGroup>
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -17,10 +19,14 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+    CSideMenu * m_menu;
 private slots:
-    void on_pushButton_clicked();
-
+    void slotPage(int iIdx);
 private:
     Ui::Widget *ui;
+    QButtonGroup m_btns;
+
+
+
 };
 #endif // WIDGET_H

@@ -8,6 +8,14 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
     this->setWindowTitle("艾比代管理系統");
+
+    m_btns.addButton(ui->btn0,0);
+    m_btns.addButton(ui->btn1,1);
+    m_btns.addButton(ui->btn2,2);
+    m_btns.addButton(ui->btn3,3);
+    m_btns.addButton(ui->btnAccount,4);
+
+    connect(&m_btns,SIGNAL(buttonClicked(int)),this,SLOT(slotPage(int)));
 }
 
 Widget::~Widget()
@@ -15,15 +23,11 @@ Widget::~Widget()
     delete ui;
 }
 
-
-void Widget::on_pushButton_clicked()
+void Widget::slotPage(int iIdx)
 {
-//    QByteArray in,out;
-
-
-
-//    LIB.network()->connectHost("127.0.0.1","6000",in,out);
-
-
+    ui->stackedWidget->setCurrentIndex(iIdx);
 }
+
+
+
 

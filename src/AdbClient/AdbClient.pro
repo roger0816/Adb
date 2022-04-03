@@ -15,13 +15,27 @@ UI_DIR =$$PWD/obj
 DESTDIR =$$PWD/../../bin/
 
 SOURCES += \
+    CSideMenu.cpp \
+    DialogLogin.cpp \
+    Global.cpp \
+    StageCustomer.cpp \
+    StageOrder.cpp \
     main.cpp \
     widget.cpp
 
 HEADERS += \
+    CSideMenu.h \
+    DialogLogin.h \
+    Global.h \
+    StageCustomer.h \
+    StageOrder.h \
     widget.h
 
 FORMS += \
+    CSideMenu.ui \
+    DialogLogin.ui \
+    StageCustomer.ui \
+    StageOrder.ui \
     widget.ui
 
 # Default rules for deployment.

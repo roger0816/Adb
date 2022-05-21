@@ -13,6 +13,10 @@ SOURCES += \
         Launch.cpp \
         main.cpp
 
+MOC_DIR =$$PWD/obj
+OBJECTS_DIR =$$PWD/obj
+UI_DIR =$$PWD/obj
+DESTDIR =$$PWD/../../bin/
 
 
 # Default rules for deployment.
@@ -24,12 +28,14 @@ HEADERS += \
     Launch.h
 
 
-win32: LIBS += -L$$PWD/../../libs/RLib/ -lRLibQt5Win
+include(../Common/Common.pri)
 
-INCLUDEPATH += $$PWD/../../libs/RLib/include
-DEPENDPATH += $$PWD/../../libs/RLib/include
+unix:!macx|win32: LIBS += -L$$PWD/../../libs/RpkLib/ -lRpkCore
 
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/RLib/RLibQt5Win.lib
-else:win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/RLib/libRLibQt5Win.a
+INCLUDEPATH += $$PWD/../../libs/RpkLib/include
+DEPENDPATH += $$PWD/../../libs/RpkLib/include
 
-    include(../Common/Common.pri)
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/RpkLib/RpkCore.lib
+else:unix:!macx|win32-g++: PRE_TARGETDEPS += $$PWD/../../libs/RpkLib/libRpkCore.a
+
+include(../../libs/RpkLib/RpkCore.pri)

@@ -3,6 +3,10 @@
 CSqlClass::CSqlClass(QObject *parent)
     : QObject{parent}
 {
+
+
+
+    bool bOk = false;
 #if 0
     m_db =QSqlDatabase::addDatabase("QMYSQL");
 
@@ -15,25 +19,399 @@ CSqlClass::CSqlClass(QObject *parent)
     m_db.setPassword("Aa111111");
 #else
 
-    m_db = QSqlDatabase::addDatabase("QSQLITE");
 
-    m_db.setDatabaseName("ADB.db");
+    bOk = RPKCORE.database.openDb("ADB.db");
+
+    m_db = RPKCORE.database.getDb();
+
+    bOk = m_db.isOpen();
+
+
 
 
 
 #endif
-    bool bOk = m_db.open();
 
     if(bOk)
         createTable();
 
+
+    bOk = RPKCORE.database.openDb("local.db");
+
+    m_local = RPKCORE.database.getDb(1);
+
+    bOk = m_local.isOpen();
+
     qDebug()<<"db open : "<<bOk;
 }
 
-bool CSqlClass::checkLogin(QString sUser, QString sPass, QString &sError)
+bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError)
 {
-    bool bRe = false;
+    QVariantMap data = input;
 
+    if(data.keys().indexOf("UpdateTime")<0)
+        data["UpdateTime"] =QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+
+    QStringList listKey = data.keys();
+
+    QSqlQuery query(m_db);
+
+    QString sCmd = "INSERT INTO  "+sTableName+" (%1) "
+                                              " VALUES(%2);";
+
+    QString tmpKey,tmpValue;
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        QString sKey = listKey.at(i);
+        if(i!=0)
+        {
+            tmpKey+=",";
+            tmpValue+=",";
+        }
+
+
+        qDebug()<<"key : "<<sKey<<" value: "<<data[sKey];
+
+        tmpKey+=sKey;
+        tmpValue+="?";
+
+    }
+
+    sCmd = sCmd.arg(tmpKey,tmpValue);
+
+    query.prepare(sCmd);
+
+    for(int j=0;j<listKey.length();j++)
+    {
+        QString sKey = listKey.at(j);
+
+        query.bindValue(j,data[sKey]);
+
+    }
+
+    bool bOk = query.exec();
+
+    sError =  query.lastError().text();
+
+    return bOk;
+
+    //ex :
+    //  query.prepare("INSERT INTO  UserData (Id,Password,Cid,Name,Lv,StartDay,CreateTime,UpdateTime) "
+    //                " VALUES(?,?,?,?,?,?,?,?);");
+    //  query.bindValue(0,sId);
+    //  query.bindValue(1,sPass);
+
+
+}
+
+bool CSqlClass::delFromTb(QString sTableName, QVariantMap conditions, QString &sError)
+{
+
+    bool bRe =false;
+    QSqlQuery query(m_db);
+    QString sCmd ="DELETE FROM "+sTableName;
+
+
+    QString sSub = "";
+
+    QStringList listKey = conditions.keys();
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        if(i==0)
+            sSub+="  WHERE ";
+        else
+            sSub+=" AND ";
+
+        sSub+= listKey.at(i)+" =? ";
+
+    }
+
+    query.prepare(sCmd+sSub);
+
+    for(int j=0;j<listKey.length();j++)
+    {
+        query.bindValue(j,conditions[listKey.at(j)]);
+    }
+
+    bRe = query.exec();
+
+    sError = query.lastError().text();
+
+    return bRe;
+}
+
+bool CSqlClass::queryTb(QString sTableName, QVariantList &listOut, QString &sError)
+{
+    QVariantMap v;
+
+    return queryTb(sTableName,v,listOut,sError);
+
+}
+
+bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList &listOut, QString &sError)
+{
+    listOut.clear();
+
+    QSqlQuery query(m_db);
+
+    QString sCmd = "SELECT * FROM " +sTableName;
+
+    QString sSub = "";
+
+    QStringList listKey = conditions.keys();
+
+
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        if(i==0)
+            sSub+="  WHERE ";
+        else
+            sSub+=" AND ";
+
+        sSub+= listKey.at(i)+" =? ";
+
+    }
+
+    query.prepare(sCmd+sSub);
+
+    for(int j=0;j<listKey.length();j++)
+    {
+        query.bindValue(j,conditions[listKey.at(j)]);
+    }
+
+    /*  ex
+            query.prepare("SELECT * FROM UserData WHERE Id=:id AND Password =:pass;");
+            query.bindValue(":id", sUser.trimmed());
+            query.bindValue(":pass",sPass.trimmed());
+            query.exec();
+            */
+    qDebug()<<"cmd : "<<sCmd+sSub;
+
+    bool bOk = query.exec();
+
+    QStringList listHeader = fieldNames(query.record());
+     qDebug()<<"listHeader:  "<<listHeader;
+    while(query.next())
+    {
+
+        QVariantMap data;
+
+        for(int k=0;k<listHeader.length();k++)
+        {
+            QString sKey = listHeader.at(k);
+
+            data[sKey] = query.value(sKey);
+
+            qDebug()<<data;
+
+        }
+
+        listOut.append(data);
+    }
+
+    sError =  query.lastError().text();
+    if(!bOk)
+       qDebug()<< sError;
+    return bOk;
+}
+
+bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap data, QString &sError)
+{
+    QString sCmd="UPDATE "+sTableName+" SET ";
+
+    QStringList listKey = data.keys();
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        if(i!=0)
+            sCmd+=" , ";
+
+        sCmd+=listKey.at(i)+" =? ";
+
+    }
+
+    QString sSub="";
+
+    QStringList tmp = conditions.keys();
+    for(int i=0;i<tmp.length();i++)
+    {
+        if(i==0)
+        {
+            sSub+=" WHERE ";
+        }
+        else
+        {
+            sSub+=" AND ";
+        }
+
+        QVariant v = conditions[tmp.at(i)];
+
+        if(v.type()==QVariant::Bool)
+        {
+           v = conditions[tmp.at(i)].toInt();
+        }
+
+        if(conditions[tmp.at(i)].type()==QVariant::Char || conditions[tmp.at(i)].type()==QVariant::String)
+        {
+           sSub+=tmp.at(i)+"='"+conditions[tmp.at(i)].toString()+"' ";
+        }
+        else
+        {
+            sSub+=tmp.at(i)+"="+conditions[tmp.at(i)].toString()+" ";
+        }
+        //sSub+=tmp.at(i)=;
+    }
+
+    QSqlQuery sql(m_db);
+
+    sql.prepare(sCmd+sSub);
+
+
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        sql.addBindValue(data[listKey.at(i)]);
+    }
+
+
+    bool bOk = sql.exec() ;
+
+    sError = sql.lastError().text();
+
+    return bOk;
+    /*
+    QString sCmd="UPDATE UserData SET Password=?,Name=?,Cid=?,Lv=?,ParentId=?,StartDay=? "
+                 " ,BirthDay=?,Tel=? ,Email=?,Note1=? ,Note2=?,Note3=? ,CreateTime=? ,UpdateTime=? "
+                 " WHERE Id =? ;";
+                 */
+
+}
+
+
+
+void CSqlClass::createTable()
+{
+
+    QSqlQuery sql(m_db);
+
+    sql.exec("CREATE TABLE 'UserData' ( \
+             'Sid'	INTEGER, \
+             'Id'	TEXT NOT NULL, \
+             'Password'	TEXT NOT NULL, \
+             'Name'	TEXT, \
+             'Cid'	TEXT, \
+             'Lv'	INTEGER DEFAULT 0, \
+             'ParentId'	TEXT, \
+             'StartDay'	TEXT, \
+             'BirthDay'	TEXT, \
+             'Tel'	TEXT, \
+             'Email'	TEXT, \
+             'Note1'	TEXT, \
+             'Note2'	TEXT, \
+             'Note3'	TEXT, \
+             'CreateTime'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'ExchangeRate' ( \
+             'Sid'	INTEGER, \
+             'Class'	TEXT, \
+             'Rate'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'GameList' ( \
+             'Sid'	INTEGER, \
+             'Id'	TEXT NOT NULL, \
+             'Name'	TEXT NOT NULL, \
+             'Enable'	INTEGER NOT NULL, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'GameItem' (  \
+             'Sid'	INTEGER,           \
+             'GameSid'	INTEGER,        \
+              'Enable'	INTEGER DEFAULT 1, \
+             'Name'	TEXT,               \
+             'OrderNTD'	TEXT,           \
+             'OrderUSD'	TEXT,           \
+             'NTD'	TEXT,               \
+             'EnableCost'	INTEGER DEFAULT 0, \
+             'Cost'	TEXT,                       \
+             'Note1'	TEXT,           \
+             'Note2'	TEXT,           \
+             'UpdateTime'	TEXT,       \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+         );");
+
+    sql.clear();
+
+
+    sql.exec("CREATE TABLE 'Bulletin' ( \
+             'Sid'	INTEGER,            \
+             'UserSid'	INTEGER,        \
+                'Top'	INTEGER,        \
+             'UpdateTime'	TEXT,       \
+             'EndTime'	TEXT,       \
+             'Title'	TEXT,           \
+             'Content'	TEXT,           \
+             'Note'	TEXT,               \
+             PRIMARY KEY('Sid' AUTOINCREMENT)   \
+         );");
+
+
+    sql.clear();
+
+
+    sql.exec("CREATE TABLE 'CustomerClass' (      \
+             'Sid'	INTEGER,                    \
+             'Id'	TEXT NOT NULL,              \
+             'Name'	TEXT NOT NULL,              \
+             'UpdateTime'	TEXT,               \
+             PRIMARY KEY('Sid' AUTOINCREMENT)   \
+         );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'FactoryClass' (      \
+             'Sid'	INTEGER,                    \
+             'Id'	TEXT NOT NULL,              \
+             'Name'	TEXT NOT NULL,              \
+             'UpdateTime'	TEXT,               \
+             PRIMARY KEY('Sid' AUTOINCREMENT)   \
+         );");
+
+
+}
+
+QStringList CSqlClass::fieldNames(QSqlRecord record)
+{
+    QStringList list;
+
+    int iCount = record.count();
+
+    for(int i=0;i<iCount;i++)
+    {
+        list.append(record.fieldName(i));
+    }
+
+    return list;
+}
+
+bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QString &sError)
+{
 
     QSqlQuery query(m_db);
 
@@ -44,27 +422,272 @@ bool CSqlClass::checkLogin(QString sUser, QString sPass, QString &sError)
 
     query.exec();
 
-    bRe = query.next();
+    bool bRe = false;
+
+    QStringList list = fieldNames(query.record());
+
+    if(query.next())
+    {
+        bRe = true;
+     //   iRe=query.value("Lv").toInt();
+
+        for(int i=0;i<list.length();i++)
+        {
+            QString sKey =  list.at(i);
+
+            qDebug()<<"key "<<sKey;
+            qDebug()<<"data : "<<query.value(sKey);
+
+
+            out[sKey] = query.value(sKey);
+        }
+
+
+    }
 
     return bRe;
 }
 
-void CSqlClass::createTable()
+bool CSqlClass::addUser(QString sId, QString sPass, QString sCid, QString sName, int iLv,QString startDate, QString &sError)
+{
+    bool bRe =false;
+
+    QVariantMap dUser;
+
+    if(queryUser(sId,dUser))
+    {
+        sError="使用者: "+sId+" 已經存在!";
+    }
+    else
+    {
+        bRe = true;
+
+        QSqlQuery query(m_db);
+
+        query.prepare("INSERT INTO  UserData (Id,Password,Cid,Name,Lv,StartDay,CreateTime,UpdateTime) "
+                      " VALUES(?,?,?,?,?,?,?,?);");
+
+        query.bindValue(0,sId);
+        query.bindValue(1,sPass);
+        query.bindValue(2,sCid);
+        query.bindValue(3,sName);
+        query.bindValue(4,iLv);
+        query.bindValue(5,startDate);
+
+        query.bindValue(6,QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+        query.bindValue(7,QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+
+        query.exec();
+    }
+
+    return bRe;
+}
+
+bool CSqlClass::delUser(QString sId, QString &sError)
+{
+    bool bRe =false;
+    QSqlQuery query(m_db);
+    query.prepare("DELETE FROM UserData WHERE Id=? ");
+    query.bindValue(0,sId);
+    bRe = query.exec();
+    if(!bRe)
+        sError = "ERROR:4002";
+    return bRe;
+}
+
+bool CSqlClass::editUser(QVariantMap data, QString &sError)
+{
+    bool bRe = false;
+
+    QString sCmd="UPDATE UserData SET Password=?,Name=?,Cid=?,Lv=?,ParentId=?,StartDay=? "
+                 " ,BirthDay=?,Tel=? ,Email=?,Note1=? ,Note2=?,Note3=? ,CreateTime=? ,UpdateTime=? "
+                 " WHERE Id =? ;";
+
+    QSqlQuery query(m_db);
+    //    qDebug()<<"AA "<<sCmd;
+    query.prepare(sCmd);
+
+    query.bindValue(0,data["Password"]);
+    query.bindValue(1,data["Name"]);
+    query.bindValue(2,data["Cid"]);
+    query.bindValue(3,data["Lv"].toInt());
+    query.bindValue(4,data["ParentId"]);
+    query.bindValue(5,data["StartDay"]);
+    query.bindValue(6,data["BirthDay"]);
+    query.bindValue(7,data["Tel"]);
+    query.bindValue(8,data["Email"]);
+    query.bindValue(9,data["Note1"]);
+    query.bindValue(10,data["Note2"]);
+    query.bindValue(11,data["Note3"]);
+    query.bindValue(12,data["CreateTime"]);
+    query.bindValue(13,data["UpdateTime"]);
+    query.bindValue(14,data["Id"]);
+
+    bRe = query.exec();
+
+
+
+    if(!bRe)
+        sError = "ERROR:4003";
+
+    return bRe;
+}
+
+bool CSqlClass::queryUser(QString sId, QVariantMap &sData)
 {
 
-    QSqlQuery sql(m_db);
+    bool bRe =false;
 
-    sql.exec("CREATE TABLE 'UserData' ( \
-              'Sid'	INTEGER, \
-              'Id'	TEXT NOT NULL, \
-              'Password'	TEXT NOT NULL, \
-              'DisplayName'	TEXT, \
-              'AccessLv'	INTEGER DEFAULT 0, \
-              'ParentId'	TEXT, \
-              'CreateTime'	TEXT, \
-              'UpdateTime'	TEXT, \
-              PRIMARY KEY('Sid' AUTOINCREMENT) \
-         );");
+    QSqlQuery query(m_db);
 
-    sql.clear();
+    query.prepare("SELECT * FROM UserData WHERE Id= ? ;");
+    query.bindValue(0,sId);
+    query.exec();
+    if(query.next())
+    {
+        bRe = true;
+
+    }
+
+    return bRe;
 }
+
+QVariantList CSqlClass::queryUser(QString sId)
+{
+    QVariantList listRe;
+
+    QSqlQuery query(m_db);
+
+    QString sCmd = "SELECT * FROM UserData ";
+
+    if(sId!="")
+        sCmd +="WHERE Id= '"+sId+"'";
+
+    query.exec(sCmd);
+
+    QStringList listKey = fieldNames(query.record());
+
+    while(query.next())
+    {
+        QVariantMap t;
+
+        for(int i=0;i<listKey.length();i++)
+        {
+            t[listKey.at(i)] = query.value(i).toString();
+        }
+
+        listRe.append(t);
+    }
+
+    return listRe;
+}
+
+bool CSqlClass::saveExchange(QVariantList list, QString &sError)
+{
+    bool bRe =false;
+
+    if(list.length()<1)
+    {
+        sError = "exchange data error";
+        return bRe;
+    }
+
+
+
+    QVariantMap data = list.first().toMap();
+
+
+
+    QStringList listKey,listValue;
+
+    for(int i=0;i<list.length();i++)
+    {
+        QVariantMap tmp = list.at(i).toMap();
+
+        if(tmp.keys().length()>0)
+        {
+            QString sKey = tmp.keys().first();
+
+            listKey.append(sKey);
+
+            listValue.append(tmp[sKey].toString());
+
+        }
+
+    }
+
+
+    QSqlQuery query(m_db);
+
+    query.prepare("INSERT INTO  ExchangeRate (Class,Rate,UpdateTime) "
+                  " VALUES(?,?,?);");
+
+    query.bindValue(0,listKey.join(";"));
+
+    query.bindValue(1,listValue.join(";"));
+
+    query.bindValue(2,QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+
+    bRe = query.exec();
+
+    return bRe;
+}
+
+QVariantList CSqlClass::readExchange(int iSid)
+{
+    QString sCmd = "SELECT * FROM ExchangeRate ";
+
+    if(iSid!=-1)
+        sCmd +=" WHERE Sid= "+QString::number(iSid)+" ;";
+    else
+        sCmd +=" ORDER BY  Sid ASC ;";
+
+    QSqlQuery query(m_db);
+
+    query.exec(sCmd);
+
+    QVariantList listRe;
+
+    while(query.next())
+    {
+        QStringList listKey,listValue;
+
+        QVariantMap data;
+
+        data["Sid"] = query.value("Sid").toString();
+
+        data["UpdateTime"] = query.value("UpdateTime").toString();
+
+        listKey.append(query.value("Class").toString().split(";"));
+
+        listValue.append(query.value("Rate").toString().split(";"));
+
+        while(listValue.length()<listKey.length())
+        {
+            listKey.append("0");
+        }
+
+
+        for(int i=0;i<listKey.length();i++)
+        {
+            data[listKey[i]] = listValue[i].toDouble();
+        }
+
+        listRe.append(data);
+    }
+
+    return listRe;
+}
+
+bool CSqlClass::addGame(QVariantList list, QString &sError)
+{
+    bool bRe;
+
+    //    query.prepare("INSERT INTO  ExchangeRate (Class,Rate,UpdateTime) "
+    //                  " VALUES(?,?,?);");
+
+    return false;
+}
+
+
+

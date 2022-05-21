@@ -7,12 +7,30 @@ DialogLogin::DialogLogin(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setWindowIcon(QIcon("://th.jpg"));
+
     setWindowTitle(" ");
+
+    init();
 }
 
 DialogLogin::~DialogLogin()
 {
     delete ui;
+}
+
+void DialogLogin::init()
+{
+    QString sLoginSave=ACTION.getKeyValue("loginSave");
+
+    if(sLoginSave!="")
+    {
+        ui->txUser->setText(sLoginSave);
+
+        ui->checkBox->setChecked(true);
+    }
+
+    ui->txPass->clear();
 }
 
 void DialogLogin::on_btnLogin_clicked()
@@ -21,10 +39,22 @@ void DialogLogin::on_btnLogin_clicked()
     ui->lbMsg->clear();
 
     QString sErrorMsg;
-    bool bOk = GLOBAL.SQL().checkLogin(ui->txUser->text(),ui->txPass->text(),sErrorMsg);
+    bool bOk = ACTION.checkLogin(ui->txUser->text().trimmed(),ui->txPass->text().trimmed(),sErrorMsg);
 
     if(bOk)
+    {
+
+        QString st="";
+
+        if(ui->checkBox->isChecked())
+            st=ui->txUser->text().trimmed();
+
+        ACTION.setKeyValue("loginSave",st);
+
+        emit signalLogin();
         done(1);
+
+    }
     else
         ui->lbMsg->setText("帳密錯誤!");
 }

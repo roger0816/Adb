@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QGridLayout>
@@ -26,11 +27,11 @@ class Ui_DialogLogin
 {
 public:
     QGridLayout *gridLayout;
-    QWidget *widget;
+    QWidget *wBg;
     QGridLayout *gridLayout_3;
     QSpacerItem *verticalSpacer;
     QSpacerItem *horizontalSpacer;
-    QSpacerItem *horizontalSpacer_2;
+    QSpacerItem *verticalSpacer_2;
     QWidget *widget_2;
     QFormLayout *formLayout;
     QLabel *label;
@@ -42,7 +43,9 @@ public:
     QPushButton *btnLogin;
     QSpacerItem *horizontalSpacer_3;
     QLabel *lbMsg;
-    QSpacerItem *verticalSpacer_2;
+    QCheckBox *checkBox;
+    QSpacerItem *horizontalSpacer_2;
+    QLabel *label_3;
 
     void setupUi(QDialog *DialogLogin)
     {
@@ -50,27 +53,30 @@ public:
             DialogLogin->setObjectName(QString::fromUtf8("DialogLogin"));
         DialogLogin->resize(400, 300);
         gridLayout = new QGridLayout(DialogLogin);
+        gridLayout->setSpacing(0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        widget = new QWidget(DialogLogin);
-        widget->setObjectName(QString::fromUtf8("widget"));
+        gridLayout->setContentsMargins(0, 0, 0, 0);
+        wBg = new QWidget(DialogLogin);
+        wBg->setObjectName(QString::fromUtf8("wBg"));
         QFont font;
         font.setPointSize(14);
-        widget->setFont(font);
-        gridLayout_3 = new QGridLayout(widget);
+        wBg->setFont(font);
+        wBg->setStyleSheet(QString::fromUtf8("QWidget#wBg{background-color: rgb(255, 255, 255);}"));
+        gridLayout_3 = new QGridLayout(wBg);
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_3->addItem(verticalSpacer, 2, 1, 1, 1);
+        gridLayout_3->addItem(verticalSpacer, 3, 1, 1, 1);
 
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout_3->addItem(horizontalSpacer, 1, 0, 1, 1);
+        gridLayout_3->addItem(horizontalSpacer, 2, 0, 1, 1);
 
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout_3->addItem(horizontalSpacer_2, 1, 2, 1, 1);
+        gridLayout_3->addItem(verticalSpacer_2, 1, 1, 1, 1);
 
-        widget_2 = new QWidget(widget);
+        widget_2 = new QWidget(wBg);
         widget_2->setObjectName(QString::fromUtf8("widget_2"));
         formLayout = new QFormLayout(widget_2);
         formLayout->setObjectName(QString::fromUtf8("formLayout"));
@@ -108,23 +114,37 @@ public:
         gridLayout_2->addItem(horizontalSpacer_3, 0, 0, 1, 1);
 
 
-        formLayout->setWidget(3, QFormLayout::FieldRole, widget_3);
+        formLayout->setWidget(4, QFormLayout::FieldRole, widget_3);
 
         lbMsg = new QLabel(widget_2);
         lbMsg->setObjectName(QString::fromUtf8("lbMsg"));
         lbMsg->setStyleSheet(QString::fromUtf8("color: rgb(255, 0, 0);"));
 
-        formLayout->setWidget(2, QFormLayout::FieldRole, lbMsg);
+        formLayout->setWidget(3, QFormLayout::FieldRole, lbMsg);
+
+        checkBox = new QCheckBox(widget_2);
+        checkBox->setObjectName(QString::fromUtf8("checkBox"));
+
+        formLayout->setWidget(2, QFormLayout::FieldRole, checkBox);
 
 
-        gridLayout_3->addWidget(widget_2, 1, 1, 1, 1);
+        gridLayout_3->addWidget(widget_2, 2, 1, 1, 1);
 
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        gridLayout_3->addItem(verticalSpacer_2, 0, 1, 1, 1);
+        gridLayout_3->addItem(horizontalSpacer_2, 2, 2, 1, 1);
+
+        label_3 = new QLabel(wBg);
+        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_3->setMinimumSize(QSize(0, 40));
+        label_3->setStyleSheet(QString::fromUtf8("color: rgb(109, 109, 109);\n"
+"font: 700 28pt \"Microsoft JhengHei UI\";"));
+        label_3->setAlignment(Qt::AlignCenter);
+
+        gridLayout_3->addWidget(label_3, 0, 1, 1, 1);
 
 
-        gridLayout->addWidget(widget, 0, 0, 1, 1);
+        gridLayout->addWidget(wBg, 0, 0, 1, 1);
 
 
         retranslateUi(DialogLogin);
@@ -139,6 +159,8 @@ public:
         label_2->setText(QApplication::translate("DialogLogin", "\345\257\206\347\242\274", nullptr));
         btnLogin->setText(QApplication::translate("DialogLogin", "\347\231\273\345\205\245", nullptr));
         lbMsg->setText(QString());
+        checkBox->setText(QApplication::translate("DialogLogin", "\345\204\262\345\255\230\345\270\263\350\231\237", nullptr));
+        label_3->setText(QApplication::translate("DialogLogin", "\350\211\276\346\257\224\344\273\243\347\256\241\347\220\206\347\263\273\347\265\261", nullptr));
     } // retranslateUi
 
 };

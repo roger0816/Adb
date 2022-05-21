@@ -2,6 +2,9 @@
 #define STAGEORDER_H
 
 #include <QWidget>
+#include <QShowEvent>
+#include <QButtonGroup>
+#include <QDebug>
 
 namespace Ui {
 class StageOrder;
@@ -17,6 +20,10 @@ public:
 
 private:
     Ui::StageOrder *ui;
+
+    void showEvent(QShowEvent *) override;
+
+    QButtonGroup m_btns;
 };
 
 #endif // STAGEORDER_H

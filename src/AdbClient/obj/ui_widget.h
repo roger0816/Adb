@@ -12,12 +12,18 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "StageAccount.h"
 #include "StageCustomer.h"
+#include "StageHomePage.h"
+#include "StageManagerSetting.h"
+#include "StageOrder.h"
+#include "StageTest.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -30,26 +36,38 @@ public:
     QWidget *widget_2;
     QGridLayout *gridLayout_3;
     QStackedWidget *stackedWidget;
-    StageCustomer *page;
-    QWidget *page_2;
-    QWidget *page_3;
-    QWidget *page_4;
-    QWidget *page_5;
+    StageHomePage *page0;
+    StageCustomer *page1;
+    StageOrder *page2;
+    QWidget *page3;
+    StageManagerSetting *page4;
+    StageAccount *page5;
+    StageTest *page;
     QWidget *wTop;
+    QGridLayout *gridLayout_4;
+    QWidget *widget_3;
+    QWidget *widget;
+    QGridLayout *gridLayout_5;
+    QPushButton *btnLogout;
+    QSpacerItem *verticalSpacer_3;
+    QLabel *lbName;
     QWidget *wMenu;
     QVBoxLayout *verticalLayout;
     QPushButton *btn0;
     QPushButton *btn1;
     QPushButton *btn2;
     QPushButton *btn3;
+    QPushButton *btn4;
     QSpacerItem *verticalSpacer;
+    QPushButton *btnTest;
+    QSpacerItem *verticalSpacer_2;
     QPushButton *btnAccount;
 
     void setupUi(QWidget *Widget)
     {
         if (Widget->objectName().isEmpty())
             Widget->setObjectName(QString::fromUtf8("Widget"));
-        Widget->resize(1280, 660);
+        Widget->resize(1280, 700);
         gridLayout = new QGridLayout(Widget);
         gridLayout->setSpacing(0);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
@@ -70,26 +88,32 @@ public:
         stackedWidget = new QStackedWidget(widget_2);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
         stackedWidget->setStyleSheet(QString::fromUtf8(""));
-        page = new StageCustomer();
+        page0 = new StageHomePage();
+        page0->setObjectName(QString::fromUtf8("page0"));
+        stackedWidget->addWidget(page0);
+        page1 = new StageCustomer();
+        page1->setObjectName(QString::fromUtf8("page1"));
+        page1->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(page1);
+        page2 = new StageOrder();
+        page2->setObjectName(QString::fromUtf8("page2"));
+        page2->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(page2);
+        page3 = new QWidget();
+        page3->setObjectName(QString::fromUtf8("page3"));
+        page3->setStyleSheet(QString::fromUtf8("background-color: rgb(207, 255, 252);"));
+        stackedWidget->addWidget(page3);
+        page4 = new StageManagerSetting();
+        page4->setObjectName(QString::fromUtf8("page4"));
+        page4->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(page4);
+        page5 = new StageAccount();
+        page5->setObjectName(QString::fromUtf8("page5"));
+        page5->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(page5);
+        page = new StageTest();
         page->setObjectName(QString::fromUtf8("page"));
-        page->setStyleSheet(QString::fromUtf8(""));
         stackedWidget->addWidget(page);
-        page_2 = new QWidget();
-        page_2->setObjectName(QString::fromUtf8("page_2"));
-        page_2->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 237, 211);"));
-        stackedWidget->addWidget(page_2);
-        page_3 = new QWidget();
-        page_3->setObjectName(QString::fromUtf8("page_3"));
-        page_3->setStyleSheet(QString::fromUtf8("background-color: rgb(207, 255, 252);"));
-        stackedWidget->addWidget(page_3);
-        page_4 = new QWidget();
-        page_4->setObjectName(QString::fromUtf8("page_4"));
-        page_4->setStyleSheet(QString::fromUtf8("background-color: rgb(228, 215, 255);"));
-        stackedWidget->addWidget(page_4);
-        page_5 = new QWidget();
-        page_5->setObjectName(QString::fromUtf8("page_5"));
-        page_5->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 108, 240);"));
-        stackedWidget->addWidget(page_5);
 
         gridLayout_3->addWidget(stackedWidget, 0, 0, 1, 1);
 
@@ -100,7 +124,65 @@ public:
         wTop->setObjectName(QString::fromUtf8("wTop"));
         wTop->setMinimumSize(QSize(0, 100));
         wTop->setMaximumSize(QSize(16777215, 100));
-        wTop->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 255);"));
+        wTop->setStyleSheet(QString::fromUtf8("QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}"));
+        gridLayout_4 = new QGridLayout(wTop);
+        gridLayout_4->setObjectName(QString::fromUtf8("gridLayout_4"));
+        widget_3 = new QWidget(wTop);
+        widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        QFont font;
+        font.setPointSize(14);
+        widget_3->setFont(font);
+
+        gridLayout_4->addWidget(widget_3, 1, 0, 1, 1);
+
+        widget = new QWidget(wTop);
+        widget->setObjectName(QString::fromUtf8("widget"));
+        QSizePolicy sizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(widget->sizePolicy().hasHeightForWidth());
+        widget->setSizePolicy(sizePolicy);
+        gridLayout_5 = new QGridLayout(widget);
+        gridLayout_5->setSpacing(0);
+        gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
+        gridLayout_5->setContentsMargins(0, 0, 0, 0);
+        btnLogout = new QPushButton(widget);
+        btnLogout->setObjectName(QString::fromUtf8("btnLogout"));
+        QFont font1;
+        font1.setPointSize(12);
+        font1.setBold(false);
+        font1.setItalic(false);
+        font1.setUnderline(true);
+        btnLogout->setFont(font1);
+        btnLogout->setStyleSheet(QString::fromUtf8("font: 12pt \"Microsoft JhengHei UI\";\n"
+"\n"
+"text-decoration: underline;\n"
+"\n"
+"color: rgb(95, 95, 0);"));
+        btnLogout->setFlat(true);
+
+        gridLayout_5->addWidget(btnLogout, 0, 0, 1, 1);
+
+
+        gridLayout_4->addWidget(widget, 1, 2, 1, 1);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_4->addItem(verticalSpacer_3, 0, 0, 1, 3);
+
+        lbName = new QLabel(wTop);
+        lbName->setObjectName(QString::fromUtf8("lbName"));
+        QSizePolicy sizePolicy1(QSizePolicy::Fixed, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(lbName->sizePolicy().hasHeightForWidth());
+        lbName->setSizePolicy(sizePolicy1);
+        lbName->setFont(font);
+        lbName->setStyleSheet(QString::fromUtf8("\n"
+"color: rgb(0, 85, 255);"));
+
+        gridLayout_4->addWidget(lbName, 1, 1, 1, 1);
+
 
         gridLayout_2->addWidget(wTop, 0, 0, 1, 2);
 
@@ -147,6 +229,14 @@ public:
 "border-style: outset; \n"
 "border-width: 0px; \n"
 "font: 700 24px \"Microsoft JhengHei UI\"; \n"
+"}\n"
+"\n"
+"QPushButton:disabled { \n"
+"border-style: outset; \n"
+"bo"
+                        "rder-width: 0px; \n"
+"font: 700 24px \"Microsoft JhengHei UI\"; \n"
+"color: rgb(122, 122, 122);\n"
 "}"));
         verticalLayout = new QVBoxLayout(wMenu);
         verticalLayout->setSpacing(0);
@@ -154,6 +244,7 @@ public:
         verticalLayout->setContentsMargins(0, 0, 0, 0);
         btn0 = new QPushButton(wMenu);
         btn0->setObjectName(QString::fromUtf8("btn0"));
+        btn0->setFocusPolicy(Qt::NoFocus);
         btn0->setStyleSheet(QString::fromUtf8(""));
         btn0->setCheckable(true);
         btn0->setChecked(true);
@@ -163,14 +254,19 @@ public:
 
         btn1 = new QPushButton(wMenu);
         btn1->setObjectName(QString::fromUtf8("btn1"));
+        btn1->setEnabled(true);
+        btn1->setFocusPolicy(Qt::NoFocus);
         btn1->setStyleSheet(QString::fromUtf8(""));
         btn1->setCheckable(true);
+        btn1->setChecked(false);
         btn1->setFlat(true);
 
         verticalLayout->addWidget(btn1);
 
         btn2 = new QPushButton(wMenu);
         btn2->setObjectName(QString::fromUtf8("btn2"));
+        btn2->setFocusPolicy(Qt::NoFocus);
+        btn2->setStyleSheet(QString::fromUtf8(""));
         btn2->setCheckable(true);
         btn2->setFlat(true);
 
@@ -178,17 +274,37 @@ public:
 
         btn3 = new QPushButton(wMenu);
         btn3->setObjectName(QString::fromUtf8("btn3"));
+        btn3->setFocusPolicy(Qt::NoFocus);
         btn3->setCheckable(true);
         btn3->setFlat(true);
 
         verticalLayout->addWidget(btn3);
 
+        btn4 = new QPushButton(wMenu);
+        btn4->setObjectName(QString::fromUtf8("btn4"));
+        btn4->setEnabled(false);
+        btn4->setFocusPolicy(Qt::NoFocus);
+        btn4->setCheckable(true);
+        btn4->setFlat(true);
+
+        verticalLayout->addWidget(btn4);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         verticalLayout->addItem(verticalSpacer);
 
+        btnTest = new QPushButton(wMenu);
+        btnTest->setObjectName(QString::fromUtf8("btnTest"));
+
+        verticalLayout->addWidget(btnTest);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_2);
+
         btnAccount = new QPushButton(wMenu);
         btnAccount->setObjectName(QString::fromUtf8("btnAccount"));
+        btnAccount->setFocusPolicy(Qt::NoFocus);
         btnAccount->setCheckable(true);
         btnAccount->setFlat(true);
 
@@ -203,16 +319,23 @@ public:
 
         retranslateUi(Widget);
 
+        stackedWidget->setCurrentIndex(0);
+
+
         QMetaObject::connectSlotsByName(Widget);
     } // setupUi
 
     void retranslateUi(QWidget *Widget)
     {
         Widget->setWindowTitle(QApplication::translate("Widget", "Widget", nullptr));
-        btn0->setText(QApplication::translate("Widget", "\345\256\242\346\234\215\345\260\210\345\215\200", nullptr));
-        btn1->setText(QApplication::translate("Widget", "\350\250\202\345\226\256\347\213\200\346\205\213", nullptr));
-        btn2->setText(QApplication::translate("Widget", "\346\234\203\350\250\210\346\252\242\350\246\226", nullptr));
-        btn3->setText(QApplication::translate("Widget", "\347\256\241\347\220\206\350\250\255\345\256\232", nullptr));
+        btnLogout->setText(QApplication::translate("Widget", "\347\231\273\345\207\272", nullptr));
+        lbName->setText(QString());
+        btn0->setText(QApplication::translate("Widget", "\351\246\226\351\240\201", nullptr));
+        btn1->setText(QApplication::translate("Widget", "\345\256\242\346\234\215\345\260\210\345\215\200", nullptr));
+        btn2->setText(QApplication::translate("Widget", "\350\250\202\345\226\256\347\213\200\346\205\213", nullptr));
+        btn3->setText(QApplication::translate("Widget", "\345\240\261\350\241\250\346\252\242\350\246\226", nullptr));
+        btn4->setText(QApplication::translate("Widget", "\347\256\241\347\220\206\350\250\255\345\256\232", nullptr));
+        btnTest->setText(QApplication::translate("Widget", "Test", nullptr));
         btnAccount->setText(QApplication::translate("Widget", "\345\270\263\350\231\237\350\250\255\345\256\232", nullptr));
     } // retranslateUi
 

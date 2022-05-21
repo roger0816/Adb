@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
-#include "Library.h"
+#include "RpkCore.h"
 
 class Launch : public QObject
 {

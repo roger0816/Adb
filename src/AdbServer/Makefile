@@ -230,6 +230,7 @@ Makefile: AdbServer.pro C:/Qt/5.12.12/mingw73_64/mkspecs/win32-g++/qmake.conf C:
 		C:/Qt/5.12.12/mingw73_64/mkspecs/features/default_pre.prf \
 		C:/Qt/5.12.12/mingw73_64/mkspecs/features/win32/default_pre.prf \
 		../Common/Common.pri \
+		../../libs/RpkLib/RpkCore.pri \
 		C:/Qt/5.12.12/mingw73_64/mkspecs/features/resolve_config.prf \
 		C:/Qt/5.12.12/mingw73_64/mkspecs/features/exclusive_builds_post.prf \
 		C:/Qt/5.12.12/mingw73_64/mkspecs/features/default_post.prf \
@@ -418,6 +419,7 @@ C:/Qt/5.12.12/mingw73_64/mkspecs/features/toolchain.prf:
 C:/Qt/5.12.12/mingw73_64/mkspecs/features/default_pre.prf:
 C:/Qt/5.12.12/mingw73_64/mkspecs/features/win32/default_pre.prf:
 ../Common/Common.pri:
+../../libs/RpkLib/RpkCore.pri:
 C:/Qt/5.12.12/mingw73_64/mkspecs/features/resolve_config.prf:
 C:/Qt/5.12.12/mingw73_64/mkspecs/features/exclusive_builds_post.prf:
 C:/Qt/5.12.12/mingw73_64/mkspecs/features/default_post.prf:

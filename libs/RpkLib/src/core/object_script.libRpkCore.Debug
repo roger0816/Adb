@@ -1,0 +1,14 @@
+CREATE ..\..\..\RpkLib\libRpkCore.a
+ADDMOD obj\RpkCore.o
+ADDMOD obj\CSql.o
+ADDMOD obj\DataBase.o
+ADDMOD obj\CTcpClient.o
+ADDMOD obj\CTcpServer.o
+ADDMOD obj\Network.o
+ADDMOD obj\Packager.o
+ADDMOD obj\moc_CSql.o
+ADDMOD obj\moc_CTcpClient.o
+ADDMOD obj\moc_CTcpServer.o
+ADDMOD obj\moc_DataBase.o
+ADDMOD obj\moc_Network.o
+SAVE

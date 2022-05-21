@@ -175,8 +175,8 @@ public:
     void retranslateUi(QWidget *StageCustomer)
     {
         StageCustomer->setWindowTitle(QApplication::translate("StageCustomer", "Form", nullptr));
-        btn0->setText(QApplication::translate("StageCustomer", "\345\256\242\346\210\266\344\270\213\345\226\256", nullptr));
-        btn1->setText(QApplication::translate("StageCustomer", "\345\256\242\346\210\266\345\212\240\345\200\274", nullptr));
+        btn0->setText(QApplication::translate("StageCustomer", "\346\220\234\345\260\213\345\256\242\346\210\266\347\267\250\350\231\237", nullptr));
+        btn1->setText(QApplication::translate("StageCustomer", "\345\273\272\347\253\213\345\256\242\346\210\266\350\263\207\346\226\231", nullptr));
         btn2->setText(QApplication::translate("StageCustomer", "\345\203\271\347\233\256\350\241\250\346\252\242\350\246\226", nullptr));
     } // retranslateUi
 

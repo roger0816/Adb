@@ -3,7 +3,10 @@
 
 #include <QObject>
 
+
 #define COMMON Common::INS()
+
+#define DATA Common::INS().m_data
 
 class Common : public QObject
 {
@@ -12,6 +15,9 @@ public:
     explicit Common(QObject *parent = nullptr);
 
     static Common &INS();
+
+
+
 
 private:
     static Common* m_pInstance;

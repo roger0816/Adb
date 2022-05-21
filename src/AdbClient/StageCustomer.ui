@@ -128,7 +128,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>客戶下單</string>
+            <string>搜尋客戶編號</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -150,7 +150,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>客戶加值</string>
+            <string>建立客戶資料</string>
            </property>
            <property name="checkable">
             <bool>true</bool>

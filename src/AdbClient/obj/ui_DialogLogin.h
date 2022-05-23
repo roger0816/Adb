@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'DialogLogin.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.2
+** Created by: Qt User Interface Compiler version 5.12.12
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -103,10 +103,37 @@ public:
 
         widget_3 = new QWidget(widget_2);
         widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        widget_3->setStyleSheet(QString::fromUtf8("\n"
+"QPushButton{\n"
+"font: 20px \"Microsoft JhengHei UI\";\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton{background-color: rgb(255, 255, 255);\n"
+"border-radius:8px;\n"
+"color: rgb(41,41,41);\n"
+"border: 1px solid #000000; }\n"
+"\n"
+"\n"
+"QPushButton:hover \n"
+"{ \n"
+"background-color: #55aaff; \n"
+"border-style: outset; \n"
+"border-width: 2px; \n"
+"font: 700 18px \"Microsoft JhengHei UI\"; \n"
+"}\n"
+"QPushButton:pressed { \n"
+"border-style: outset; \n"
+"border-width: 0px; \n"
+"font: 700 24px \"Microsoft JhengHei UI\"; \n"
+"color:rgb(241,241,241);\n"
+"background-color:#3c78b4;\n"
+"}"));
         gridLayout_2 = new QGridLayout(widget_3);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         btnLogin = new QPushButton(widget_3);
         btnLogin->setObjectName(QString::fromUtf8("btnLogin"));
+        btnLogin->setMinimumSize(QSize(90, 0));
 
         gridLayout_2->addWidget(btnLogin, 0, 1, 1, 1);
 
@@ -155,13 +182,13 @@ public:
 
     void retranslateUi(QDialog *DialogLogin)
     {
-        DialogLogin->setWindowTitle(QCoreApplication::translate("DialogLogin", "Dialog", nullptr));
-        label->setText(QCoreApplication::translate("DialogLogin", "\345\270\263\350\231\237", nullptr));
-        label_2->setText(QCoreApplication::translate("DialogLogin", "\345\257\206\347\242\274", nullptr));
-        btnLogin->setText(QCoreApplication::translate("DialogLogin", "\347\231\273\345\205\245", nullptr));
+        DialogLogin->setWindowTitle(QApplication::translate("DialogLogin", "Dialog", nullptr));
+        label->setText(QApplication::translate("DialogLogin", "\345\270\263\350\231\237", nullptr));
+        label_2->setText(QApplication::translate("DialogLogin", "\345\257\206\347\242\274", nullptr));
+        btnLogin->setText(QApplication::translate("DialogLogin", "\347\231\273\345\205\245", nullptr));
         lbMsg->setText(QString());
-        checkBox->setText(QCoreApplication::translate("DialogLogin", "\345\204\262\345\255\230\345\270\263\350\231\237", nullptr));
-        label_3->setText(QCoreApplication::translate("DialogLogin", "\350\211\276\346\257\224\344\273\243\347\256\241\347\220\206\347\263\273\347\265\261", nullptr));
+        checkBox->setText(QApplication::translate("DialogLogin", "\345\204\262\345\255\230\345\270\263\350\231\237", nullptr));
+        label_3->setText(QApplication::translate("DialogLogin", "\350\211\276\346\257\224\344\273\243\347\256\241\347\220\206\347\263\273\347\265\261", nullptr));
     } // retranslateUi
 
 };

@@ -49,7 +49,9 @@ public:
 
     bool lsatCustomerId(QString sClassSid,QString sClassId,QString &out,QString &sError);
 
+    bool lastOrderId(QString sDate, QString &sId, QString &sError);
 
+    bool lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QString &sError);
 private:
     void createTable();
 

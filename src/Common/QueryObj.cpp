@@ -42,7 +42,7 @@ CData QueryObj::queryData(CData data)
     }
     else if(data.iAciton==ACT::DEL_USER)
     {
-        bOk = m_sql.delUser(data.sMsg,sError);
+        bOk = m_sql.delUser(data.dData["Id"].toString(),sError);
     }
     else if(data.iAciton==ACT::QUERY_USER)
     {
@@ -331,6 +331,18 @@ CData QueryObj::queryData(CData data)
         sOkMsg = "客戶資料刪除完成";
     }
 
+    else if(data.iAciton==ACT::ADD_CUSTOMER_COST)
+    {
+        qDebug()<<"query Add customer cost : "<<data.dData;
+        bOk = m_sql.insertTb(SQL_TABLE::CustomerCost(),data.dData,sError);
+        sOkMsg = "加值完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_CUSTOMER_COST)
+    {
+        bOk = m_sql.queryTb(SQL_TABLE::CustomerCost(),data.dData,re.listData,sError);
+    }
+
     else if(data.iAciton==ACT::REPLACE_GAME_INFO)
     {
 
@@ -371,6 +383,73 @@ CData QueryObj::queryData(CData data)
     else if(data.iAciton==ACT::QUERY_GAME_INFO)
     {
         bOk = m_sql.queryTb(SQL_TABLE::CustomerGameInfo(),data.dData,re.listData,sError);
+    }
+
+
+    else if(data.iAciton==ACT::REPLACE_ORDER)
+    {
+
+      bOk = m_sql.insertTb(SQL_TABLE::OrderData(),data.dData,sError,true);
+
+      sOkMsg="訂單送出";
+
+    }
+    else if(data.iAciton==ACT::QUERY_ORDER)
+    {
+        bOk = m_sql.queryTb(SQL_TABLE::OrderData(),data.dData,re.listData,sError);
+    }
+
+    else if(data.iAciton==ACT::LAST_ORDER_ID)
+    {
+        QString sReId="";
+
+        QString sDate = data.dData["OrderDate"].toString();
+
+        bOk  =m_sql.lastOrderId(sDate,sReId,sError);
+
+        re.dData["Id"] = sReId;
+    }
+
+    else if(data.iAciton==ACT::LAST_ORDER_NAME)
+    {
+        QString sReId="";
+
+        QString sDate = data.dData["OrderDate"].toString();
+        QString sOwner = data.dData["Owner"].toString();
+        bOk  =m_sql.lastOrderName(sOwner,sDate,sReId,sError);
+
+        re.dData["Name"] = sReId;
+    }
+
+
+    //
+    else if(data.iAciton==ACT::ADD_ADDVALUE_TYPE)
+    {
+
+
+        bOk = m_sql.insertTb(SQL_TABLE::AddValueType(),data.dData,sError);
+        sOkMsg = "新增完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_ADDVALUE_TYPE)
+    {
+        bOk = m_sql.queryTb(SQL_TABLE::AddValueType(),data.dData,re.listData,sError);
+    }
+
+    else if(data.iAciton==ACT::EDIT_ADDVALUE_TYPE)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.updateTb(SQL_TABLE::AddValueType(),d,data.dData,sError);
+        sOkMsg = "修改完成";
+    }
+
+    else if(data.iAciton==ACT::DEL_ADDVALUE_TYPE)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.delFromTb(SQL_TABLE::AddValueType(),d,sError);
+        sOkMsg = "刪除完成";
     }
 
 

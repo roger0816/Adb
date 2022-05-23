@@ -2,6 +2,8 @@
 #define GLOBALUI_H
 
 #include <QObject>
+#include <QApplication>
+#include <QClipboard>
 #include <QShowEvent>
 #include "DialogMsg.h"
 #include <QDebug>
@@ -27,6 +29,7 @@ public:
 
     QFont font(int iPixSize=20);
 
+    void copyMsg(QString sMsg);
     DialogLogin *m_dialogLogin = nullptr;
 
 private:

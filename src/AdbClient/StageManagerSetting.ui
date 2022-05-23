@@ -279,7 +279,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
          <item row="0" column="0">
           <widget class="QStackedWidget" name="stackedWidget">
            <property name="currentIndex">
-            <number>5</number>
+            <number>2</number>
            </property>
            <widget class="LayerExchangeRate" name="page0"/>
            <widget class="QWidget" name="page1">
@@ -289,7 +289,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
              </item>
             </layout>
            </widget>
-           <widget class="QWidget" name="page2"/>
+           <widget class="LayerAddValueType" name="page2"/>
            <widget class="QWidget" name="page3"/>
            <widget class="LayerSysSetting" name="page4"/>
            <widget class="QWidget" name="pageAccount">
@@ -320,7 +320,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
                 </font>
                </property>
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="tab">
                 <attribute name="title">
@@ -775,6 +775,12 @@ font: 14pt &quot;Microsoft JhengHei UI&quot;;</string>
    <class>LayerSysSetting</class>
    <extends>QWidget</extends>
    <header>LayerSysSetting.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerAddValueType</class>
+   <extends>QWidget</extends>
+   <header>LayerAddValueType.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

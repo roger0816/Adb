@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'widget.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.2
+** Created by: Qt User Interface Compiler version 5.12.12
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -74,7 +74,9 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         wBg = new QWidget(Widget);
         wBg->setObjectName(QString::fromUtf8("wBg"));
-        wBg->setStyleSheet(QString::fromUtf8("font: 16px \"Microsoft JhengHei UI\";"));
+        wBg->setStyleSheet(QString::fromUtf8("font: 16px \"Microsoft JhengHei UI\";\n"
+"\n"
+""));
         gridLayout_2 = new QGridLayout(wBg);
         gridLayout_2->setSpacing(0);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
@@ -329,16 +331,16 @@ public:
 
     void retranslateUi(QWidget *Widget)
     {
-        Widget->setWindowTitle(QCoreApplication::translate("Widget", "Widget", nullptr));
-        btnLogout->setText(QCoreApplication::translate("Widget", "\347\231\273\345\207\272", nullptr));
+        Widget->setWindowTitle(QApplication::translate("Widget", "Widget", nullptr));
+        btnLogout->setText(QApplication::translate("Widget", "\347\231\273\345\207\272", nullptr));
         lbName->setText(QString());
-        btn0->setText(QCoreApplication::translate("Widget", "\351\246\226\351\240\201", nullptr));
-        btn1->setText(QCoreApplication::translate("Widget", "\345\256\242\346\234\215\345\260\210\345\215\200", nullptr));
-        btn2->setText(QCoreApplication::translate("Widget", "\350\250\202\345\226\256\347\213\200\346\205\213", nullptr));
-        btn3->setText(QCoreApplication::translate("Widget", "\345\240\261\350\241\250\346\252\242\350\246\226", nullptr));
-        btn4->setText(QCoreApplication::translate("Widget", "\347\256\241\347\220\206\350\250\255\345\256\232", nullptr));
-        btnTest->setText(QCoreApplication::translate("Widget", "Test", nullptr));
-        btnAccount->setText(QCoreApplication::translate("Widget", "\345\270\263\350\231\237\350\250\255\345\256\232", nullptr));
+        btn0->setText(QApplication::translate("Widget", "\351\246\226\351\240\201", nullptr));
+        btn1->setText(QApplication::translate("Widget", "\345\256\242\346\234\215\345\260\210\345\215\200", nullptr));
+        btn2->setText(QApplication::translate("Widget", "\350\250\202\345\226\256\347\213\200\346\205\213", nullptr));
+        btn3->setText(QApplication::translate("Widget", "\345\240\261\350\241\250\346\252\242\350\246\226", nullptr));
+        btn4->setText(QApplication::translate("Widget", "\347\256\241\347\220\206\350\250\255\345\256\232", nullptr));
+        btnTest->setText(QApplication::translate("Widget", "Test", nullptr));
+        btnAccount->setText(QApplication::translate("Widget", "\345\270\263\350\231\237\350\250\255\345\256\232", nullptr));
     } // retranslateUi
 
 };

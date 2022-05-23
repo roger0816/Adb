@@ -15,6 +15,11 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
     //ui->stackedWidget->setCurrentIndex(0);
 
     connect(ui->page2,SIGNAL(back()),this,SLOT(slotBack()));
+    connect(ui->page3,SIGNAL(back()),this,SLOT(slotBack()));
+
+    connect(ui->page4,SIGNAL(back()),this,SLOT(slotBack()));
+
+    ui->page4->m_bOrderMode=true;
 
     changePage(0);
 }
@@ -79,6 +84,8 @@ void LayerSearchCustomer::changePage(int iPage)
     {
         QVariantMap data = m_listData.at(m_iIdx).toMap();
 
+        ui->lbClass->setText(ACTION.getCustomerClass(data["Class"].toString()).Name);
+
         ui->lbId->setText(data["Id"].toString());
 
         ui->lbName->setText(data["Name"].toString());
@@ -102,7 +109,7 @@ void LayerSearchCustomer::changePage(int iPage)
         {
             QVariantMap dataGame = out.last().toMap();
 
-            ui->lbGame->setText(DATA.getGameName(dataGame["GameSid"].toString()));
+            ui->lbGame->setText(ACTION.getGameName(dataGame["GameSid"].toString()));
 
             ui->lbLoginType->setText(dataGame["LoginType"].toString());
 
@@ -127,6 +134,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
     else if(iPage==3)
     {
+        ui->page3->setCustomer(m_listData.at(m_iIdx).toMap());
 
         ui->stackedWidget->setCurrentWidget(ui->page3);
     }
@@ -144,6 +152,8 @@ void LayerSearchCustomer::changePage(int iPage)
 
 void LayerSearchCustomer::showEvent(QShowEvent *)
 {
+    ui->stackedWidget->setCurrentWidget(ui->page0);
+
     refresh();
 }
 
@@ -173,8 +183,10 @@ void LayerSearchCustomer::slotBack()
 {
 
 
-    if( dynamic_cast<QWidget*>(sender())==ui->page2)
-        ui->stackedWidget->setCurrentWidget(ui->page1);
+    // if( dynamic_cast<QWidget*>(sender())==ui->page2)
+    changePage(1);
+
+
 }
 
 void LayerSearchCustomer::on_btnCheck_clicked()
@@ -188,6 +200,7 @@ void LayerSearchCustomer::on_btnCheck_clicked()
 void LayerSearchCustomer::on_btnClear_clicked()
 {
     ui->txSearch->setText("");
+    m_sSearchKey = ui->txSearch->text();
 
     refresh(false);
 }
@@ -208,10 +221,6 @@ void LayerSearchCustomer::on_tb_cellClicked(int row, int column)
 void LayerSearchCustomer::on_btnBack_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->page0);
-
-    ui->page2->init();
-
-    ui->page4->init();
 }
 
 

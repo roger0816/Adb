@@ -14,6 +14,10 @@ StageOrder::StageOrder(QWidget *parent) :
     m_btns.addButton(ui->btn2,2);
 
     m_btns.addButton(ui->btn3,3);
+
+    connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 StageOrder::~StageOrder()

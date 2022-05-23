@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'StageOrder.ui'
 **
-** Created by: Qt User Interface Compiler version 5.15.2
+** Created by: Qt User Interface Compiler version 5.12.12
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -17,6 +17,9 @@
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "LayerCostTable.h"
+#include "LayerDayReport.h"
+#include "LayerGetOrder1.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -34,8 +37,10 @@ public:
     QPushButton *btn3;
     QSpacerItem *verticalSpacer;
     QStackedWidget *stackedWidget;
-    QWidget *page;
-    QWidget *page_2;
+    LayerCostTable *page;
+    LayerGetOrder1 *page_2;
+    QWidget *page_3;
+    LayerDayReport *page_4;
 
     void setupUi(QWidget *StageOrder)
     {
@@ -148,12 +153,18 @@ public:
 
         stackedWidget = new QStackedWidget(wBg);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
-        page = new QWidget();
+        page = new LayerCostTable();
         page->setObjectName(QString::fromUtf8("page"));
         stackedWidget->addWidget(page);
-        page_2 = new QWidget();
+        page_2 = new LayerGetOrder1();
         page_2->setObjectName(QString::fromUtf8("page_2"));
         stackedWidget->addWidget(page_2);
+        page_3 = new QWidget();
+        page_3->setObjectName(QString::fromUtf8("page_3"));
+        stackedWidget->addWidget(page_3);
+        page_4 = new LayerDayReport();
+        page_4->setObjectName(QString::fromUtf8("page_4"));
+        stackedWidget->addWidget(page_4);
 
         gridLayout_2->addWidget(stackedWidget, 0, 1, 1, 1);
 
@@ -163,16 +174,19 @@ public:
 
         retranslateUi(StageOrder);
 
+        stackedWidget->setCurrentIndex(1);
+
+
         QMetaObject::connectSlotsByName(StageOrder);
     } // setupUi
 
     void retranslateUi(QWidget *StageOrder)
     {
-        StageOrder->setWindowTitle(QCoreApplication::translate("StageOrder", "Form", nullptr));
-        btn0->setText(QCoreApplication::translate("StageOrder", "\345\203\271\347\233\256\350\241\250", nullptr));
-        btn1->setText(QCoreApplication::translate("StageOrder", "\346\216\245\345\226\256\345\204\262\345\200\274", nullptr));
-        btn2->setText(QCoreApplication::translate("StageOrder", "\350\250\202\345\226\256\345\233\236\345\240\261", nullptr));
-        btn3->setText(QCoreApplication::translate("StageOrder", "\346\257\217\346\227\245\345\240\261\350\241\250", nullptr));
+        StageOrder->setWindowTitle(QApplication::translate("StageOrder", "Form", nullptr));
+        btn0->setText(QApplication::translate("StageOrder", "\345\203\271\347\233\256\350\241\250", nullptr));
+        btn1->setText(QApplication::translate("StageOrder", "\346\216\245\345\226\256\345\204\262\345\200\274", nullptr));
+        btn2->setText(QApplication::translate("StageOrder", "\350\250\202\345\226\256\345\233\236\345\240\261", nullptr));
+        btn3->setText(QApplication::translate("StageOrder", "\346\257\217\346\227\245\345\240\261\350\241\250", nullptr));
     } // retranslateUi
 
 };

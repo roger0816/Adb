@@ -16,7 +16,9 @@ DESTDIR =$$PWD/../../bin/
 
 SOURCES += \
     CSideMenu.cpp \
+    DialogAddValueTypeEdit.cpp \
     DialogBulletinEdit.cpp \
+    DialogCommon.cpp \
     DialogCustomerEdit.cpp \
     DialogEditGameItem.cpp \
     DialogEditUser.cpp \
@@ -27,11 +29,15 @@ SOURCES += \
     Global.cpp \
     GlobalUi.cpp \
     LayerAddCost.cpp \
+    LayerAddValueType.cpp \
     LayerBulletin.cpp \
     LayerCostSetting.cpp \
+    LayerCostTable.cpp \
     LayerCustomer.cpp \
     LayerCustomerDetail.cpp \
+    LayerDayReport.cpp \
     LayerExchangeRate.cpp \
+    LayerGetOrder1.cpp \
     LayerOrder.cpp \
     LayerSayCost.cpp \
     LayerSearchCustomer.cpp \
@@ -47,7 +53,9 @@ SOURCES += \
 
 HEADERS += \
     CSideMenu.h \
+    DialogAddValueTypeEdit.h \
     DialogBulletinEdit.h \
+    DialogCommon.h \
     DialogCustomerEdit.h \
     DialogEditGameItem.h \
     DialogEditUser.h \
@@ -58,11 +66,15 @@ HEADERS += \
     Global.h \
     GlobalUi.h \
     LayerAddCost.h \
+    LayerAddValueType.h \
     LayerBulletin.h \
     LayerCostSetting.h \
+    LayerCostTable.h \
     LayerCustomer.h \
     LayerCustomerDetail.h \
+    LayerDayReport.h \
     LayerExchangeRate.h \
+    LayerGetOrder1.h \
     LayerOrder.h \
     LayerSayCost.h \
     LayerSearchCustomer.h \
@@ -77,7 +89,9 @@ HEADERS += \
 
 FORMS += \
     CSideMenu.ui \
+    DialogAddValueTypeEdit.ui \
     DialogBulletinEdit.ui \
+    DialogCommon.ui \
     DialogCustomerEdit.ui \
     DialogEditGameItem.ui \
     DialogEditUser.ui \
@@ -86,11 +100,15 @@ FORMS += \
     DialogLogin.ui \
     DialogMsg.ui \
     LayerAddCost.ui \
+    LayerAddValueType.ui \
     LayerBulletin.ui \
     LayerCostSetting.ui \
+    LayerCostTable.ui \
     LayerCustomer.ui \
     LayerCustomerDetail.ui \
+    LayerDayReport.ui \
     LayerExchangeRate.ui \
+    LayerGetOrder1.ui \
     LayerOrder.ui \
     LayerSayCost.ui \
     LayerSearchCustomer.ui \

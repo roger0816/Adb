@@ -50,7 +50,7 @@
       <item row="0" column="0">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page0">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -587,54 +587,59 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
               <height>60</height>
              </size>
             </property>
-            <widget class="QLabel" name="label">
-             <property name="geometry">
-              <rect>
-               <x>200</x>
-               <y>10</y>
-               <width>262</width>
-               <height>35</height>
-              </rect>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <property name="leftMargin">
+              <number>0</number>
              </property>
-             <property name="styleSheet">
-              <string notr="true">font: 26px &quot;Microsoft JhengHei UI&quot;;</string>
+             <property name="topMargin">
+              <number>0</number>
              </property>
-             <property name="text">
-              <string>客戶資料</string>
+             <property name="rightMargin">
+              <number>0</number>
              </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
+             <property name="bottomMargin">
+              <number>0</number>
              </property>
-            </widget>
-            <widget class="QPushButton" name="btnBack">
-             <property name="geometry">
-              <rect>
-               <x>10</x>
-               <y>10</y>
-               <width>70</width>
-               <height>40</height>
-              </rect>
-             </property>
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="minimumSize">
-              <size>
-               <width>70</width>
-               <height>40</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>70</width>
-               <height>40</height>
-              </size>
-             </property>
-             <property name="styleSheet">
-              <string notr="true">QPushButton{
+             <item>
+              <widget class="QWidget" name="widget_3" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QPushButton" name="btnBack">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>70</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>70</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QPushButton{
 font: 22px &quot;Microsoft JhengHei UI&quot;;
 
 
@@ -662,21 +667,68 @@ font: 700 24px &quot;Microsoft JhengHei UI&quot;;
 color:rgb(241,241,241);
 background-color:#3c78b4;
 }</string>
-             </property>
-             <property name="text">
-              <string>返回</string>
-             </property>
-             <property name="flat">
-              <bool>true</bool>
-             </property>
-            </widget>
+                  </property>
+                  <property name="text">
+                   <string>返回</string>
+                  </property>
+                  <property name="flat">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_2">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label">
+               <property name="styleSheet">
+                <string notr="true">font: 26px &quot;Microsoft JhengHei UI&quot;;</string>
+               </property>
+               <property name="text">
+                <string>客戶資料</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignCenter</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QWidget" name="widget_5" native="true">
+               <property name="minimumSize">
+                <size>
+                 <width>200</width>
+                 <height>0</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </widget>
           </item>
          </layout>
         </widget>
         <widget class="LayerSayCost" name="page2"/>
         <widget class="LayerAddCost" name="page3"/>
-        <widget class="LayerOrder" name="page4"/>
+        <widget class="LayerSayCost" name="page4"/>
        </widget>
       </item>
      </layout>
@@ -689,12 +741,6 @@ background-color:#3c78b4;
    <class>LayerSayCost</class>
    <extends>QWidget</extends>
    <header>LayerSayCost.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>LayerOrder</class>
-   <extends>QWidget</extends>
-   <header>LayerOrder.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

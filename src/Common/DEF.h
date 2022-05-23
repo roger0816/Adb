@@ -12,15 +12,19 @@
 
 struct SQL_TABLE
 {
-static QString ExchangeRate(){return "ExchangeRate";}
-static QString GameList(){return "GameList";}
-static QString GameItem(){return "GameItem";}
-static QString Bulletin(){return "Bulletin";}
-static QString CustomerClass(){return "CustomerClass";}
-static QString FactoryClass(){return "FactoryClass";}
-static QString UserData(){return "UserData";}
-static QString CustomerData(){return "CustomerData";}
-static QString CustomerGameInfo(){return "CustomerGameInfo";}
+    static QString ExchangeRate(){return "ExchangeRate";}
+    static QString GameList(){return "GameList";}
+    static QString GameItem(){return "GameItem";}
+    static QString Bulletin(){return "Bulletin";}
+    static QString CustomerClass(){return "CustomerClass";}
+    static QString FactoryClass(){return "FactoryClass";}
+    static QString UserData(){return "UserData";}
+    static QString CustomerData(){return "CustomerData";}
+    static QString CustomerCost(){return "CustomerCost";}
+    static QString CustomerGameInfo(){return "CustomerGameInfo";}
+    static QString OrderData(){return "OrderData";}
+    static QString AddValueType(){return "AddValueType";}
+
 };
 
 
@@ -47,6 +51,10 @@ enum _KEY
     DEL_GAME_INFO,
     QUERY_GAME_INFO,
 
+    ADD_CUSTOMER_COST =4031,
+    QUERY_CUSTOMER_COST,
+
+
 
     ADD_GAME_LIST = 5001,
     EDIT_GAME_LIST,
@@ -72,6 +80,17 @@ enum _KEY
     EDIT_FACTORY_CLASS,
     DEL_FACTORY_CLASS,
     QUERY_FACTORY_CLASS,
+
+    ADD_ADDVALUE_TYPE =5131,
+    DEL_ADDVALUE_TYPE,
+    EDIT_ADDVALUE_TYPE,
+    QUERY_ADDVALUE_TYPE,
+
+
+    REPLACE_ORDER =6001,
+    QUERY_ORDER,
+    LAST_ORDER_ID,
+    LAST_ORDER_NAME,
 
 
     SAVE_EXCHANGE,

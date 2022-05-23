@@ -124,7 +124,6 @@ void StageManagerSetting::refreshTb()
 {
     m_listUser = ACTION.queryUser();
 
-    qDebug()<<"AAA : "<<m_listUser.length();
 
     ui->tb->setRowCount(0);
 

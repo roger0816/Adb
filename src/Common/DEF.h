@@ -19,6 +19,8 @@ static QString Bulletin(){return "Bulletin";}
 static QString CustomerClass(){return "CustomerClass";}
 static QString FactoryClass(){return "FactoryClass";}
 static QString UserData(){return "UserData";}
+static QString CustomerData(){return "CustomerData";}
+static QString CustomerGameInfo(){return "CustomerGameInfo";}
 };
 
 
@@ -29,16 +31,27 @@ enum _KEY
     SET_VALUE=1001,
     GET_VALUE,
 
-    LOGIN = 4000,
-    ADD_USER,
+    LOGIN = 3000,
+    ADD_USER =4001,
     DEL_USER,
     EDIT_USER,
     QUERY_USER,
 
-    ADD_GAME = 5001,
-    EDIT_GAME,
-    DEL_GAME,
-    QUERY_GAME,
+    ADD_CUSTOMER =4011,
+    DEL_CUSTOMER,
+    EDIT_CUSTOMER,
+    QUERY_CUSTOMER,
+    LAST_CUSTOMER_ID,
+
+    REPLACE_GAME_INFO =4021,
+    DEL_GAME_INFO,
+    QUERY_GAME_INFO,
+
+
+    ADD_GAME_LIST = 5001,
+    EDIT_GAME_LIST,
+    DEL_GAME_LIST,
+    QUERY_GAME_LIST,
 
     ADD_GAME_ITEM = 5011,
     EDIT_GAME_ITEM,

@@ -1,5 +1,6 @@
 obj/CSideMenu.o
 obj/DialogBulletinEdit.o
+obj/DialogCustomerEdit.o
 obj/DialogEditGameItem.o
 obj/DialogEditUser.o
 obj/DialogGameEdit.o
@@ -8,9 +9,15 @@ obj/DialogLogin.o
 obj/DialogMsg.o
 obj/Global.o
 obj/GlobalUi.o
+obj/LayerAddCost.o
 obj/LayerBulletin.o
 obj/LayerCostSetting.o
+obj/LayerCustomer.o
+obj/LayerCustomerDetail.o
 obj/LayerExchangeRate.o
+obj/LayerOrder.o
+obj/LayerSayCost.o
+obj/LayerSearchCustomer.o
 obj/LayerSysSetting.o
 obj/StageAccount.o
 obj/StageCustomer.o
@@ -27,6 +34,7 @@ obj/common.o
 obj/qrc_res.o
 obj/moc_CSideMenu.o
 obj/moc_DialogBulletinEdit.o
+obj/moc_DialogCustomerEdit.o
 obj/moc_DialogEditGameItem.o
 obj/moc_DialogEditUser.o
 obj/moc_DialogGameEdit.o
@@ -35,9 +43,15 @@ obj/moc_DialogLogin.o
 obj/moc_DialogMsg.o
 obj/moc_Global.o
 obj/moc_GlobalUi.o
+obj/moc_LayerAddCost.o
 obj/moc_LayerBulletin.o
 obj/moc_LayerCostSetting.o
+obj/moc_LayerCustomer.o
+obj/moc_LayerCustomerDetail.o
 obj/moc_LayerExchangeRate.o
+obj/moc_LayerOrder.o
+obj/moc_LayerSayCost.o
+obj/moc_LayerSearchCustomer.o
 obj/moc_LayerSysSetting.o
 obj/moc_StageAccount.o
 obj/moc_StageCustomer.o

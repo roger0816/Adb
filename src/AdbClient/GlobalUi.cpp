@@ -30,8 +30,10 @@ int GlobalUi::showMsg(QString sTitle, QString sMsg, QString btn)
 }
 
 
-QTableWidgetItem *GlobalUi::tbItem(QVariant var)
+QTableWidgetItem *GlobalUi::tbItem(QVariant var, bool bBtn, int iPixSize)
 {
+
+
     QString st = var.toString();
 
     if(var.type() == QVariant::Bool)
@@ -60,12 +62,32 @@ QTableWidgetItem *GlobalUi::tbItem(QVariant var)
 
     QFont f;
 
-    f.setPixelSize(14);
+    f.setPixelSize(iPixSize);
+
+
+    if(bBtn)
+    {
+
+     f.setUnderline(true);
+
+     item->setTextColor(QColor(85,170,255));
+
+    }
 
     item->setFont(f);
+
 
     item->setTextAlignment(Qt::AlignCenter);
 
     return item;
 
+}
+
+QFont GlobalUi::font(int iPixSize)
+{
+    QFont f;
+
+    f.setPixelSize(iPixSize);
+
+    return f;
 }

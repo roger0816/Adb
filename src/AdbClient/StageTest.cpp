@@ -6,6 +6,9 @@ StageTest::StageTest(QWidget *parent) :
     ui(new Ui::StageTest)
 {
     ui->setupUi(this);
+
+
+
 }
 
 StageTest::~StageTest()

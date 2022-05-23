@@ -143,7 +143,6 @@ void LayerExchangeRate::on_btnSave_clicked()
 
     bool bIsDiff = GLOBAL.isDiff(m_listKey,m_listRate.last().toMap(),data);
 
-    qDebug()<<"isDiff : "<<bIsDiff;
     if(!bIsDiff)
     {
         DMSG.showMsg("","資料無變更","OK");
@@ -204,7 +203,7 @@ double LayerExchangeRate::getCell(int iRow)
     QDoubleSpinBox *item = dynamic_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(iRow,0));
 
     re =item ->value();
-    qDebug()<<"get call "<<re;
+
     return re;
 }
 

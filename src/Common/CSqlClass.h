@@ -17,7 +17,7 @@ class CSqlClass : public QObject
 public:
     explicit CSqlClass(QObject *parent = nullptr);
 
-    bool insertTb(QString sTableName, QVariantMap input, QString &sError);
+    bool insertTb(QString sTableName, QVariantMap input, QString &sError,bool bOrRplace=false);
 
     bool delFromTb(QString sTableName,QVariantMap conditions, QString &sError);
 
@@ -26,6 +26,8 @@ public:
     bool queryTb(QString sTableName, QVariantMap conditions, QVariantList &listOut, QString &sError);
 
     bool updateTb(QString sTableName, QVariantMap conditions, QVariantMap data, QString &sError);
+
+
 
     bool checkLogin(QString sUser,QString sPass,QVariantMap &out,QString &sError);
 
@@ -44,7 +46,8 @@ public:
     QVariantList readExchange(int iSid=-1);
 
 
-    bool addGame(QVariantList list, QString &sError);
+
+    bool lsatCustomerId(QString sClassSid,QString sClassId,QString &out,QString &sError);
 
 
 private:

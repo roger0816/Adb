@@ -38,6 +38,9 @@ private slots:
 
     void on_sbNTD_valueChanged(double arg1);
 
+
+    void on_btnGameEditDel_clicked();
+
 private:
     Ui::DialogEditGameItem *ui;
 

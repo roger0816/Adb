@@ -13,6 +13,8 @@ StageCustomer::StageCustomer(QWidget *parent) :
 
     m_btns.addButton(ui->btn2,2);
 
+    ui->btn2->hide();
+
     connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
 }
 

@@ -46,14 +46,14 @@ CData QueryObj::queryData(CData data)
     }
     else if(data.iAciton==ACT::QUERY_USER)
     {
-//        bOk = true;
+        //        bOk = true;
 
-//        QString sQueryId ="";
+        //        QString sQueryId ="";
 
-//        if(data.listData.length()>0)
-//            sQueryId =data.listData.first().toString();
+        //        if(data.listData.length()>0)
+        //            sQueryId =data.listData.first().toString();
 
-//        re.listData = m_sql.queryUser(sQueryId);
+        //        re.listData = m_sql.queryUser(sQueryId);
 
 
 
@@ -100,13 +100,13 @@ CData QueryObj::queryData(CData data)
         re.listData = m_sql.readExchange(iIdx);
     }
 
-    else if(data.iAciton==ACT::ADD_GAME)
+    else if(data.iAciton==ACT::ADD_GAME_LIST)
     {
         bOk = m_sql.insertTb(SQL_TABLE::GameList(),data.dData,sError);
         sOkMsg = "遊戲新增完成";
     }
 
-    else if(data.iAciton==ACT::EDIT_GAME)
+    else if(data.iAciton==ACT::EDIT_GAME_LIST)
     {
         QVariantMap d;
         d["Sid"] =data.dData["Sid"];
@@ -114,7 +114,7 @@ CData QueryObj::queryData(CData data)
         sOkMsg = "遊戲修改完成";
     }
 
-    else if(data.iAciton==ACT::DEL_GAME)
+    else if(data.iAciton==ACT::DEL_GAME_LIST)
     {
         QVariantMap d;
         d["Sid"] =data.dData["Sid"];
@@ -125,9 +125,9 @@ CData QueryObj::queryData(CData data)
     }
 
 
-    else if(data.iAciton==ACT::QUERY_GAME)
+    else if(data.iAciton==ACT::QUERY_GAME_LIST)
     {
-        qDebug()<<"qeury game list ";
+
         bOk = m_sql.queryTb(SQL_TABLE::GameList(),re.listData,sError);
 
 
@@ -146,13 +146,25 @@ CData QueryObj::queryData(CData data)
 
         QVariantMap d;
 
-        d["GameSid"] = data.dData["GameSid"];
+        d["Sid"] = data.dData["Sid"];
 
         bOk = m_sql.updateTb(SQL_TABLE::GameItem(),d,data.dData,sError);
 
         sOkMsg="修改完成";
 
+    }
 
+    else if(data.iAciton==ACT::DEL_GAME_ITEM)
+    {
+        qDebug()<<"qeury game item ";
+
+        QVariantMap d;
+
+        d["Sid"] = data.dData["Sid"];
+
+        bOk = m_sql.delFromTb(SQL_TABLE::GameItem(),d,sError);
+
+        sOkMsg="刪除完成";
 
     }
 
@@ -160,12 +172,12 @@ CData QueryObj::queryData(CData data)
     {
         qDebug()<<"qeury game item ";
 
-        QVariantMap d;
+        //        QVariantMap d;
 
-        if(data.listData.length()>0)
-            d = data.listData.first().toMap();
+        //        if(data.listData.length()>0)
+        //            d = data.listData.first().toMap();
 
-        bOk = m_sql.queryTb(SQL_TABLE::GameItem(),d,re.listData,sError);
+        bOk = m_sql.queryTb(SQL_TABLE::GameItem(),data.dData,re.listData,sError);
 
     }
 
@@ -275,6 +287,91 @@ CData QueryObj::queryData(CData data)
 
     }
 
+
+    else if(data.iAciton==ACT::LAST_CUSTOMER_ID)
+    {
+        QString sReId="";
+
+        QString sSid = data.dData["Class"].toString();
+
+        QString sId =  data.dData["ClassId"].toString();
+
+        bOk  =m_sql.lsatCustomerId(sSid,sId,sReId,sError);
+
+
+        re.dData["Id"] = sReId;
+    }
+
+    else if(data.iAciton==ACT::ADD_CUSTOMER)
+    {
+
+
+        bOk = m_sql.insertTb(SQL_TABLE::CustomerData(),data.dData,sError);
+        sOkMsg = "客戶資料新增完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_CUSTOMER)
+    {
+        bOk = m_sql.queryTb(SQL_TABLE::CustomerData(),data.dData,re.listData,sError);
+    }
+
+    else if(data.iAciton==ACT::EDIT_CUSTOMER)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.updateTb(SQL_TABLE::CustomerData(),d,data.dData,sError);
+        sOkMsg = "客戶資料修改完成";
+    }
+
+    else if(data.iAciton==ACT::DEL_CUSTOMER)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.delFromTb(SQL_TABLE::CustomerData(),d,sError);
+        sOkMsg = "客戶資料刪除完成";
+    }
+
+    else if(data.iAciton==ACT::REPLACE_GAME_INFO)
+    {
+
+        bOk = true;
+        sOkMsg = "客戶遊戲資料修改完成";
+
+        for(int i=0;i<data.listData.length();i++)
+        {
+
+            bool bTmp = m_sql.insertTb(SQL_TABLE::CustomerGameInfo(),data.listData.at(i).toMap(),sError,true);
+
+            if(!bTmp)
+            {
+                bOk = false;
+
+                sOkMsg = sError;
+            }
+
+        }
+
+
+    }
+
+    else if(data.iAciton==ACT::DEL_GAME_INFO)
+    {
+        bOk =true;
+        for(int i=0;i<data.listData.length();i++)
+        {
+            QVariantMap d;
+            d["Sid"] = data.listData.at(i).toMap()["Sid"];
+            bool b = m_sql.delFromTb(SQL_TABLE::CustomerGameInfo(),d,sError);
+            if(!b)
+                bOk = false;
+        }
+        sOkMsg = "客戶遊戲資料修改完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_GAME_INFO)
+    {
+        bOk = m_sql.queryTb(SQL_TABLE::CustomerGameInfo(),data.dData,re.listData,sError);
+    }
 
 
 

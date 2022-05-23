@@ -93,10 +93,10 @@ void DialogGameEdit::on_btnOk_clicked()
 void DialogGameEdit::on_btnDel_clicked()
 {
     int iRet = DMSG.showMsg("","刪除遊戲時，對應的商品也會全刪除，確定是否刪除？",QStringList()<<"否"<<"是");
-    qDebug()<<"i ret "<<iRet;
+
     if(iRet==1)
     {
-        qDebug()<<"done 3";
+
         done(3);
     }
 }

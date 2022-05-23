@@ -17,6 +17,7 @@ DESTDIR =$$PWD/../../bin/
 SOURCES += \
     CSideMenu.cpp \
     DialogBulletinEdit.cpp \
+    DialogCustomerEdit.cpp \
     DialogEditGameItem.cpp \
     DialogEditUser.cpp \
     DialogGameEdit.cpp \
@@ -25,9 +26,15 @@ SOURCES += \
     DialogMsg.cpp \
     Global.cpp \
     GlobalUi.cpp \
+    LayerAddCost.cpp \
     LayerBulletin.cpp \
     LayerCostSetting.cpp \
+    LayerCustomer.cpp \
+    LayerCustomerDetail.cpp \
     LayerExchangeRate.cpp \
+    LayerOrder.cpp \
+    LayerSayCost.cpp \
+    LayerSearchCustomer.cpp \
     LayerSysSetting.cpp \
     StageAccount.cpp \
     StageCustomer.cpp \
@@ -41,6 +48,7 @@ SOURCES += \
 HEADERS += \
     CSideMenu.h \
     DialogBulletinEdit.h \
+    DialogCustomerEdit.h \
     DialogEditGameItem.h \
     DialogEditUser.h \
     DialogGameEdit.h \
@@ -49,9 +57,15 @@ HEADERS += \
     DialogMsg.h \
     Global.h \
     GlobalUi.h \
+    LayerAddCost.h \
     LayerBulletin.h \
     LayerCostSetting.h \
+    LayerCustomer.h \
+    LayerCustomerDetail.h \
     LayerExchangeRate.h \
+    LayerOrder.h \
+    LayerSayCost.h \
+    LayerSearchCustomer.h \
     LayerSysSetting.h \
     StageAccount.h \
     StageCustomer.h \
@@ -64,15 +78,22 @@ HEADERS += \
 FORMS += \
     CSideMenu.ui \
     DialogBulletinEdit.ui \
+    DialogCustomerEdit.ui \
     DialogEditGameItem.ui \
     DialogEditUser.ui \
     DialogGameEdit.ui \
     DialogInput.ui \
     DialogLogin.ui \
     DialogMsg.ui \
+    LayerAddCost.ui \
     LayerBulletin.ui \
     LayerCostSetting.ui \
+    LayerCustomer.ui \
+    LayerCustomerDetail.ui \
     LayerExchangeRate.ui \
+    LayerOrder.ui \
+    LayerSayCost.ui \
+    LayerSearchCustomer.ui \
     LayerSysSetting.ui \
     StageAccount.ui \
     StageCustomer.ui \

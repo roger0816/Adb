@@ -74,6 +74,7 @@ public:
         gridLayout->setContentsMargins(0, 0, 0, 0);
         wBg = new QWidget(Widget);
         wBg->setObjectName(QString::fromUtf8("wBg"));
+        wBg->setStyleSheet(QString::fromUtf8("font: 16px \"Microsoft JhengHei UI\";"));
         gridLayout_2 = new QGridLayout(wBg);
         gridLayout_2->setSpacing(0);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
@@ -130,7 +131,8 @@ public:
         widget_3 = new QWidget(wTop);
         widget_3->setObjectName(QString::fromUtf8("widget_3"));
         QFont font;
-        font.setPointSize(14);
+        font.setBold(false);
+        font.setItalic(false);
         widget_3->setFont(font);
 
         gridLayout_4->addWidget(widget_3, 1, 0, 1, 1);

@@ -9,15 +9,54 @@
 // name follow database fieldName
 
 
-
-
-
-struct UserData
+struct DataObj
 {
+    DataObj(){}
+    DataObj(QVariantMap data):DataObj(){setData(data);}
     QString Sid;
+
     QString Id;
-    QString Password;
+
     QString Name;
+
+    QString UpdateTime;
+
+    void setData(QVariantMap data)
+    {
+        Sid = data["Sid"].toString();
+
+        Id = data["Id"].toString();
+
+        Name = data["Name"].toString();
+
+        UpdateTime = data["UpdateTime"].toString();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re;
+
+        re["Sid"] = Sid;
+
+        re["Id"] = Id;
+
+        re["Name"] =Name;
+
+        re["UpdateTime"] = UpdateTime;
+
+        return re;
+    }
+
+};
+
+
+
+struct UserData :public DataObj
+{
+
+
+    QString Password;
+
     QString Cid;
     int Lv ;
     QString ParentId;
@@ -29,18 +68,18 @@ struct UserData
     QString Note2;
     QString Note3;
     QString CreateTime;
-    QString UpdateTime;
 
-    UserData(){}
+
+    UserData():DataObj(){}
 
     UserData(QVariantMap dData):UserData(){setData(dData);}
 
     void setData(QVariantMap data)
     {
-        Sid = data["Sid"].toString();
-        Id = data["Id"].toString();
+        DataObj::setData(data);
+
         Password = data["Password"].toString();
-        Name = data["Name"].toString();
+
         Cid = data["Cid"].toString();
         Lv = data["Lv"].toInt();
         ParentId = data["ParentId"].toString();
@@ -52,16 +91,15 @@ struct UserData
         Note2 = data["Note2"].toString();
         Note3 = data["Note3"].toString();
         CreateTime = data["CreateTime"].toString();
-        UpdateTime = data["UpdateTime"].toString();
+
     }
 
     QVariantMap data()
     {
-        QVariantMap re;
-        re["Sid"] = Sid;
-        re["Id"] = Id;
+        QVariantMap re = DataObj::data();
+
         re["Password"] = Password;
-        re["Name"] = Name;
+
         re["Cid"] = Cid;
         re["Lv"] = Lv;
         re["ParentId"] = ParentId;
@@ -73,9 +111,180 @@ struct UserData
         re["Note2"] = Note2;
         re["Note3"] = Note3;
         re["CreateTime"] = CreateTime;
-        re["UpdateTime"] = UpdateTime;
+
         return re;
     }
+};
+
+struct CustomerData :public DataObj
+{
+    CustomerData(){}
+    CustomerData(QVariantMap data):DataObj(){setData(data);}
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
+        Class = data["Class"].toString();
+        Money = data["Money"].toString();
+        Currency = data["Currency"].toString();
+        PayType =data["PayType"].toString();
+        PayInfo =data["PayInfo"].toString();
+        UserSid = data["UserSid"].toString();
+        Note1   =data["Note1"].toString();
+        Note2   =data["Note2"].toString();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap d = DataObj::data();
+
+        d["Class"] = Class;
+        d["Money"] = Money;
+        d["Currency"] = Currency;
+        d["PayType"] = PayType;
+        d["PayInfo"] =PayInfo;
+        d["UserSid"] =UserSid;
+        d["Note1"] = Note1;
+        d["Note2"]= Note2;
+
+        return d;
+    }
+
+    QString Class;
+    QString Money;
+    QString Currency;
+    QString PayType;
+    QString PayInfo;
+    QString UserSid;
+    QString Note1;
+    QString Note2;
+};
+
+
+
+struct DataCustomerClass :public DataObj
+{
+
+};
+
+
+struct CustomerGameInfo :public DataObj
+{
+    CustomerGameInfo(){}
+    CustomerGameInfo(QVariantMap data):DataObj(){setData(data);}
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
+        CustomerId = data["CustomerId"].toString();
+        GameSid = data["GameSid"].toString();
+        LoginType = data["LoginType"].toString();
+        LoginAccount = data["LoginAccount"].toString();
+        ServerName = data["ServerName"].toString();
+        Character = data["Character"].toString();
+        LastTime = data["LastTime"].toString();
+        Note1 = data["Note1"].toString();
+
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap d = DataObj::data();
+
+        d["CustomerId"] = CustomerId;
+        d["GameSid"] = GameSid;
+        d["LoginType"] = LoginType;
+        d["LoginAccount"] = LoginAccount;
+        d["ServerName"] = ServerName;
+        d["Character"] = Character;
+        d["LastTime"] = LastTime;
+        d["Note1"] = Note1;
+
+
+        return d;
+    }
+
+    QString CustomerId;
+    QString GameSid;
+    QString LoginType;
+    QString LoginAccount;
+    QString ServerName;
+    QString Character;
+    QString LastTime;
+    QString Note1;
+};
+
+struct DataGameList :public DataObj
+{
+    bool Enable;
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
+        Enable = data["Enable"].toBool();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re =DataObj::data();
+
+        re["Enable"] = Enable;
+
+        return re;
+    }
+};
+
+struct DataGameItem :public DataObj
+{
+    DataGameItem(){}
+    DataGameItem(QVariantMap data):DataObj(){setData(data);}
+
+    void setData(QVariantMap data)
+    {
+        GameSid = data["GameSid"].toString();
+        Enable = data["Enable"].toBool();
+        OrderNTD = data["OrderNTD"].toString();
+        OrderUSD = data["OrderUSD"].toString();
+        NTD = data["NTD"].toString();
+        EnableCost = data["EnableCost"].toBool();
+        Cost = data["Cost"].toString();
+        Note1 = data["Note1"].toString();
+        Note2 = data["Note2"].toString();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap d = DataObj::data();
+
+        d["GameSid"]=GameSid;
+        d["Enable"]=Enable;
+        d["OrderNTD"]=OrderNTD;
+        d["OrderUSD"]=OrderUSD;
+        d["NTD"]=NTD;
+        d["EnableCost"]=EnableCost;
+        d["Cost"]=Cost;
+        d["Note1"]=Note1;
+        d["Note2"]=Note2;
+
+
+        return d;
+    }
+
+
+    QString GameSid;
+    bool Enable;
+    QString OrderNTD;
+    QString OrderUSD;
+    QString NTD;
+    bool EnableCost;
+    QString Cost;
+    QString Note1;
+    QString Note2;
+
+    int Count=0;
 };
 
 
@@ -254,7 +463,7 @@ struct GameList
     };
 
 
-     QList<GameData> listData;
+    QList<GameData> listData;
 
 };
 
@@ -325,14 +534,14 @@ struct GameItem
 
 
 
-    class VojData
-    {
-    public:
-        VojData(){}
+class VojData
+{
+public:
+    VojData(){}
 
 
 
-    };
+};
 
 
 

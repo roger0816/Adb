@@ -97,6 +97,7 @@ public:
 
         txPass = new QLineEdit(widget_2);
         txPass->setObjectName(QString::fromUtf8("txPass"));
+        txPass->setEchoMode(QLineEdit::Password);
 
         formLayout->setWidget(1, QFormLayout::FieldRole, txPass);
 

@@ -23,7 +23,9 @@ public:
 
     int showMsg(QString sTitle,QString sMsg,QString btn);
 
-    QTableWidgetItem * tbItem(QVariant var);
+    QTableWidgetItem * tbItem(QVariant var, bool bBtn=false,int iPixSize=16);
+
+    QFont font(int iPixSize=20);
 
     DialogLogin *m_dialogLogin = nullptr;
 

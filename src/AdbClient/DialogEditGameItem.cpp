@@ -154,3 +154,10 @@ void DialogEditGameItem::on_sbNTD_valueChanged(double arg1)
     ui->lbSGD->setText(QString::number(arg1/m_rate.NTD*m_rate.SGD,'f', 2));
 }
 
+
+
+void DialogEditGameItem::on_btnGameEditDel_clicked()
+{
+      done(3);
+}
+

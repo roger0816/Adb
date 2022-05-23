@@ -16,6 +16,21 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QWidget" name="wBg" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>260</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>2000</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 18px &quot;Microsoft JhengHei UI&quot;;</string>
+     </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="leftMargin">
        <number>0</number>
@@ -42,19 +57,21 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>240</width>
+          <width>260</width>
           <height>0</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>240</width>
+          <width>2000</width>
           <height>16777215</height>
          </size>
         </property>
         <property name="font">
          <font>
-          <pointsize>14</pointsize>
+          <pointsize>-1</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
         <property name="title">
@@ -129,7 +146,9 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>10</pointsize>
+             <pointsize>-1</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
             </font>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout">
@@ -182,7 +201,9 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>14</pointsize>
+          <pointsize>-1</pointsize>
+          <italic>false</italic>
+          <bold>false</bold>
          </font>
         </property>
         <property name="title">
@@ -202,7 +223,9 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <pointsize>-1</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
             </font>
            </property>
            <property name="text">
@@ -220,8 +243,9 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
-             <bold>true</bold>
+             <pointsize>-1</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
             </font>
            </property>
            <property name="text">
@@ -233,7 +257,9 @@
           <widget class="QTableWidget" name="tbGameItem">
            <property name="font">
             <font>
-             <pointsize>14</pointsize>
+             <pointsize>-1</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
             </font>
            </property>
            <property name="styleSheet">
@@ -252,7 +278,7 @@
             <number>35</number>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>65</number>
+            <number>80</number>
            </attribute>
            <attribute name="horizontalHeaderStretchLastSection">
             <bool>true</bool>

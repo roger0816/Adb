@@ -45,7 +45,7 @@ CSqlClass::CSqlClass(QObject *parent)
     qDebug()<<"db open : "<<bOk;
 }
 
-bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError)
+bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,bool bOrRplace)
 {
     QVariantMap data = input;
 
@@ -56,7 +56,11 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError)
 
     QSqlQuery query(m_db);
 
-    QString sCmd = "INSERT INTO  "+sTableName+" (%1) "
+    QString sTmp="";
+    if(bOrRplace)
+        sTmp="OR REPLACE";
+
+    QString sCmd = "INSERT "+sTmp+" INTO "+sTableName+" (%1) "
                                               " VALUES(%2);";
 
     QString tmpKey,tmpValue;
@@ -71,14 +75,14 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError)
         }
 
 
-        qDebug()<<"key : "<<sKey<<" value: "<<data[sKey];
-
         tmpKey+=sKey;
         tmpValue+="?";
 
     }
 
     sCmd = sCmd.arg(tmpKey,tmpValue);
+
+
 
     query.prepare(sCmd);
 
@@ -188,12 +192,11 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
             query.bindValue(":pass",sPass.trimmed());
             query.exec();
             */
-    qDebug()<<"cmd : "<<sCmd+sSub;
 
     bool bOk = query.exec();
 
     QStringList listHeader = fieldNames(query.record());
-     qDebug()<<"listHeader:  "<<listHeader;
+
     while(query.next())
     {
 
@@ -205,7 +208,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
             data[sKey] = query.value(sKey);
 
-            qDebug()<<data;
+
 
         }
 
@@ -393,6 +396,38 @@ void CSqlClass::createTable()
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
          );");
 
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'CustomerData' (     \
+        'Sid'	INTEGER,                    \
+        'Id'	TEXT NOT NULL,              \
+        'Class'	TEXT NOT NULL,             \
+        'Name'	TEXT,                       \
+        'Money'	INTEGER DEFAULT 0,          \
+        'Currency'	TEXT,                   \
+        'PayType'	TEXT,                   \
+        'PayInfo'	TEXT,                   \
+        'UpdateTime'	TEXT,               \
+        'UserSid'	TEXT,                   \
+        'Note1'	TEXT,                       \
+        'Note2'	TEXT,                       \
+        PRIMARY KEY('Sid' AUTOINCREMENT)    \
+    );");
+
+    sql.clear();
+    sql.exec("CREATE TABLE 'CustomerGameInfo' (     \
+        'Sid'	INTEGER,                            \
+        'CustomerId'	TEXT,                           \
+        'GameSid'	TEXT,                           \
+        'LoginType'	TEXT,                           \
+        'LoginAccount'	TEXT,                       \
+        'ServerName'	TEXT,                       \
+        'Character'	TEXT,                           \
+        'LastTime'	TEXT,                           \
+        'UpdateTime'	TEXT,                       \
+        'Note1'	TEXT,                               \
+        PRIMARY KEY('Sid' AUTOINCREMENT)            \
+    );");
 
 }
 
@@ -435,8 +470,6 @@ bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QStri
         {
             QString sKey =  list.at(i);
 
-            qDebug()<<"key "<<sKey;
-            qDebug()<<"data : "<<query.value(sKey);
 
 
             out[sKey] = query.value(sKey);
@@ -679,15 +712,27 @@ QVariantList CSqlClass::readExchange(int iSid)
     return listRe;
 }
 
-bool CSqlClass::addGame(QVariantList list, QString &sError)
+
+bool CSqlClass::lsatCustomerId(QString sClassSid, QString sClassId, QString &out, QString &sError)
 {
-    bool bRe;
+    out = sClassId+"-A000";
 
-    //    query.prepare("INSERT INTO  ExchangeRate (Class,Rate,UpdateTime) "
-    //                  " VALUES(?,?,?);");
+    QSqlQuery query(m_db);
 
-    return false;
+    QString sCmd = "SELECT Id FROM CustomerData WHERE Class='%1' ORDER BY Id DESC; ";
+
+    bool bRe = query.exec(sCmd.arg(sClassSid));
+
+    if(query.next())
+    {
+        out = query.value(0).toString();
+    }
+
+    sError = query.lastError().text();
+
+    return bRe;
 }
+
 
 
 

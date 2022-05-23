@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>617</width>
-    <height>533</height>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -338,7 +338,7 @@
         </property>
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
-          <widget class="QPushButton" name="btnDel">
+          <widget class="QPushButton" name="btnGameEditDel">
            <property name="font">
             <font>
              <pointsize>14</pointsize>
@@ -572,7 +572,7 @@
   <tabstop>sb1Value</tabstop>
   <tabstop>btnCancel</tabstop>
   <tabstop>btnOk</tabstop>
-  <tabstop>btnDel</tabstop>
+  <tabstop>btnGameEditDel</tabstop>
  </tabstops>
  <resources/>
  <connections/>

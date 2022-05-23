@@ -38,7 +38,7 @@ void LayerCostSetting::on_btnGameAdd_clicked()
 
         QString sError;
 
-        ACTION.action(ACT::ADD_GAME,data,sError);
+        ACTION.action(ACT::ADD_GAME_LIST,data,sError);
 
 
         UI.showMsg("",sError,"OK");
@@ -67,9 +67,7 @@ void LayerCostSetting::refreshGameList()
     QVariantList listIn,listOut;
 
     QString sError;
-    ACTION.action(ACT::QUERY_GAME,listIn,listOut,sError);
-
-    qDebug()<<"game list count : "<<listOut;
+    ACTION.action(ACT::QUERY_GAME_LIST,listIn,listOut,sError);
 
     m_gameList.setGameList(listOut);
 
@@ -117,17 +115,15 @@ void LayerCostSetting::refreshItemList()
 
     ui->lbItemTitle1->setText("商品內容");
 
-    QVariantList listIn;
 
     QVariantMap d;
 
     d["GameSid"] = m_iCurrentGameSid;
 
-    listIn.append(d);
 
     QString sError;
 
-    bool bOk = ACTION.action(ACT::QUERY_GAME_ITEM,listIn,m_listItem,sError);
+    bool bOk = ACTION.action(ACT::QUERY_GAME_ITEM,d,m_listItem,sError);
 
     if(!bOk)
     {
@@ -136,7 +132,7 @@ void LayerCostSetting::refreshItemList()
         return;
     }
 
-     DataExchange::Rate rate = GLOBAL.rate();
+     DataExchange::Rate rate = DATA.rate();
 //    QVariantList input,listRate;
 
 //    bool bRateOk = ACTION.action(ACT::READ_EXCHANGE,input,listRate,sError);
@@ -236,7 +232,7 @@ void LayerCostSetting::on_btnGameEdit_clicked()
 
         QString sError;
 
-        ACTION.action(ACT::EDIT_GAME,data,sError);
+        ACTION.action(ACT::EDIT_GAME_LIST,data,sError);
         UI.showMsg("",sError,"OK");
 
 
@@ -255,7 +251,7 @@ void LayerCostSetting::on_btnGameEdit_clicked()
 
 
         QString sError;
-        ACTION.action(ACT::DEL_GAME,data,sError);
+        ACTION.action(ACT::DEL_GAME_LIST,data,sError);
         UI.showMsg("",sError,"OK");
 
         refreshGameList();
@@ -282,7 +278,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
-    dialog.setRate(sGameName+" : 新增商品",GLOBAL.rate());
+    dialog.setRate(sGameName+" : 新增商品",DATA.rate());
 
 
     if(dialog.exec()==1)
@@ -296,6 +292,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
         ACTION.action(ACT::ADD_GAME_ITEM,data,sError);
 
         UI.showMsg("",sError,"OK");
+        refreshItemList();
 
     }
 }
@@ -305,7 +302,6 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
 void LayerCostSetting::on_tbGame_cellClicked(int row, int )
 {
-    qDebug()<<"row : "<<row;
 
     refreshItemList();
 }
@@ -332,11 +328,13 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
-    dialog.setRate(sGameName+" : 修改商品",GLOBAL.rate());
+    dialog.setRate(sGameName+" : 修改商品",DATA.rate());
 
     dialog.setData(m_listItem.at(ui->tbGameItem->currentRow()).toMap());
 
-    if(dialog.exec()==1)
+    int iRet = dialog.exec();
+
+    if(iRet==1)
     {
         QVariantMap data =dialog.data();
 
@@ -345,6 +343,22 @@ void LayerCostSetting::on_btnItemEdit_clicked()
         QString sError;
 
         ACTION.action(ACT::EDIT_GAME_ITEM,data,sError);
+
+        UI.showMsg("",sError,"OK");
+
+        refreshItemList();
+
+    }
+
+    if(iRet==3)
+    {
+        QVariantMap data;
+
+        data["Sid"] =  dialog.data()["Sid"];
+
+        QString sError;
+
+        ACTION.action(ACT::DEL_GAME_ITEM,data,sError);
 
         UI.showMsg("",sError,"OK");
 

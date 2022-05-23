@@ -128,7 +128,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>搜尋客戶編號</string>
+            <string>業務功能</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -150,7 +150,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>建立客戶資料</string>
+            <string>客戶資料</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -198,16 +198,31 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
       <item>
        <widget class="QWidget" name="widget_2" native="true">
         <layout class="QGridLayout" name="gridLayout_2">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
          <item row="0" column="0">
           <widget class="QStackedWidget" name="stackedWidget">
-           <widget class="QWidget" name="page">
+           <widget class="LayerSearchCustomer" name="page">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(85, 255, 127);</string>
+             <string notr="true"/>
             </property>
            </widget>
-           <widget class="QWidget" name="page_3">
+           <widget class="LayerCustomer" name="page_3">
             <property name="styleSheet">
-             <string notr="true">background-color: rgb(255, 255, 127);</string>
+             <string notr="true"/>
             </property>
            </widget>
            <widget class="QWidget" name="page_2">
@@ -225,6 +240,20 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LayerCustomer</class>
+   <extends>QWidget</extends>
+   <header>LayerCustomer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerSearchCustomer</class>
+   <extends>QWidget</extends>
+   <header>LayerSearchCustomer.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

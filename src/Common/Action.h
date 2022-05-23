@@ -32,6 +32,9 @@ public:
 
     bool action(ACT::_KEY act, QVariantMap data, QString &sError);
 
+    bool action(ACT::_KEY act, QVariantMap data, QVariantMap &out, QString &sError);
+
+
     bool action(ACT::_KEY act, QVariantMap data,QVariantList &listOut, QString &sError);
 
     bool action(ACT::_KEY act, QVariantList listData, QVariantList &listOut, QString &sError);

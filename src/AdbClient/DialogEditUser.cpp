@@ -38,8 +38,6 @@ void DialogEditUser::setData(QVariantMap data)
     int iLvIdx =qBound(0,m_data.Lv-1,ui->cbType->count()-1);
 
 
-
-    qDebug()<<"read : "<<m_data.Lv;
     ui->cbType->setCurrentIndex(iLvIdx);
 
 }
@@ -67,7 +65,6 @@ void DialogEditUser::on_btnOk_clicked()
         iLv = ui->cbType->currentIndex()+1;
 
 
-    qDebug()<<"LV set : "<<iLv;
     m_data.Lv = iLv;
 
     m_data.Name = ui->txName->text().trimmed();

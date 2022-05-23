@@ -18,6 +18,8 @@
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "LayerCustomer.h"
+#include "LayerSearchCustomer.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -36,8 +38,8 @@ public:
     QWidget *widget_2;
     QGridLayout *gridLayout_2;
     QStackedWidget *stackedWidget;
-    QWidget *page;
-    QWidget *page_3;
+    LayerSearchCustomer *page;
+    LayerCustomer *page_3;
     QWidget *page_2;
 
     void setupUi(QWidget *StageCustomer)
@@ -142,16 +144,18 @@ public:
         widget_2 = new QWidget(wBg);
         widget_2->setObjectName(QString::fromUtf8("widget_2"));
         gridLayout_2 = new QGridLayout(widget_2);
+        gridLayout_2->setSpacing(0);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        gridLayout_2->setContentsMargins(0, 0, 0, 0);
         stackedWidget = new QStackedWidget(widget_2);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
-        page = new QWidget();
+        page = new LayerSearchCustomer();
         page->setObjectName(QString::fromUtf8("page"));
-        page->setStyleSheet(QString::fromUtf8("background-color: rgb(85, 255, 127);"));
+        page->setStyleSheet(QString::fromUtf8(""));
         stackedWidget->addWidget(page);
-        page_3 = new QWidget();
+        page_3 = new LayerCustomer();
         page_3->setObjectName(QString::fromUtf8("page_3"));
-        page_3->setStyleSheet(QString::fromUtf8("background-color: rgb(255, 255, 127);"));
+        page_3->setStyleSheet(QString::fromUtf8(""));
         stackedWidget->addWidget(page_3);
         page_2 = new QWidget();
         page_2->setObjectName(QString::fromUtf8("page_2"));
@@ -175,8 +179,8 @@ public:
     void retranslateUi(QWidget *StageCustomer)
     {
         StageCustomer->setWindowTitle(QApplication::translate("StageCustomer", "Form", nullptr));
-        btn0->setText(QApplication::translate("StageCustomer", "\346\220\234\345\260\213\345\256\242\346\210\266\347\267\250\350\231\237", nullptr));
-        btn1->setText(QApplication::translate("StageCustomer", "\345\273\272\347\253\213\345\256\242\346\210\266\350\263\207\346\226\231", nullptr));
+        btn0->setText(QApplication::translate("StageCustomer", "\346\245\255\345\213\231\345\212\237\350\203\275", nullptr));
+        btn1->setText(QApplication::translate("StageCustomer", "\345\256\242\346\210\266\350\263\207\346\226\231", nullptr));
         btn2->setText(QApplication::translate("StageCustomer", "\345\203\271\347\233\256\350\241\250\346\252\242\350\246\226", nullptr));
     } // retranslateUi
 

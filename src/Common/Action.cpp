@@ -39,6 +39,25 @@ bool Action::action(ACT::_KEY act, QVariantMap data, QString &sError)
     return re.bOk;
 }
 
+bool Action::action(ACT::_KEY act, QVariantMap data, QVariantMap &out, QString &sError)
+{
+    CData input;
+
+    input.iAciton = ACT::_KEY(act);
+
+    input.dData = data;
+
+    CData re;
+
+    re = query(input);
+
+    out = re.dData;
+
+    sError =re.sMsg;
+
+    return re.bOk;
+}
+
 bool Action::action(ACT::_KEY act, QVariantMap data,QVariantList &listOut, QString &sError)
 {
     CData input;
@@ -252,8 +271,8 @@ QString Action::getKeyValue(QString key, bool inLocal)
 
 CData Action::query(CData data)
 {
-    qDebug()<<"query : " <<data.iAciton;
-    qDebug()<<"listData : "<<data.listData;
+//    qDebug()<<"query : " <<data.iAciton;
+//    qDebug()<<"listData : "<<data.listData;
     data.sUser = m_currentUser.Id;
 
     if(m_bDataFromServer)

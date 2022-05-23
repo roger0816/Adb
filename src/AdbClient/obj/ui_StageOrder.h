@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'StageOrder.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.12
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -168,11 +168,11 @@ public:
 
     void retranslateUi(QWidget *StageOrder)
     {
-        StageOrder->setWindowTitle(QApplication::translate("StageOrder", "Form", nullptr));
-        btn0->setText(QApplication::translate("StageOrder", "\345\203\271\347\233\256\350\241\250", nullptr));
-        btn1->setText(QApplication::translate("StageOrder", "\346\216\245\345\226\256\345\204\262\345\200\274", nullptr));
-        btn2->setText(QApplication::translate("StageOrder", "\350\250\202\345\226\256\345\233\236\345\240\261", nullptr));
-        btn3->setText(QApplication::translate("StageOrder", "\346\257\217\346\227\245\345\240\261\350\241\250", nullptr));
+        StageOrder->setWindowTitle(QCoreApplication::translate("StageOrder", "Form", nullptr));
+        btn0->setText(QCoreApplication::translate("StageOrder", "\345\203\271\347\233\256\350\241\250", nullptr));
+        btn1->setText(QCoreApplication::translate("StageOrder", "\346\216\245\345\226\256\345\204\262\345\200\274", nullptr));
+        btn2->setText(QCoreApplication::translate("StageOrder", "\350\250\202\345\226\256\345\233\236\345\240\261", nullptr));
+        btn3->setText(QCoreApplication::translate("StageOrder", "\346\257\217\346\227\245\345\240\261\350\241\250", nullptr));
     } // retranslateUi
 
 };

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'DialogLogin.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.12
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -155,13 +155,13 @@ public:
 
     void retranslateUi(QDialog *DialogLogin)
     {
-        DialogLogin->setWindowTitle(QApplication::translate("DialogLogin", "Dialog", nullptr));
-        label->setText(QApplication::translate("DialogLogin", "\345\270\263\350\231\237", nullptr));
-        label_2->setText(QApplication::translate("DialogLogin", "\345\257\206\347\242\274", nullptr));
-        btnLogin->setText(QApplication::translate("DialogLogin", "\347\231\273\345\205\245", nullptr));
+        DialogLogin->setWindowTitle(QCoreApplication::translate("DialogLogin", "Dialog", nullptr));
+        label->setText(QCoreApplication::translate("DialogLogin", "\345\270\263\350\231\237", nullptr));
+        label_2->setText(QCoreApplication::translate("DialogLogin", "\345\257\206\347\242\274", nullptr));
+        btnLogin->setText(QCoreApplication::translate("DialogLogin", "\347\231\273\345\205\245", nullptr));
         lbMsg->setText(QString());
-        checkBox->setText(QApplication::translate("DialogLogin", "\345\204\262\345\255\230\345\270\263\350\231\237", nullptr));
-        label_3->setText(QApplication::translate("DialogLogin", "\350\211\276\346\257\224\344\273\243\347\256\241\347\220\206\347\263\273\347\265\261", nullptr));
+        checkBox->setText(QCoreApplication::translate("DialogLogin", "\345\204\262\345\255\230\345\270\263\350\231\237", nullptr));
+        label_3->setText(QCoreApplication::translate("DialogLogin", "\350\211\276\346\257\224\344\273\243\347\256\241\347\220\206\347\263\273\347\265\261", nullptr));
     } // retranslateUi
 
 };

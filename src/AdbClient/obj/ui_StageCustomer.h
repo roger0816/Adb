@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'StageCustomer.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.12
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -178,10 +178,10 @@ public:
 
     void retranslateUi(QWidget *StageCustomer)
     {
-        StageCustomer->setWindowTitle(QApplication::translate("StageCustomer", "Form", nullptr));
-        btn0->setText(QApplication::translate("StageCustomer", "\346\245\255\345\213\231\345\212\237\350\203\275", nullptr));
-        btn1->setText(QApplication::translate("StageCustomer", "\345\256\242\346\210\266\350\263\207\346\226\231", nullptr));
-        btn2->setText(QApplication::translate("StageCustomer", "\345\203\271\347\233\256\350\241\250\346\252\242\350\246\226", nullptr));
+        StageCustomer->setWindowTitle(QCoreApplication::translate("StageCustomer", "Form", nullptr));
+        btn0->setText(QCoreApplication::translate("StageCustomer", "\346\245\255\345\213\231\345\212\237\350\203\275", nullptr));
+        btn1->setText(QCoreApplication::translate("StageCustomer", "\345\256\242\346\210\266\350\263\207\346\226\231", nullptr));
+        btn2->setText(QCoreApplication::translate("StageCustomer", "\345\203\271\347\233\256\350\241\250\346\252\242\350\246\226", nullptr));
     } // retranslateUi
 
 };

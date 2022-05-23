@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'CSideMenu.ui'
 **
-** Created by: Qt User Interface Compiler version 5.12.12
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -44,7 +44,7 @@ public:
 
     void retranslateUi(QWidget *CSideMenu)
     {
-        CSideMenu->setWindowTitle(QApplication::translate("CSideMenu", "Form", nullptr));
+        CSideMenu->setWindowTitle(QCoreApplication::translate("CSideMenu", "Form", nullptr));
     } // retranslateUi
 
 };

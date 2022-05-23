@@ -1,0 +1,17 @@
+../AdbClient/obj/CSideMenu.o
+../AdbClient/obj/DialogLogin.o
+../AdbClient/obj/Global.o
+../AdbClient/obj/StageCustomer.o
+../AdbClient/obj/StageOrder.o
+../AdbClient/obj/main.o
+../AdbClient/obj/widget.o
+../AdbClient/obj/CSqlClass.o
+../AdbClient/obj/common.o
+../AdbClient/obj/moc_CSideMenu.o
+../AdbClient/obj/moc_DialogLogin.o
+../AdbClient/obj/moc_Global.o
+../AdbClient/obj/moc_StageCustomer.o
+../AdbClient/obj/moc_StageOrder.o
+../AdbClient/obj/moc_widget.o
+../AdbClient/obj/moc_CSqlClass.o
+../AdbClient/obj/moc_Common.o

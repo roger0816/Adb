@@ -20,6 +20,8 @@ public:
 
         void orderMode();
 
+        void init();
+
      void setCustomer(QVariantMap data);
 
      void showEvent(QShowEvent *) override;

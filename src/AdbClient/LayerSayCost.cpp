@@ -32,6 +32,11 @@ void LayerSayCost::orderMode()
     ui->btnOk->setText("送出訂單");
 }
 
+void LayerSayCost::init()
+{
+    m_listInto.clear();
+}
+
 void LayerSayCost::setCustomer(QVariantMap data)
 {
     m_dataCustomer = data;

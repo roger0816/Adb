@@ -208,6 +208,10 @@ void LayerSearchCustomer::on_tb_cellClicked(int row, int column)
 void LayerSearchCustomer::on_btnBack_clicked()
 {
     ui->stackedWidget->setCurrentWidget(ui->page0);
+
+    ui->page2->init();
+
+    ui->page4->init();
 }
 
 

@@ -132,6 +132,8 @@ double LayerSayCost::checkTotal()
 {
     double re = 0;
 
+     DataExchange::Rate rate = DATA.rate();
+
 
 
     for(int i=0;i<ui->tbInfo->rowCount();i++)
@@ -140,13 +142,31 @@ double LayerSayCost::checkTotal()
 
         double iPrice =sp->value();
 
-        double cost =m_listInto.at(i).toMap()["NTD"].toDouble() * iPrice;
+        double r = m_listInto.at(i).toMap()["NTD"].toDouble();
+
+
+        if(m_dataCustomer["Currency"]=="HKD")
+        {
+            r = r/rate.NTD*rate.HKD;
+
+        }
+
+        else if(m_dataCustomer["Currency"]=="RMB")
+             r = r/rate.NTD*rate.RMB;
+        else if(m_dataCustomer["Currency"]=="MYR")
+             r = r/rate.NTD*rate.MYR;
+        else if(m_dataCustomer["Currency"]=="SGD")
+             r = r/rate.NTD*rate.SGD;
+
+
+        double cost = r* iPrice;
+
 
         re=re+cost;
         ui->tbInfo->setItem(i,3,UI.tbItem(cost));
     }
 
-    ui->lbTotal->setText(QString::number(re));
+    ui->lbTotal->setText(QString::number(re,'f',2));
     //    DATA.rate()
 
 

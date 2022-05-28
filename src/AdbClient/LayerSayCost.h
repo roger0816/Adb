@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include <QSpinBox>
+#include <QClipboard>
 
 namespace Ui {
 class LayerSayCost;
@@ -20,15 +21,18 @@ public:
 
         void orderMode();
 
-     void setCustomer(QVariantMap data);
+     void setCustomer(QVariantMap data,QString sOrderSid="");
+
+     void setReadOnly();
 
      void showEvent(QShowEvent *) override;
      void refreshInfo();
      Ui::LayerSayCost *ui;
+     bool m_bOrderMode = false;
 
 private:
 
-    QVariantMap m_dataCustomer;
+    CustomerData m_dataCustomer;
 
     QVariantList m_listGameInfo;
 
@@ -41,6 +45,28 @@ private:
     QList<QSpinBox*> m_listSp;
 
     double checkTotal();
+
+    QList<UserData> m_listOwnerUser;
+
+
+    OrderData m_order;
+
+    QDateTime m_date;
+
+    double m_iTotal=0.0;
+
+    QString m_sLoadOrderSid="";
+
+    QString m_sLoadRateSid="";
+
+    bool m_bReadOnly = false;
+protected:
+
+
+    QString getNewOrderId();
+
+    QString getNewOrderName();
+
 signals:
     void back();
 public slots:
@@ -51,8 +77,15 @@ public slots:
 private slots:
     void on_cbGame_currentTextChanged(const QString &arg1);
     void on_cbAccount_currentTextChanged(const QString &arg1);
+    void on_cbServer_currentTextChanged(const QString &arg1);
+    void on_cbChr_currentTextChanged(const QString &arg1);
     void on_tbGameItem_cellClicked(int row, int column);
     void on_tbInfo_cellPressed(int row, int column);
+    void on_btnCopy_clicked();
+    void on_btnSayClose_clicked();
+
+public slots:
+    void on_btnSayOk_clicked();
 };
 
 #endif // LAYERSAYCOST_H

@@ -13,7 +13,7 @@ struct DataObj
 {
     DataObj(){}
     DataObj(QVariantMap data):DataObj(){setData(data);}
-    QString Sid;
+    QString Sid="";
 
     QString Id;
 
@@ -161,6 +161,64 @@ struct CustomerData :public DataObj
     QString Note2;
 };
 
+struct CustomerCost
+{
+    CustomerCost(){}
+    CustomerCost(QVariantMap data)
+    {
+        Sid = data["Sid"].toString();
+        CustomerSid = data["CustomerSid"].toString();
+        Currency = data["Currency"].toString();
+        OrderId = data["OrderId"].toString();
+        Change = data["Change"].toString();
+        Type = data["Type"].toString();
+        Rate = data["Rate"].toString();
+        Value = data["Value"].toString();
+        UserSid = data["UserSid"].toString();
+        OrderTime = data["OrderTime"].toString();
+        UpdateTime = data["UpdateTime"].toString();
+        Note1 = data["Note1"].toString();
+        Note2 = data["Note2"].toString();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re;
+
+        re["Sid"]=Sid;
+        re["CustomerSid"]=CustomerSid;
+        re["OrderId"]=OrderId;
+        re["Currency"]=Currency;
+        re["Type"]=Type;
+        re["Rate"]=Rate;
+        re["Change"]=Change;
+        re["Value"]=Value;
+        re["UserSid"]=UserSid;
+        re["OrderTime"]=OrderTime;
+        re["UpdateTime"]=UpdateTime;
+        re["Note1"]=Note1;
+        re["Note2"]=Note2;
+
+        return re;
+    }
+
+
+
+    QString Sid;
+    QString CustomerSid;
+    QString OrderId;
+    QString Rate;
+    QString Type;
+    QString Currency;
+    QString Change ="0";
+    QString Value ="0";
+    QString UserSid;
+    QString OrderTime;
+    QString UpdateTime;
+    QString Note1;
+    QString Note2;
+
+};
 
 
 struct DataCustomerClass :public DataObj
@@ -216,6 +274,101 @@ struct CustomerGameInfo :public DataObj
     QString Note1;
 };
 
+
+struct OrderData :public DataObj
+{
+    OrderData()
+    {
+        while(User.length()<5)
+            User.append("");
+        while(StepTime.length()<5)
+            StepTime.append("");
+    }
+    OrderData(QVariantMap data):DataObj(){OrderData();setData(data);}
+
+    void setData(QVariantMap data)
+    {
+
+
+        DataObj::setData(data);
+
+        CustomerSid = data["CustomerSid"].toString();
+        UiRecord = data["UiRecord"].toString();
+        Step = data["Step"].toString();
+        StepTime = data["StepTime"].toString().split(",");
+        User = data["User"].toString().split(",");
+        Owner = data["Owner"].toString();
+        PaddingUser = data["PaddingUser"].toString();
+        Item = data["Item"].toString();
+        Cost = data["Cost"].toString();
+        AddValueType = data["AddValueType"].toString();
+        Rate = data["Rate"].toString();
+        Note0 = data["Note0"].toString();
+        Note1 = data["Note1"].toString();
+        Note2 = data["Note2"].toString();
+        Note3 = data["Note3"].toString();
+        Note4 = data["Note4"].toString();
+        Note5 = data["Note5"].toString();
+        UpdateTime = data["UpdateTime"].toString();
+        OrderDate = data["OrderDate"].toString();
+        OrderTime = data["OrderTime"].toString();
+
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re =DataObj::data();
+
+        re["CustomerSid"] = CustomerSid;
+        re["Step"] = Step;
+        re["UiRecord"] = UiRecord;
+        re["StepTime"] = StepTime.join(",");
+        re["User"] = User.join(",");
+        re["Owner"] = Owner;
+        re["PaddingUser"] = PaddingUser;
+        re["Item"] = Item;
+        re["Cost"] = Cost;
+        re["AddValueType"] = AddValueType;
+        re["Rate"] = Rate;
+        re["Note0"] = Note0;
+        re["Note1"] = Note1;
+        re["Note2"] = Note2;
+        re["Note3"] = Note3;
+        re["Note4"] = Note4;
+        re["Note5"] = Note5;
+        re["OrderDate"] = OrderDate;
+        re["OrderTime"] = OrderTime;
+
+
+        return re;
+
+    }
+
+    QString CustomerSid;
+    QString Step;
+    QString UiRecord;
+    QStringList StepTime;
+    QStringList User;
+    QString Owner;
+    QString PaddingUser;
+    QString AddValueType;
+    QString Item;
+    QString Cost="0";
+    QString Rate="";
+    QString Note0;
+    QString Note1;
+    QString Note2;
+    QString Note3;
+    QString Note4;
+    QString Note5;
+    QString UpdateTime;
+    QString OrderDate;
+    QString OrderTime;
+
+
+
+
+};
 struct DataGameList :public DataObj
 {
     bool Enable;
@@ -240,10 +393,15 @@ struct DataGameList :public DataObj
 struct DataGameItem :public DataObj
 {
     DataGameItem(){}
-    DataGameItem(QVariantMap data):DataObj(){setData(data);}
+    DataGameItem(QVariantMap data):DataObj()
+    {
+
+        setData(data);
+    }
 
     void setData(QVariantMap data)
     {
+        DataObj::setData(data);
         GameSid = data["GameSid"].toString();
         Enable = data["Enable"].toBool();
         OrderNTD = data["OrderNTD"].toString();
@@ -318,6 +476,7 @@ public:
         double MYR=0.00;
         //Singapore
         double SGD=0.00;
+        QStringList listKey;
 
         QStringList list()
         {
@@ -329,7 +488,19 @@ public:
             re.append(QString::number(MYR));
             re.append(QString::number(SGD));
 
+            while(re.length()<listKey.length())
+            {
+                re.append("0");
+            }
+
             return re;
+        }
+
+        double value(QString sKey)
+        {
+            int iIdx = qBound(0,listKey.indexOf(sKey),listKey.length());
+
+            return list().at(iIdx).toDouble();
         }
 
     };
@@ -338,13 +509,16 @@ public:
 
     Rate rate(QString sId)
     {
+        if(sId=="")
+            return last();
         Rate re;
 
         for(int i=0;i<m_listData.length();i++)
         {
             if(m_listData.at(i).Sid.trimmed()==sId.trimmed())
+            {
                 re = m_listData[i];
-
+            }
         }
 
         return re;
@@ -365,6 +539,7 @@ public:
             rate.RMB = data["RMB"].toDouble();
             rate.MYR = data["MYR"].toDouble();
             rate.SGD = data["SGD"].toDouble();
+            rate.listKey = listKey;
 
             m_listData.append(rate);
         }

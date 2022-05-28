@@ -49,10 +49,20 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 {
     QVariantMap data = input;
 
-    if(data.keys().indexOf("UpdateTime")<0)
+    if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
         data["UpdateTime"] =QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
 
     QStringList listKey = data.keys();
+
+    if(listKey.indexOf("Sid")>=0)
+    {
+        if(data["Sid"].toString()=="")
+        {
+            listKey.removeOne("Sid");
+        }
+
+    }
+
 
     QSqlQuery query(m_db);
 
@@ -61,7 +71,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
         sTmp="OR REPLACE";
 
     QString sCmd = "INSERT "+sTmp+" INTO "+sTableName+" (%1) "
-                                              " VALUES(%2);";
+                                                      " VALUES(%2);";
 
     QString tmpKey,tmpValue;
 
@@ -86,18 +96,21 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
     query.prepare(sCmd);
 
+    qDebug()<<"cmd : "<<sCmd;
     for(int j=0;j<listKey.length();j++)
     {
         QString sKey = listKey.at(j);
 
         query.bindValue(j,data[sKey]);
 
+        qDebug()<<data[sKey];
+
     }
 
     bool bOk = query.exec();
 
     sError =  query.lastError().text();
-
+    qDebug()<<"sql : "<<bOk;
     return bOk;
 
     //ex :
@@ -217,7 +230,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
     sError =  query.lastError().text();
     if(!bOk)
-       qDebug()<< sError;
+        qDebug()<< sError;
     return bOk;
 }
 
@@ -254,12 +267,12 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 
         if(v.type()==QVariant::Bool)
         {
-           v = conditions[tmp.at(i)].toInt();
+            v = conditions[tmp.at(i)].toInt();
         }
 
         if(conditions[tmp.at(i)].type()==QVariant::Char || conditions[tmp.at(i)].type()==QVariant::String)
         {
-           sSub+=tmp.at(i)+"='"+conditions[tmp.at(i)].toString()+"' ";
+            sSub+=tmp.at(i)+"='"+conditions[tmp.at(i)].toString()+"' ";
         }
         else
         {
@@ -346,7 +359,7 @@ void CSqlClass::createTable()
     sql.exec("CREATE TABLE 'GameItem' (  \
              'Sid'	INTEGER,           \
              'GameSid'	INTEGER,        \
-              'Enable'	INTEGER DEFAULT 1, \
+             'Enable'	INTEGER DEFAULT 1, \
              'Name'	TEXT,               \
              'OrderNTD'	TEXT,           \
              'OrderUSD'	TEXT,           \
@@ -357,7 +370,7 @@ void CSqlClass::createTable()
              'Note2'	TEXT,           \
              'UpdateTime'	TEXT,       \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
-         );");
+             );");
 
     sql.clear();
 
@@ -365,14 +378,14 @@ void CSqlClass::createTable()
     sql.exec("CREATE TABLE 'Bulletin' ( \
              'Sid'	INTEGER,            \
              'UserSid'	INTEGER,        \
-                'Top'	INTEGER,        \
+             'Top'	INTEGER,        \
              'UpdateTime'	TEXT,       \
              'EndTime'	TEXT,       \
              'Title'	TEXT,           \
              'Content'	TEXT,           \
              'Note'	TEXT,               \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
-         );");
+             );");
 
 
     sql.clear();
@@ -384,7 +397,7 @@ void CSqlClass::createTable()
              'Name'	TEXT NOT NULL,              \
              'UpdateTime'	TEXT,               \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
-         );");
+             );");
 
     sql.clear();
 
@@ -394,40 +407,99 @@ void CSqlClass::createTable()
              'Name'	TEXT NOT NULL,              \
              'UpdateTime'	TEXT,               \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
-         );");
+             );");
 
     sql.clear();
 
     sql.exec("CREATE TABLE 'CustomerData' (     \
-        'Sid'	INTEGER,                    \
-        'Id'	TEXT NOT NULL,              \
-        'Class'	TEXT NOT NULL,             \
-        'Name'	TEXT,                       \
-        'Money'	INTEGER DEFAULT 0,          \
-        'Currency'	TEXT,                   \
-        'PayType'	TEXT,                   \
-        'PayInfo'	TEXT,                   \
-        'UpdateTime'	TEXT,               \
-        'UserSid'	TEXT,                   \
-        'Note1'	TEXT,                       \
-        'Note2'	TEXT,                       \
-        PRIMARY KEY('Sid' AUTOINCREMENT)    \
-    );");
+             'Sid'	INTEGER,                    \
+             'Id'	TEXT NOT NULL,              \
+             'Class'	TEXT NOT NULL,             \
+             'Name'	TEXT,                       \
+             'Money'	INTEGER DEFAULT 0,          \
+             'Currency'	TEXT,                   \
+             'PayType'	TEXT,                   \
+             'PayInfo'	TEXT,                   \
+             'UpdateTime'	TEXT,               \
+             'UserSid'	TEXT,                   \
+             'Note1'	TEXT,                       \
+             'Note2'	TEXT,                       \
+             PRIMARY KEY('Sid' AUTOINCREMENT)    \
+             );");
 
     sql.clear();
     sql.exec("CREATE TABLE 'CustomerGameInfo' (     \
-        'Sid'	INTEGER,                            \
-        'CustomerId'	TEXT,                           \
-        'GameSid'	TEXT,                           \
-        'LoginType'	TEXT,                           \
-        'LoginAccount'	TEXT,                       \
-        'ServerName'	TEXT,                       \
-        'Character'	TEXT,                           \
-        'LastTime'	TEXT,                           \
-        'UpdateTime'	TEXT,                       \
-        'Note1'	TEXT,                               \
-        PRIMARY KEY('Sid' AUTOINCREMENT)            \
-    );");
+             'Sid'	INTEGER,                            \
+             'CustomerId'	TEXT,                           \
+             'GameSid'	TEXT,                           \
+             'LoginType'	TEXT,                           \
+             'LoginAccount'	TEXT,                       \
+             'ServerName'	TEXT,                       \
+             'Character'	TEXT,                           \
+             'LastTime'	TEXT,                           \
+             'UpdateTime'	TEXT,                       \
+             'Note1'	TEXT,                               \
+             PRIMARY KEY('Sid' AUTOINCREMENT)            \
+             );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'CustomerCost' (        \
+             'Sid'	INTEGER,                            \
+             'CustomerSid'	TEXT,                       \
+             'OrderId'	TEXT,                        \
+             'Currency'	TEXT,                               \
+             'Rate'	TEXT,                   \
+             'Type'	TEXT,                               \
+             'Change'	TEXT,                        \
+             'Value'	TEXT,                            \
+             'UserSid'	TEXT,                           \
+             'UpdateTime'	TEXT,                       \
+             'OrderTime'	TEXT,                       \
+             'Note1'	TEXT,                               \
+             'Note2'	TEXT,                               \
+             PRIMARY KEY('Sid' AUTOINCREMENT)            \
+             );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'OrderData' (    \
+             'Sid'	INTEGER,                \
+             'Id'	TEXT,                       \
+             'Name'	TEXT,                       \
+             'UiRecord'	TEXT,                       \
+             'CustomerSid'	TEXT,           \
+             'Step'	TEXT,                   \
+             'StepTime'	INTEGER,            \
+             'User'	TEXT,                   \
+             'Owner'	TEXT,                   \
+            'PaddingUser'	TEXT,                   \
+             'Item'	TEXT,                   \
+             'Cost'	TEXT,                   \
+            'Rate'	TEXT,                   \
+            'AddValueType'	TEXT,                   \
+             'Note0'	TEXT,                   \
+             'Note1'	TEXT,                   \
+             'Note2'	TEXT,                   \
+             'Note3'	TEXT,                   \
+             'Note4'	TEXT,                   \
+             'Note5'	TEXT,                   \
+             'UpdateTime'	TEXT,           \
+             'OrderDate'	TEXT,                 \
+            'OrderTime'	TEXT,                 \
+             PRIMARY KEY('Sid' AUTOINCREMENT)    \
+             );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'AddValueType' (    \
+             'Sid'	INTEGER,                    \
+             'Name'	TEXT,                       \
+             'Id'	TEXT,                       \
+             'UpdateTime'	TEXT,               \
+             'Value'	TEXT,                   \
+             PRIMARY KEY('Sid' AUTOINCREMENT)   \
+         );");
 
 }
 
@@ -447,7 +519,7 @@ QStringList CSqlClass::fieldNames(QSqlRecord record)
 
 bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QString &sError)
 {
-
+    qDebug()<<"user :"<<sUser<<" ,pass:"<<sPass;
     QSqlQuery query(m_db);
 
     query.prepare("SELECT * FROM UserData WHERE Id=:id AND Password =:pass;");
@@ -464,7 +536,7 @@ bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QStri
     if(query.next())
     {
         bRe = true;
-     //   iRe=query.value("Lv").toInt();
+        //   iRe=query.value("Lv").toInt();
 
         for(int i=0;i<list.length();i++)
         {
@@ -726,6 +798,55 @@ bool CSqlClass::lsatCustomerId(QString sClassSid, QString sClassId, QString &out
     if(query.next())
     {
         out = query.value(0).toString();
+    }
+
+    sError = query.lastError().text();
+
+    return bRe;
+}
+
+bool CSqlClass::lastOrderId(QString sDate,QString &sId,QString &sError)
+{
+    QString tmpDate = sDate;
+    sId=tmpDate.remove(0,2)+"-A000";
+    QSqlQuery query(m_db);
+
+    QString sCmd = "SELECT Id FROM OrderData WHERE OrderDate='%1' ORDER BY Id DESC; ";
+
+     sCmd = sCmd.arg(sDate);
+
+     qDebug()<<"cmd : "<<sCmd;
+
+    bool bRe = query.exec(sCmd);
+
+    if(query.next())
+    {
+        sId = query.value("Id").toString();
+    }
+
+    sError = query.lastError().text();
+
+    return bRe;
+}
+
+bool CSqlClass::lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QString &sError)
+{
+    QString tmpDate = sDate;
+    //sId=tmpDate.remove(0,2)+"-A000";
+    QSqlQuery query(m_db);
+
+    QString sCmd = "SELECT Name FROM OrderData WHERE OrderDate='%1' AND Owner='%2' ORDER BY Id DESC; ";
+
+     sCmd = sCmd.arg(sDate).arg(sOwnerSid);
+
+     qDebug()<<"cmd : "<<sCmd;
+
+    bool bRe = query.exec(sCmd);
+
+    sRe="";
+    if(query.next())
+    {
+        sRe = query.value("Name").toString();
     }
 
     sError = query.lastError().text();

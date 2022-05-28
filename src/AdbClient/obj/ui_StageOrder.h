@@ -17,6 +17,9 @@
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
+#include "LayerCostTable.h"
+#include "LayerDayReport.h"
+#include "LayerGetOrder1.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -34,8 +37,10 @@ public:
     QPushButton *btn3;
     QSpacerItem *verticalSpacer;
     QStackedWidget *stackedWidget;
-    QWidget *page;
-    QWidget *page_2;
+    LayerCostTable *page;
+    LayerGetOrder1 *page_2;
+    QWidget *page_3;
+    LayerDayReport *page_4;
 
     void setupUi(QWidget *StageOrder)
     {
@@ -148,12 +153,18 @@ public:
 
         stackedWidget = new QStackedWidget(wBg);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
-        page = new QWidget();
+        page = new LayerCostTable();
         page->setObjectName(QString::fromUtf8("page"));
         stackedWidget->addWidget(page);
-        page_2 = new QWidget();
+        page_2 = new LayerGetOrder1();
         page_2->setObjectName(QString::fromUtf8("page_2"));
         stackedWidget->addWidget(page_2);
+        page_3 = new QWidget();
+        page_3->setObjectName(QString::fromUtf8("page_3"));
+        stackedWidget->addWidget(page_3);
+        page_4 = new LayerDayReport();
+        page_4->setObjectName(QString::fromUtf8("page_4"));
+        stackedWidget->addWidget(page_4);
 
         gridLayout_2->addWidget(stackedWidget, 0, 1, 1, 1);
 
@@ -162,6 +173,9 @@ public:
 
 
         retranslateUi(StageOrder);
+
+        stackedWidget->setCurrentIndex(1);
+
 
         QMetaObject::connectSlotsByName(StageOrder);
     } // setupUi

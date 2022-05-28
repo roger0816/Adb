@@ -91,3 +91,15 @@ QFont GlobalUi::font(int iPixSize)
 
     return f;
 }
+
+void GlobalUi::copyMsg(QString sMsg)
+{
+    QClipboard* clipboard = QApplication::clipboard();
+
+    clipboard->setText(sMsg, QClipboard::Clipboard);
+
+    if (clipboard->supportsSelection()) {
+        clipboard->setText(sMsg, QClipboard::Selection);
+    }
+
+}

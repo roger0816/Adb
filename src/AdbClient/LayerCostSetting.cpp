@@ -132,7 +132,7 @@ void LayerCostSetting::refreshItemList()
         return;
     }
 
-     DataExchange::Rate rate = DATA.rate();
+     DataExchange::Rate rate = ACTION.rate();
 //    QVariantList input,listRate;
 
 //    bool bRateOk = ACTION.action(ACT::READ_EXCHANGE,input,listRate,sError);
@@ -278,7 +278,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
-    dialog.setRate(sGameName+" : 新增商品",DATA.rate());
+    dialog.setRate(sGameName+" : 新增商品",ACTION.rate());
 
 
     if(dialog.exec()==1)
@@ -328,7 +328,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
-    dialog.setRate(sGameName+" : 修改商品",DATA.rate());
+    dialog.setRate(sGameName+" : 修改商品",ACTION.rate());
 
     dialog.setData(m_listItem.at(ui->tbGameItem->currentRow()).toMap());
 

@@ -120,25 +120,25 @@ bool Action::checkLogin(QString sUser, QString sPass, QString &sError)
     return bOk;
 
 
-//    m_sCurrentLoginUser.clear();
+    //    m_sCurrentLoginUser.clear();
 
-//    int iRe = -1;
+    //    int iRe = -1;
 
-//    if(bOk && data.listData.length()>0)
-//    {
+    //    if(bOk && data.listData.length()>0)
+    //    {
 
 
-//        m_sCurrentLoginUser = data.sUser;
+    //        m_sCurrentLoginUser = data.sUser;
 
-//        iRe = dRe.listData.first().toInt();
+    //        iRe = dRe.listData.first().toInt();
 
-//        if(m_sCurrentLoginUser=="root")
-//            iRe =99;
-//    }
+    //        if(m_sCurrentLoginUser=="root")
+    //            iRe =99;
+    //    }
 
-//    m_iUserLv = iRe;
+    //    m_iUserLv = iRe;
 
-//    return iRe;
+    //    return iRe;
 
 
 }
@@ -183,7 +183,7 @@ bool Action::delUser(QString sUser,QString &sError)
 
     data.iAciton = ACT::DEL_USER;
 
-    data.listData<<sUser;
+    data.dData["Id"]=sUser;
 
     CData dRe = query(data);
 
@@ -271,8 +271,8 @@ QString Action::getKeyValue(QString key, bool inLocal)
 
 CData Action::query(CData data)
 {
-//    qDebug()<<"query : " <<data.iAciton;
-//    qDebug()<<"listData : "<<data.listData;
+    //    qDebug()<<"query : " <<data.iAciton;
+    //    qDebug()<<"listData : "<<data.listData;
     data.sUser = m_currentUser.Id;
 
     if(m_bDataFromServer)
@@ -294,3 +294,384 @@ CData Action::callServer(CData data)
     return re;
 }
 
+
+void Action::reQuerty()
+{
+    getUser(true);
+
+    getGameList(true);
+
+    getCustomerClass(true);
+
+    rate("",true);
+}
+
+QList<UserData> Action::getUser(bool bQuery)
+{
+    if(bQuery)
+        m_listUser = queryUser();
+
+    return m_listUser;
+}
+
+UserData Action::getUser(QString sSid,bool bQuery)
+{
+    UserData re;
+    getUser(bQuery);
+    for(int i=0;i<m_listUser.length();i++)
+    {
+        if(sSid==m_listUser.at(i).Sid)
+            re =m_listUser.at(i);
+    }
+
+    return re;
+}
+
+QList<DataCustomerClass> Action::getCustomerClass(bool bQuery)
+{
+    if(bQuery)
+    {
+        m_listCustomerClass.clear();
+
+        QVariantList in,listClass;
+
+        QString sError;
+
+        action(ACT::QUERY_CUSTOM_CLASS,in,listClass,sError);
+
+        foreach(QVariant v,listClass)
+        {
+            DataCustomerClass tmp;
+
+            tmp.setData(v.toMap());
+
+            m_listCustomerClass.append(tmp);
+        }
+
+    }
+    return m_listCustomerClass;
+}
+
+DataCustomerClass Action::getCustomerClass(QString sSid, bool bQuery)
+{
+    getCustomerClass(bQuery);
+
+    DataCustomerClass re;
+
+    for(int i=0;i<m_listCustomerClass.length();i++)
+    {
+        if(sSid == m_listCustomerClass.at(i).Sid)
+        {
+            re = m_listCustomerClass.at(i);
+
+            break;
+        }
+    }
+
+    return re;
+}
+
+
+QList<DataGameList> Action::getGameList(bool bQuery)
+{
+    if(bQuery)
+    {
+        m_listGameList.clear();
+
+        QVariantList in,list;
+
+        QString sError;
+
+        action(ACT::QUERY_GAME_LIST,in,list,sError);
+
+        foreach(QVariant v,list)
+        {
+            DataGameList tmp;
+
+            tmp.setData(v.toMap());
+
+            m_listGameList.append(tmp);
+        }
+
+    }
+    return m_listGameList;
+}
+
+DataGameList Action::getGameList(QString sSid, bool bQuery)
+{
+    getGameList(bQuery);
+
+    DataGameList re;
+
+    for(int i=0;i<m_listGameList.length();i++)
+    {
+        if(sSid == m_listGameList.at(i).Sid)
+        {
+            re = m_listGameList.at(i);
+
+            break;
+        }
+    }
+
+    return re;
+}
+
+QList<DataGameItem> Action::getGameItem(bool bQuery)
+{
+    if(!bQuery)
+        return m_listGameItem;
+
+    QList<DataGameItem> listRe;
+
+    QVariantMap d;
+
+    //    d["GameSid"] = sGameSid;
+
+    QVariantList listOut;
+
+    QString sError;
+
+    action(ACT::QUERY_GAME_ITEM,d,listOut,sError);
+
+    m_listGameItem.clear();
+
+    for(int i=0;i<listOut.length();i++)
+    {
+        DataGameItem item(listOut.at(i).toMap());
+
+        m_listGameItem.append(item);
+    }
+
+    return listRe;
+}
+
+QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
+{
+    getGameItem(bQuery);
+
+    QList<DataGameItem> listRe;
+
+
+    for(int i=0;i<m_listGameItem.length();i++)
+    {
+        DataGameItem data = m_listGameItem.at(i);
+        if(data.GameSid == sGameSid)
+        {
+            listRe.append(data);
+        }
+    }
+
+    return listRe;
+}
+
+QString Action::getGameName(QString sId)
+{
+    QString sRe="";
+
+    for(int i=0;i<m_listGameList.length();i++)
+    {
+        if(sId==m_listGameList.at(i).Sid)
+        {
+            sRe =m_listGameList.at(i).Name;
+
+            break;
+        }
+    }
+
+    return sRe;
+
+}
+
+QString Action::getGameId(QString sName)
+{
+    QString sRe="";
+
+    for(int i=0;i<m_listGameList.length();i++)
+    {
+        if(sName==m_listGameList.at(i).Name)
+        {
+            sRe =m_listGameList.at(i).Sid;
+
+            break;
+        }
+    }
+
+    return sRe;
+}
+
+QList<CustomerCost> Action::getCustomerCost(QString sCustomerSid, bool bQuery)
+{
+
+    if(bQuery)
+    {
+        QVariantMap in;
+
+        QVariantList listOut;
+
+        in["CustomerSid"] = sCustomerSid;
+
+        QString sError;
+
+        action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError);
+
+        m_listCustomerCost.clear();
+
+        for(int i=0;i<listOut.length();i++)
+        {
+            CustomerCost d(listOut.at(i).toMap());
+            m_listCustomerCost.append(d);
+        }
+    }
+    return m_listCustomerCost;
+}
+
+bool Action::setCustomerCost(CustomerCost costData,QString &sError)
+{
+    bool bRe = false;
+
+    QVariantMap out;
+    qDebug()<<"setCustomer : "<<costData.data();
+    bRe = action(ACT::ADD_CUSTOMER_COST,costData.data(),out,sError);
+
+    return bRe;
+}
+
+QList<OrderData> Action::getOrder(bool bRequest)
+{
+    if(bRequest)
+    {
+        QVariantList in,out;
+
+        QString sError;
+        action(ACT::QUERY_ORDER,in,out,sError);
+
+        m_listOrder.clear();
+
+        for(int i=0;i<out.length();i++)
+        {
+            OrderData data(out.at(i).toMap());
+
+            m_listOrder.append(data);
+        }
+
+    }
+
+    return m_listOrder;
+}
+
+bool Action::replaceOrder(OrderData order, QString &sError)
+{
+    bool bRe = false;
+    QVariantMap out;
+    bRe = action(ACT::REPLACE_ORDER,order.data(),out,sError);
+    return bRe;
+
+}
+
+OrderData Action::getOrder(QString sSid, bool bRequest)
+{
+    if(bRequest)
+        getOrder(bRequest);
+
+    OrderData re;
+
+    for(int i=0;i<m_listOrder.length();i++)
+    {
+        if(m_listOrder.at(i).Sid==sSid)
+            re = m_listOrder.at(i);
+    }
+
+    return re;
+}
+
+OrderData Action::getOrderByCustomerSid(QString sSid, bool bRequest)
+{
+    if(bRequest)
+        getOrder(bRequest);
+
+    OrderData re;
+
+    for(int i=0;i<m_listOrder.length();i++)
+    {
+        if(m_listOrder.at(i).CustomerSid==sSid)
+        {
+
+            re = m_listOrder.at(i);
+
+            qDebug()<<re.Sid<<" , "<<re.Step;
+        }
+    }
+
+    return re;
+}
+
+QVariant Action::trKey(QVariantList list, QVariantMap info, QString sTargetKey)
+{
+    QVariant sRe="";
+    for(int i=0;list.length();i++)
+    {
+        QVariantMap d = list.at(i).toMap();
+        if(d[info.firstKey()] == info.first())
+        {
+            sRe = d[sTargetKey];
+        }
+    }
+
+    return sRe;
+}
+
+QStringList Action::mapToList(QVariantList list, QString sKey)
+{
+    QStringList listRe;
+
+    foreach(QVariant v ,list)
+    {
+        listRe.append(v.toMap()[sKey].toString());
+
+
+    }
+
+    return listRe;
+}
+
+int Action::mapping(QVariantList list, QString sKey, QString var)
+{
+    int iIdx=-1;
+
+    for(int i=0;i<list.length();i++)
+    {
+        if(list.at(i).toMap()[sKey] == var)
+        {
+            iIdx=i;
+
+            break;
+        }
+    }
+
+
+    return iIdx;
+}
+
+
+DataExchange::Rate Action::rate(QString sSid, bool bRequest)
+{
+    if(!bRequest)
+        return m_rate;
+    QVariantList input,listRate;
+
+    QString sError;
+
+    bool bRateOk =true;
+
+    bRateOk= action(ACT::READ_EXCHANGE,input,listRate,sError);
+
+    if(bRateOk)
+    {
+        DataExchange tmp(listRate);
+
+        m_rate = tmp.rate(sSid);
+
+    }
+
+    return m_rate;
+}

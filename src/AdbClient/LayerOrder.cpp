@@ -7,8 +7,8 @@ LayerOrder::LayerOrder(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    orderMode();
 
+    m_bOrderMode=true;
 }
 
 LayerOrder::~LayerOrder()

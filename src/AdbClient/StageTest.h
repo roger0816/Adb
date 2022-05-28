@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "DialogInput.h"
+#include "DialogCommon.h"
+#include "LayerSayCost.h"
 
 namespace Ui {
 class StageTest;

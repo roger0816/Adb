@@ -54,7 +54,7 @@ void LayerCustomer::on_btnAdd_clicked()
 
 void LayerCustomer::refresh()
 {
-    DATA.reQuerty();
+    ACTION.reQuerty();
 
     QString sError;
 
@@ -73,7 +73,7 @@ void LayerCustomer::refresh()
 
         ui->tb->setItem(i,0,UI.tbItem(data["Id"]));
 
-        QString sClassSid = DATA.getCustomerClass(data["Class"].toString()).Name;
+        QString sClassSid = ACTION.getCustomerClass(data["Class"].toString()).Name;
 
         ui->tb->setItem(i,1,UI.tbItem(sClassSid));
         ui->tb->setItem(i,2,UI.tbItem(data["Name"]));
@@ -83,7 +83,7 @@ void LayerCustomer::refresh()
 
         QDateTime updatetime =QDateTime::fromString(data["UpdateTime"].toString(),"yyyyMMddhhmmss");
 
-        QString sUserName = DATA.getUser(data["UserSid"].toString()).Name;
+        QString sUserName = ACTION.getUser(data["UserSid"].toString()).Name;
 
         ui->tb->setItem(i,9,UI.tbItem(updatetime));
         ui->tb->setItem(i,10,UI.tbItem(sUserName));

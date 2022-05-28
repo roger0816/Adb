@@ -103,10 +103,37 @@ public:
 
         widget_3 = new QWidget(widget_2);
         widget_3->setObjectName(QString::fromUtf8("widget_3"));
+        widget_3->setStyleSheet(QString::fromUtf8("\n"
+"QPushButton{\n"
+"font: 20px \"Microsoft JhengHei UI\";\n"
+"\n"
+"}\n"
+"\n"
+"QPushButton{background-color: rgb(255, 255, 255);\n"
+"border-radius:8px;\n"
+"color: rgb(41,41,41);\n"
+"border: 1px solid #000000; }\n"
+"\n"
+"\n"
+"QPushButton:hover \n"
+"{ \n"
+"background-color: #55aaff; \n"
+"border-style: outset; \n"
+"border-width: 2px; \n"
+"font: 700 18px \"Microsoft JhengHei UI\"; \n"
+"}\n"
+"QPushButton:pressed { \n"
+"border-style: outset; \n"
+"border-width: 0px; \n"
+"font: 700 24px \"Microsoft JhengHei UI\"; \n"
+"color:rgb(241,241,241);\n"
+"background-color:#3c78b4;\n"
+"}"));
         gridLayout_2 = new QGridLayout(widget_3);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
         btnLogin = new QPushButton(widget_3);
         btnLogin->setObjectName(QString::fromUtf8("btnLogin"));
+        btnLogin->setMinimumSize(QSize(90, 0));
 
         gridLayout_2->addWidget(btnLogin, 0, 1, 1, 1);
 

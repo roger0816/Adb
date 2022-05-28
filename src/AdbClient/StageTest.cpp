@@ -9,6 +9,7 @@ StageTest::StageTest(QWidget *parent) :
 
 
 
+
 }
 
 StageTest::~StageTest()
@@ -18,6 +19,17 @@ StageTest::~StageTest()
 
 void StageTest::on_pushButton_clicked()
 {
+    LayerSayCost layer;
+
+    QVariantMap d;
+
+
+
+    DialogCommon dialog;
+
+    dialog.setWidget(&layer);
+
+    dialog.exec();
 
 }
 

@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 
     GLOBAL;
 
-    DATA.reQuerty();
+    ACTION.reQuerty();
 
     Widget w;
     DialogLogin login;

@@ -34,9 +34,6 @@ private slots:
 
     void on_tbCusClass_cellDoubleClicked(int, int);
 
-    void on_btnFactoryAdd_clicked();
-
-    void on_btnFactoryEdit_clicked();
 
 private:
     Ui::LayerSysSetting *ui;
@@ -47,11 +44,11 @@ private:
 
     void refreshCustomer();
 
-    void refreshFactory();
+
 
     QVariantList m_listBulletin;
      QVariantList m_listCustomer;
-      QVariantList m_listFactory;
+
 };
 
 #endif // LAYERSYSSETTING_H

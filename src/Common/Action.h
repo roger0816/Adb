@@ -66,6 +66,10 @@ public:
     QList<DataCustomerClass> getCustomerClass(bool bQuery=false);
     DataCustomerClass getCustomerClass(QString sSid, bool bQuery=false);
 
+    QList<DataFactory> getFactoryClass(QString sSid="",bool bQuery=false);
+    bool editFacotryClass(QVariantMap data,QString &sError);
+
+
     QList<DataGameList> getGameList(bool bQuery=false);
     DataGameList getGameList(QString sSid, bool bQuery=false);
 
@@ -98,6 +102,10 @@ public:
 
     DataExchange::Rate rate(QString sSid="",bool bRequest=false);
 
+    bool addPrimeRate(QVariantMap data, QString &sError, bool bExchangeType=false);
+
+    QList<PrimeRate> primeRate(QString sSid="", bool bRequest=true, bool bExchangeType=false);
+
 
     UserData m_currentUser;
 
@@ -118,6 +126,9 @@ private:
 
     QList<DataCustomerClass> m_listCustomerClass;
 
+    QList<DataFactory> m_listFactoryClass;
+
+
     QList<DataGameList> m_listGameList;
 
     QList<DataGameItem> m_listGameItem;
@@ -126,8 +137,9 @@ private:
 
     QList<OrderData> m_listOrder;
 
-    DataExchange::Rate m_rate;
 
+    QVariantList m_primeRate;
+       QVariantList m_exRate;
 
 signals:
 

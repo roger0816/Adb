@@ -36,6 +36,8 @@ private:
 
     QList<UserData> m_listOwner;
 
+    QList<DataFactory> m_listFactory;
+
     QVariantMap m_data;
 
     QVariantMap gameItem(QString sSid);

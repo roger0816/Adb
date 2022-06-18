@@ -128,7 +128,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>匯率設定</string>
+            <string>售價匯率</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -150,7 +150,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>售價設定</string>
+            <string>成本匯率</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -161,7 +161,33 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
           </widget>
          </item>
          <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="btn2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>廠商設定</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -183,7 +209,33 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btn3">
+          <widget class="Line" name="line_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>商品設定</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -202,7 +254,14 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btn4">
+          <widget class="Line" name="line_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn6">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -224,7 +283,7 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btn5">
+          <widget class="QPushButton" name="btn7">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
              <horstretch>0</horstretch>
@@ -279,19 +338,17 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
          <item row="0" column="0">
           <widget class="QStackedWidget" name="stackedWidget">
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
-           <widget class="LayerExchangeRate" name="page0"/>
-           <widget class="QWidget" name="page1">
-            <layout class="QGridLayout" name="gridLayout_7">
-             <item row="0" column="0">
-              <widget class="LayerCostSetting" name="widget_7" native="true"/>
-             </item>
-            </layout>
+           <widget class="LayerPrimeCostRate" name="pageExchangeRate"/>
+           <widget class="LayerPrimeCostRate" name="pagePrimeCostRate"/>
+           <widget class="LayerFactory" name="pageFactory"/>
+           <widget class="LayerAddValueType" name="pageAddValueType"/>
+           <widget class="LayerCostSetting" name="pageCost">
+            <layout class="QGridLayout" name="gridLayout_7"/>
            </widget>
-           <widget class="LayerAddValueType" name="page2"/>
-           <widget class="QWidget" name="page3"/>
-           <widget class="LayerSysSetting" name="page4"/>
+           <widget class="QWidget" name="page"/>
+           <widget class="LayerSysSetting" name="page5"/>
            <widget class="QWidget" name="pageAccount">
             <layout class="QGridLayout" name="gridLayout_3">
              <property name="leftMargin">
@@ -760,9 +817,9 @@ font: 14pt &quot;Microsoft JhengHei UI&quot;;</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>LayerExchangeRate</class>
+   <class>LayerFactory</class>
    <extends>QWidget</extends>
-   <header>LayerExchangeRate.h</header>
+   <header>LayerFactory.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
@@ -781,6 +838,12 @@ font: 14pt &quot;Microsoft JhengHei UI&quot;;</string>
    <class>LayerAddValueType</class>
    <extends>QWidget</extends>
    <header>LayerAddValueType.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerPrimeCostRate</class>
+   <extends>QWidget</extends>
+   <header>LayerPrimeCostRate.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

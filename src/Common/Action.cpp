@@ -371,6 +371,52 @@ DataCustomerClass Action::getCustomerClass(QString sSid, bool bQuery)
     return re;
 }
 
+QList<DataFactory> Action::getFactoryClass(QString sSid, bool bQuery)
+{
+    if(bQuery)
+    {
+        m_listFactoryClass.clear();
+
+        QVariantList in,list;
+
+        QString sError;
+
+        action(ACT::QUERY_FACTORY_CLASS,in,list,sError);
+
+        foreach(QVariant v,list)
+        {
+            DataFactory tmp;
+
+            tmp.setData(v.toMap());
+
+            m_listFactoryClass.append(tmp);
+        }
+
+    }
+
+    QList<DataFactory> listRe;
+
+    if(sSid!="")
+    {
+        for(int i=0;i<m_listFactoryClass.length();i++)
+        {
+            if(m_listFactoryClass.at(i).Sid==sSid)
+            {
+                listRe.append(m_listFactoryClass.at(i));
+            }
+        }
+
+    }
+    else
+    {
+        listRe = m_listFactoryClass;
+    }
+
+    return listRe;
+}
+
+
+
 
 QList<DataGameList> Action::getGameList(bool bQuery)
 {
@@ -467,11 +513,12 @@ QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
 QString Action::getGameName(QString sId)
 {
     QString sRe="";
-
+    qDebug()<<"BB0 : "<<m_listGameList.length();
     for(int i=0;i<m_listGameList.length();i++)
     {
         if(sId==m_listGameList.at(i).Sid)
         {
+              qDebug()<<"BB1 : "<<sId<<" ,BB2 :"<<m_listGameList.at(i).Sid;
             sRe =m_listGameList.at(i).Name;
 
             break;
@@ -530,7 +577,7 @@ bool Action::setCustomerCost(CustomerCost costData,QString &sError)
     bool bRe = false;
 
     QVariantMap out;
-    qDebug()<<"setCustomer : "<<costData.data();
+
     bRe = action(ACT::ADD_CUSTOMER_COST,costData.data(),out,sError);
 
     return bRe;
@@ -598,7 +645,7 @@ OrderData Action::getOrderByCustomerSid(QString sSid, bool bRequest)
 
             re = m_listOrder.at(i);
 
-            qDebug()<<re.Sid<<" , "<<re.Step;
+
         }
     }
 
@@ -655,6 +702,7 @@ int Action::mapping(QVariantList list, QString sKey, QString var)
 
 DataExchange::Rate Action::rate(QString sSid, bool bRequest)
 {
+    /*
     if(!bRequest)
         return m_rate;
     QVariantList input,listRate;
@@ -672,6 +720,98 @@ DataExchange::Rate Action::rate(QString sSid, bool bRequest)
         m_rate = tmp.rate(sSid);
 
     }
+    */
+    DataExchange::Rate re;
 
-    return m_rate;
+    if(bRequest)
+    {
+        primeRate("",true,true);
+    }
+    if(m_exRate.length()>0)
+    {
+        re.fromPrime(m_exRate.last().toMap());
+    }
+
+    return re;
+}
+
+bool Action::addPrimeRate(QVariantMap data,QString &sError,bool bExchangeType)
+{
+
+    QVariantList out;
+
+    bool bRe=false;
+
+    if(!bExchangeType)
+        bRe=action(ACT::ADD_PRIMERATE,data,out,sError);
+    else
+        bRe=action(ACT::ADD_EXCHANGE,data,out,sError);
+
+    return bRe;
+
+}
+
+QList<PrimeRate> Action::primeRate(QString sSid, bool bRequest,bool bExchangeType)
+{
+    QList<PrimeRate> re  ;
+
+    if(bRequest)
+    {
+        QVariantList out;
+
+        QVariantMap in;
+
+        QString sError;
+
+
+        if(!bExchangeType)
+        {
+            action(ACT::QUERY_PRIMERATE,in,out,sError);
+
+            m_primeRate = out;
+        }
+        else
+        {
+            action(ACT::QUERY_EXCHANGE,in,out,sError);
+
+            m_exRate=out;
+        }
+
+    }
+
+    QVariantList target = m_primeRate;
+
+    if(bExchangeType)
+        target=m_exRate;
+
+    if(sSid=="")
+    {
+
+
+        for(int i=0;i<target.length();i++)
+        {
+            PrimeRate data;
+
+            data.setData(target.at(i).toMap());
+
+            re.append(data);
+        }
+
+    }
+    else
+    {
+        for(int i=0;i<target.length();i++)
+        {
+            if(sSid==target.at(i).toMap()["Sid"])
+            {
+                PrimeRate data;
+
+                data.setData(target.at(i).toMap());
+
+                re.append(data);
+            }
+        }
+    }
+
+    return re;
 }

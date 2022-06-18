@@ -355,12 +355,17 @@ background-color:#3c78b4;
            </column>
            <column>
             <property name="text">
-             <string>美金原價</string>
+             <string>業積點數</string>
             </property>
            </column>
            <column>
             <property name="text">
              <string>新台幣</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>美金</string>
             </property>
            </column>
            <column>

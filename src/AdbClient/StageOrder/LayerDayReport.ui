@@ -240,7 +240,7 @@
         </column>
         <column>
          <property name="text">
-          <string>業積獎金</string>
+          <string>業積</string>
          </property>
         </column>
         <column>

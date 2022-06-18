@@ -47,6 +47,8 @@ CSqlClass::CSqlClass(QObject *parent)
 
 bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,bool bOrRplace)
 {
+
+
     QVariantMap data = input;
 
     if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
@@ -194,6 +196,8 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
     query.prepare(sCmd+sSub);
 
+    qDebug()<<"query tb "<<sCmd+sSub;
+
     for(int j=0;j<listKey.length();j++)
     {
         query.bindValue(j,conditions[listKey.at(j)]);
@@ -335,10 +339,28 @@ void CSqlClass::createTable()
 
     sql.clear();
 
+//    sql.exec("CREATE TABLE 'ExchangeRate' ( \
+//             'Sid'	INTEGER, \
+//             'Class'	TEXT, \
+//             'Rate'	TEXT, \
+//             'UpdateTime'	TEXT, \
+//             PRIMARY KEY('Sid' AUTOINCREMENT) \
+//             );");
+
     sql.exec("CREATE TABLE 'ExchangeRate' ( \
              'Sid'	INTEGER, \
-             'Class'	TEXT, \
-             'Rate'	TEXT, \
+            'Id'	TEXT, \
+             'Name'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'PrimeCostRate' ( \
+             'Sid'	INTEGER, \
+            'Id'	TEXT, \
+             'Name'	TEXT, \
              'UpdateTime'	TEXT, \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
@@ -362,7 +384,7 @@ void CSqlClass::createTable()
              'Enable'	INTEGER DEFAULT 1, \
              'Name'	TEXT,               \
              'OrderNTD'	TEXT,           \
-             'OrderUSD'	TEXT,           \
+             'Bouns'	TEXT,           \
              'NTD'	TEXT,               \
              'EnableCost'	INTEGER DEFAULT 0, \
              'Cost'	TEXT,                       \
@@ -405,6 +427,9 @@ void CSqlClass::createTable()
              'Sid'	INTEGER,                    \
              'Id'	TEXT NOT NULL,              \
              'Name'	TEXT NOT NULL,              \
+             'Currency'	TEXT NOT NULL,           \
+             'SellCurrency'	TEXT NOT NULL,       \
+                  'Cost'	TEXT NOT NULL,              \
              'UpdateTime'	TEXT,               \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
              );");
@@ -450,6 +475,7 @@ void CSqlClass::createTable()
              'OrderId'	TEXT,                        \
              'Currency'	TEXT,                               \
              'Rate'	TEXT,                   \
+             'AddRate'	TEXT,                   \
              'Type'	TEXT,                               \
              'Change'	TEXT,                        \
              'Value'	TEXT,                            \
@@ -476,6 +502,7 @@ void CSqlClass::createTable()
             'PaddingUser'	TEXT,                   \
              'Item'	TEXT,                   \
              'Cost'	TEXT,                   \
+          'Bouns'	TEXT,                   \
             'Rate'	TEXT,                   \
             'AddValueType'	TEXT,                   \
              'Note0'	TEXT,                   \
@@ -780,7 +807,7 @@ QVariantList CSqlClass::readExchange(int iSid)
 
         listRe.append(data);
     }
-
+    qDebug()<<"rate : "<<listRe;
     return listRe;
 }
 

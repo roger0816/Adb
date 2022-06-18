@@ -74,13 +74,14 @@ private:
 
     QString checkId(int cbIdx);
 
-    QStringList m_listCurrency;
 
     void refresh();
 
     QString gameToName(QString sSid);
 
     QString gameToSid(QString sName);
+
+    QStringList m_listRateKey;
 };
 
 #endif // DIALOGCUSTOMEREDIT_H

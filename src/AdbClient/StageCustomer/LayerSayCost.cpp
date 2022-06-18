@@ -87,7 +87,8 @@ void LayerSayCost::orderMode()
 
     QList<UserData> listUser =ACTION.getUser(true);
     QStringList listCb;
-
+    listCb.append("艾比代");
+    /*
     m_listOwnerUser.clear();
 
     for(int i=0;i<listUser.length();i++)
@@ -100,6 +101,15 @@ void LayerSayCost::orderMode()
         }
 
     }
+    */
+
+    QList<DataFactory> listFac = ACTION.getFactoryClass("",true);
+
+    for(int i=0;i<listFac.length();i++)
+    {
+        listCb.append(listFac.at(i).Name);
+    }
+
 
     ui->cbSelect->clear();
 
@@ -138,6 +148,7 @@ void LayerSayCost::orderMode()
 
 void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 {
+    qDebug()<<"set customer : "<<data;
     m_listInto.clear();
 
     ui->tbInfo->setRowCount(0);
@@ -183,7 +194,6 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     ACTION.action(ACT::QUERY_GAME_INFO,d,m_listGameInfo,sError);
 
 
-
     QStringList cbName;
 
     for(int i=0;i<m_listGameInfo.length();i++)
@@ -192,11 +202,13 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
         QString sName= ACTION.getGameName(tmp["GameSid"].toString());
 
+
         if(cbName.indexOf(sName)<0)
             cbName.append(sName);
     }
 
     ui->cbGame->clear();
+
 
     ui->cbGame->addItems(cbName);
 
@@ -286,8 +298,10 @@ void LayerSayCost::refreshInfo()
 
 double LayerSayCost::checkTotal()
 {
+
     double re = 0;
 
+    double bouns = 0;
     DataExchange::Rate rate = ACTION.rate(m_sLoadOrderSid);
 
 
@@ -303,11 +317,16 @@ double LayerSayCost::checkTotal()
 
         double r = m_listInto.at(i).toMap()["NTD"].toDouble();
 
+        bouns += m_listInto.at(i).toMap()["Bouns"].toDouble();
+
+        qDebug()<<rate.listKey<<"   :   : "<<m_dataCustomer.Currency;
+
         int iIdx = rate.listKey.indexOf(m_dataCustomer.Currency);
+
 
         double target= rate.list().at(iIdx).toDouble();
 
-        r=r/rate.NTD*target;
+        r=r/rate.USD*target;
 
         //        if(m_dataCustomer.Currency=="HKD")
         //        {
@@ -330,6 +349,8 @@ double LayerSayCost::checkTotal()
         ui->tbInfo->setItem(i,3,UI.tbItem(cost));
     }
     m_iTotal=re;
+    m_iBouns = bouns;
+
     ui->lbTotal->setText(QString::number(re,'f',2));
     //    DATA.rate()
 
@@ -349,7 +370,7 @@ QString LayerSayCost::getNewOrderId()
 
     QString sRe =GLOBAL.sidAdd(out["Id"].toString());
 
-     qDebug()<<"order id "<<sRe;
+    qDebug()<<"order id "<<sRe;
     return sRe;
 }
 
@@ -360,22 +381,27 @@ QString LayerSayCost::getNewOrderName()
     QString sError;
 
     data["OrderDate"] = QDate::currentDate().toString("yyyyMMdd");
+    /*
     UserData owner=m_listOwnerUser.at(ui->cbSelect->currentIndex());
     data["Owner"] = owner.Sid;
+    */
+
+    QString sName = ui->cbSelect->currentText();
+    data["Owner"] = sName;
 
     ACTION.action(ACT::LAST_ORDER_NAME,data,out,sError);
 
     QString sRe =out["Name"].toString();
 
-    sRe=sRe.replace(owner.Name,"");
+    sRe=sRe.replace(sName,"");
 
     if(sRe=="")
     {
-        sRe=owner.Name+"1";
+        sRe=sName+"1";
     }
     else
     {
-        sRe= owner.Name+QString::number(sRe.toInt()+1);
+        sRe= sName+QString::number(sRe.toInt()+1);
     }
 
 
@@ -661,11 +687,14 @@ void LayerSayCost::on_btnCopy_clicked()
     {
         sCost+=ui->tbInfo->item(i,1)->text();
         sCost+=" x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,2))->text();
-        sCost+="  "+ui->tbInfo->item(i,3)->text()+"\n";
+
+        if(!m_bOrderMode)
+            sCost+="  "+ui->tbInfo->item(i,3)->text()+"\n";
 
     }
 
-    sCost+="總計: $ "+ui->lbTotal->text();
+    if(!m_bOrderMode)
+        sCost+="總計: $ "+ui->lbTotal->text();
 
     UI.copyMsg(sMsg+sCost);
 
@@ -693,10 +722,14 @@ void LayerSayCost::on_btnSayOk_clicked()
         return;
     }
 
-    QString sMsg="確定送出嗎？";
 
     if(m_bOrderMode && m_order.Sid=="")
-        sMsg="沒預先報價流程，請確認是否直接下訂單？";
+    {
+        UI.showMsg("","沒預先報價流程，請先進行報價",QStringList()<<"OK");
+        return;
+    }
+
+    QString sMsg="確定送出嗎？";
 
     int iRet =UI.showMsg("",sMsg,QStringList()<<"否"<<"是");
 
@@ -708,10 +741,10 @@ void LayerSayCost::on_btnSayOk_clicked()
     if(!m_bOrderMode)
     {
         m_order.Owner="";
-       // m_order.Sid="";
+        // m_order.Sid="";
         m_order.Note0 = ui->txNote1->toPlainText();
         m_order.User[0] = ACTION.m_currentUser.Sid;
-       // m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
+        // m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
         m_order.Step="0";
     }
     else
@@ -721,10 +754,12 @@ void LayerSayCost::on_btnSayOk_clicked()
         m_order.Note0 = ui->txNote1->toPlainText();
         m_order.User[1] = ACTION.m_currentUser.Sid;
         m_order.StepTime[1] = m_date.toString("yyyyMMddhhmmss");
-//        m_order.OrderDate = m_date.toString("yyyyMMdd");
-//        m_order.OrderTime = m_date.toString("hhmmss");
+        //        m_order.OrderDate = m_date.toString("yyyyMMdd");
+        //        m_order.OrderTime = m_date.toString("hhmmss");
         m_order.Step="1";
-        m_order.Owner = m_listOwnerUser.at(ui->cbSelect->currentIndex()).Sid;
+        m_order.Bouns = QString::number(m_iBouns,'f',2);
+       // m_order.Owner = m_listOwnerUser.at(ui->cbSelect->currentIndex()).Sid;
+        m_order.Owner = ui->cbSelect->currentText();
         m_order.Id = getNewOrderId();
 
         m_order.Name = getNewOrderName();
@@ -733,8 +768,8 @@ void LayerSayCost::on_btnSayOk_clicked()
 
     if( m_order.Sid=="")
     {
-                m_order.OrderDate = m_date.toString("yyyyMMdd");
-                m_order.OrderTime = m_date.toString("hhmmss");
+        m_order.OrderDate = m_date.toString("yyyyMMdd");
+        m_order.OrderTime = m_date.toString("hhmmss");
     }
 
     QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+

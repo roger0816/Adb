@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
 
     w.connect(&login,SIGNAL(signalLogin()),&w,SLOT(show()));
-#if 1
+#if 0
 
 
    login.exec();
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
      ACTION.m_currentUser.Id="root";
      ACTION.m_currentUser.Name="Test001";
       ACTION.m_currentUser.Lv=99;
-      ACTION.m_currentUser.Sid="0";
+      ACTION.m_currentUser.Sid="1";
      w.show();
 #endif
 

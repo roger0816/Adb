@@ -220,11 +220,11 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
       <item row="0" column="1">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="LayerCostTable" name="page"/>
         <widget class="LayerGetOrder1" name="page_2"/>
-        <widget class="QWidget" name="page_3"/>
+        <widget class="LayerGetOrder2" name="page_3"/>
         <widget class="LayerDayReport" name="page_4"/>
        </widget>
       </item>
@@ -250,6 +250,12 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
    <class>LayerGetOrder1</class>
    <extends>QWidget</extends>
    <header>LayerGetOrder1.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerGetOrder2</class>
+   <extends>QWidget</extends>
+   <header>LayerGetOrder2.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

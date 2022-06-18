@@ -47,6 +47,8 @@ struct DataObj
         return re;
     }
 
+
+
 };
 
 
@@ -127,12 +129,17 @@ struct CustomerData :public DataObj
 
         Class = data["Class"].toString();
         Money = data["Money"].toString();
+        if(Money=="")
+            Money="0";
+
         Currency = data["Currency"].toString();
         PayType =data["PayType"].toString();
         PayInfo =data["PayInfo"].toString();
         UserSid = data["UserSid"].toString();
         Note1   =data["Note1"].toString();
         Note2   =data["Note2"].toString();
+
+
     }
 
     QVariantMap data()
@@ -152,7 +159,7 @@ struct CustomerData :public DataObj
     }
 
     QString Class;
-    QString Money;
+    QString Money="0";
     QString Currency;
     QString PayType;
     QString PayInfo;
@@ -173,7 +180,13 @@ struct CustomerCost
         Change = data["Change"].toString();
         Type = data["Type"].toString();
         Rate = data["Rate"].toString();
+        AddRate = data["AddRate"].toString();
+
         Value = data["Value"].toString();
+
+        if(Value=="")
+            Value="0";
+
         UserSid = data["UserSid"].toString();
         OrderTime = data["OrderTime"].toString();
         UpdateTime = data["UpdateTime"].toString();
@@ -191,6 +204,7 @@ struct CustomerCost
         re["Currency"]=Currency;
         re["Type"]=Type;
         re["Rate"]=Rate;
+        re["AddRate"]=AddRate;
         re["Change"]=Change;
         re["Value"]=Value;
         re["UserSid"]=UserSid;
@@ -208,6 +222,7 @@ struct CustomerCost
     QString CustomerSid;
     QString OrderId;
     QString Rate;
+    QString AddRate="0";
     QString Type;
     QString Currency;
     QString Change ="0";
@@ -225,6 +240,8 @@ struct DataCustomerClass :public DataObj
 {
 
 };
+
+
 
 
 struct CustomerGameInfo :public DataObj
@@ -301,6 +318,7 @@ struct OrderData :public DataObj
         PaddingUser = data["PaddingUser"].toString();
         Item = data["Item"].toString();
         Cost = data["Cost"].toString();
+         Bouns = data["Bouns"].toString();
         AddValueType = data["AddValueType"].toString();
         Rate = data["Rate"].toString();
         Note0 = data["Note0"].toString();
@@ -328,6 +346,7 @@ struct OrderData :public DataObj
         re["PaddingUser"] = PaddingUser;
         re["Item"] = Item;
         re["Cost"] = Cost;
+                re["Bouns"] = Bouns;
         re["AddValueType"] = AddValueType;
         re["Rate"] = Rate;
         re["Note0"] = Note0;
@@ -354,6 +373,7 @@ struct OrderData :public DataObj
     QString AddValueType;
     QString Item;
     QString Cost="0";
+        QString Bouns="0";
     QString Rate="";
     QString Note0;
     QString Note1;
@@ -369,6 +389,37 @@ struct OrderData :public DataObj
 
 
 };
+
+
+struct DataFactory :public DataObj
+{
+    bool Enable;
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
+        Currency = data["Currency"].toString();
+        SellCurrency = data["SellCurrency"].toString();
+        Cost = data["Cost"].toString();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re =DataObj::data();
+
+        re["Currency"] = Currency;
+        re["SellCurrency"] = SellCurrency;
+        re["Cost"] = Cost;
+
+        return re;
+    }
+
+    QString Currency;
+    QString SellCurrency;
+    QString Cost;
+};
+
 struct DataGameList :public DataObj
 {
     bool Enable;
@@ -390,6 +441,76 @@ struct DataGameList :public DataObj
     }
 };
 
+
+//struct DataGameList
+//{
+
+//    void setGameList(QVariantList list)
+//    {
+//        listData.clear();
+
+//        for(int i=0;i<list.length();i++)
+//        {
+//            QVariantMap data = list.at(i).toMap();
+
+//            GameData game;
+
+//            game.Sid = data["Sid"].toString();
+
+//            game.Id = data["Id"].toString();
+
+//            game.Name = data["Name"].toString();
+
+//            game.Enable = data["Enable"].toInt();
+
+//            game.UpdateTime = data["UpdateTime"].toString();
+
+//            listData.append(game);
+//        }
+
+//    }
+
+//    QVariantList data()
+//    {
+//        QVariantList listRe;
+
+//        for(int i=0;i<listData.length();i++)
+//        {
+//            GameData game = listData.at(i);
+//            QVariantMap v;
+
+//            v["Sid"] = game.Sid;
+//            v["Id"] = game.Id;
+//            v["Name"] = game.Name;
+//            v["UpdateTime"] = game.UpdateTime;
+//            v["Enable"] = game.Enable;
+
+//            listRe.append(v);
+//        }
+
+//        return listRe;
+//    }
+
+//    struct GameData
+//    {
+//        QString Sid;
+
+//        QString Id;
+
+//        QString Name;
+
+//        bool Enable;
+
+//        QString UpdateTime;
+
+//    };
+
+
+//    QList<GameData> listData;
+
+//};
+
+
 struct DataGameItem :public DataObj
 {
     DataGameItem(){}
@@ -405,7 +526,7 @@ struct DataGameItem :public DataObj
         GameSid = data["GameSid"].toString();
         Enable = data["Enable"].toBool();
         OrderNTD = data["OrderNTD"].toString();
-        OrderUSD = data["OrderUSD"].toString();
+        Bouns = data["Bouns"].toString();
         NTD = data["NTD"].toString();
         EnableCost = data["EnableCost"].toBool();
         Cost = data["Cost"].toString();
@@ -420,7 +541,7 @@ struct DataGameItem :public DataObj
         d["GameSid"]=GameSid;
         d["Enable"]=Enable;
         d["OrderNTD"]=OrderNTD;
-        d["OrderUSD"]=OrderUSD;
+        d["Bouns"]=Bouns;
         d["NTD"]=NTD;
         d["EnableCost"]=EnableCost;
         d["Cost"]=Cost;
@@ -435,7 +556,7 @@ struct DataGameItem :public DataObj
     QString GameSid;
     bool Enable;
     QString OrderNTD;
-    QString OrderUSD;
+    QString Bouns;
     QString NTD;
     bool EnableCost;
     QString Cost;
@@ -454,7 +575,7 @@ public:
     DataExchange()
     {
         listKey.clear();
-        listKey<<"NTD"<<"HKD"<<"RMB"<<"MYR"<<"SGD";
+        listKey<<"新台幣(NTD)"<<"美金(USD)"<<"港幣(HKD)"<<"人民幣(RMB)"<<"林吉特(MYR)"<<"新加坡元(SGD)";
     }
 
     DataExchange(QVariantList data):DataExchange()
@@ -467,9 +588,78 @@ public:
     struct Rate
     {
 
+        void fromPrime(QVariantMap data)
+        {
+            Sid = data["Sid"].toString();
+            UpdateTime = data["UpdateTime"].toString();
+
+            listKey.clear();
+
+            listKey.append("新台幣(NTD)");
+            QStringList list = data["Name"].toString().split(";");
+
+            if(list.length()>1)
+            {
+                QStringList tmp = list.at(1).split("=");
+                if(tmp.length()>1)
+                {
+                    listKey.append(tmp.first());
+
+                    USD = tmp.last().toDouble();
+                }
+            }
+
+            if(list.length()>2)
+            {
+                QStringList tmp = list.at(2).split("=");
+                if(tmp.length()>1)
+                {
+                    listKey.append(tmp.first());
+
+                    HKD = tmp.last().toDouble();
+                }
+            }
+
+            if(list.length()>3)
+            {
+                QStringList tmp = list.at(3).split("=");
+                if(tmp.length()>1)
+                {
+                    listKey.append(tmp.first());
+
+                    RMB = tmp.last().toDouble();
+                }
+            }
+
+            if(list.length()>4)
+            {
+                QStringList tmp = list.at(4).split("=");
+                if(tmp.length()>1)
+                {
+                    listKey.append(tmp.first());
+
+                    MYR = tmp.last().toDouble();
+                }
+            }
+
+            if(list.length()>5)
+            {
+                QStringList tmp = list.at(5).split("=");
+                if(tmp.length()>1)
+                {
+                    listKey.append(tmp.first());
+
+                    SGD = tmp.last().toDouble();
+                }
+            }
+
+        }
+
+
         QString Sid;
         QString UpdateTime;
-        double NTD=0.00;
+
+        double USD=0.00;
         double HKD=0.00;
         double RMB=0.00;
         //Malaysia
@@ -482,7 +672,7 @@ public:
         {
             QStringList re;
 
-            re.append(QString::number(NTD));
+            re.append(QString::number(USD));
             re.append(QString::number(HKD));
             re.append(QString::number(RMB));
             re.append(QString::number(MYR));
@@ -509,9 +699,14 @@ public:
 
     Rate rate(QString sId)
     {
+        Rate re;
+
+        if(m_listData.length()<1)
+            return re;
+
         if(sId=="")
             return last();
-        Rate re;
+
 
         for(int i=0;i<m_listData.length();i++)
         {
@@ -534,7 +729,7 @@ public:
             Rate rate;
             rate.Sid = data["Sid"].toString();
             rate.UpdateTime = data["UpdateTime"].toString();
-            rate.NTD =data["NTD"].toDouble();
+            rate.USD =data["USD"].toDouble();
             rate.HKD = data["HKD"].toDouble();
             rate.RMB = data["RMB"].toDouble();
             rate.MYR = data["MYR"].toDouble();
@@ -555,7 +750,7 @@ public:
             QVariantMap t ;
             t["Sid"] = m_listData.at(i).Sid;
             t["UpdateTime"] = m_listData.at(i).UpdateTime;
-            t["NTD"] = m_listData.at(i).NTD;
+            t["USD"] = m_listData.at(i).USD;
             t["HKD"] = m_listData.at(i).HKD;
             t["RMB"] = m_listData.at(i).RMB;
             t["MYR"] = m_listData.at(i).MYR;
@@ -570,6 +765,115 @@ public:
 
     QList<Rate> m_listData;
 
+
+};
+
+
+struct PrimeRate :public DataObj
+{
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
+        QStringList tmp = data["Name"].toString().split(";");
+
+        listData.clear();
+
+
+        for(int i=0;i<tmp.length();i++)
+        {
+            QPair<QString,QString> data;
+            data.first = tmp.at(i).split("=").first();
+            data.second = tmp.at(i).split("=").last();
+
+            listData.append(data);
+        }
+
+    }
+
+
+    QVariantMap data()
+    {
+        QVariantMap re = DataObj::data();
+
+        QStringList list;
+
+        for(int i=0;i<listData.length();i++)
+        {
+            QString sTmp = listData.at(i).first+"="+listData.at(i).second;
+
+            list.append(sTmp);
+        }
+
+        re["Name"] = list.join(";");
+
+        return re;
+    }
+
+    QStringList listKey()
+    {
+        QStringList listRe;
+
+        for(int i=0;i<listData.length();i++)
+        {
+            listRe.append(listData.at(i).first);
+        }
+
+        return listRe;
+
+    }
+
+    QList<QPair<QString,QString> > listData;
+
+    double USD()
+    {
+        int iRe=0.00;
+
+        if(listData.length()>=2)
+            iRe = listData.at(1).second.toDouble();
+
+        return iRe;
+    }
+
+    double HKD()
+    {
+        int iRe=0.00;
+
+        if(listData.length()>=3)
+            iRe = listData.at(2).second.toDouble();
+
+        return iRe;
+    }
+
+    double RMB()
+    {
+        int iRe=0.00;
+
+        if(listData.length()>=4)
+            iRe = listData.at(3).second.toDouble();
+
+        return iRe;
+    }
+
+    double MYR()
+    {
+        int iRe=0.00;
+
+        if(listData.length()>=5)
+            iRe = listData.at(4).second.toDouble();
+
+        return iRe;
+    }
+
+    double SGD()
+    {
+        int iRe=0.00;
+
+        if(listData.length()>=6)
+            iRe = listData.at(5).second.toDouble();
+
+        return iRe;
+    }
 
 };
 
@@ -643,65 +947,65 @@ struct GameList
 };
 
 
-struct GameItem
-{
+//struct GameItem
+//{
 
-    GameItem(){}
+//    GameItem(){}
 
-    GameItem(QVariantMap data){setData(data);}
+//    GameItem(QVariantMap data){setData(data);}
 
-    void setData(QVariantMap data)
-    {
-        Sid = data["Sid"].toInt();
+//    void setData(QVariantMap data)
+//    {
+//        Sid = data["Sid"].toInt();
 
-        GameId = data["GameSid"].toInt();
+//        GameId = data["GameSid"].toInt();
 
-        Enable = data["Enable"].toBool();
+//        Enable = data["Enable"].toBool();
 
-        Name = data["Name"].toString();
+//        Name = data["Name"].toString();
 
-        OrderNTD = data["OrderNTD"].toDouble();
+//        OrderNTD = data["OrderNTD"].toDouble();
 
-        OrderUSD = data["OrderUSD"].toDouble();
+//        Bouns = data["Bouns"].toDouble();
 
-        NTD = data["NTD"].toDouble();
+//        NTD = data["NTD"].toDouble();
 
-        EnableCost = data["EnableCost"].toBool();
+//        EnableCost = data["EnableCost"].toBool();
 
-        Cost = data["Cost"].toString();
+//        Cost = data["Cost"].toString();
 
-        Note1 = data["Note1"].toString();
+//        Note1 = data["Note1"].toString();
 
-        Note2 = data["Note2"].toString();
+//        Note2 = data["Note2"].toString();
 
-        UpdateTime = data["UpdateTime"].toString();
+//        UpdateTime = data["UpdateTime"].toString();
 
-    }
+//    }
 
-    int Sid;
+//    int Sid;
 
-    int GameId;
+//    int GameId;
 
-    bool Enable;
+//    bool Enable;
 
-    QString  Name;
+//    QString  Name;
 
-    double OrderNTD;
+//    double OrderNTD;
 
-    double OrderUSD;
+//    double Bouns;
 
-    double NTD;
+//    double NTD;
 
-    bool EnableCost;
+//    bool EnableCost;
 
-    QString Cost;
+//    QString Cost;
 
-    QString Note1;
+//    QString Note1;
 
-    QString Note2;
+//    QString Note2;
 
-    QString UpdateTime;
-};
+//    QString UpdateTime;
+//};
 
 
 

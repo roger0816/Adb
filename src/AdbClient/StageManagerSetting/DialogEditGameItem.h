@@ -6,7 +6,7 @@
 #include <QVariantMap>
 #include "DialogMsg.h"
 #include "VojData.h"
-
+#include <QDoubleSpinBox>
 namespace Ui {
 class DialogEditGameItem;
 }
@@ -19,14 +19,16 @@ public:
     explicit DialogEditGameItem(QWidget *parent = nullptr);
     ~DialogEditGameItem();
 
-    void setRate(QString sTitle,DataExchange::Rate rate);
-
+    void setRate(QString sTitle,PrimeRate rate);
     void setData(QVariantMap data);
 
     QVariantMap data();
 
-    DataExchange::Rate m_rate;
+    //DataExchange::Rate m_rate;
 
+    PrimeRate m_rate;
+private :
+    bool m_bLock = false;
 private slots:
     void on_btnCostAdd_clicked();
 
@@ -40,6 +42,8 @@ private slots:
 
 
     void on_btnGameEditDel_clicked();
+
+    void valueChange(double arg);
 
 private:
     Ui::DialogEditGameItem *ui;

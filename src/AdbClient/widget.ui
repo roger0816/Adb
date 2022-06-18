@@ -79,15 +79,15 @@
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>4</number>
            </property>
-           <widget class="StageHomePage" name="page0"/>
-           <widget class="StageCustomer" name="page1">
+           <widget class="StageHomePage" name="pageHome"/>
+           <widget class="StageCustomer" name="pageCustomer">
             <property name="styleSheet">
              <string notr="true"/>
             </property>
            </widget>
-           <widget class="StageOrder" name="page2">
+           <widget class="StageOrder" name="pageOrder">
             <property name="styleSheet">
              <string notr="true"/>
             </property>
@@ -97,17 +97,17 @@
              <string notr="true">background-color: rgb(207, 255, 252);</string>
             </property>
            </widget>
-           <widget class="StageManagerSetting" name="page4">
+           <widget class="StageManagerSetting" name="pageManager">
             <property name="styleSheet">
              <string notr="true"/>
             </property>
            </widget>
-           <widget class="StageAccount" name="page5">
+           <widget class="StageAccount" name="pageAccount">
             <property name="styleSheet">
              <string notr="true"/>
             </property>
            </widget>
-           <widget class="StageTest" name="page"/>
+           <widget class="QWidget" name="page"/>
           </widget>
          </item>
         </layout>
@@ -494,12 +494,6 @@ color: rgb(122, 122, 122);
    <class>StageOrder</class>
    <extends>QWidget</extends>
    <header>StageOrder.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>StageTest</class>
-   <extends>QWidget</extends>
-   <header>StageTest.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

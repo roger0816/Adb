@@ -13,6 +13,7 @@
 struct SQL_TABLE
 {
     static QString ExchangeRate(){return "ExchangeRate";}
+    static QString PrimeCostRate(){return "PrimeCostRate";}
     static QString GameList(){return "GameList";}
     static QString GameItem(){return "GameItem";}
     static QString Bulletin(){return "Bulletin";}
@@ -94,7 +95,14 @@ enum _KEY
 
 
     SAVE_EXCHANGE,
-    READ_EXCHANGE
+    READ_EXCHANGE,
+
+    ADD_EXCHANGE,
+    QUERY_EXCHANGE,
+
+
+    ADD_PRIMERATE,
+    QUERY_PRIMERATE
 
 
 

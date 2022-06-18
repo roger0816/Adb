@@ -9,9 +9,6 @@ DialogCustomerEdit::DialogCustomerEdit(QWidget *parent) :
 
     this->setWindowTitle("客戶資料設定");
 
-    m_listCurrency<<"NTD"<<"HKD"<<"RMB"<<"MYR"<<"SGD";
-
-
     ui->tbGameList->setColumnWidth(0,56);
 
 
@@ -37,6 +34,12 @@ void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
     ui->cbGame->clear();
 
     ui->cbGame->addItems(mapToList(m_listGame,"Name"));
+    m_listRateKey.clear();
+    m_listRateKey = ACTION.primeRate("",true).last().listKey();
+    m_listRateKey.push_front("新台幣(NTD)");
+    ui->cbCost->clear();
+
+    ui->cbCost->addItems(m_listRateKey);
 }
 
 void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,QVariantList listGameInfo,QVariantMap data)
@@ -60,7 +63,7 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     QString sCurrency = m_data["Currency"].toString();
 
-    int iCbIdx =qBound(0,m_listCurrency.indexOf(sCurrency),ui->cbCost->count()-1);
+    int iCbIdx =qBound(0,m_listRateKey.indexOf(sCurrency),ui->cbCost->count()-1);
 
     ui->cbCost->setCurrentIndex(iCbIdx);
 
@@ -74,7 +77,7 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     m_listGameInfo = listGameInfo;
 
-    qDebug()<<"AAA :"<<m_listGameInfo;
+
 
 
     refresh();
@@ -97,7 +100,7 @@ QVariantMap DialogCustomerEdit::data()
 
     m_data["Class"] = mapToList(m_listClass,"Sid").at(iClassIdx);
 
-    QString sCurrency = m_listCurrency.at(qBound(0,ui->cbCost->currentIndex(),ui->cbCost->count()-1));
+    QString sCurrency = ui->cbCost->currentText();
 
     m_data["Currency"] = sCurrency;
 

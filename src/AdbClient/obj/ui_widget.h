@@ -23,7 +23,6 @@
 #include "StageHomePage.h"
 #include "StageManagerSetting.h"
 #include "StageOrder.h"
-#include "StageTest.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -36,13 +35,13 @@ public:
     QWidget *widget_2;
     QGridLayout *gridLayout_3;
     QStackedWidget *stackedWidget;
-    StageHomePage *page0;
-    StageCustomer *page1;
-    StageOrder *page2;
+    StageHomePage *pageHome;
+    StageCustomer *pageCustomer;
+    StageOrder *pageOrder;
     QWidget *page3;
-    StageManagerSetting *page4;
-    StageAccount *page5;
-    StageTest *page;
+    StageManagerSetting *pageManager;
+    StageAccount *pageAccount;
+    QWidget *page;
     QWidget *wTop;
     QGridLayout *gridLayout_4;
     QWidget *widget_3;
@@ -91,30 +90,30 @@ public:
         stackedWidget = new QStackedWidget(widget_2);
         stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
         stackedWidget->setStyleSheet(QString::fromUtf8(""));
-        page0 = new StageHomePage();
-        page0->setObjectName(QString::fromUtf8("page0"));
-        stackedWidget->addWidget(page0);
-        page1 = new StageCustomer();
-        page1->setObjectName(QString::fromUtf8("page1"));
-        page1->setStyleSheet(QString::fromUtf8(""));
-        stackedWidget->addWidget(page1);
-        page2 = new StageOrder();
-        page2->setObjectName(QString::fromUtf8("page2"));
-        page2->setStyleSheet(QString::fromUtf8(""));
-        stackedWidget->addWidget(page2);
+        pageHome = new StageHomePage();
+        pageHome->setObjectName(QString::fromUtf8("pageHome"));
+        stackedWidget->addWidget(pageHome);
+        pageCustomer = new StageCustomer();
+        pageCustomer->setObjectName(QString::fromUtf8("pageCustomer"));
+        pageCustomer->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(pageCustomer);
+        pageOrder = new StageOrder();
+        pageOrder->setObjectName(QString::fromUtf8("pageOrder"));
+        pageOrder->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(pageOrder);
         page3 = new QWidget();
         page3->setObjectName(QString::fromUtf8("page3"));
         page3->setStyleSheet(QString::fromUtf8("background-color: rgb(207, 255, 252);"));
         stackedWidget->addWidget(page3);
-        page4 = new StageManagerSetting();
-        page4->setObjectName(QString::fromUtf8("page4"));
-        page4->setStyleSheet(QString::fromUtf8(""));
-        stackedWidget->addWidget(page4);
-        page5 = new StageAccount();
-        page5->setObjectName(QString::fromUtf8("page5"));
-        page5->setStyleSheet(QString::fromUtf8(""));
-        stackedWidget->addWidget(page5);
-        page = new StageTest();
+        pageManager = new StageManagerSetting();
+        pageManager->setObjectName(QString::fromUtf8("pageManager"));
+        pageManager->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(pageManager);
+        pageAccount = new StageAccount();
+        pageAccount->setObjectName(QString::fromUtf8("pageAccount"));
+        pageAccount->setStyleSheet(QString::fromUtf8(""));
+        stackedWidget->addWidget(pageAccount);
+        page = new QWidget();
         page->setObjectName(QString::fromUtf8("page"));
         stackedWidget->addWidget(page);
 
@@ -323,7 +322,7 @@ public:
 
         retranslateUi(Widget);
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(4);
 
 
         QMetaObject::connectSlotsByName(Widget);

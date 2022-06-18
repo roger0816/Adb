@@ -91,6 +91,7 @@ void LayerCostSetting::refreshGameList()
 
 void LayerCostSetting::refreshItemList()
 {
+
     int iGameRow = ui->tbGame->currentRow();
 
     m_listItem.clear();
@@ -133,6 +134,14 @@ void LayerCostSetting::refreshItemList()
     }
 
      DataExchange::Rate rate = ACTION.rate();
+
+     QList<PrimeRate> tmp = ACTION.primeRate("",true,true);
+
+     PrimeRate rate2;
+
+     if(tmp.length()>0)
+         rate2 = tmp.last();
+
 //    QVariantList input,listRate;
 
 //    bool bRateOk = ACTION.action(ACT::READ_EXCHANGE,input,listRate,sError);
@@ -153,7 +162,7 @@ void LayerCostSetting::refreshItemList()
     for(int i=0;i<m_listItem.length();i++)
     {
 
-        GameItem data(m_listItem.at(i).toMap());
+        DataGameItem data(m_listItem.at(i).toMap());
 
 
         ui->tbGameItem->setRowCount(i+1);
@@ -164,26 +173,39 @@ void LayerCostSetting::refreshItemList()
 
         ui->tbGameItem->setItem(i,2,UI.tbItem(data.OrderNTD));
 
-        ui->tbGameItem->setItem(i,3,UI.tbItem(data.OrderUSD));
+        ui->tbGameItem->setItem(i,3,UI.tbItem(data.Bouns));
 
         ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
 
-        double iNTD = data.NTD;
+        double iNTD = data.NTD.toDouble();
 
-        ui->tbGameItem->setItem(i,5,UI.tbItem(iNTD/rate.NTD*rate.HKD));
+//        ui->tbGameItem->setItem(i,5,UI.tbItem(iNTD/rate.USD));
 
-        ui->tbGameItem->setItem(i,6,UI.tbItem(iNTD/rate.NTD*rate.RMB));
+//        ui->tbGameItem->setItem(i,6,UI.tbItem(iNTD/rate.HKD));
 
-        ui->tbGameItem->setItem(i,7,UI.tbItem(iNTD/rate.NTD*rate.MYR));
+//        ui->tbGameItem->setItem(i,7,UI.tbItem(iNTD/rate.RMB));
 
-        ui->tbGameItem->setItem(i,8,UI.tbItem(iNTD/rate.NTD*rate.SGD));
+//        ui->tbGameItem->setItem(i,8,UI.tbItem(iNTD/rate.MYR));
+
+//        ui->tbGameItem->setItem(i,9,UI.tbItem(iNTD/rate.SGD));
+
+                ui->tbGameItem->setItem(i,5,UI.tbItem(iNTD/rate2.USD()));
+
+                ui->tbGameItem->setItem(i,6,UI.tbItem(iNTD/rate2.HKD()));
+
+                ui->tbGameItem->setItem(i,7,UI.tbItem(iNTD/rate2.RMB()));
+
+                ui->tbGameItem->setItem(i,8,UI.tbItem(iNTD/rate2.MYR()));
+
+                ui->tbGameItem->setItem(i,9,UI.tbItem(iNTD/rate2.SGD()));
 
 
-        ui->tbGameItem->setItem(i,9,UI.tbItem(data.EnableCost));
 
-        ui->tbGameItem->setItem(i,10,UI.tbItem(data.Cost));
+        ui->tbGameItem->setItem(i,10,UI.tbItem(data.EnableCost));
 
-        ui->tbGameItem->setItem(i,11,UI.tbItem(QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss")));
+        ui->tbGameItem->setItem(i,11,UI.tbItem(data.Cost));
+
+        ui->tbGameItem->setItem(i,12,UI.tbItem(QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss")));
     }
 
 
@@ -278,7 +300,12 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
-    dialog.setRate(sGameName+" : 新增商品",ACTION.rate());
+    PrimeRate rate;
+
+    if(ACTION.primeRate("",true,true).length()>0)
+        rate=ACTION.primeRate("",true,true).last();
+
+    dialog.setRate(sGameName+" : 新增商品",rate);
 
 
     if(dialog.exec()==1)
@@ -328,7 +355,14 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
-    dialog.setRate(sGameName+" : 修改商品",ACTION.rate());
+    PrimeRate rate;
+
+    QList<PrimeRate> listTmp =ACTION.primeRate("",true,true);
+
+    if(listTmp.length()>0)
+        rate = listTmp.last();
+
+    dialog.setRate(sGameName+" : 修改商品",rate);
 
     dialog.setData(m_listItem.at(ui->tbGameItem->currentRow()).toMap());
 

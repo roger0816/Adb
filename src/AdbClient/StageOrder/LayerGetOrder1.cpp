@@ -28,6 +28,19 @@ void LayerGetOrder1::showEvent(QShowEvent *)
 
     ACTION.getOrder(true);
 
+    m_listFactory.clear();
+
+
+    DataFactory tmp;
+
+    tmp.Id="ABD";
+
+    tmp.Name="艾比代";
+
+    m_listFactory.append(tmp);
+
+    m_listFactory.append(ACTION.getFactoryClass("",true));
+
     ui->tbOrder->setRowCount(0);
 
     ui->cbAddValueType->clear();
@@ -61,6 +74,14 @@ void LayerGetOrder1::refreshUser(bool bRe)
 
     m_data.clear();
 
+    QList<DataFactory> listFac = m_listFactory;
+
+    for(int i=0;i<listFac.length();i++)
+    {
+        m_data[listFac.at(i).Name] = QVariantList();
+    }
+
+
     for(int i=0;i<list.length();i++)
     {
         UserData data = list.at(i);
@@ -68,7 +89,7 @@ void LayerGetOrder1::refreshUser(bool bRe)
         {
             m_listOwner.append(data);
 
-            m_data[data.Sid]=QVariantList();
+           // m_data[data.Sid]=QVariantList();
         }
     }
 
@@ -99,31 +120,34 @@ void LayerGetOrder1::refreshUser(bool bRe)
 
     ui->tbUser->setRowCount(0);
 
+    ui->tbUser->setColumnCount(0);
     int row=0,col=0;
 
-    for(int i=0;i<m_listOwner.length();i++)
+    for(int i=0;i<listFac.length();i++)
     {
         if(row>=ui->tbUser->rowCount())
             ui->tbUser->setRowCount(row+1);
 
-        UserData user = m_listOwner.at(i);
+        DataFactory fac = listFac.at(i);
 
-        QString sCount = QString::number(m_data[user.Sid].toList().length());
+        QString sCount = QString::number(m_data[fac.Name].toList().length());
 
-        QString st = user.Id+"    "+user.Name+"  ("+sCount+")";
+        QString st = fac.Id+"    "+fac.Name+"  ("+sCount+")";
+
+        if(ui->tbUser->columnCount()<=col)
+            ui->tbUser->setColumnCount(ui->tbUser->columnCount()+1);
+
         ui->tbUser->setItem(row,col,UI.tbItem(st));
 
         col++;
 
-        if(col>=ui->tbUser->columnCount())
+        if(col>=3)
         {
             col=0;
 
             row++;
         }
-
     }
-
 
 
 }
@@ -145,79 +169,93 @@ QVariantMap LayerGetOrder1::gameItem(QString sSid)
 
 void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 {
+      int iIdx = row*ui->tbUser->columnCount()+column;
+      QString sKey= m_listFactory.at(iIdx).Name;
+      m_currentOwnerSid = sKey;
 
-    int iIdx = row*ui->tbUser->columnCount()+column;
-    qDebug()<<"iIdx "<<iIdx;
-    if(iIdx>=m_listOwner.length())
-        return;
+      ui->cbAddValueType->setVisible(sKey=="艾比代");
 
-    UserData user = m_listOwner.at(iIdx);
-    m_currentOwnerSid = user.Sid;
-    QString sError;
+      QVariantList listItem = m_data[sKey].toList();
 
-    QVariantList listItem = m_data[user.Sid].toList();
+      ui->tbOrder->setRowCount(0);
 
-    ui->tbOrder->setRowCount(0);
+      for(int i=0;i<listItem.length();i++)
+      {
+          ui->tbOrder->setRowCount(i+1);
 
-    for(int i=0;i<listItem.length();i++)
-    {
-        ui->tbOrder->setRowCount(i+1);
+          OrderData order(listItem.at(i).toMap());
 
-        OrderData order(listItem.at(i).toMap());
+          /*
+          QStringList tmp=order.User;
 
-        ui->tbOrder->setItem(i,0,UI.tbItem(user.Id));
-        ui->tbOrder->setItem(i,1,UI.tbItem(order.Name));
-        ui->tbOrder->setItem(i,2,UI.tbItem(order.Id,true));
-
-        QVariantMap d;
-        QVariantList tmpOut;
-
-        d["Sid"]=order.CustomerSid;
-
-        ACTION.action(ACT::QUERY_CUSTOMER,d,tmpOut,sError);
+          QString sUser = "";
+          while(tmp.length()>0 && tmp.last()=="" )
+          {
+              tmp.pop_back();
+          }
 
 
-        QVariantMap customer;
+          if(tmp.length()>0)
+          {
+           sUser = ACTION.getUser(order.User.last(),true).Name ;
+          }
 
-        if(tmpOut.length()>0)
-            customer = tmpOut.first().toMap();
+          ui->tbOrder->setItem(i,0,UI.tbItem(sUser));
+          */
+          ui->tbOrder->setItem(i,0,UI.tbItem(sKey));
 
-        ui->tbOrder->setItem(i,3,UI.tbItem(customer["Id"]));
-        ui->tbOrder->setItem(i,4,UI.tbItem(customer["Name"]));
+          ui->tbOrder->setItem(i,1,UI.tbItem(order.Name));
+          ui->tbOrder->setItem(i,2,UI.tbItem(order.Id,true));
 
-        QString sGameItemSid= order.Item.split(";").first().split(",").first();
-        QVariantMap item=gameItem(sGameItemSid);
+          QVariantMap d;
+          QVariantList tmpOut;
 
-        ui->tbOrder->setItem(i,5,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
+          d["Sid"]=order.CustomerSid;
 
+          QString sError;
 
-        if(order.Step=="1")
-        {
-            ui->tbOrder->setItem(i,6,UI.tbItem("待處理"));
-            ui->tbOrder->setItem(i,7,UI.tbItem("確認接單",true));
-        }
-
-        if(order.Step=="2")
-        {
+          ACTION.action(ACT::QUERY_CUSTOMER,d,tmpOut,sError);
 
 
+          QVariantMap customer;
+
+          if(tmpOut.length()>0)
+              customer = tmpOut.first().toMap();
+
+          ui->tbOrder->setItem(i,3,UI.tbItem(customer["Id"]));
+          ui->tbOrder->setItem(i,4,UI.tbItem(customer["Name"]));
+
+          QString sGameItemSid= order.Item.split(";").first().split(",").first();
+          QVariantMap item=gameItem(sGameItemSid);
+
+          ui->tbOrder->setItem(i,5,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
 
 
+          if(order.Step=="1")
+          {
+              ui->tbOrder->setItem(i,6,UI.tbItem("待處理"));
+              ui->tbOrder->setItem(i,7,UI.tbItem("確認接單",true));
+          }
 
-            ui->tbOrder->setItem(i,6,UI.tbItem(ACTION.getUser(order.PaddingUser).Name+" 處理中"));
-            ui->tbOrder->setItem(i,7,UI.tbItem(""));
-            //            if(order.PaddingUser==ACTION.m_currentUser.Sid)
-            //            {
-            //                ui->tbOrder->setItem(i,7,UI.tbItem("釋放接單",true));
-            //            }
-            //            else
-            //            {
-            //               ui->tbOrder->setItem(i,7,UI.tbItem(""));
-            //           }
+          if(order.Step=="2")
+          {
 
-        }
 
-    }
+              ui->tbOrder->setItem(i,6,UI.tbItem(ACTION.getUser(order.PaddingUser,true).Name+" 處理中"));
+              ui->tbOrder->setItem(i,7,UI.tbItem(""));
+              //            if(order.PaddingUser==ACTION.m_currentUser.Sid)
+              //            {
+              //                ui->tbOrder->setItem(i,7,UI.tbItem("釋放接單",true));
+              //            }
+              //            else
+              //            {
+              //               ui->tbOrder->setItem(i,7,UI.tbItem(""));
+              //           }
+
+          }
+
+      }
+
 
 }
 

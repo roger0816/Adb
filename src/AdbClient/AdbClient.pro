@@ -14,39 +14,49 @@ OBJECTS_DIR =$$PWD/obj
 UI_DIR =$$PWD/obj
 DESTDIR =$$PWD/../../bin/
 
+INCLUDEPATH+= \
+              StageCustomer \
+              StageOrder \
+              StageReport \
+              StageManagerSetting
+
 SOURCES += \
     CSideMenu.cpp \
     DialogAddValueTypeEdit.cpp \
     DialogBulletinEdit.cpp \
     DialogCommon.cpp \
     DialogCustomerEdit.cpp \
-    DialogEditGameItem.cpp \
     DialogEditUser.cpp \
-    DialogGameEdit.cpp \
     DialogInput.cpp \
     DialogLogin.cpp \
     DialogMsg.cpp \
     Global.cpp \
     GlobalUi.cpp \
-    LayerAddCost.cpp \
-    LayerAddValueType.cpp \
     LayerBulletin.cpp \
-    LayerCostSetting.cpp \
-    LayerCostTable.cpp \
-    LayerCustomer.cpp \
-    LayerCustomerDetail.cpp \
-    LayerDayReport.cpp \
-    LayerExchangeRate.cpp \
-    LayerGetOrder1.cpp \
     LayerOrder.cpp \
-    LayerSayCost.cpp \
-    LayerSearchCustomer.cpp \
-    LayerSysSetting.cpp \
     StageAccount.cpp \
-    StageCustomer.cpp \
+    StageCustomer/StageCustomer.cpp \
+    StageCustomer/LayerSayCost.cpp \
+    StageCustomer/LayerSearchCustomer.cpp \
+    StageCustomer/LayerCustomer.cpp \
+    StageCustomer/LayerCustomerDetail.cpp \
+    StageCustomer/LayerAddCost.cpp \
+    StageOrder/LayerGetOrder2.cpp \
+    StageOrder\StageOrder.cpp \
+    StageOrder\LayerCostTable.cpp \
+    StageOrder\LayerDayReport.cpp \
+    StageOrder\LayerGetOrder1.cpp \
     StageHomePage.cpp \
-    StageManagerSetting.cpp \
-    StageOrder.cpp \
+    StageManagerSetting/DialogEditFactory.cpp \
+    StageManagerSetting/LayerFactory.cpp \
+    StageManagerSetting/LayerPrimeCostRate.cpp \
+    StageManagerSetting/StageManagerSetting.cpp \
+    StageManagerSetting/LayerExchangeRate.cpp \
+    StageManagerSetting/LayerCostSetting.cpp \
+    StageManagerSetting/LayerAddValueType.cpp \
+    StageManagerSetting/LayerSysSetting.cpp \
+    StageManagerSetting/DialogGameEdit.cpp \
+    StageManagerSetting/DialogEditGameItem.cpp \
     StageTest.cpp \
     main.cpp \
     widget.cpp
@@ -57,33 +67,37 @@ HEADERS += \
     DialogBulletinEdit.h \
     DialogCommon.h \
     DialogCustomerEdit.h \
-    DialogEditGameItem.h \
     DialogEditUser.h \
-    DialogGameEdit.h \
     DialogInput.h \
     DialogLogin.h \
     DialogMsg.h \
     Global.h \
     GlobalUi.h \
-    LayerAddCost.h \
-    LayerAddValueType.h \
     LayerBulletin.h \
-    LayerCostSetting.h \
-    LayerCostTable.h \
-    LayerCustomer.h \
-    LayerCustomerDetail.h \
-    LayerDayReport.h \
-    LayerExchangeRate.h \
-    LayerGetOrder1.h \
     LayerOrder.h \
-    LayerSayCost.h \
-    LayerSearchCustomer.h \
-    LayerSysSetting.h \
     StageAccount.h \
-    StageCustomer.h \
+    StageCustomer/StageCustomer.h \
+    StageCustomer/LayerSayCost.h \
+    StageCustomer/LayerSearchCustomer.h \
+    StageCustomer/LayerCustomer.h \
+    StageCustomer/LayerCustomerDetail.h \
+     StageCustomer/LayerAddCost.h \
+    StageOrder/LayerGetOrder2.h \
+       StageOrder\StageOrder.h \
+       StageOrder\LayerCostTable.h \
+       StageOrder\LayerDayReport.h \
+       StageOrder\LayerGetOrder1.h \
     StageHomePage.h \
-    StageManagerSetting.h \
-    StageOrder.h \
+    StageManagerSetting/DialogEditFactory.h \
+    StageManagerSetting/LayerFactory.h \
+    StageManagerSetting/LayerPrimeCostRate.h \
+    StageManagerSetting/StageManagerSetting.h \
+    StageManagerSetting/LayerExchangeRate.h \
+    StageManagerSetting/LayerCostSetting.h \
+    StageManagerSetting/LayerAddValueType.h \
+    StageManagerSetting/LayerSysSetting.h \
+    StageManagerSetting/DialogGameEdit.h \
+    StageManagerSetting/DialogEditGameItem.h \
     StageTest.h \
     widget.h
 
@@ -93,31 +107,35 @@ FORMS += \
     DialogBulletinEdit.ui \
     DialogCommon.ui \
     DialogCustomerEdit.ui \
-    DialogEditGameItem.ui \
     DialogEditUser.ui \
-    DialogGameEdit.ui \
     DialogInput.ui \
     DialogLogin.ui \
     DialogMsg.ui \
-    LayerAddCost.ui \
-    LayerAddValueType.ui \
     LayerBulletin.ui \
-    LayerCostSetting.ui \
-    LayerCostTable.ui \
-    LayerCustomer.ui \
-    LayerCustomerDetail.ui \
-    LayerDayReport.ui \
-    LayerExchangeRate.ui \
-    LayerGetOrder1.ui \
     LayerOrder.ui \
-    LayerSayCost.ui \
-    LayerSearchCustomer.ui \
-    LayerSysSetting.ui \
     StageAccount.ui \
-    StageCustomer.ui \
+    StageCustomer/StageCustomer.ui \
+    StageCustomer/LayerSayCost.ui \
+    StageCustomer/LayerSearchCustomer.ui \
+    StageCustomer/LayerCustomer.ui \
+    StageCustomer/LayerCustomerDetail.ui \
+    StageCustomer/LayerAddCost.ui \
+    StageOrder/LayerGetOrder2.ui \
+      StageOrder\StageOrder.ui \
+      StageOrder\LayerCostTable.ui \
+      StageOrder\LayerDayReport.ui \
+      StageOrder\LayerGetOrder1.ui \
     StageHomePage.ui \
-    StageManagerSetting.ui \
-    StageOrder.ui \
+    StageManagerSetting/DialogEditFactory.ui \
+    StageManagerSetting/LayerFactory.ui \
+    StageManagerSetting/LayerPrimeCostRate.ui \
+    StageManagerSetting/StageManagerSetting.ui \
+    StageManagerSetting/LayerExchangeRate.ui \
+    StageManagerSetting/LayerCostSetting.ui \
+    StageManagerSetting/LayerAddValueType.ui \
+    StageManagerSetting/LayerSysSetting.ui \
+    StageManagerSetting/DialogGameEdit.ui \
+    StageManagerSetting/DialogEditGameItem.ui \
     StageTest.ui \
     widget.ui
 

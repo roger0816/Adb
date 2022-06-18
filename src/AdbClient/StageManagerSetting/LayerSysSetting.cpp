@@ -46,7 +46,7 @@ void LayerSysSetting::showEvent(QShowEvent *)
 
     refreshCustomer();
 
-    refreshFactory();
+
 }
 
 void LayerSysSetting::refreshBulletin()
@@ -121,31 +121,6 @@ void LayerSysSetting::refreshCustomer()
 
 }
 
-void LayerSysSetting::refreshFactory()
-{
-    QVariantMap tmp;
-
-    m_listFactory.clear();
-
-    QString sError;
-
-    ACTION.action(ACT::QUERY_FACTORY_CLASS,tmp,m_listFactory,sError);
-
-    ui->tbFactory->setRowCount(0);
-
-
-    for(int i=0;i<m_listFactory.length();i++)
-    {
-        ui->tbFactory->setRowCount(i+1);
-
-        ui->tbFactory->setItem(i,0,UI.tbItem(m_listFactory.at(i).toMap()["Id"]));
-
-
-        ui->tbFactory->setItem(i,1,UI.tbItem(m_listFactory.at(i).toMap()["Name"]));
-
-    }
-
-}
 
 
 void LayerSysSetting::on_tbBulletin_cellDoubleClicked(int row, int column)
@@ -208,6 +183,7 @@ void LayerSysSetting::on_btnBulletinEdit_clicked()
 
 void LayerSysSetting::on_btnCusClassAdd_clicked()
 {
+
     DialogInput dialog;
 
     dialog.setTitle("客戶分類");
@@ -303,93 +279,6 @@ void LayerSysSetting::on_tbCusClass_cellDoubleClicked(int , int )
 }
 
 
-void LayerSysSetting::on_btnFactoryAdd_clicked()
-{
-    DialogInput dialog;
-
-    dialog.setTitle("廠商類型");
 
 
-    QVariantMap id,name;
-
-    id["Id"] = "";
-
-    name["Name"] ="";
-
-    dialog.addInput("代號",id);
-
-    dialog.addInput("名稱",name);
-
-    int ret  =  dialog.exec();
-
-    QString sError;
-
-    if(ret==1)
-    {
-        QVariantMap d;
-
-        ACTION.action(ACT::ADD_FACTORY_CLASS,dialog.data(),sError);
-
-        UI.showMsg("",sError,"OK");
-
-        refreshFactory();
-    }
-}
-
-
-void LayerSysSetting::on_btnFactoryEdit_clicked()
-{
-    int iRow = ui->tbFactory->currentRow();
-
-    if(iRow<0 || iRow>= m_listFactory.length() )
-    {
-        UI.showMsg("","請先選擇要編輯的目標","OK");
-        return;
-    }
-
-    QString sError;
-
-    QVariantMap data = m_listFactory.at(iRow).toMap();
-
-    DialogInput dialog;
-
-    dialog.setTitle("廠商類型");
-
-    QVariantMap d0;
-
-    d0["Id"] =data["Id"];
-
-    dialog.addInput("代號",d0);
-
-    QVariantMap d1;
-
-    d1["Name"] =data["Name"];
-
-    dialog.addInput("名稱",d1);
-
-    int iRet = dialog.exec();
-
-    if(iRet==1)
-    {
-        QVariantMap input = dialog.data();
-        input["Sid"] = data["Sid"];
-
-        ACTION.action(ACT::EDIT_FACTORY_CLASS,input,sError);
-
-        UI.showMsg("",sError,"OK");
-
-        refreshFactory();
-    }
-    else if(iRet==3)
-    {
-        QVariantMap input;
-        input["Sid"] = data["Sid"];
-        ACTION.action(ACT::DEL_FACTORY_CLASS,input,sError);
-
-        UI.showMsg("",sError,"OK");
-
-        refreshFactory();
-    }
-
-}
 

@@ -32,6 +32,10 @@ private:
 
     double m_addValue=0;
 
+    PrimeRate m_rate;
+
+    bool m_bLock=false;
+
 signals:
     void back();
 public slots:
@@ -40,9 +44,12 @@ public slots:
 
 private slots:
     void on_btnCopy_clicked();
-    void on_cbCurrency_currentTextChanged(const QString &arg1);
+        void on_cbCurrency_currentIndexChanged(int index);
+
     void on_sb_valueChanged(int);
     void on_btnOk_clicked();
+
+    void on_sbAdd_valueChanged(double arg1);
 };
 
 #endif // LAYERADDCOST_H

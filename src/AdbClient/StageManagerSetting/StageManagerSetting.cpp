@@ -18,7 +18,8 @@ StageManagerSetting::StageManagerSetting(QWidget *parent) :
     m_btns.addButton(ui->btn4,4);
 
     m_btns.addButton(ui->btn5,5);
-
+        m_btns.addButton(ui->btn6,6);
+  m_btns.addButton(ui->btn7,7);
 
     connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
 
@@ -26,7 +27,7 @@ StageManagerSetting::StageManagerSetting(QWidget *parent) :
 
     ui->stackedWidget->setCurrentIndex(0);
 
-
+    ui->pageExchangeRate->setExchangeType();
 }
 
 StageManagerSetting::~StageManagerSetting()

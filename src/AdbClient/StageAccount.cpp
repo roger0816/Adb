@@ -29,7 +29,7 @@ void StageAccount::showEvent(QShowEvent *)
 
 void StageAccount::readUser()
 {
-    m_user = ACTION.queryUser(ACTION.m_currentUser.Id).first();
+    m_user = ACTION.getUser(ACTION.m_currentUser.Id);
 
     ui->txId->setText(m_user.Id);
 

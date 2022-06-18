@@ -55,6 +55,8 @@ private:
 
     double m_iTotal=0.0;
 
+    double m_iBouns=0.0;
+
     QString m_sLoadOrderSid="";
 
     QString m_sLoadRateSid="";

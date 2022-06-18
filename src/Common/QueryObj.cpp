@@ -83,22 +83,22 @@ CData QueryObj::queryData(CData data)
 
     }
 
-    else if(data.iAciton==ACT::SAVE_EXCHANGE)
-    {
-        bOk = m_sql.saveExchange(data.listData,sError);
-    }
+//    else if(data.iAciton==ACT::SAVE_EXCHANGE)
+//    {
+//        bOk = m_sql.saveExchange(data.listData,sError);
+//    }
 
-    else if(data.iAciton==ACT::READ_EXCHANGE)
-    {
-        bOk = true;
+//    else if(data.iAciton==ACT::READ_EXCHANGE)
+//    {
+//        bOk = true;
 
-        int iIdx = -1;
+//        int iIdx = -1;
 
-        if(data.listData.length()>0)
-            iIdx = data.listData.first().toInt();
+//        if(data.listData.length()>0)
+//            iIdx = data.listData.first().toInt();
 
-        re.listData = m_sql.readExchange(iIdx);
-    }
+//        re.listData = m_sql.readExchange(iIdx);
+//    }
 
     else if(data.iAciton==ACT::ADD_GAME_LIST)
     {
@@ -172,10 +172,6 @@ CData QueryObj::queryData(CData data)
     {
         qDebug()<<"qeury game item ";
 
-        //        QVariantMap d;
-
-        //        if(data.listData.length()>0)
-        //            d = data.listData.first().toMap();
 
         bOk = m_sql.queryTb(SQL_TABLE::GameItem(),data.dData,re.listData,sError);
 
@@ -256,7 +252,7 @@ CData QueryObj::queryData(CData data)
     {
 
         bOk = m_sql.insertTb(SQL_TABLE::FactoryClass(),data.dData,sError);
-        sOkMsg = "廠商類型新增完成";
+        sOkMsg = "廠商新增完成";
     }
 
     else if(data.iAciton==ACT::EDIT_FACTORY_CLASS)
@@ -264,7 +260,7 @@ CData QueryObj::queryData(CData data)
         QVariantMap d;
         d["Sid"] = data.dData["Sid"];
         bOk = m_sql.updateTb(SQL_TABLE::FactoryClass(),d,data.dData,sError);
-        sOkMsg = "廠商類型修改完成";
+        sOkMsg = "廠商修改完成";
     }
 
     else if(data.iAciton==ACT::DEL_FACTORY_CLASS)
@@ -451,6 +447,38 @@ CData QueryObj::queryData(CData data)
         bOk = m_sql.delFromTb(SQL_TABLE::AddValueType(),d,sError);
         sOkMsg = "刪除完成";
     }
+
+    else if(data.iAciton==ACT::QUERY_PRIMERATE)
+    {
+
+        bOk = m_sql.queryTb(SQL_TABLE::PrimeCostRate(),data.dData,re.listData,sError);
+
+
+    }
+
+    else if(data.iAciton==ACT::ADD_PRIMERATE)
+    {
+        bOk = m_sql.insertTb(SQL_TABLE::PrimeCostRate(),data.dData,sError);
+
+
+         sOkMsg = "修改完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_EXCHANGE)
+    {
+
+        bOk = m_sql.queryTb(SQL_TABLE::ExchangeRate(),data.dData,re.listData,sError);
+
+    }
+
+    else if(data.iAciton==ACT::ADD_EXCHANGE)
+    {
+        bOk = m_sql.insertTb(SQL_TABLE::ExchangeRate(),data.dData,sError);
+
+
+         sOkMsg = "修改完成";
+    }
+
 
 
 

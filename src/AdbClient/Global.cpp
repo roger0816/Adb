@@ -42,10 +42,13 @@ bool Global::isDiff(QStringList listKey, QVariantMap pre, QVariantMap current)
 
 QString Global::displayCurrency(QString st)
 {
+    return st;
     QString sRe="新台幣";
 
     if(st.trimmed()=="HKD")
         sRe="港幣";
+    if(st.trimmed()=="USD")
+        sRe="美金";
     else if(st.trimmed()=="RMB")
         sRe="人民幣";
     else if(st.trimmed()=="MYR")
@@ -58,12 +61,15 @@ QString Global::displayCurrency(QString st)
 
 QString Global::originCurrency(QString st)
 {
+    return st;
     QString sRe="NTD";
 
     if(st.trimmed()=="港幣")
         sRe="HKD";
     else if(st.trimmed()=="人民幣")
         sRe="RMB";
+    else if(st.trimmed()=="美金")
+        sRe="USD";
     else if(st.trimmed()=="林吉特")
         sRe="MYR";
     else if(st.trimmed()=="新加坡元")

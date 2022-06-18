@@ -768,9 +768,9 @@ background-color:#3c78b4;
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
-        <widget class="QWidget" name="wBottomPage1" native="true">
+        <widget class="QWidget" name="wBottomPage1">
          <layout class="QGridLayout" name="gridLayout_5">
           <property name="topMargin">
            <number>0</number>
@@ -805,7 +805,7 @@ background-color:#3c78b4;
              <item>
               <widget class="QLabel" name="label_9">
                <property name="text">
-                <string>選擇儲值專員:</string>
+                <string>選擇廠商:</string>
                </property>
               </widget>
              </item>
@@ -832,7 +832,7 @@ background-color:#3c78b4;
            <widget class="QPushButton" name="btnSayOk">
             <property name="minimumSize">
              <size>
-              <width>0</width>
+              <width>62</width>
               <height>40</height>
              </size>
             </property>
@@ -868,7 +868,7 @@ background-color:#3c78b4;
 }</string>
             </property>
             <property name="text">
-             <string>複製並送出</string>
+             <string>送出</string>
             </property>
            </widget>
           </item>

@@ -21,26 +21,20 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     ui->lbName->setText(m_dataCustomer.Name);
 
-    ui->lbCurrency->setText(GLOBAL.displayCurrency(m_dataCustomer.Currency));
+    ui->lbCurrency->setText(m_dataCustomer.Currency);
 
-    ui->lbCurrency_2->setText(GLOBAL.displayCurrency(m_dataCustomer.Currency));
-
-    QStringList tmp = ACTION.rate("",true).listKey;
-
-    QStringList listCbKey;
-
-    for(int i=0;i<tmp.length();i++)
-    {
-        listCbKey.append(GLOBAL.displayCurrency(tmp.at(i)));
-    }
+    ui->lbCurrency_2->setText(m_dataCustomer.Currency);
 
     ui->cbCurrency->clear();
 
-    ui->cbCurrency->addItems(listCbKey);
+    m_bLock = true;
+    ui->cbCurrency->addItems(m_rate.listKey());
+    m_bLock = false;
 
-    int idx= tmp.indexOf(m_dataCustomer.Currency);
+    int idx= m_rate.listKey().indexOf(m_dataCustomer.Currency);
 
     idx=qBound(0,idx,ui->cbCurrency->count()-1);
+
 
     ui->cbCurrency->setCurrentIndex(idx);
 
@@ -68,20 +62,33 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
 void LayerAddCost::checkTotal()
 {
+
     m_addValue = ui->sb->value();
 
-    QString sCustomerKey = GLOBAL.originCurrency(ui->lbCurrency->text());
 
-    double sCustomerRate = ACTION.rate().value(sCustomerKey);
+  //  QString sCustomerKey = GLOBAL.originCurrency(ui->lbCurrency->text());
 
+    int iTmp = qBound(0,m_rate.listKey().indexOf(ui->lbCurrency->text()),m_rate.listData.length()-1);
+
+    double sCustomerRate = m_rate.listData.at(iTmp).second.toDouble();
+
+     double sSelectRate=1;
 
     if(ui->cbCurrency->currentText()!=ui->lbCurrency->text())
     {
-        QString sSelectKey = GLOBAL.originCurrency(ui->cbCurrency->currentText());
+      //  QString sSelectKey = GLOBAL.originCurrency(ui->cbCurrency->currentText());
+        int iIdx = qBound(0,m_rate.listKey().indexOf(ui->cbCurrency->currentText()),m_rate.listData.length()-1);
+        sSelectRate = m_rate.listData.at(iIdx).second.toDouble();
 
-        double sSelectRate = ACTION.rate().value(sSelectKey);
+        m_addValue = m_addValue*(sSelectRate+ui->sbAdd->value())/sCustomerRate;
 
-        m_addValue = m_addValue/sSelectRate*sCustomerRate;
+        ui->lbDiff->setText( QString::number(sCustomerRate )+" : "+QString::number(sSelectRate+ui->sbAdd->value()));
+
+    }
+    else
+    {
+        ui->lbDiff->setText( "1 : 1");
+
     }
 
     //  ui->lbChange->setText(ui->lbCurrency->text()+" : $ "+QString::number(m_addValue,'f',2));
@@ -100,7 +107,11 @@ void LayerAddCost::showEvent(QShowEvent *)
 {
     ui->lbTime->setText(QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm"));
 
-    ACTION.rate("",true);
+    m_rate = ACTION.primeRate("",true).last();
+
+//    QPair<QString,QString>s("新台幣(NTD)","1");
+
+//    m_rate.listData.insert(0,s);
 }
 
 void LayerAddCost::on_btnAddCostBack_clicked()
@@ -123,20 +134,22 @@ void LayerAddCost::on_btnCopy_clicked()
 
 }
 
-
-void LayerAddCost::on_cbCurrency_currentTextChanged(const QString &arg1)
+void LayerAddCost::on_cbCurrency_currentIndexChanged(int index)
 {
-    DataExchange::Rate rate =ACTION.rate();
 
-    int idx = rate.listKey.indexOf(GLOBAL.originCurrency(arg1));
+//    if(m_bLock)
+//        return;
 
-    ui->lbRate->setText("匯率: "+rate.list().at(idx));
+    m_bLock= true;
 
-    ui->lbRate->setVisible(ui->lbCurrency->text()!=ui->cbCurrency->currentText());
+    ui->wRate->setHidden(ui->cbCurrency->currentText()==ui->lbCurrency->text());
+    int idx = qBound(0,index,m_rate.listData.length()-1);
 
-    // ui->lbChange->setVisible(ui->lbCurrency->text()!=ui->cbCurrency->currentText());
+    ui->lbRate->setText("匯率: "+m_rate.listData.at(idx).second);
 
     checkTotal();
+
+    m_bLock=false;
 }
 
 
@@ -153,7 +166,7 @@ void LayerAddCost::on_btnOk_clicked()
     m_lastCostData.OrderId="-1";
     m_lastCostData.Note1=ui->txNote1->toPlainText();
     m_lastCostData.Type=ui->txType->text();
-
+    m_lastCostData.AddRate = ui->sbAdd->text();
     m_lastCostData.Rate = ACTION.rate().Sid;
 
     QString sMsg = "請確認加值內容\n "+ui->lbCurrency->text()+": $"+m_lastCostData.Change+"\n確定要送出嗎?";
@@ -182,5 +195,13 @@ void LayerAddCost::on_btnOk_clicked()
 
     }
 
+}
+
+
+
+
+void LayerAddCost::on_sbAdd_valueChanged(double arg1)
+{
+       checkTotal();
 }
 

@@ -113,8 +113,8 @@ void LayerDayReport::refreshTb()
 
             ui->tb->setItem(iRow,7,UI.tbItem(sStatus));
             ui->tb->setItem(iRow,8,UI.tbItem(data.Cost));
-            ui->tb->setItem(iRow,9,UI.tbItem(GLOBAL.displayCurrency(customer.Currency)));
-            ui->tb->setItem(iRow,10,UI.tbItem(""));
+            ui->tb->setItem(iRow,9,UI.tbItem(customer.Currency));
+            ui->tb->setItem(iRow,10,UI.tbItem(data.Bouns));
             if(data.Step=="4")
             {
                 ui->tb->setItem(iRow,11,UI.tbItem("點擊確認",true));

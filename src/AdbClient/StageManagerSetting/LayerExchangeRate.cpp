@@ -14,9 +14,9 @@ LayerExchangeRate::LayerExchangeRate(QWidget *parent) :
 
     m_listKey = tempClass.listKey;
 
-    m_listHeaderName<<"新台幣(NTD)"<<"港幣(HKD)"<<"人民幣(RMB)"<<"林吉特(MYR)"<<"新加坡元(SGD)";
+   // m_listHeaderName<<"新台幣(NTD)"<<"港幣(HKD)"<<"人民幣(RMB)"<<"林吉特(MYR)"<<"新加坡元(SGD)";
 
-    ui->tableWidget->setRowCount(m_listHeaderName.length());
+   // ui->tableWidget->setRowCount(m_listHeaderName.length());
 
 
     QHeaderView *header =ui->tableWidget->verticalHeader();
@@ -83,7 +83,7 @@ void LayerExchangeRate::refresh()
 
     DataExchange data(m_listRate);
 
-    setCell(0,0,data.last().NTD);
+    setCell(0,0,data.last().USD);
     setCell(1,0,data.last().HKD);
     setCell(2,0,data.last().RMB);
     setCell(3,0,data.last().MYR);
@@ -104,7 +104,7 @@ void LayerExchangeRate::refresh()
         DataExchange::Rate rate = history.m_listData.at(i);
 
         setHistoryCell(i,0,rate.Sid);
-        setHistoryCell(i,1,QString::number(rate.NTD));
+        setHistoryCell(i,1,QString::number(rate.USD));
         setHistoryCell(i,2,QString::number(rate.HKD));
         setHistoryCell(i,3,QString::number(rate.RMB));
         setHistoryCell(i,4,QString::number(rate.MYR));

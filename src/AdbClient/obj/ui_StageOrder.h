@@ -20,6 +20,7 @@
 #include "LayerCostTable.h"
 #include "LayerDayReport.h"
 #include "LayerGetOrder1.h"
+#include "LayerGetOrder2.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -39,7 +40,7 @@ public:
     QStackedWidget *stackedWidget;
     LayerCostTable *page;
     LayerGetOrder1 *page_2;
-    QWidget *page_3;
+    LayerGetOrder2 *page_3;
     LayerDayReport *page_4;
 
     void setupUi(QWidget *StageOrder)
@@ -159,7 +160,7 @@ public:
         page_2 = new LayerGetOrder1();
         page_2->setObjectName(QString::fromUtf8("page_2"));
         stackedWidget->addWidget(page_2);
-        page_3 = new QWidget();
+        page_3 = new LayerGetOrder2();
         page_3->setObjectName(QString::fromUtf8("page_3"));
         stackedWidget->addWidget(page_3);
         page_4 = new LayerDayReport();
@@ -174,7 +175,7 @@ public:
 
         retranslateUi(StageOrder);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(StageOrder);

@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Widget</class>
+ <widget class="QWidget" name="Widget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1366</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Widget</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QWidget" name="wBg" native="true">
+     <property name="styleSheet">
+      <string notr="true">
+QWidget{
+font: 18px &quot;Microsoft JhengHei UI&quot;;
+}
+
+QPushButton{
+font: 18px &quot;Microsoft JhengHei UI&quot;;
+
+}
+
+QPushButton{
+background-color: rgb(255, 255, 255);
+border-radius:8px;
+color: rgb(41,41,41);
+border: 1px solid #000000; }
+
+
+QPushButton:hover 
+{ 
+background-color: #55aaff; 
+border-style: outset; 
+border-width: 2px; 
+font: 700 18px &quot;Microsoft JhengHei UI&quot;; 
+}
+QPushButton:pressed { 
+border-style: outset; 
+border-width: 0px; 
+font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
+color:rgb(241,241,241);
+background-color:#3c78b4;
+}
+
+/**/
+
+
+
+</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="1" column="1">
+       <widget class="QWidget" name="widget_2" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(230, 230, 230);</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QStackedWidget" name="stackedWidget">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="currentIndex">
+            <number>6</number>
+           </property>
+           <widget class="StageHomePage" name="pageHome"/>
+           <widget class="StageCustomerService" name="pageService">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+           <widget class="StageOrder" name="pageOrder">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+           <widget class="StageReport" name="page3">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+           <widget class="StageManagerSetting" name="pageManager">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+           <widget class="StageAccount" name="pageAccount">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
+           </widget>
+           <widget class="StageTest" name="page"/>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="2">
+       <widget class="QWidget" name="wTop" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>80</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="1" column="0">
+          <widget class="QWidget" name="widget_3" native="true">
+           <property name="font">
+            <font>
+             <pointsize>-1</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QWidget" name="widget" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_5">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QPushButton" name="btnLogout">
+              <property name="minimumSize">
+               <size>
+                <width>40</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <pointsize>12</pointsize>
+                <italic>false</italic>
+                <bold>false</bold>
+                <underline>true</underline>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font: 12pt &quot;Microsoft JhengHei UI&quot;;
+
+text-decoration: underline;
+
+color: rgb(95, 95, 0);</string>
+              </property>
+              <property name="text">
+               <string>登出</string>
+              </property>
+              <property name="flat">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="3">
+          <spacer name="verticalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="lbName">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="font">
+            <font>
+             <pointsize>-1</pointsize>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">
+color: rgb(0, 85, 255);</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QWidget" name="wMenu" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>140</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>140</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QWidget#wMenu{
+
+background-color: rgb(0, 37, 88);
+}
+
+QPushButton{
+background-color: rgba(255, 255, 255,0);
+color: rgb(255, 255, 255);
+	font: 700 26px &quot;Microsoft JhengHei UI&quot;; 
+border-radius:0px;
+}
+
+QPushButton { 
+	border:none; 
+/*    border-radius: 6px;*/ 
+    border-color: beige; 
+
+    min-width: 4em; 
+    min-height:1.2em; 
+	padding: 6px; 
+	color: rgb(255, 255, 255); 
+	}
+
+QPushButton:hover 
+{ 
+background-color: #cacaca; 
+border-style: outset; 
+border-width: 2px; 
+
+font: 800 28px &quot;Microsoft JhengHei UI&quot;; 
+
+}
+QPushButton:pressed { 
+border-style: outset; 
+border-width: 2px; 
+
+background-color: rgb(67, 67, 67);
+}
+ QPushButton:checked { 
+background-color: rgb(67, 67, 67);
+border-style: outset; 
+border-width: 0px; 
+
+}
+
+QPushButton:disabled { 
+border-style: outset; 
+border-width: 0px; 
+font: 600 26px &quot;Microsoft JhengHei UI&quot;; 
+color: rgb(122, 122, 122);
+}</string>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QPushButton" name="btn0">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>首頁</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn1">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>客服專區</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn2">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <property name="text">
+            <string>訂單狀態</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn3">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="text">
+            <string>報表檢視</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn4">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="text">
+            <string>管理設定</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnTest">
+           <property name="text">
+            <string>Test</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnAccount">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="text">
+            <string>帳號設定</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>StageManagerSetting</class>
+   <extends>QWidget</extends>
+   <header>StageManagerSetting.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StageAccount</class>
+   <extends>QWidget</extends>
+   <header>StageAccount.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StageOrder</class>
+   <extends>QWidget</extends>
+   <header>StageOrder.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StageHomePage</class>
+   <extends>QWidget</extends>
+   <header>StageHomePage.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StageCustomerService</class>
+   <extends>QWidget</extends>
+   <header>StageCustomerService.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StageReport</class>
+   <extends>QWidget</extends>
+   <header>StageReport.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>StageTest</class>
+   <extends>QWidget</extends>
+   <header>StageTest.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LayerAddValueType</class>
+ <widget class="QWidget" name="LayerAddValueType">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>921</width>
+    <height>449</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0">
+    <widget class="QWidget" name="wBg" native="true">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QTableWidget" name="tb">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>100</number>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>儲值方式</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>幣別</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>成本(台幣)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>折扣</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>反利</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>刷卡匯率</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>信用卡回饋</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>買卡折扣</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>積分回饋</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>手續費</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QWidget" name="widget" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnEdit">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>36</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>編輯</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnAdd">
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>36</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>新增</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

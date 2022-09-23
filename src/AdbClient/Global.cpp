@@ -236,9 +236,8 @@ Global &Global::Instance()
 
 QVariant Global::config(QString st)
 {
-    qDebug()<<m_config;
 
-return m_config.value(st);
+    return m_config.value(st);
 }
 
 QString Global::strNumber(double number)

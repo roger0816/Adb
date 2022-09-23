@@ -219,6 +219,20 @@ font: 700 28pt &quot;Microsoft JhengHei UI&quot;;</string>
         </property>
        </widget>
       </item>
+      <item row="3" column="2">
+       <widget class="QLabel" name="lbVersion">
+        <property name="text">
+         <string>v1.01.0923</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lbRelease">
+        <property name="text">
+         <string>release</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

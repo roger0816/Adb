@@ -52,6 +52,10 @@ public:
 
         d.insert("listData",listData);
 
+        d.insert("ok",bOk);
+
+        d.insert("status",iState);
+
         QJsonObject obj;
 
         obj = QJsonObject(QJsonDocument::fromJson(QJsonDocument::fromVariant(QVariant(d)).toJson()).object());
@@ -82,6 +86,10 @@ public:
         sUser = map["user"].toString();
 
         sMsg = map["msg"].toString();
+
+        bOk = map["ok"].toBool();
+
+        iState = map["status"].toInt();
 
         dData = map["data"].toMap();
 

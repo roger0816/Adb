@@ -11,26 +11,30 @@ int main(int argc, char *argv[])
 
     GLOBAL;
 
-    QString sServerIp =CONFIG("ServerIp").toString();
+    QString sServerIp =GLOBAL.config("ServerIp").toString();
 
-    qDebug()<<"AAA : "<<sServerIp;
-    QString sServerPort = CONFIG("ServerPort").toString();
 
-    ACTION.setDataFromServer(true,sServerIp,sServerPort);
+    QString sServerPort = GLOBAL.config("ServerPort").toString();
 
-   // ACTION.setDataFromServer(true,"127.0.0.1","6000");
+    bool b = GLOBAL.config("UseServer").toBool();
 
+    ACTION.setDataFromServer(b,sServerIp,sServerPort);
+
+    if(!b)
+        ACTION.setDataBase(false);
 
     ACTION.reQuerty();
 
     Widget w;
     DialogLogin login;
 
+    login.setRelease(b);
+
     UI.m_dialogLogin = &login;
 
 
     w.connect(&login,SIGNAL(signalLogin()),&w,SLOT(show()));
-#if 0
+#if 1
 
 
    login.exec();

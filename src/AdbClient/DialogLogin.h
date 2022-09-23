@@ -17,6 +17,8 @@ public:
 
     void init();
 
+    void setRelease(bool b);
+
 private slots:
     void on_btnLogin_clicked();
 

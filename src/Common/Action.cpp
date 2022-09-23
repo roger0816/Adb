@@ -115,17 +115,18 @@ bool Action::action(ACT::_KEY act, QVariantList listData, QVariantList &listOut,
 
 bool Action::checkLogin(QString sUser, QString sPass, QString &sError)
 {
-
+qDebug()<<"check login : "<<sUser<<" , "<<sPass<<" , error : "<<sError;
     CData data;
 
     data.iAciton = ACT::LOGIN;
 
     data.listData<<sUser<<sPass;
 
+
     CData dRe = query(data);
 
     bool bOk = dRe.bOk;
-
+    qDebug()<<"re ok : "<<dRe.bOk;
     sError = dRe.sMsg;
 
     if(bOk)
@@ -308,14 +309,13 @@ CData Action::callServer(CData data)
     QByteArray out;
 
     qDebug()<<"call server : "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
-
+    qDebug()<<data.enCodeJson();
     RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
-
 
     re.deCodeJson(out);
 
     qDebug()<<"server return : "<<re.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
-
+    qDebug()<<out;
     emit lockLoading(false);
 
     return re;

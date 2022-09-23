@@ -33,6 +33,11 @@ void DialogLogin::init()
     ui->txPass->clear();
 }
 
+void DialogLogin::setRelease(bool b)
+{
+    ui->lbRelease->setVisible(b);
+}
+
 void DialogLogin::on_btnLogin_clicked()
 {
 

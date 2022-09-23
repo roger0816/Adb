@@ -9,8 +9,9 @@
 #include "VojData.h"
 
 #define GLOBAL Global::Instance()
+
 #define ACTION Global::Instance().m_action
-#define CONFIG Global::Instance().config
+
 
 //#define DATA Global::Instance().m_data
 

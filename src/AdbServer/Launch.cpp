@@ -3,9 +3,15 @@
 Launch::Launch(QObject *parent)
     : QObject{parent}
 {
-    act.m_queryObj.openDb(true);
+
+    QString sIp="206.189.185.20";
+
+    QString sLocal="127.0.0.1";
 
     act.setDataFromServer(false);
+
+    act.setDataBase(true,sIp);
+
 
 
 
@@ -20,18 +26,22 @@ Launch::Launch(QObject *parent)
 
 void Launch::getData(QByteArray dData, uintptr_t handleId)
 {
-    qDebug()<<"server get Data: "<<dData.toStdString().c_str()<<"\n";
-
-
 
     CData data;
 
     data.deCodeJson(dData);
 
+    qDebug()<<"server get Data: "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss.zzz");
+
+
     CData reData = act.query(data);
 
     QByteArray re = reData.enCodeJson();
-    qDebug()<<"server return data : "<<re.toStdString().c_str()<<" \n";
 
     RPKCORE.network.recallClient(re,handleId);
+
+
+
+    qDebug()<<"server recal: "<<reData.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss.zzz");
+
 }

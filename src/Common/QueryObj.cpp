@@ -543,7 +543,4 @@ CData QueryObj::queryData(CData data)
     return re;
 }
 
-void QueryObj::openDb(bool bMysql)
-{
-    m_sql.openDb(bMysql);
-}
+

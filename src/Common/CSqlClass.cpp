@@ -30,11 +30,11 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
     QSqlQuery query(m_db);
 
-    QString sTmp="";
+    QString sTmp="INSERT";
     if(bOrRplace)
-        sTmp="OR REPLACE";
+        sTmp="REPLACE";
 
-    QString sCmd = "INSERT "+sTmp+" INTO "+sTableName+" (%1) "
+    QString sCmd = sTmp+" INTO "+sTableName+" (%1) "
                                                       " VALUES(%2);";
 
     QString tmpKey,tmpValue;
@@ -280,7 +280,18 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 void CSqlClass::createTable()
 {
 
+    if(!bRunMysql)
+        createTableSqlite();
+    else
+        createTableMysql();
+
+}
+
+void CSqlClass::createTableSqlite()
+{
     QSqlQuery sql(m_db);
+
+
 
     sql.exec("CREATE TABLE 'UserData' ( \
              'Sid'	INTEGER, \
@@ -521,6 +532,10 @@ void CSqlClass::createTable()
              'UpdateTime'	TEXT,   \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
+}
+
+void CSqlClass::createTableMysql()
+{
 
 }
 
@@ -875,33 +890,31 @@ bool CSqlClass::lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QS
     return bRe;
 }
 
-void CSqlClass::openDb(bool bMysql)
+void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 {
-
-
     bool bOk = false;
     if(bMysql)
     {
-        qDebug()<<"open mysql";
+        qDebug()<<"open mysql : "<<sIp;
 
         qDebug()<< QSqlDatabase::drivers();
 
-       QSqlDatabase m_db =QSqlDatabase::addDatabase("QMYSQL");
+       m_db =QSqlDatabase::addDatabase("QMYSQL");
         //m_db =QSqlDatabase::addDatabase("QMYSQL","adp");
 
 
-     //   m_db.setHostName("206.189.185.20");
+      //  m_db.setHostName("206.189.185.20");
 
-        m_db.setHostName("127.0.0.1");
+        m_db.setHostName(sIp);
 
 
-        m_db.setPort(3306);
+        m_db.setPort(sPort.toInt());
 
         m_db.setUserName("root");
 
         m_db.setPassword("Aa111111");
 
-        m_db.setDatabaseName("adp");
+        m_db.setDatabaseName(sDbName);
 
         bOk = m_db.open();
     }

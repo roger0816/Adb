@@ -12,6 +12,8 @@
 #include <QDateTime>
 #include "DialogLogin.h"
 #include "DialogInput.h"
+#include "ItemMiniLoadbar.h"
+
 
 #define PX_SIZE 16
 
@@ -40,10 +42,13 @@ public:
     void copyMsg(QString sMsg);
     DialogLogin *m_dialogLogin = nullptr;
 
+    ItemMiniLoadbar *m_loading;
+
 private:
     static GlobalUi *m_pInstance;
 
-
+public slots:
+    void slotLockLoading(bool b);
 signals:
 
 };

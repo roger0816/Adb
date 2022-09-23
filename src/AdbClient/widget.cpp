@@ -13,6 +13,7 @@ Widget::Widget(QWidget *parent)
 
     this->setWindowTitle("艾比代管理系統");
 
+    connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));
 
     m_btns.addButton(ui->btn0,0);
     m_btns.addButton(ui->btn1,1);
@@ -32,6 +33,8 @@ Widget::Widget(QWidget *parent)
 
 
     ui->stackedWidget->setCurrentIndex(0);
+
+    UI.m_loading = new ItemMiniLoadbar(this);
 
 
 
@@ -98,6 +101,11 @@ void Widget::showEvent(QShowEvent *)
     setLv(ACTION.m_currentUser.Lv);
 }
 
+void Widget::resizeEvent(QResizeEvent *)
+{
+    UI.m_loading->resize(this->size());
+}
+
 void Widget::setLv(int iLv)
 {
     ui->btn0->setEnabled(true);
@@ -126,6 +134,9 @@ void Widget::setLv(int iLv)
     {
         ui->btnTest->setEnabled(true);
     }
+
+    UI.m_loading->resize(this->size());
+
 
 }
 

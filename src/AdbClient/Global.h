@@ -2,13 +2,16 @@
 #define GLOBAL_H
 
 #include <QObject>
-
+#include <QCoreApplication>
+#include <QSettings>
 #include <QDebug>
 #include "Action.h"
 #include "VojData.h"
 
 #define GLOBAL Global::Instance()
 #define ACTION Global::Instance().m_action
+#define CONFIG Global::Instance().config
+
 //#define DATA Global::Instance().m_data
 
 
@@ -44,14 +47,24 @@ public:
 
     QStringList mapping(CListPair listData, QStringList listKey, bool bMappingFirst = true);
 
+    void loadConfig();
+
     static Global& Instance();
 
     Action m_action;
+
+    QVariant config(QString st);
+
+
+
 private:
     static Global *m_pInstance;
 
 
     QString strNumber(double number);
+
+    QMap<QString,QVariant> m_config;
+
 
 
 signals:

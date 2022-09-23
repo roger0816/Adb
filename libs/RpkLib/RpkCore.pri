@@ -19,16 +19,18 @@ HEADERS += \
 
 
 
-MOC_DIR =$$PWD/obj
-OBJECTS_DIR =$$PWD/obj
-UI_DIR =$$PWD/obj
-#DESTDIR =$$PWD/../../bin/
 
 
 
 
 contains(DEFINES,BUILD_PRK){
     message("Build RPKLib")
+
+MOC_DIR =$$PWD/obj
+OBJECTS_DIR =$$PWD/obj
+UI_DIR =$$PWD/obj
+#DESTDIR =$$PWD/../../bin/
+
 }
 else{
      message("Use RPKLib")

@@ -54,11 +54,15 @@ public:
     bool lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QString &sError);
 
 
-    void openDb(bool bMysql=false);
+    void openDb(bool bMysql, QString sIp, QString sPort="3306",QString sDbName="adp");
 
     bool bRunMysql = false;
 private:
     void createTable();
+
+    void createTableSqlite();
+
+    void createTableMysql();
 
     QSqlDatabase m_db;
 

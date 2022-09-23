@@ -18,8 +18,6 @@ public:
 
   //  QVariantMap queryLogin(QString sUser,QString sPasseor)
 
-    void openDb(bool bMysql=false);
-
 
     CSqlClass m_sql;
 signals:

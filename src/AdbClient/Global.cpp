@@ -5,7 +5,7 @@ Global *Global::m_pInstance = nullptr;
 Global::Global(QObject *parent)
     : QObject{parent}
 {
-
+    loadConfig();
 }
 
 
@@ -183,6 +183,44 @@ QStringList Global::mapping(CListPair listData, QStringList listKey, bool bMappi
     return listRe;
 }
 
+void Global::loadConfig()
+{
+    qDebug()<<"loading config";
+
+    QString file=QCoreApplication::applicationDirPath()+"/conf.ini";
+
+    QSettings conf(file, QSettings::IniFormat);
+
+    QStringList list = conf.allKeys();
+
+    if(list.indexOf("ServerIp")<0)
+        list.append("ServerIp");
+
+
+    if(list.indexOf("ServerPort")<0)
+        list.append("ServerPort");
+
+    for(int i=0;i<list.length();i++)
+    {
+        QString sKey = list.at(i);
+
+        if(sKey=="ServerIp")
+        {
+            m_config[list.at(i)]= conf.value(list.at(i),"127.0.0.1");
+        }
+        else if(sKey=="ServerPort")
+        {
+            m_config[list.at(i)]= conf.value(list.at(i),"6000");
+        }
+        else
+        {
+            m_config[list.at(i)]= conf.value(list.at(i));
+        }
+    }
+
+
+}
+
 
 
 
@@ -194,6 +232,13 @@ Global &Global::Instance()
     if(m_pInstance==0)
         m_pInstance=new Global();
     return *m_pInstance;
+}
+
+QVariant Global::config(QString st)
+{
+    qDebug()<<m_config;
+
+return m_config.value(st);
 }
 
 QString Global::strNumber(double number)

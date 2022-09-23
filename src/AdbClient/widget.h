@@ -10,6 +10,8 @@
 #include "DEF.h"
 #include "GlobalUi.h"
 
+#include <QResizeEvent>
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
 QT_END_NAMESPACE
@@ -21,8 +23,6 @@ class Widget : public QWidget
 public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
-
-    QString sAA;
 
     CSideMenu * m_menu;
 private slots:
@@ -37,6 +37,9 @@ private:
     QButtonGroup m_btns;
 
     void showEvent(QShowEvent *) override;
+
+    void resizeEvent(QResizeEvent *) override;
+
 
     void setLv(int iLv);
 

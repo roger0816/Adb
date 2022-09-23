@@ -11,7 +11,12 @@ int main(int argc, char *argv[])
 
     GLOBAL;
 
-    ACTION.setDataFromServer(true,"206.189.185.20","6000");
+    QString sServerIp =CONFIG("ServerIp").toString();
+
+    qDebug()<<"AAA : "<<sServerIp;
+    QString sServerPort = CONFIG("ServerPort").toString();
+
+    ACTION.setDataFromServer(true,sServerIp,sServerPort);
 
    // ACTION.setDataFromServer(true,"127.0.0.1","6000");
 

@@ -3,21 +3,32 @@
 Action::Action(QObject *parent)
     : QObject{parent}
 {
-    setDataFromServer(false);
-
 
 
 }
 
+
 void Action::setDataFromServer(bool b, QString sIp, QString sPort)
 {
+    //b = false  is no use server
+    qDebug()<<"sIp: "<<sIp<<" ,port :  "<<sPort;
     m_ip = sIp;
 
     m_port = sPort;
 
     m_bDataFromServer = b;
 
-    m_queryObj.m_sql.bRunMysql = b;
+    if(!b)
+        m_bUserMysql = false;
+}
+
+void Action::setDataBase(bool bMysql, QString sIp, QString sPort)
+{
+    bool bUserMysql = bMysql;
+
+    m_bUserMysql = bUserMysql;
+
+    m_queryObj.m_sql.openDb(m_bUserMysql,sIp,sPort,"adp");
 }
 
 bool Action::action(ACT::_KEY act, QVariantList listData, QString &sError)
@@ -289,13 +300,23 @@ CData Action::query(CData data)
 
 CData Action::callServer(CData data)
 {
+
+    emit lockLoading(true);
+
     CData re;
 
     QByteArray out;
 
+    qDebug()<<"call server : "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
+
     RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
 
+
     re.deCodeJson(out);
+
+    qDebug()<<"server return : "<<re.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
+
+    emit lockLoading(false);
 
     return re;
 }

@@ -154,3 +154,8 @@ void GlobalUi::copyMsg(QString sMsg)
     }
 
 }
+
+void GlobalUi::slotLockLoading(bool b)
+{
+    m_loading->setLoading(b);
+}

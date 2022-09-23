@@ -27,6 +27,8 @@ public:
 
     void setDataFromServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
 
+    void setDataBase(bool bMysql,QString sIp="127.0.0.1",QString sPort="3306");
+
     bool action(ACT::_KEY act, QVariantList listData, QString &sError);
 
     bool action(ACT::_KEY act, QVariantMap data, QString &sError);
@@ -136,6 +138,8 @@ private :
 
     bool m_bDataFromServer = true;
 
+    bool m_bUserMysql = false;
+
     QString m_ip;
 
     QString m_port;
@@ -164,6 +168,8 @@ private:
     QVariantList m_exRate;
 
 signals:
+
+    void lockLoading(bool b);
 
 };
 

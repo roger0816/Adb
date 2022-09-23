@@ -30,6 +30,7 @@ SOURCES += \
     DialogMsg.cpp \
     Global.cpp \
     GlobalUi.cpp \
+    ItemMiniLoadbar.cpp \
     LayerBulletin.cpp \
     LayerOrder.cpp \
     StageAccount.cpp \
@@ -74,6 +75,7 @@ HEADERS += \
     DialogMsg.h \
     Global.h \
     GlobalUi.h \
+    ItemMiniLoadbar.h \
     LayerBulletin.h \
     LayerOrder.h \
     StageAccount.h \
@@ -115,6 +117,7 @@ FORMS += \
     DialogInput.ui \
     DialogLogin.ui \
     DialogMsg.ui \
+    ItemMiniLoadbar.ui \
     LayerBulletin.ui \
     LayerOrder.ui \
     StageAccount.ui \

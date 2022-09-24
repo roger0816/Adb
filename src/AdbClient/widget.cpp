@@ -37,7 +37,7 @@ Widget::Widget(QWidget *parent)
     UI.m_loading = new ItemMiniLoadbar(this);
 
 
-
+    UI.m_loading->hide();
 }
 
 Widget::~Widget()

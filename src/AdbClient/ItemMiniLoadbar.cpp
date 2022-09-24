@@ -26,6 +26,8 @@ ItemMiniLoadbar::ItemMiniLoadbar(QWidget *parent) :
 
     //  ui->lbText->hide();
 
+    hide();
+
 }
 
 ItemMiniLoadbar::~ItemMiniLoadbar()

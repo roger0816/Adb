@@ -23,8 +23,10 @@ void DialogLogin::init()
 {
     QString sLoginSave=ACTION.getKeyValue("loginSave");
 
+    qDebug()<<"login save  : "<<sLoginSave;
     if(sLoginSave!="")
     {
+
         ui->txUser->setText(sLoginSave);
 
         ui->checkBox->setChecked(true);

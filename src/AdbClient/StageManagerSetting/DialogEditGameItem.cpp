@@ -18,6 +18,11 @@ DialogEditGameItem::DialogEditGameItem(QWidget *parent) :
     connect(ui->sbSGD,SIGNAL(valueChanged(double)),this,SLOT(valueChange(double)));
 
 
+
+    ui->tableWidget->hideColumn(2);
+    ui->tableWidget->hideColumn(3);
+
+
     ui->tableWidget->setColumnWidth(1,110);
 }
 
@@ -35,11 +40,15 @@ void DialogEditGameItem::setRate(QString sTitle, DataRate rate)
 }
 
 
-void DialogEditGameItem::setData(QVariantMap data)
+void DialogEditGameItem::setData(double iGameRate,QVariantMap data)
 {
     m_data = data;
 
     ui->txName->setText(m_data["Name"].toString());
+
+    m_iGameRate = iGameRate;
+
+    ui->lbGameRate->setText(QString::number(m_iGameRate));
 
     ui->cbEnable->setChecked(m_data["Enable"].toBool());
 
@@ -47,7 +56,10 @@ void DialogEditGameItem::setData(QVariantMap data)
 
     ui->sbOrderUSD->setValue(m_data["Bonus"].toDouble());
 
-    ui->sbNTD->setValue(m_data["NTD"].toDouble());
+    // ui->sbNTD->setValue(m_data["NTD"].toDouble());
+
+    ui->sbNTD->setValue(m_iGameRate*m_data["Bonus"].toDouble());
+
 
     QStringList tmp = data["AddValueTypeSid"].toString().split(SPLIT1);
 
@@ -190,10 +202,10 @@ void DialogEditGameItem::on_btnCancel_clicked()
 
 void DialogEditGameItem::on_sbNTD_valueChanged(double arg1)
 {
-//    ui->lbHKD->setText(QString::number(arg1/m_rate.NTD*m_rate.HKD,'f', 2));
-//    ui->lbRMB->setText(QString::number(arg1/m_rate.NTD*m_rate.RMB,'f', 2));
-//    ui->lbMYR->setText(QString::number(arg1/m_rate.NTD*m_rate.MYR,'f', 2));
-//    ui->lbSGD->setText(QString::number(arg1/m_rate.NTD*m_rate.SGD,'f', 2));
+    //    ui->lbHKD->setText(QString::number(arg1/m_rate.NTD*m_rate.HKD,'f', 2));
+    //    ui->lbRMB->setText(QString::number(arg1/m_rate.NTD*m_rate.RMB,'f', 2));
+    //    ui->lbMYR->setText(QString::number(arg1/m_rate.NTD*m_rate.MYR,'f', 2));
+    //    ui->lbSGD->setText(QString::number(arg1/m_rate.NTD*m_rate.SGD,'f', 2));
 }
 
 
@@ -205,6 +217,8 @@ void DialogEditGameItem::on_btnGameEditDel_clicked()
 
 void DialogEditGameItem::valueChange(double arg)
 {
+    return ;
+
     if(m_bLock)
         return;
 
@@ -217,61 +231,61 @@ void DialogEditGameItem::valueChange(double arg)
     if(t==ui->sbNTD)
     {
 
-      ntd= arg;
-      ui->sbUSD->setValue(ntd/m_rate.USD());
-      ui->sbHKD->setValue(ntd/m_rate.HKD());
-      ui->sbRMB->setValue(ntd/m_rate.RMB());
-      ui->sbMYR->setValue(ntd/m_rate.MYR());
-      ui->sbSGD->setValue(ntd/m_rate.SGD());
+        ntd= arg;
+        ui->sbUSD->setValue(ntd/m_rate.USD());
+        ui->sbHKD->setValue(ntd/m_rate.HKD());
+        ui->sbRMB->setValue(ntd/m_rate.RMB());
+        ui->sbMYR->setValue(ntd/m_rate.MYR());
+        ui->sbSGD->setValue(ntd/m_rate.SGD());
     }
     else if(t==ui->sbUSD)
     {
-      ntd= arg*m_rate.USD();
-      ui->sbHKD->setValue(ntd/m_rate.HKD());
-      ui->sbNTD->setValue(ntd);
-      ui->sbRMB->setValue(ntd/m_rate.RMB());
-      ui->sbMYR->setValue(ntd/m_rate.MYR());
-      ui->sbSGD->setValue(ntd/m_rate.SGD());
+        ntd= arg*m_rate.USD();
+        ui->sbHKD->setValue(ntd/m_rate.HKD());
+        ui->sbNTD->setValue(ntd);
+        ui->sbRMB->setValue(ntd/m_rate.RMB());
+        ui->sbMYR->setValue(ntd/m_rate.MYR());
+        ui->sbSGD->setValue(ntd/m_rate.SGD());
     }
     else if(t==ui->sbHKD)
     {
 
-      ntd= arg*m_rate.HKD();
-      ui->sbUSD->setValue(ntd/m_rate.USD());
-      ui->sbNTD->setValue(ntd);
-      ui->sbRMB->setValue(ntd/m_rate.RMB());
-      ui->sbMYR->setValue(ntd/m_rate.MYR());
-      ui->sbSGD->setValue(ntd/m_rate.SGD());
+        ntd= arg*m_rate.HKD();
+        ui->sbUSD->setValue(ntd/m_rate.USD());
+        ui->sbNTD->setValue(ntd);
+        ui->sbRMB->setValue(ntd/m_rate.RMB());
+        ui->sbMYR->setValue(ntd/m_rate.MYR());
+        ui->sbSGD->setValue(ntd/m_rate.SGD());
     }
     else if(t==ui->sbRMB)
     {
 
-      ntd= arg*m_rate.RMB();
-      ui->sbUSD->setValue(ntd/m_rate.USD());
-      ui->sbNTD->setValue(ntd);
-      ui->sbHKD->setValue(ntd/m_rate.HKD());
-      ui->sbMYR->setValue(ntd/m_rate.MYR());
-      ui->sbSGD->setValue(ntd/m_rate.SGD());
+        ntd= arg*m_rate.RMB();
+        ui->sbUSD->setValue(ntd/m_rate.USD());
+        ui->sbNTD->setValue(ntd);
+        ui->sbHKD->setValue(ntd/m_rate.HKD());
+        ui->sbMYR->setValue(ntd/m_rate.MYR());
+        ui->sbSGD->setValue(ntd/m_rate.SGD());
     }
     else if(t==ui->sbMYR)
     {
 
-      ntd= arg*m_rate.MYR();
-      ui->sbUSD->setValue(ntd/m_rate.USD());
-      ui->sbNTD->setValue(ntd);
-      ui->sbRMB->setValue(ntd/m_rate.RMB());
-      ui->sbHKD->setValue(ntd/m_rate.HKD());
-      ui->sbSGD->setValue(ntd/m_rate.SGD());
+        ntd= arg*m_rate.MYR();
+        ui->sbUSD->setValue(ntd/m_rate.USD());
+        ui->sbNTD->setValue(ntd);
+        ui->sbRMB->setValue(ntd/m_rate.RMB());
+        ui->sbHKD->setValue(ntd/m_rate.HKD());
+        ui->sbSGD->setValue(ntd/m_rate.SGD());
     }
     else if(t==ui->sbSGD)
     {
 
-      ntd= arg*m_rate.SGD();
-      ui->sbUSD->setValue(ntd/m_rate.USD());
-      ui->sbNTD->setValue(ntd);
-      ui->sbRMB->setValue(ntd/m_rate.RMB());
-      ui->sbHKD->setValue(ntd/m_rate.HKD());
-      ui->sbMYR->setValue(ntd/m_rate.MYR());
+        ntd= arg*m_rate.SGD();
+        ui->sbUSD->setValue(ntd/m_rate.USD());
+        ui->sbNTD->setValue(ntd);
+        ui->sbRMB->setValue(ntd/m_rate.RMB());
+        ui->sbHKD->setValue(ntd/m_rate.HKD());
+        ui->sbMYR->setValue(ntd/m_rate.MYR());
     }
 
 
@@ -280,4 +294,19 @@ void DialogEditGameItem::valueChange(double arg)
 }
 
 
+
+
+void DialogEditGameItem::on_sbOrderUSD_valueChanged(double arg1)
+{
+
+    double ntd =arg1*m_iGameRate;
+
+    ui->sbNTD->setValue(ntd);
+    ui->sbUSD->setValue(ntd/m_rate.USD());
+    ui->sbHKD->setValue(ntd/m_rate.HKD());
+    ui->sbRMB->setValue(ntd/m_rate.RMB());
+    ui->sbMYR->setValue(ntd/m_rate.MYR());
+    ui->sbSGD->setValue(ntd/m_rate.SGD());
+
+}
 

@@ -29,7 +29,9 @@ void StageAccount::showEvent(QShowEvent *)
 
 void StageAccount::readUser()
 {
-    m_user = ACTION.getUser(ACTION.m_currentUser.Id);
+    qDebug()<<"current user : "<<ACTION.m_currentUser.Sid;
+
+    m_user = ACTION.getUser(ACTION.m_currentUser.Sid);
 
     ui->txId->setText(m_user.Id);
 
@@ -108,7 +110,7 @@ void StageAccount::slotPage(int i)
 
     if(i==1)
     {
-        QList<UserData> list = ACTION.queryUser(ACTION.m_currentUser.Id);
+        QList<UserData> list = ACTION.queryUser(ACTION.m_currentUser.Sid);
 
         if(list.length()>0)
         {

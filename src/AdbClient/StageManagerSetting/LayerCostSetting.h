@@ -22,6 +22,7 @@ public:
     explicit LayerCostSetting(QWidget *parent = nullptr);
     ~LayerCostSetting();
 
+
 private slots:
 
     void on_btnGameAdd_clicked();

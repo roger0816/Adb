@@ -18,7 +18,7 @@ public:
     explicit DialogGameEdit(QWidget *parent = nullptr);
     ~DialogGameEdit();
 
-    void setData(QString sSid,bool bEnable,QString sId,QString sName);
+    void setData(QString sSid,bool bEnable,QString sId,QString sName,double iGameRate);
 
     bool m_bEnable= false;
 
@@ -26,6 +26,8 @@ public:
     QString m_sId;
 
     QString m_sName;
+
+    double m_iGameRate;
 
 public slots:
     void on_btnCancel_clicked();

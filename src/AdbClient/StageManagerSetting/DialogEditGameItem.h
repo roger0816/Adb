@@ -24,7 +24,7 @@ public:
     ~DialogEditGameItem();
 
     void setRate(QString sTitle,DataRate rate);
-    void setData(QVariantMap data);
+    void setData(double iGameRate, QVariantMap data);
 
     QVariantMap data();
 
@@ -33,6 +33,8 @@ public:
     DataRate m_rate;
 private :
     bool m_bLock = false;
+
+    double m_iGameRate=1.00;
 
     void appendCb(int iCbIdx=0, double cost=1.00);
 private slots:
@@ -52,6 +54,8 @@ private slots:
     void valueChange(double arg);
 
 
+
+    void on_sbOrderUSD_valueChanged(double arg1);
 
 private:
     Ui::DialogEditGameItem *ui;

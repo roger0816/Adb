@@ -7,6 +7,11 @@ Action::Action(QObject *parent)
 
 }
 
+ Action::~Action()
+{
+    qDebug()<<"un Action";
+}
+
 
 void Action::setDataFromServer(bool b, QString sIp, QString sPort)
 {
@@ -34,6 +39,7 @@ void Action::setDataBase(bool bMysql, QString sIp, QString sPort)
 bool Action::action(ACT::_KEY act, QVariantList listData, QString &sError)
 {
     QVariantList out;
+    qDebug()<<"lll1 : "<<listData.length();
 
     return action(act,listData,out,sError);
 
@@ -101,6 +107,7 @@ bool Action::action(ACT::_KEY act, QVariantList listData, QVariantList &listOut,
     data.iAciton = ACT::_KEY(act);
 
     data.listData = listData;
+
 
     CData re;
 
@@ -217,9 +224,14 @@ QList<UserData> Action::queryUser(QString sId)
     if(sId!="")
         data.dData["Sid"]= sId;
 
+
+    qDebug()<<"query user "<<sId;
+
     data.iAciton = ACT::QUERY_USER;
 
     CData dRe = query(data);
+
+
 
     QList<UserData> listRe;
 
@@ -239,11 +251,11 @@ bool Action::setKeyValue(QString key, QString value, bool inLocal)
 {
     bool bRe= false;
 
-
+    qDebug()<<"setKeyValue : "<<key<<" , value :"<<value;
     if(inLocal)
     {
 
-        bRe = RPKCORE.database.insertKeyPair(key,value,1);
+        bRe = RPKCORE.database.insertKeyPair(key,value,0);
 
         return bRe;
     }
@@ -269,7 +281,7 @@ QString Action::getKeyValue(QString key, bool inLocal)
     if(inLocal)
     {
 
-        sRe = RPKCORE.database.getKeyPair(key,1);
+        sRe = RPKCORE.database.getKeyPair(key,0);
 
         return sRe;
     }
@@ -284,6 +296,56 @@ QString Action::getKeyValue(QString key, bool inLocal)
 
     return re.listData.first().toString();
 
+}
+
+bool Action::addGroupData(int iType, GroupData data, QString &sError)
+{
+    QVariantMap d = data.data();
+    d["Type"]= QString::number(iType);
+
+    bool b = action(ACT::ADD_GROUP, d, sError);
+
+    return b;
+}
+
+bool Action::delGroupData(int iType, QString sSid,QString &sError)
+{
+    QVariantMap d ;
+    d["Type"]= QString::number(iType);
+    d["Sid"] =sSid;
+
+    bool b = action(ACT::DEL_GROUP, d, sError);
+
+    return b;
+}
+
+bool Action::editGroupData(int iType, GroupData data,QString &sError)
+{
+    QVariantMap d = data.data();
+
+
+    bool b = action(ACT::EDIT_GROUP, d, sError);
+
+    return b;
+}
+
+QList<GroupData> Action::getGroupData(int iType,QString &sError)
+{
+    QVariantList in,out;
+
+    bool b = action(ACT::QUERY_GROUP, in,out, sError);
+
+    QList<GroupData> list;
+
+    for(int i=0;i<in.length();i++)
+    {
+        GroupData v(list.at(i));
+
+
+    }
+
+
+    return list;
 }
 
 
@@ -534,6 +596,34 @@ QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
     }
 
     return listRe;
+}
+
+void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
+{
+
+
+    QList<DataGameItem> list = getGameItem(sGameSid,true);
+
+    QVariantList listSend;
+
+    for(int i=0;i<list.length();i++)
+    {
+
+
+        DataGameItem v = list.at(i);
+        v.NTD = QString::number(v.Bonus.toDouble()*iGameRate);
+
+
+        listSend.append(v.data());
+    }
+
+
+    QString sError;
+
+    qDebug()<<"lll0"<<listSend.length();
+
+    action(ACT::EDIT_GAME_ITEM,listSend,sError);
+
 }
 
 DataGameItem Action::getGameItemFromSid(QString sSid, bool bQuery)

@@ -332,11 +332,11 @@ void LayerSchedule::on_tb1_itemChanged(QTableWidgetItem *item)
 
 void LayerSchedule::on_tb0_itemChanged(QTableWidgetItem *item)
 {
-    int iRow = item->row();
+//    int iRow = item->row();
 
-    int iCol = item->column();
+//    int iCol = item->column();
 
-    qDebug()<<"tb0 : "<<iRow<<" , "<<iCol;
+
 }
 
 

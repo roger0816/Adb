@@ -8,6 +8,11 @@ Global::Global(QObject *parent)
     loadConfig();
 }
 
+Global::~Global()
+{
+    qDebug()<<"~Global";
+}
+
 
 
 

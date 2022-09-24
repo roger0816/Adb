@@ -376,7 +376,7 @@ background-color: rgb(250, 250, 250);</string>
              <item row="0" column="0">
               <widget class="QWidget" name="wBg_2" native="true">
                <property name="styleSheet">
-                <string notr="true">font: 14px &quot;Microsoft JhengHei UI&quot;;</string>
+                <string notr="true"/>
                </property>
                <layout class="QGridLayout" name="gridLayout_4">
                 <property name="leftMargin">
@@ -404,13 +404,12 @@ background-color: rgb(250, 250, 250);</string>
                   </property>
                   <property name="maximumSize">
                    <size>
-                    <width>400</width>
+                    <width>600</width>
                     <height>400</height>
                    </size>
                   </property>
                   <property name="font">
                    <font>
-                    <pointsize>-1</pointsize>
                     <italic>false</italic>
                     <bold>false</bold>
                    </font>
@@ -427,7 +426,16 @@ background-color: rgb(250, 250, 250);</string>
                        <height>40</height>
                       </size>
                      </property>
+                     <property name="styleSheet">
+                      <string notr="true"/>
+                     </property>
                      <layout class="QHBoxLayout" name="horizontalLayout">
+                      <property name="topMargin">
+                       <number>0</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>0</number>
+                      </property>
                       <item>
                        <spacer name="horizontalSpacer_2">
                         <property name="orientation">
@@ -443,6 +451,15 @@ background-color: rgb(250, 250, 250);</string>
                       </item>
                       <item>
                        <widget class="QPushButton" name="btnCancel">
+                        <property name="minimumSize">
+                         <size>
+                          <width>120</width>
+                          <height>0</height>
+                         </size>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true"/>
+                        </property>
                         <property name="text">
                          <string>取消</string>
                         </property>
@@ -450,15 +467,14 @@ background-color: rgb(250, 250, 250);</string>
                       </item>
                       <item>
                        <widget class="QPushButton" name="btnEdit">
-                        <property name="font">
-                         <font>
-                          <pointsize>-1</pointsize>
-                          <italic>false</italic>
-                          <bold>false</bold>
-                         </font>
+                        <property name="minimumSize">
+                         <size>
+                          <width>120</width>
+                          <height>0</height>
+                         </size>
                         </property>
                         <property name="text">
-                         <string>確定編輯</string>
+                         <string>確定修改</string>
                         </property>
                        </widget>
                       </item>
@@ -469,7 +485,6 @@ background-color: rgb(250, 250, 250);</string>
                     <widget class="QGroupBox" name="groupBox_2">
                      <property name="font">
                       <font>
-                       <pointsize>-1</pointsize>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -489,7 +504,6 @@ background-color: rgb(250, 250, 250);</string>
                        <widget class="QLineEdit" name="txName">
                         <property name="font">
                          <font>
-                          <pointsize>-1</pointsize>
                           <italic>false</italic>
                           <bold>false</bold>
                          </font>
@@ -537,7 +551,6 @@ background-color: rgb(250, 250, 250);</string>
                        <widget class="QLineEdit" name="txNote">
                         <property name="font">
                          <font>
-                          <pointsize>-1</pointsize>
                           <italic>false</italic>
                           <bold>false</bold>
                          </font>
@@ -549,9 +562,14 @@ background-color: rgb(250, 250, 250);</string>
                    </item>
                    <item row="1" column="0">
                     <widget class="QGroupBox" name="groupBox">
+                     <property name="minimumSize">
+                      <size>
+                       <width>200</width>
+                       <height>0</height>
+                      </size>
+                     </property>
                      <property name="font">
                       <font>
-                       <pointsize>-1</pointsize>
                        <italic>false</italic>
                        <bold>false</bold>
                       </font>
@@ -591,7 +609,6 @@ background-color: rgb(250, 250, 250);</string>
                         </property>
                         <property name="font">
                          <font>
-                          <pointsize>-1</pointsize>
                           <italic>false</italic>
                           <bold>false</bold>
                          </font>
@@ -640,7 +657,6 @@ background-color: rgb(250, 250, 250);</string>
                        <widget class="QDateEdit" name="dateStart">
                         <property name="font">
                          <font>
-                          <pointsize>-1</pointsize>
                           <italic>false</italic>
                           <bold>false</bold>
                          </font>
@@ -668,7 +684,7 @@ background-color: rgb(250, 250, 250);</string>
                       </size>
                      </property>
                      <property name="styleSheet">
-                      <string notr="true">background-color: rgb(255, 255, 255);</string>
+                      <string notr="true"/>
                      </property>
                      <layout class="QHBoxLayout" name="horizontalLayout_2">
                       <property name="leftMargin">
@@ -692,8 +708,7 @@ background-color: rgb(250, 250, 250);</string>
                          </size>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">background-color: rgb(85, 170, 255);
-color: rgb(247, 247, 247);</string>
+                         <string notr="true"/>
                         </property>
                         <property name="text">
                          <string>登入帳號:</string>
@@ -723,7 +738,6 @@ color: rgb(247, 247, 247);</string>
                         </property>
                         <property name="font">
                          <font>
-                          <pointsize>-1</pointsize>
                           <italic>false</italic>
                           <bold>false</bold>
                           <underline>false</underline>

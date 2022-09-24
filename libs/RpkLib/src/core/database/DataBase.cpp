@@ -42,6 +42,9 @@ bool DataBase::dbCmd(QString st)
 QSqlDatabase &DataBase::getDb(int idx)
 {
     int i= qBound(0,idx,sql->m_listDb.length()-1);
+
+    qDebug()<<"count sqlite :"<<sql->m_listDb.length();
+
     return sql->m_listDb[i];
 }
 
@@ -64,7 +67,7 @@ bool DataBase::updateKeyPair(QString sKey, QString sValue, int idx)
 
 bool DataBase::insertKeyPair(QString sKey, QString sValue, int idx, bool isHaveKeyDoUpdate)
 {
-    return sql->insertKeyPair(sKey,sValue,isHaveKeyDoUpdate,idx);
+    return sql->insertKeyPair(sKey,sValue,idx,isHaveKeyDoUpdate);
 }
 
 QString DataBase::getKeyPair(QString sKey, int idx)

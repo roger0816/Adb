@@ -7,6 +7,8 @@ DialogGameEdit::DialogGameEdit(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->cbEnable->hide();
+
     setWindowTitle("遊戲清單設定");
 
     ui->btnDel->hide();
@@ -30,7 +32,7 @@ DialogGameEdit::~DialogGameEdit()
     delete ui;
 }
 
-void DialogGameEdit::setData(QString sSid, bool bEnable, QString sId, QString sName)
+void DialogGameEdit::setData(QString sSid, bool bEnable, QString sId, QString sName, double iGameRate)
 {
     m_sSid = sSid;
 
@@ -47,6 +49,8 @@ void DialogGameEdit::setData(QString sSid, bool bEnable, QString sId, QString sN
     ui->txName->setText(sName);
 
     ui->cbEnable->setChecked(bEnable);
+
+    ui->dbGameRate->setValue(iGameRate);
 }
 
 void DialogGameEdit::on_btnCancel_clicked()
@@ -72,6 +76,7 @@ void DialogGameEdit::on_btnOk_clicked()
 
     m_bEnable = ui->cbEnable->isChecked();
 
+    m_iGameRate = ui->dbGameRate->value();
 
     if(m_sSid=="")
     {

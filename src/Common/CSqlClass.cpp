@@ -3,6 +3,14 @@
 CSqlClass::CSqlClass(QObject *parent)
     : QObject{parent}
 {
+   bool bOk = RPKCORE.database.openDb("local.db");
+
+    m_local = RPKCORE.database.getDb(0);
+
+
+
+    qDebug()<<"open local sql save"<<bOk;
+
 
 
 }
@@ -134,6 +142,9 @@ bool CSqlClass::queryTb(QString sTableName, QVariantList &listOut, QString &sErr
 
 bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList &listOut, QString &sError)
 {
+
+    qDebug()<<"AA 0 :"<<conditions;
+
     listOut.clear();
 
     QSqlQuery query(m_db);
@@ -163,7 +174,10 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
     for(int j=0;j<listKey.length();j++)
     {
+
+        qDebug()<<"AAAx : "<<conditions[listKey.at(j)].toString();
         query.bindValue(j,conditions[listKey.at(j)]);
+
     }
 
     /*  ex
@@ -173,6 +187,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
             query.exec();
             */
 
+    qDebug()<<"AA : "<<query.lastQuery();
     bool bOk = query.exec();
 
     QStringList listHeader = fieldNames(query.record());
@@ -207,13 +222,21 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 
     QStringList listKey = data.keys();
 
+    bool bFirst = true;
+
     for(int i=0;i<listKey.length();i++)
     {
-        if(i!=0)
-            sCmd+=" , ";
+        QVariant v = data[listKey.at(i)];
 
+        if( listKey.at(i) == "Sid" || v.toString().trimmed()=="" || v.isNull())
+            continue;
+
+        if(!bFirst)
+            sCmd+=" , ";
         sCmd+=listKey.at(i)+" =? ";
 
+
+        bFirst = false;
     }
 
     QString sSub="";
@@ -256,6 +279,10 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
     qDebug()<<"update tb : "<<sCmd+sSub;
     for(int i=0;i<listKey.length();i++)
     {
+        QVariant v=data[listKey.at(i)];
+
+        if( listKey.at(i) == "Sid" || v.toString().trimmed()=="" || v.isNull())
+            continue;
         sql.addBindValue(data[listKey.at(i)]);
 
         qDebug()<<data[listKey.at(i)];
@@ -263,7 +290,7 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 
 
     bool bOk = sql.exec() ;
-
+   qDebug()<<"sql update cmd : "<<sql.lastQuery();
     sError = sql.lastError().text();
 
     return bOk;
@@ -348,6 +375,7 @@ void CSqlClass::createTableSqlite()
              'Id'	TEXT NOT NULL, \
              'Name'	TEXT NOT NULL, \
              'Enable'	INTEGER NOT NULL, \
+             'GameRate' TEXT,\
              'UpdateTime'	TEXT, \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
@@ -399,6 +427,24 @@ void CSqlClass::createTableSqlite()
              );");
 
     sql.clear();
+
+
+     sql.exec("CREATE TABLE 'GroupData' (  \
+        'Sid'	INTEGER,    \
+        'Id'	TEXT,   \
+        'Type'	TEXT,   \
+        'Name'	TEXT,   \
+        'Value'	TEXT,   \
+        'Blob'	BLOB,   \
+        'UpdateTime'	TEXT,   \
+        'Note1'	TEXT,   \
+        'Note2'	TEXT,   \
+        'NoteBlob'	BLOB,   \
+        PRIMARY KEY('Sid' AUTOINCREMENT) \
+    );");
+
+
+        sql.clear();
 
     sql.exec("CREATE TABLE 'FactoryClass' (      \
              'Sid'	INTEGER,                    \
@@ -926,7 +972,7 @@ void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 
         bOk = RPKCORE.database.openDb("ADB.db");
 
-        m_db = RPKCORE.database.getDb();
+        m_db = RPKCORE.database.getDb(1);
 
         bOk = m_db.isOpen();
 
@@ -941,11 +987,7 @@ void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
         createTable();
 
 
-    bOk = RPKCORE.database.openDb("local.db");
 
-    m_local = RPKCORE.database.getDb(1);
-
-    bOk = m_local.isOpen();
 
     qDebug()<<"local db open : "<<bOk;
 }

@@ -24,6 +24,8 @@ class Action : public QObject
 public:
     explicit Action(QObject *parent = nullptr);
 
+    ~Action();
+
 
     void setDataFromServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
 
@@ -58,6 +60,14 @@ public:
     QString getKeyValue(QString key, bool inLocal=true);
 
 
+    bool addGroupData(int iType,GroupData data,QString &sError);
+
+    bool delGroupData(int iType, QString sSid, QString &sError);
+
+    bool editGroupData(int iType,GroupData data,QString &sError);
+
+    QList<GroupData> getGroupData(int iType,QString &sError);
+
 
     void reQuerty();
 
@@ -77,6 +87,8 @@ public:
     QList<DataGameItem> getGameItem(bool bQuery = false);
 
     QList<DataGameItem> getGameItem(QString sGameSid, bool bQuery=false);
+
+    void updateGameItemPrice(QString sGameSid,double iGameRate);
 
     DataGameItem getGameItemFromSid(QString sSid,bool bQuery=false);
 
@@ -102,7 +114,7 @@ public:
 
     int mapping(QVariantList list, QString sKey,QString var);
 
-   // DataExchange::Rate rate(QString sSid="",bool bRequest=false);
+    // DataExchange::Rate rate(QString sSid="",bool bRequest=false);
 
     bool addRate(QVariantMap data, QString &sError, bool bExchangeType=false);
 

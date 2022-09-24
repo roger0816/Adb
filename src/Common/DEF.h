@@ -21,6 +21,7 @@ struct SQL_TABLE
     static QString GameItem(){return "GameItem";}
     static QString Bulletin(){return "Bulletin";}
     static QString CustomerClass(){return "CustomerClass";}
+    static QString GroupData(){return "GroupData";}
     static QString FactoryClass(){return "FactoryClass";}
     static QString UserData(){return "UserData";}
     static QString CustomerData(){return "CustomerData";}
@@ -33,6 +34,17 @@ struct SQL_TABLE
 
 };
 
+namespace  GROUP_DATA{
+enum
+{
+    PAY_PIPELINE=0
+
+
+};
+}
+
+
+
 
 namespace ACT
 {
@@ -44,13 +56,15 @@ enum _KEY
     LOGIN = 3000,
     ADD_USER =4001,
     DEL_USER,
-    EDIT_USER,
     QUERY_USER,
+    EDIT_USER,
+
 
     ADD_CUSTOMER =4011,
     DEL_CUSTOMER,
-    EDIT_CUSTOMER,
     QUERY_CUSTOMER,
+    EDIT_CUSTOMER,
+
     LAST_CUSTOMER_ID,
 
     REPLACE_GAME_INFO =4021,
@@ -91,6 +105,11 @@ enum _KEY
     DEL_PAY_TYPE,
     EDIT_PAY_TYPE,
     QUERY_PAY_TYPE,
+
+    ADD_GROUP=5201,
+    DEL_GROUP,
+    QUERY_GROUP,
+    EDIT_GROUP,
 
 
     REPLACE_ORDER =6001,
@@ -173,7 +192,7 @@ struct CListPair : public QList< CPair >
 
         for(int i=0;i<this->length();i++)
         {
-           listRe.append(this->at(i).second);
+            listRe.append(this->at(i).second);
         }
 
         qDebug()<<"list sec : "<<listRe;
@@ -211,7 +230,7 @@ struct CListPair : public QList< CPair >
             return;
 
         if(listFirst().length()<1)
-           return this->fromString(data.toString());
+            return this->fromString(data.toString());
 
 
         CListPair tmp;

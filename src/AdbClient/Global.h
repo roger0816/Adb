@@ -25,6 +25,7 @@ class Global : public QObject
     Q_OBJECT
 public:
     explicit Global(QObject *parent = nullptr);
+    ~Global();
 
 //    GLOBAL_DATA::Data m_data;
 

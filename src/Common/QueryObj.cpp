@@ -142,13 +142,43 @@ CData QueryObj::queryData(CData data)
 
     else if(data.iAciton==ACT::EDIT_GAME_ITEM)
     {
-        qDebug()<<"qeury game item ";
+        qDebug()<<"qeury game item : ";
+
+        qDebug()<<"ll1 : "<<data.listData.length();
 
         QVariantMap d;
 
         d["Sid"] = data.dData["Sid"];
 
-        bOk = m_sql.updateTb(SQL_TABLE::GameItem(),d,data.dData,sError);
+
+        bool bHasList = data.listData.length()>0;
+
+        bOk =true;
+
+
+
+        for(int i=0;i<data.listData.length();i++)
+        {
+
+            QVariantMap t = data.listData.at(i).toMap();
+
+            QVariantMap tmp ;
+
+            tmp["Sid"] = t["Sid"];
+
+            bool b = m_sql.updateTb(SQL_TABLE::GameItem(),tmp,t,sError);
+
+            if(!b)
+                bOk = false;
+
+        }
+
+
+
+        if(!bHasList)
+        {
+            bOk = m_sql.updateTb(SQL_TABLE::GameItem(),d,data.dData,sError);
+        }
 
         sOkMsg="修改完成";
 
@@ -459,11 +489,33 @@ CData QueryObj::queryData(CData data)
         sOkMsg = "修改完成";
     }
 
-    else if(data.iAciton==ACT::DEL_PAY_TYPE)
+
+    else if(data.iAciton==ACT::ADD_GROUP)
+    {
+
+
+        bOk = m_sql.insertTb(SQL_TABLE::GroupData(),data.dData,sError);
+        sOkMsg = "新增完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_GROUP)
+    {
+        bOk = m_sql.queryTb(SQL_TABLE::GroupData(),data.dData,re.listData,sError);
+    }
+
+    else if(data.iAciton==ACT::EDIT_GROUP)
     {
         QVariantMap d;
         d["Sid"] = data.dData["Sid"];
-        bOk = m_sql.delFromTb(SQL_TABLE::PayType(),d,sError);
+        bOk = m_sql.updateTb(SQL_TABLE::GroupData(),d,data.dData,sError);
+        sOkMsg = "修改完成";
+    }
+
+    else if(data.iAciton==ACT::DEL_GROUP)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.delFromTb(SQL_TABLE::GroupData(),d,sError);
         sOkMsg = "刪除完成";
     }
 

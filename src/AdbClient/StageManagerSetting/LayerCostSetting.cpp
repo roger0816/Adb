@@ -24,21 +24,30 @@ LayerCostSetting::~LayerCostSetting()
 
 
 
+
+
 void LayerCostSetting::on_btnGameAdd_clicked()
 {
     DialogGameEdit dialog;
 
     if(dialog.exec()==1)
     {
+
+        GameList d;
+
+
+
         QVariantMap data;
 
         data["Enable"] = dialog.m_bEnable;
 
-        //data["Sid"] = dialog.m_sId;
+        data["GameRate"] = dialog.m_iGameRate;
 
         data["Id"] = dialog.m_sId;
 
         data["Name"] = dialog.m_sName;
+
+        data["GameRate"] = QString::number(dialog.m_iGameRate);
 
         QString sError;
 
@@ -84,7 +93,7 @@ void LayerCostSetting::refreshGameList()
 
         ui->tbGame->setItem(i,0,UI.tbItem(m_gameList.listData.at(i).Id));
 
-        ui->tbGame->setItem(i,1,UI.tbItem(m_gameList.listData.at(i).Enable));
+        ui->tbGame->setItem(i,1,UI.tbItem(m_gameList.listData.at(i).GameRate));
 
         ui->tbGame->setItem(i,2,UI.tbItem(m_gameList.listData.at(i).Name));
 
@@ -97,6 +106,12 @@ void LayerCostSetting::refreshItemList()
 {
 
     int iGameRow = ui->tbGame->currentRow();
+
+    if(iGameRow<0 || iGameRow>= m_gameList.listData.length())
+        return;
+
+    double GameRate = m_gameList.listData.at(iGameRow).GameRate;
+
 
     m_listItem.clear();
 
@@ -183,7 +198,10 @@ void LayerCostSetting::refreshItemList()
 
         ui->tbGameItem->setItem(i,3,UI.tbItem(data.Bonus));
 
-        ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
+
+        ui->tbGameItem->setItem(i,4,UI.tbItem(GameRate*data.Bonus.toDouble()));
+
+      //  ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
 
         double iNTD = data.NTD.toDouble();
 
@@ -246,7 +264,7 @@ void LayerCostSetting::on_btnGameEdit_clicked()
 
     DialogGameEdit dialog;
 
-    dialog.setData(gameData.Sid, gameData.Enable,gameData.Id,gameData.Name);
+    dialog.setData(gameData.Sid, gameData.Enable,gameData.Id,gameData.Name,gameData.GameRate);
 
     int iRet = dialog.exec();
 
@@ -262,11 +280,15 @@ void LayerCostSetting::on_btnGameEdit_clicked()
 
         data["Name"] = dialog.m_sName;
 
+        data["GameRate"] = QString::number(dialog.m_iGameRate);
+
         QString sError;
 
         ACTION.action(ACT::EDIT_GAME_LIST,data,sError);
         UI.showMsg("",sError,"OK");
 
+
+        ACTION.updateGameItemPrice(dialog.m_sSid,dialog.m_iGameRate);
 
         refreshGameList();
 
@@ -310,13 +332,18 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
+    double iGameRate = m_gameList.listData.at(ui->tbGame->currentRow()).GameRate;
+
+
     DataRate rate;
 
     if(ACTION.listRate("",true,true).length()>0)
         rate=ACTION.listRate("",true,true).last();
 
     dialog.setRate(sGameName+" : 新增商品",rate);
+    QVariantMap dat;
 
+    dialog.setData(iGameRate,dat);
 
     if(dialog.exec()==1)
     {
@@ -330,6 +357,13 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
         UI.showMsg("",sError,"OK");
         refreshItemList();
+
+
+
+
+
+
+
 
     }
 }
@@ -365,6 +399,8 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
 
+    double gameRate=m_gameList.listData.at(ui->tbGame->currentRow()).GameRate;
+
     DataRate rate;
 
     QList<DataRate> listTmp =ACTION.listRate("",true,true);
@@ -374,7 +410,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     dialog.setRate(sGameName+" : 修改商品",rate);
 
-    dialog.setData(m_listItem.at(ui->tbGameItem->currentRow()).toMap());
+    dialog.setData(gameRate,m_listItem.at(ui->tbGameItem->currentRow()).toMap());
 
     int iRet = dialog.exec();
 

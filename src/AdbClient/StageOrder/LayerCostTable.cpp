@@ -46,7 +46,7 @@ void LayerCostTable::refreshGameList()
 void LayerCostTable::showEvent(QShowEvent *)
 {
    // ACTION.rate("",true);
-    refreshGameList();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refreshGameList()));
 }
 
 bool LayerCostTable::check(GameList::GameData data)

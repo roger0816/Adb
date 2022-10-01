@@ -131,7 +131,7 @@ void LayerFactory::refresh()
 
 void LayerFactory::showEvent(QShowEvent *)
 {
-    refresh();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
 

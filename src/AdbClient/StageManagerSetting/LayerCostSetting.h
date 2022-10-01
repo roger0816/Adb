@@ -66,8 +66,9 @@ private:
 
     int m_iCurrentGameSid = -1;
 
+private slots:
 
-
+     void refresh();
 
 };
 

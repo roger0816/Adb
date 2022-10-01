@@ -25,7 +25,7 @@ private slots:
 
     void on_btnBulletinEdit_clicked();
 
-
+    void refreshBulletin();
 
 
 
@@ -33,10 +33,6 @@ private:
     Ui::LayerSysSetting *ui;
 
     void showEvent(QShowEvent *) override;
-
-    void refreshBulletin();
-
-
 
 
     QVariantList m_listBulletin;

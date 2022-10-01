@@ -1,5 +1,6 @@
 #include "LayerBulletin.h"
 #include "ui_LayerBulletin.h"
+#include <QTimer>
 
 LayerBulletin::LayerBulletin(QWidget *parent) :
     QWidget(parent),
@@ -15,7 +16,7 @@ LayerBulletin::~LayerBulletin()
 
 void LayerBulletin::showEvent(QShowEvent *)
 {
-    refresh();
+    QTimer::singleShot(30,[this](){ refresh(true); });
 }
 
 void LayerBulletin::refresh(bool bRequery)
@@ -38,8 +39,6 @@ void LayerBulletin::refresh(bool bRequery)
         m_listUser = ACTION.queryUser();
 
         ACTION.action(ACT::QUERY_BULLETIN,in,m_listData,sError);
-
-
 
 
         for(int i=m_listData.length()-1;i>=0;i--)

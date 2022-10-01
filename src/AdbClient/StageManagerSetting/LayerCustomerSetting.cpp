@@ -41,7 +41,7 @@ void LayerCustomerSetting::refresh()
 
 void LayerCustomerSetting::showEvent(QShowEvent *)
 {
-    refresh();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
 void LayerCustomerSetting::on_btnCusClassAdd_clicked()

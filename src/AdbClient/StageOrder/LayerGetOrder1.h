@@ -29,6 +29,8 @@ private slots:
 
     void on_btnFinish_clicked();
 
+    void refresh();
+
 private:
     Ui::LayerGetOrder1 *ui;
 

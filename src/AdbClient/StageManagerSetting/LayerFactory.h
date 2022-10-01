@@ -24,14 +24,12 @@ private slots:
 
     void on_btnFactoryAdd_clicked();
 
-
+    void refresh();
 
     void on_tbFactory_itemEntered(QTableWidgetItem *item);
 
 private:
     Ui::LayerFactory *ui;
-
-    void refresh();
 
        QVariantList m_listFactory;
 

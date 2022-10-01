@@ -64,17 +64,9 @@ LayerSchedule::~LayerSchedule()
 
 void LayerSchedule::showEvent(QShowEvent *)
 {
-    ACTION.getUser(true);
-
-    read();
-
-    refreshCb();
-
-    refresh();
-
-
-
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(delayRefresh()));
 }
+
 
 void LayerSchedule::refresh()
 {
@@ -382,5 +374,17 @@ void LayerSchedule::btnsClicked()
 void LayerSchedule::on_tb1_cellChanged(int row, int column)
 {
     qDebug()<<"tb1 : "<<"cell "<<row<<" , "<<column;
+}
+
+void LayerSchedule::delayRefresh()
+{
+    ACTION.getUser(true);
+
+    read();
+
+    refreshCb();
+
+    refresh();
+
 }
 

@@ -173,7 +173,7 @@ void LayerSearchCustomer::showEvent(QShowEvent *)
 {
     ui->stackedWidget->setCurrentWidget(ui->page0);
 
-    refresh();
+    QTimer::singleShot(30,[this](){ refresh(true); });
 }
 
 bool LayerSearchCustomer::checkSearch(QVariantMap data)

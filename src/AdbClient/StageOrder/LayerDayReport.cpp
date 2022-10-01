@@ -38,9 +38,7 @@ LayerDayReport::~LayerDayReport()
 
 void LayerDayReport::showEvent(QShowEvent *)
 {
-    ui->dateEdit->setDate(QDate::currentDate());
-    ACTION.primeRate("",true);
-    refreshTb();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(delayRefresh()));
 }
 
 void LayerDayReport::refreshTb()
@@ -351,6 +349,13 @@ void LayerDayReport::on_cbStep5_clicked()
 void LayerDayReport::on_tb_cellClicked(int row, int column)
 {
 
+}
+
+void LayerDayReport::delayRefresh()
+{
+    ui->dateEdit->setDate(QDate::currentDate());
+    ACTION.primeRate("",true);
+    refreshTb();
 }
 
 void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer)

@@ -17,7 +17,7 @@ public:
     explicit LayerCustomerSetting(QWidget *parent = nullptr);
     ~LayerCustomerSetting();
 
-    void refresh();
+
 
     void showEvent(QShowEvent *) override;
 
@@ -29,7 +29,7 @@ private slots:
 
     void on_tbCusClass_cellDoubleClicked(int, int);
 
-
+    void refresh();
 
 private:
     Ui::LayerCustomerSetting *ui;

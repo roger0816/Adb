@@ -39,13 +39,7 @@ void LayerSysSetting::on_btnBulletinAdd_clicked()
 
 void LayerSysSetting::showEvent(QShowEvent *)
 {
-
-
-
-    refreshBulletin();
-
-
-
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refreshBulletin()));
 }
 
 void LayerSysSetting::refreshBulletin()

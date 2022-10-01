@@ -23,30 +23,7 @@ LayerGetOrder2::~LayerGetOrder2()
 
 void LayerGetOrder2::showEvent(QShowEvent *)
 {
-    ui->wBottom->setCurrentIndex(0);
-    ACTION.getUser(true);
-
-    ACTION.getOrder(true);
-
-    m_listFactory.clear();
-
-
-    DataFactory tmp;
-
-    tmp.Id="ABD";
-
-    tmp.Name="艾比代";
-
-//    m_listFactory.append(tmp);
-
-    m_listFactory.append(ACTION.getFactoryClass("",true));
-
-    ui->tbOrder->setRowCount(0);
-
-    //ui->cbAddValueType->clear();
-
-
-    refreshUser();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
 void LayerGetOrder2::refreshUser(bool bRe)
@@ -360,5 +337,33 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
         return;
     }
+}
+
+void LayerGetOrder2::refresh()
+{
+    ui->wBottom->setCurrentIndex(0);
+    ACTION.getUser(true);
+
+    ACTION.getOrder(true);
+
+    m_listFactory.clear();
+
+
+    DataFactory tmp;
+
+    tmp.Id="ABD";
+
+    tmp.Name="艾比代";
+
+//    m_listFactory.append(tmp);
+
+    m_listFactory.append(ACTION.getFactoryClass("",true));
+
+    ui->tbOrder->setRowCount(0);
+
+    //ui->cbAddValueType->clear();
+
+
+    refreshUser();
 }
 

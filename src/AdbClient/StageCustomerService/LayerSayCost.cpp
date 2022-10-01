@@ -268,22 +268,7 @@ void LayerSayCost::setReadOnly()
 
 void LayerSayCost::showEvent(QShowEvent *)
 {
-
-    qDebug()<<"show Event ";
-    m_listPayType = ACTION.getAddValueType();
-
-
-    m_date = QDateTime::currentDateTime();
-
-    QString sDate = m_date.QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm");
-    ui->lbTime->setText(sDate);
-
-    QString sError;
-
-    QVariantMap v;
-    ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError);
-
-    refreshInfo();
+    QTimer::singleShot(30,this,SLOT(delayShowEvent()));
 }
 
 void LayerSayCost::refreshInfo()
@@ -947,5 +932,24 @@ void LayerSayCost::on_btnSayOk_clicked()
 void LayerSayCost::on_btnSayClose_clicked()
 {
     hide();
+}
+
+void LayerSayCost::delayShowEvent()
+{
+    qDebug()<<"show Event ";
+    m_listPayType = ACTION.getAddValueType();
+
+
+    m_date = QDateTime::currentDateTime();
+
+    QString sDate = m_date.QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm");
+    ui->lbTime->setText(sDate);
+
+    QString sError;
+
+    QVariantMap v;
+    ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError);
+
+    refreshInfo();
 }
 

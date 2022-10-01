@@ -99,7 +99,7 @@ void LayerCustomer::showEvent(QShowEvent *)
 {
     ui->btnEdit->setEnabled(false);
 
-    refresh();
+    QTimer::singleShot(30,this,SLOT(refresh()));
 }
 
 

@@ -98,6 +98,7 @@ private slots:
     void on_btnCopy_clicked();
     void on_btnSayClose_clicked();
 
+    void delayShowEvent();
 public slots:
     void on_btnSayOk_clicked();
 };

@@ -23,48 +23,7 @@ LayerGetOrder1::~LayerGetOrder1()
 
 void LayerGetOrder1::showEvent(QShowEvent *)
 {
-    ui->wBottom->setCurrentIndex(0);
-    ACTION.getUser(true);
-
-    ACTION.getOrder(true);
-
-    m_listPayType = ACTION.getAddValueType(true);
-
-    m_listFactory.clear();
-
-
-    DataFactory tmp;
-
-    tmp.Id="ABD";
-
-    tmp.Name="艾比代";
-
-    // m_listFactory.append(tmp);
-
-    m_listFactory.append(ACTION.getFactoryClass("",true));
-
-    ui->tbOrder->setRowCount(0);
-
-    ui->cbAddValueType->clear();
-    /*
-    QVariantList list;
-
-    QVariantMap d;
-
-    QString sError;
-
-    ACTION.action(ACT::QUERY_ADDVALUE_TYPE,d,list,sError);
-
-    QStringList listCb;
-
-    for(int i=0;i<list.length();i++)
-    {
-        listCb.append(list.at(i).toMap()["Name"].toString());
-    }
-
-    ui->cbAddValueType->addItems(listCb);
-    */
-    refreshUser();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
 void LayerGetOrder1::refreshUser(bool bRe)
@@ -400,5 +359,51 @@ void LayerGetOrder1::on_btnFinish_clicked()
 
         return;
     }
+}
+
+void LayerGetOrder1::refresh()
+{
+    ui->wBottom->setCurrentIndex(0);
+    ACTION.getUser(true);
+
+    ACTION.getOrder(true);
+
+    m_listPayType = ACTION.getAddValueType(true);
+
+    m_listFactory.clear();
+
+
+    DataFactory tmp;
+
+    tmp.Id="ABD";
+
+    tmp.Name="艾比代";
+
+    // m_listFactory.append(tmp);
+
+    m_listFactory.append(ACTION.getFactoryClass("",true));
+
+    ui->tbOrder->setRowCount(0);
+
+    ui->cbAddValueType->clear();
+    /*
+    QVariantList list;
+
+    QVariantMap d;
+
+    QString sError;
+
+    ACTION.action(ACT::QUERY_ADDVALUE_TYPE,d,list,sError);
+
+    QStringList listCb;
+
+    for(int i=0;i<list.length();i++)
+    {
+        listCb.append(list.at(i).toMap()["Name"].toString());
+    }
+
+    ui->cbAddValueType->addItems(listCb);
+    */
+    refreshUser();
 }
 

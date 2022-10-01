@@ -21,8 +21,6 @@ public:
 private:
     Ui::LayerAccountManager *ui;
 
-    void refresh();
-
          QList<UserData> m_listUser;
 
 
@@ -37,6 +35,9 @@ private slots:
     void on_tabWidget_currentChanged(int index);
 
     void on_btnDel_clicked();
+
+    void refresh();
+
 
 };
 

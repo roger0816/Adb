@@ -24,12 +24,14 @@ private slots:
 
     void on_tbTop_cellDoubleClicked(int row, int);
 
+    void refresh(bool bRequery=true);
+
 private:
     Ui::LayerBulletin *ui;
 
     void showEvent(QShowEvent * ) override;
 
-    void refresh(bool bRequery=true);
+    //void refresh(bool bRequery=true);
 
     QList<UserData> m_listUser;
 

@@ -18,8 +18,6 @@ public:
     explicit LayerCostTable(QWidget *parent = nullptr);
     ~LayerCostTable();
 
-    void refreshGameList();
-
     GameList m_gameList;
 
     void showEvent(QShowEvent * ) override;
@@ -34,6 +32,8 @@ private slots:
     void on_btnClear_clicked();
 
     void on_btnCopy_clicked();
+
+    void refreshGameList();
 
 private:
     Ui::LayerCostTable *ui;

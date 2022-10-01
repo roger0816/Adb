@@ -20,13 +20,7 @@ LayerPrimeCostRate::~LayerPrimeCostRate()
 
 void LayerPrimeCostRate::showEvent(QShowEvent *)
 {
-    reLineEdit();
-
-    refreshRate();
-
-    refreshTbDetail();
-
-
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
 void LayerPrimeCostRate::setExchangeType()
@@ -225,5 +219,14 @@ void LayerPrimeCostRate::on_tb1_itemEntered(QTableWidgetItem *item)
         QToolTip::hideText();
     }
 
+}
+
+void LayerPrimeCostRate::refresh()
+{
+    reLineEdit();
+
+    refreshRate();
+
+    refreshTbDetail();
 }
 

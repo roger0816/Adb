@@ -18,14 +18,15 @@ public:
     explicit LayerAddValueType(QWidget *parent = nullptr);
     ~LayerAddValueType();
     void showEvent(QShowEvent *) override;
-    void refresh();
+
 
     QVariantList m_listData;
 private slots:
     void on_btnAdd_clicked();
 
-
     void on_btnEdit_clicked();
+
+    void refresh();
 
 private:
     Ui::LayerAddValueType *ui;

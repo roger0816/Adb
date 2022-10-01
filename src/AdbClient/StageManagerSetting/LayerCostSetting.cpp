@@ -66,9 +66,7 @@ void LayerCostSetting::on_btnGameAdd_clicked()
 
 void LayerCostSetting::showEvent(QShowEvent *)
 {
-    refreshGameList();
-
-    refreshItemList();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
 
@@ -237,6 +235,13 @@ void LayerCostSetting::refreshItemList()
 
 
 
+}
+
+void LayerCostSetting::refresh()
+{
+    refreshGameList();
+
+    refreshItemList();
 }
 
 

@@ -69,7 +69,10 @@ private slots:
     void on_btnChangeBtn_clicked();
 
     void btnsClicked();
+
     void on_tb1_cellChanged(int row, int column);
+
+    void delayRefresh();
 
 private:
     Ui::LayerSchedule *ui;

@@ -30,6 +30,8 @@ private slots:
 
     void on_tb1_itemEntered(QTableWidgetItem *item);
 
+    void refresh();
+
 private:
     Ui::LayerPrimeCostRate *ui;
 

@@ -20,9 +20,10 @@ public:
     ~LayerDayReport();
 
     void showEvent(QShowEvent *) override;
-    void refreshTb();
 
     bool checkFilter(OrderData order);
+
+    void refreshTb();
 private slots:
     void on_tb_cellPressed(int row, int column);
 
@@ -39,6 +40,8 @@ private slots:
     void on_cbStep5_clicked();
 
     void on_tb_cellClicked(int row, int column);
+
+    void delayRefresh();
 
 private:
     Ui::LayerDayReport *ui;

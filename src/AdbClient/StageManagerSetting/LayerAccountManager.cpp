@@ -19,7 +19,7 @@ void LayerAccountManager::showEvent(QShowEvent *)
 {
     ui->tabWidget->setCurrentIndex(0);
 
-    refresh();
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
 void LayerAccountManager::refresh()

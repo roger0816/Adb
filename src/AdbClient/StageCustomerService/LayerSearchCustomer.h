@@ -35,8 +35,6 @@ private slots:
 private:
     Ui::LayerSearchCustomer *ui;
 
-    void refresh(bool bReQuery = true);
-
     void changePage(int iPage);
 
     void showEvent(QShowEvent *) override;
@@ -51,6 +49,9 @@ private:
 
 public slots:
     void slotBack(int iPage=0);
+
+private slots:
+    void refresh(bool bReQuery = true);
 };
 
 #endif // LAYERSEARCHCUSTOMER_H

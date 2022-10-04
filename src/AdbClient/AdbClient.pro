@@ -44,10 +44,10 @@ SOURCES += \
     StageManagerSetting/LayerAccountManager.cpp \
     StageManagerSetting/LayerCustomerSetting.cpp \
     StageOrder/LayerGetOrder2.cpp \
-    StageOrder\StageOrder.cpp \
-    StageOrder\LayerCostTable.cpp \
-    StageOrder\LayerDayReport.cpp \
-    StageOrder\LayerGetOrder1.cpp \
+    StageOrder/StageOrder.cpp \
+    StageOrder/LayerCostTable.cpp \
+    StageOrder/LayerDayReport.cpp \
+    StageOrder/LayerGetOrder1.cpp \
     StageHomePage.cpp \
     StageManagerSetting/DialogEditFactory.cpp \
     StageManagerSetting/LayerFactory.cpp \
@@ -89,10 +89,10 @@ HEADERS += \
     StageManagerSetting/LayerAccountManager.h \
     StageManagerSetting/LayerCustomerSetting.h \
     StageOrder/LayerGetOrder2.h \
-       StageOrder\StageOrder.h \
-       StageOrder\LayerCostTable.h \
-       StageOrder\LayerDayReport.h \
-       StageOrder\LayerGetOrder1.h \
+       StageOrder/StageOrder.h \
+       StageOrder/LayerCostTable.h \
+       StageOrder/LayerDayReport.h \
+       StageOrder/LayerGetOrder1.h \
     StageHomePage.h \
     StageManagerSetting/DialogEditFactory.h \
     StageManagerSetting/LayerFactory.h \
@@ -131,10 +131,10 @@ FORMS += \
     StageManagerSetting/LayerAccountManager.ui \
     StageManagerSetting/LayerCustomerSetting.ui \
     StageOrder/LayerGetOrder2.ui \
-      StageOrder\StageOrder.ui \
-      StageOrder\LayerCostTable.ui \
-      StageOrder\LayerDayReport.ui \
-      StageOrder\LayerGetOrder1.ui \
+      StageOrder/StageOrder.ui \
+      StageOrder/LayerCostTable.ui \
+      StageOrder/LayerDayReport.ui \
+      StageOrder/LayerGetOrder1.ui \
     StageHomePage.ui \
     StageManagerSetting/DialogEditFactory.ui \
     StageManagerSetting/LayerFactory.ui \

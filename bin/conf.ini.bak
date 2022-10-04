@@ -1,0 +1,7 @@
+
+#ServerIp=206.189.185.20
+ServerIp=127.0.0.1
+ServerPort=6000
+
+UseServer=true
+

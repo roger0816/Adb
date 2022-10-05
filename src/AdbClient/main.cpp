@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     bool b = GLOBAL.config("UseServer").toBool();
 
     ACTION.setDataFromServer(b,sServerIp,sServerPort);
-
+//    ACTION.setDataBase(true,sServerIp,"3306");
     if(!b)
         ACTION.setDataBase(false);
 

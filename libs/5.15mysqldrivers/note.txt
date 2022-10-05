@@ -1,0 +1,13 @@
+1. copy libmysql.dll  libmysql.lib  
+
+        (build run) into  Qt Path bin  		
+		EX: Qt\5.15.2\mingw81_64\bin		
+	(user run )  into  Project exe file Path  
+		EX: Adb\bin
+
+
+2. copy qsqlmysql.dll qsqlmysql.dll.debug 
+	(build run) into Qt Path lib  
+		EX: Qt\5.15.2\mingw81_64\plugins\sqldrivers
+	(user run )  into  Project exe file Path 
+		EX: Adb\bin\sqldrivers

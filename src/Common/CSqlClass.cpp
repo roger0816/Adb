@@ -941,7 +941,6 @@ void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
     bool bOk = false;
     if(bMysql)
     {
-        qDebug()<<"open mysql : "<<sIp;
 
         qDebug()<< QSqlDatabase::drivers();
 
@@ -963,6 +962,8 @@ void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
         m_db.setDatabaseName(sDbName);
 
         bOk = m_db.open();
+        qDebug()<<"open mysql : "<<sIp<<" : "<<bOk;
+
     }
 
     else

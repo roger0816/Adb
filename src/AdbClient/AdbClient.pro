@@ -31,6 +31,7 @@ SOURCES += \
     Global.cpp \
     GlobalUi.cpp \
     ItemMiniLoadbar.cpp \
+    Label3.cpp \
     LayerBulletin.cpp \
     LayerOrder.cpp \
     StageAccount.cpp \
@@ -59,6 +60,7 @@ SOURCES += \
     StageManagerSetting/DialogGameEdit.cpp \
     StageManagerSetting/DialogEditGameItem.cpp \
     StageManagerSetting/DialogAddValueTypeEdit.cpp \
+    StageReport/ItemScheduleStatus.cpp \
     StageReport/LayerSchedule.cpp \
     StageReport/StageReport.cpp \
     StageTest.cpp \
@@ -76,6 +78,7 @@ HEADERS += \
     Global.h \
     GlobalUi.h \
     ItemMiniLoadbar.h \
+    Label3.h \
     LayerBulletin.h \
     LayerOrder.h \
     StageAccount.h \
@@ -104,6 +107,7 @@ HEADERS += \
     StageManagerSetting/DialogGameEdit.h \
     StageManagerSetting/DialogEditGameItem.h \
     StageManagerSetting/DialogAddValueTypeEdit.h \
+    StageReport/ItemScheduleStatus.h \
     StageReport/LayerSchedule.h \
     StageReport/StageReport.h \
     StageTest.h \
@@ -146,6 +150,7 @@ FORMS += \
     StageManagerSetting/DialogGameEdit.ui \
     StageManagerSetting/DialogEditGameItem.ui \
     StageManagerSetting/DialogAddValueTypeEdit.ui \
+    StageReport/ItemScheduleStatus.ui \
     StageReport/LayerSchedule.ui \
     StageReport/StageReport.ui \
     StageTest.ui \

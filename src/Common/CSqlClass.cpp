@@ -175,7 +175,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
     for(int j=0;j<listKey.length();j++)
     {
 
-        qDebug()<<"AAAx : "<<conditions[listKey.at(j)].toString();
+
         query.bindValue(j,conditions[listKey.at(j)]);
 
     }
@@ -342,13 +342,7 @@ void CSqlClass::createTableSqlite()
 
     sql.clear();
 
-    //    sql.exec("CREATE TABLE 'ExchangeRate' ( \
-    //             'Sid'	INTEGER, \
-    //             'Class'	TEXT, \
-    //             'Rate'	TEXT, \
-    //             'UpdateTime'	TEXT, \
-    //             PRIMARY KEY('Sid' AUTOINCREMENT) \
-    //             );");
+
 
     sql.exec("CREATE TABLE 'ExchangeRate' ( \
              'Sid'	INTEGER, \
@@ -569,15 +563,20 @@ void CSqlClass::createTableSqlite()
 
     sql.clear();
 
-    sql.exec("CREATE TABLE 'ScheduleData' ( \
-             'Sid'	INTEGER,    \
-             'Id'	TEXT,   \
-             'Cost'	TEXT,   \
-             'Check'	TEXT,   \
-             'Note'	TEXT,   \
-             'UpdateTime'	TEXT,   \
-             PRIMARY KEY('Sid' AUTOINCREMENT) \
-             );");
+
+    sql.exec("CREATE TABLE 'Schedule' ( \
+        'Sid'	INTEGER, \
+        'Id'	TEXT, \
+        'Header'	TEXT, \
+        'Data'	TEXT, \
+        'UserCheck'	TEXT, \
+        'EditStatus'	INTEGER, \
+        'Note'	TEXT, \
+        'UpdateTime'	TEXT, \
+        PRIMARY KEY('Sid' AUTOINCREMENT) \
+    );");
+
+
 }
 
 void CSqlClass::createTableMysql()

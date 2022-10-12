@@ -5,9 +5,11 @@
 #include <QDebug>
 #include "Global.h"
 #include "GlobalUi.h"
+#include "StageTest.h"
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
 
     GLOBAL;
 
@@ -17,7 +19,7 @@ int main(int argc, char *argv[])
     QString sServerPort = GLOBAL.config("ServerPort").toString();
 
     bool b = GLOBAL.config("UseServer").toBool();
-
+    b = false;
     ACTION.setDataFromServer(b,sServerIp,sServerPort);
 //    ACTION.setDataBase(true,sServerIp,"3306");
     if(!b)

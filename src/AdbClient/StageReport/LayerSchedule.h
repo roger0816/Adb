@@ -10,11 +10,62 @@
 #include <QButtonGroup>
 #include <QSpinBox>
 #include <QMouseEvent>
+#include "Label3.h"
 
 namespace Ui {
 class LayerSchedule;
 }
 
+
+namespace  Layer_Schedule{
+
+struct Data
+{
+
+    QString sUserSid;
+    QString sCost;
+    QString sStatus;
+    QString sCheck="0";
+    //if sText is not "" , it's normal text
+    QString sText="";
+
+
+    QString s3TextData()
+    {
+        return sUserSid+"::"+sCost+"::"+sStatus;
+    }
+
+    void set3TextData(QString sTmp)
+    {
+        QStringList list = sTmp.split("::");
+
+        if(list.length()>=3)
+        {
+            sUserSid= list.first();
+            sCost= list.at(1);
+            sStatus= list.at(2);
+
+        }
+        else if(list.length()>=1)
+        {
+            sText = list.first();
+        }
+
+    }
+
+    void clear()
+    {
+        sUserSid="";
+        sCost="";
+        sStatus="";
+
+        sCheck="0";
+        sText="";
+    }
+
+};
+
+}
 
 class CLineEditClick : public QLineEdit
 {
@@ -47,11 +98,7 @@ public:
 
     QButtonGroup m_group;
 
-
-    QString sDataUserSid[52][7];
-    QString sDataCost[52][7];
-    QString sDataCheck[52][7];
-    QString sTb0Note[52][7];
+    Layer_Schedule::Data m_data[128][7];
 
 private slots:
     void on_btnSave_clicked();
@@ -60,9 +107,10 @@ private slots:
 
     void on_btnCost_clicked();
 
-    void on_tb2_itemClicked(QTableWidgetItem *item);
+    void on_btnStatus_clicked();
 
-    void on_tb1_itemChanged(QTableWidgetItem *item);
+    void on_tbUserList_itemClicked(QTableWidgetItem *item);
+
 
     void on_tb0_itemChanged(QTableWidgetItem *item);
 
@@ -73,6 +121,12 @@ private slots:
     void on_tb1_cellChanged(int row, int column);
 
     void delayRefresh();
+
+    void on_btnNext_clicked();
+
+    void on_btnPre_clicked();
+
+public slots:
 
 private:
     Ui::LayerSchedule *ui;
@@ -87,6 +141,19 @@ private:
     void write();
 
     void read();
+
+
+     QStringList m_listVHeader;
+
+
+     int checkDayOfWeek(QString yyyy,QString MM,QString dd);
+
+     QString m_sYear="2022";
+     QString m_sMonth="10";
+
+     QString m_sSid="";
+
+     void checkUserList();
 };
 
 #endif // LAYERSCHEDULE_H

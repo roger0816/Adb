@@ -44,6 +44,8 @@ public:
 
     ItemMiniLoadbar *m_loading;
 
+    void toolTip(QString st);
+
 private:
     static GlobalUi *m_pInstance;
 

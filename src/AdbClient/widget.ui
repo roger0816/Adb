@@ -66,6 +66,13 @@ font: 700 24px &quot;Microsoft JhengHei UI&quot;;
 color:rgb(241,241,241);
 background-color:#3c78b4;
 }
+QPushButton:disabled { 
+border-style: outset; 
+border-width: 0px; 
+font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
+color:gray;
+background-color:gray;
+}
 
 /**/
 

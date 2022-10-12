@@ -8,36 +8,24 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
     ui->setupUi(this);
 
     ui->tb0->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//平均分配列宽
-    ui->tb1->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//平均分配列宽
+
     //    ui->tb->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);//平均分配行宽
 
 
-    QStringList listV;
-    listV<<""<<"白領11-19"<<"白儲11-19"<<"早班10-18"<<"早班10-18"<<"白班11-19"<<"白班11-19"
-        <<"晚班18-0130"<<"晚班18-0130"<<"晚領19-03"<<"晚儲19-02"<<"夜儲20-03"<<"夜班20-03";
-    listV<<""<<"白領11-19"<<"白儲11-19"<<"早班10-18"<<"早班10-18"<<"白班11-19"<<"白班11-19"
-        <<"晚班18-0130"<<"晚班18-0130"<<"晚領19-03"<<"晚儲19-02"<<"夜儲20-03"<<"夜班20-03";
-    listV<<""<<"白領11-19"<<"白儲11-19"<<"早班10-18"<<"早班10-18"<<"白班11-19"<<"白班11-19"
-        <<"晚班18-0130"<<"晚班18-0130"<<"晚領19-03"<<"晚儲19-02"<<"夜儲20-03"<<"夜班20-03";
-    listV<<""<<"白領11-19"<<"白儲11-19"<<"早班10-18"<<"早班10-18"<<"白班11-19"<<"白班11-19"
-        <<"晚班18-0130"<<"晚班18-0130"<<"晚領19-03"<<"晚儲19-02"<<"夜儲20-03"<<"夜班20-03";
+
+    m_listVHeader<<""<<"白領11-19"<<"白儲11-19"<<"早班10-18"<<"早班10-18"<<"白班11-19"<<"白班11-19"<<"白班11-19"<<"備註"
+                <<"晚班18-0130"<<"晚班18-0130"<<"晚領19-03"<<"晚班19-02"<<"夜班20-03"<<"夜班20-03"<<"夜班20-03"<<"備註";
 
 
 
-    ui->tb0->setRowCount(listV.length());
 
-    ui->tb0->setVerticalHeaderLabels(listV);
+    ui->tbUserList->setColumnCount(1);
 
+    m_group.addButton(ui->btnName,0);
 
-    ui->tb1->setRowCount(listV.length());
+    m_group.addButton(ui->btnCost,1);
 
-    ui->tb1->setVerticalHeaderLabels(listV);
-
-    ui->tb2->setColumnCount(1);
-
-    m_group.addButton(ui->btnName);
-
-    m_group.addButton(ui->btnCost);
+    m_group.addButton(ui->btnStatus,2);
 
     m_listBtn<<ui->btn0<<ui->btn1<<ui->btn2<<ui->btn3<<ui->btn4<<ui->btn5
             <<ui->btn6<<ui->btn7<<ui->btn8<<ui->btn9;
@@ -52,6 +40,26 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
     {
         connect(m_listBtn[i],SIGNAL(clicked()),this,SLOT(btnsClicked()));
     }
+
+    connect(ui->itemStatus,&ItemScheduleStatus::sendClicked,this,[=](QString sText)
+    {
+        int iRow = ui->tb0->currentRow();
+
+        int iCol = ui->tb0->currentColumn();
+
+        if(iRow<0 ||iCol<0)
+            return ;
+
+
+        m_data[iRow][iCol].sStatus = sText;
+
+        refresh();
+
+        ui->tb0->setFocus();
+    });
+
+
+
 
 }
 
@@ -72,85 +80,83 @@ void LayerSchedule::refresh()
 {
     //color: rgb(0, 85, 255);
 
-    ui->tb2->setRowCount(0);
-
-    QList<UserData> list = ACTION.getUser(false);
+    checkUserList();
 
 
-    int iRow=0;
 
-    for(int i=0;i<list.length();i++)
+    int iDays =  QDate::fromString(m_sYear+m_sMonth,"yyyyMM").daysInMonth();
+
+    int iDay=1;
+
+    int iFirstDayInWeek = checkDayOfWeek(m_sYear,m_sMonth,"01");
+
+    int iNeedWeek = 5;
+
+    if(iNeedWeek*7-iDays-iFirstDayInWeek<0)
+        iNeedWeek=6;
+
+    int iRowCount = 6*m_listVHeader.length();
+
+    QStringList listV;
+
+    for(int iRow=0;iRow<iRowCount;iRow++)
     {
-        iRow = ui->tb2->rowCount();
-        ui->tb2->setRowCount(iRow+1);
-
-        QString sName = list.at(i).Name;
-
-        ui->tb2->setItem(iRow,0,UI.tbItem(sName));
-
-
-    }
-
-
-
-    for(int i=0;i<52;i++)
-    {
-
-
-        for(int j=0;j<7;j++)
+        if(ui->tb0->rowCount()<=iRow)
+            ui->tb0->setRowCount(iRow+1);
+        QString sHeaderName = m_listVHeader.at(iRow%m_listVHeader.length());
+        listV.append(sHeaderName);
+        for(int iCol=0;iCol<7;iCol++)
         {
 
+            Layer_Schedule::Data data = m_data[iRow][iCol];
 
-            if(i%13==0)
+            if(iRow%m_listVHeader.length()==0)
+            {
+                // ui->tb0->setItem(iRow,iCol,UI.tbItem(m_sMonth+"/"+QString::number(iDay++)));
+
+
+                QLineEdit *d0 = new QLineEdit(ui->tb0);
+                d0->setStyleSheet("background-color:white");
+                d0->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+
+                if(iDay==1 && iFirstDayInWeek!= iCol+1)
+                    d0->setText("");
+                else if(iDay>iDays)
+                    d0->setText("");
+                else
+                    d0->setText(m_sMonth+"/"+QString::number(iDay++));
+                d0->setReadOnly(true);
+                // d0->setStyleSheet("background-color:rgb(222,222,222);");
+
+                ui->tb0->setCellWidget(iRow,iCol,d0);
+            }
+
+            else if(sHeaderName=="備註" || sHeaderName=="")
             {
                 QLineEdit *d0 = new QLineEdit(ui->tb0);
                 d0->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
-                d0->setText(sDataUserSid[i][j]);
+                d0->setText(data.sText);
                 d0->setStyleSheet("background-color:rgb(222,222,222);");
 
-                ui->tb0->setCellWidget(i,j,d0);
-
-
-                QLineEdit  *d1 = new QLineEdit(ui->tb1);
-
-                d1->setReadOnly(true);
-
-                d1->setText(sDataCost[i][j]);
-
-                d1->setStyleSheet("background-color:rgb(222,222,222);");
-
-                ui->tb1->setCellWidget(i,j,d1);
-
-
-
+                ui->tb0->setCellWidget(iRow,iCol,d0);
             }
+
             else
             {
+                Label3 *l = new Label3(ui->tb0);
 
-                QTableWidgetItem *item = UI.tbItem(sDataUserSid[i][j]);
+                l->setCurrentIdx(m_group.checkedId());
+                l->setText(data.sUserSid,data.sCost,data.sStatus);
 
-                ui->tb0->setItem(i,j,item);
-
-                //
-
-                QLineEdit* sp = new QLineEdit(ui->tb1);
-                sp->setAlignment(Qt::AlignCenter);
-                QRegExp ex("[0-9.]{1,6}");
-                sp->setValidator(new QRegExpValidator(ex,ui->tb1));
-
-                sp->setText(sDataCost[i][j]);
-                ui->tb1->setCellWidget(i,j,sp);
-
+                ui->tb0->setCellWidget(iRow,iCol,l);
             }
-
-
-
 
         }
     }
 
-
+    ui->tb0->setVerticalHeaderLabels(listV);
 
 
 
@@ -178,24 +184,19 @@ void LayerSchedule::on_btnCost_clicked()
     changeTb();
 }
 
+void LayerSchedule::on_btnStatus_clicked()
+{
+    changeTb();
+}
+
 void LayerSchedule::changeTb()
 {
 
+    int iIdx = m_group.checkedId();
 
+    ui->stackRight->setCurrentIndex(iIdx);
 
-    if(ui->btnName->isChecked())
-    {
-        ui->stack->setCurrentIndex(0);
-
-        ui->stackRight->setCurrentIndex(0);
-
-    }
-    else
-    {
-        ui->stack->setCurrentIndex(1);
-
-        ui->stackRight->setCurrentIndex(1);
-    }
+    refresh();
 }
 
 void LayerSchedule::refreshCb()
@@ -216,25 +217,30 @@ void LayerSchedule::refreshCb()
 void LayerSchedule::write()
 {
 
+
+    /*
     QStringList listUser,listCost;
 
     for(int i=0;i<52;i++)
     {
         for(int j=0;j<7;j++)
         {
+
+            Layer_Schedule::Data *data = &m_data[i][j];
+
             if(i%13==0)
             {
-                sDataUserSid[i][j] = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j))->text();
-                sDataCost[i][j] = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j))->text();
+                data->sUserSid = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j))->text();
+                data->sCost = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j))->text();
             }
             else
             {
-                sDataUserSid[i][j]= ui->tb0->item(i,j)->text();
-                sDataCost[i][j] = dynamic_cast<QLineEdit*>(ui->tb1->cellWidget(i,j))->text();
+                data->sUserSid= ui->tb0->item(i,j)->text();
+                data->sCost = dynamic_cast<QLineEdit*>(ui->tb1->cellWidget(i,j))->text();
             }
 
-            listUser.append(sDataUserSid[i][j]);
-            listCost.append(sDataCost[i][j]);
+            listUser.append(data->sUserSid);
+            listCost.append(data->sCost);
         }
     }
 
@@ -246,12 +252,103 @@ void LayerSchedule::write()
     QString sError;
 
     ACTION.action(ACT::ADD_SCHEDULE,d,sError);
+    */
+
+    qDebug()<<"write : ";
+
+    QStringList listData;
+
+    QStringList listCheck;
+
+    for(int i=0;i<ui->tb0->rowCount();i++)
+    {
+
+        QStringList listRow ;
+        QStringList check;
+        for(int j=0;j<ui->tb0->columnCount();j++)
+        {
+            qDebug()<<"iRow : "<<i<<" iCol : "<<j;
+            if(i%m_listVHeader.length()==0)
+            {
+
+                //                qDebug()<<"data : "<<ui->tb0->itemAt(i,j)->text();
+                //                listRow.append(ui->tb0->itemAt(i,j)->text());
+
+
+                QLineEdit *t = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j));
+                qDebug()<<"note : "<<t->text();
+
+            }
+            else if(ui->tb0->verticalHeaderItem(i)->text()=="備註"
+                    || ui->tb0->verticalHeaderItem(i)->text()=="")
+            {
+
+                QLineEdit *t = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j));
+
+                QString sTmp = t->text();
+
+                sTmp=sTmp.replace(",,",",");
+
+                sTmp=sTmp.replace(";;",";");
+
+                sTmp=sTmp.replace("::",":");
+
+                qDebug()<<"note : "<<t->text();
+                listRow.append(t->text());
+            }
+            else
+            {
+                listRow.append(m_data[i][j].s3TextData());
+                qDebug()<<"3data : "<<m_data[i][j].s3TextData();
+                check.append(m_data[i][j].sCheck);
+
+            }
+
+
+        }
+
+        listData.append(listRow.join(",,"));
+
+        listCheck.append(check.join(",,"));
+
+    }
+
+
+
+    QVariantMap d;
+
+    d["Header"] = m_listVHeader.join(",,");
+
+    d["Data"] = listData.join(";;");
+
+    d["UserCheck"] = listCheck.join(";;");
+
+    d["Id"]=m_sYear+m_sMonth;
+
+    d["EditStatus"] = ui->itemStatus->data();
+
+    d["Sid"] = m_sSid;
+    QString sError;
+
+    ACTION.action(ACT::ADD_SCHEDULE,d,sError);
 
 }
 
 void LayerSchedule::read()
 {
+
+    for(int i=0;i<128;i++)
+    {
+        for(int j=0;j<7;j++)
+        m_data[i][j].clear();
+    }
+
+
+
+
     QVariantMap in;
+
+    in["Id"]=m_sYear+m_sMonth;
 
     QVariantList out;
 
@@ -262,6 +359,40 @@ void LayerSchedule::read()
     if(out.length()<1)
         return;
 
+    QVariantMap data = out.first().toMap();
+    m_sSid = data["Sid"].toString();
+    QStringList listData = data["Data"].toString().split(";;");
+    QStringList listCheck = data["UserCheck"].toString().split(";;");
+
+    ui->itemStatus->setData(data["EditStatus"].toString());
+
+
+    for(int i=0;i<128 && i<listData.length();i++)
+    {
+        QStringList data=listData.at(i).split(",,");
+
+        QStringList check = listCheck.at(i).split(",,");
+
+        for(int j=0;j<7 && j<data.length();j++)
+        {
+            QString sTmp = data.at(j);
+
+            m_data[i][j].set3TextData(sTmp);
+
+            //  m_data[i][j].sCheck = check.at(j);
+
+        }
+
+    }
+
+
+
+
+    //  QStringList list=data["Header"].toString().split(",,");
+
+
+
+    /*
     QVariantMap data = out.first().toMap();
 
     QStringList listUser = data["Id"].toString().split(",");
@@ -274,19 +405,53 @@ void LayerSchedule::read()
     {
         for(int j=0;j<7;j++)
         {
-            sDataUserSid[i][j] = listUser.at(iIdx);
 
-            sDataCost[i][j] = listCost.at(iIdx);
+            Layer_Schedule::Data *data = &m_data[i][j];
+
+            data->sUserSid = listUser.at(iIdx);
+
+            data->sCost = listCost.at(iIdx);
 
             iIdx++;
         }
     }
 
+    */
+
 
 }
 
+int LayerSchedule::checkDayOfWeek(QString yyyy, QString MM, QString dd)
+{
+    QDate date=QDateTime::fromString(yyyy+MM+dd,"yyyyMMdd").date();
 
-void LayerSchedule::on_tb2_itemClicked(QTableWidgetItem *item)
+
+    return date.dayOfWeek();
+}
+
+void LayerSchedule::checkUserList()
+{
+    ui->tbUserList->setRowCount(0);
+
+    QList<UserData> list = ACTION.getUser(false);
+
+    int iRow=0;
+
+    for(int i=0;i<list.length();i++)
+    {
+        iRow = ui->tbUserList->rowCount();
+        ui->tbUserList->setRowCount(iRow+1);
+
+        QString sName = list.at(i).Name;
+
+        ui->tbUserList->setItem(iRow,0,UI.tbItem(sName));
+
+
+    }
+}
+
+
+void LayerSchedule::on_tbUserList_itemClicked(QTableWidgetItem *item)
 {
     if(ui->tb0->currentRow()<0 || ui->tb0->currentRow()>= ui->tb0->rowCount())
         return;
@@ -294,39 +459,33 @@ void LayerSchedule::on_tb2_itemClicked(QTableWidgetItem *item)
     if(ui->tb0->currentColumn()<0 || ui->tb0->currentColumn()>= ui->tb0->columnCount())
         return;
 
-    if(ui->stack->currentWidget()==ui->page0)
-    {
-        QString st = item->text();
 
-        int iRow=0;
-        int iCol=0;
+    QString st = item->text();
 
-        iRow = ui->tb0->currentRow();
+    int iRow=0;
+    int iCol=0;
 
-        iCol = ui->tb0->currentColumn();
+    iRow = ui->tb0->currentRow();
 
-        ui->tb0->setItem(iRow,iCol,UI.tbItem(st));
+    iCol = ui->tb0->currentColumn();
 
-        ui->tb0->setFocus();
-    }
+    m_data[iRow][iCol].sUserSid = st;
+
+    refresh();
+    //    ui->tb0->setItem(iRow,iCol,UI.tbItem(st));
+
+    ui->tb0->setFocus();
+
 }
 
 
-void LayerSchedule::on_tb1_itemChanged(QTableWidgetItem *item)
-{
-    int iRow = item->row();
-
-    int iCol = item->column();
-
-    qDebug()<<"tb1 : "<<iRow<<" , "<<iCol;
-}
 
 
 void LayerSchedule::on_tb0_itemChanged(QTableWidgetItem *item)
 {
-//    int iRow = item->row();
+    //    int iRow = item->row();
 
-//    int iCol = item->column();
+    //    int iCol = item->column();
 
 
 }
@@ -348,26 +507,29 @@ void LayerSchedule::btnsClicked()
 {
     QPushButton *btn = dynamic_cast<QPushButton*>(sender());
 
-    if(ui->stack->currentWidget()==ui->page1)
+
+    int iRow= ui->tb0->currentRow();
+    int iCol = ui->tb0->currentColumn();
+    if(iRow%13!=0 && iRow>=0 && iRow< ui->tb0->rowCount()
+            && iCol>=0 && iCol< ui->tb0->columnCount())
     {
-        int iRow= ui->tb1->currentRow();
-        int iCol = ui->tb1->currentColumn();
-        if(iRow%13!=0 && iRow>=0 && iRow< ui->tb1->rowCount()
-                && iCol>=0 && iCol< ui->tb1->columnCount())
-        {
 
 
-            QLineEdit* sp = new QLineEdit(ui->tb1);
-            sp->setAlignment(Qt::AlignCenter);
-            sp->setText(btn->text());
-            QRegExp ex("[0-9.]{1,6}");
-            sp->setValidator(new QRegExpValidator(ex,ui->tb1));
+        QLineEdit* sp = new QLineEdit(ui->tb0);
+        sp->setAlignment(Qt::AlignCenter);
+        sp->setText(btn->text());
+        QRegExp ex("[0-9.]{1,6}");
+        sp->setValidator(new QRegExpValidator(ex,ui->tb0));
+        QString sText = sp->text();
 
-            ui->tb1->setCellWidget(iRow,iCol,sp);
+        m_data[iRow][iCol].sCost = sText;
 
-            ui->tb1->setFocus();
-        }
+        refresh();
+        //  ui->tb1->setCellWidget(iRow,iCol,sp);
+
+        ui->tb0->setFocus();
     }
+
 }
 
 
@@ -378,6 +540,12 @@ void LayerSchedule::on_tb1_cellChanged(int row, int column)
 
 void LayerSchedule::delayRefresh()
 {
+
+    m_sYear = QDateTime::currentDateTimeUtc().toString("yyyy");
+    m_sMonth = QDateTime::currentDateTimeUtc().toString("MM");
+
+    ui->lbTitle->setText(m_sYear+" / "+m_sMonth);
+
     ACTION.getUser(true);
 
     read();
@@ -386,5 +554,84 @@ void LayerSchedule::delayRefresh()
 
     refresh();
 
+}
+
+
+
+
+
+
+void LayerSchedule::on_btnNext_clicked()
+{
+
+    ui->btnPre->setEnabled(true);
+
+    int iYear = m_sYear.toInt();
+
+    int iMonth = m_sMonth.toInt();
+
+    iMonth++;
+
+    if(iMonth>12)
+    {
+        iMonth=1;
+
+        iYear++;
+    }
+
+    m_sMonth = QString::number(iMonth);
+
+    if(iMonth<10)
+        m_sMonth="0"+m_sMonth;
+
+    m_sYear=QString::number(iYear);
+
+    if(QDate::currentDate().toString("MM")!=m_sMonth)
+        ui->btnNext->setDisabled(true);
+
+
+    ui->lbTitle->setText(m_sYear+" / "+m_sMonth);
+
+    read();
+
+    refresh();
+
+}
+
+
+void LayerSchedule::on_btnPre_clicked()
+{
+    ui->btnNext->setEnabled(true);
+
+
+    int iYear = m_sYear.toInt();
+
+    int iMonth = m_sMonth.toInt();
+
+    iMonth--;
+
+    if(iMonth==0)
+    {
+        iMonth=12;
+
+        iYear--;
+    }
+
+    m_sMonth = QString::number(iMonth);
+
+    if(iMonth<10)
+        m_sMonth="0"+m_sMonth;
+
+    m_sYear=QString::number(iYear);
+
+
+    if(QDate::currentDate().toString("MM")!=m_sMonth)
+        ui->btnPre->setDisabled(true);
+
+    ui->lbTitle->setText(m_sYear+" / "+m_sMonth);
+
+    read();
+
+    refresh();
 }
 

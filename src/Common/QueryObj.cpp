@@ -567,13 +567,15 @@ CData QueryObj::queryData(CData data)
     else if(data.iAciton==ACT::QUERY_SCHEDULE)
     {
 
-        bOk = m_sql.queryTb(SQL_TABLE::ScheduleData(),data.dData,re.listData,sError);
+        bOk = m_sql.queryTb(SQL_TABLE::Schedule(),data.dData,re.listData,sError);
 
     }
 
     else if(data.iAciton==ACT::ADD_SCHEDULE)
     {
-        bOk = m_sql.insertTb(SQL_TABLE::ScheduleData(),data.dData,sError);
+
+
+        bOk = m_sql.insertTb(SQL_TABLE::Schedule(),data.dData,sError,true);
 
         sOkMsg = "修改完成";
     }

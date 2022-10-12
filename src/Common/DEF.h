@@ -30,7 +30,7 @@ struct SQL_TABLE
     static QString OrderData(){return "OrderData";}
     static QString PayType(){return "PayType";}
     static QString UserBonus(){return "UserBonus";}
-    static QString ScheduleData(){return "ScheduleData";}
+    static QString Schedule(){return "Schedule";}
 
 };
 

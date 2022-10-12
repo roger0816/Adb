@@ -155,6 +155,11 @@ void GlobalUi::copyMsg(QString sMsg)
 
 }
 
+void GlobalUi::toolTip(QString st)
+{
+  QToolTip::showText(QCursor::pos(),st);
+}
+
 void GlobalUi::slotLockLoading(bool b)
 {
     m_loading->setLoading(b);

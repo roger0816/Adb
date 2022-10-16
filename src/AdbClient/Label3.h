@@ -31,12 +31,15 @@ public:
 
     QString text(int iIdx);
 
+
     void setData(QVariantList data);
 
     QVariantList data();
 
 
     void setVisable(bool bL,bool bC,bool bR);
+
+    void setFlag(bool b);
 
     void setBorder(bool b);
 
@@ -46,6 +49,8 @@ private:
     bool m_bVisable[3]={true,true,true};
     int m_iIdx=0;
     bool m_bBorder=false;
+
+    bool m_bFlag=false;
 };
 
 #endif // LABEL3_H

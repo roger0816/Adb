@@ -361,7 +361,7 @@ void LayerDayReport::delayRefresh()
 void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer)
 {
 
-    DataRate rate=ACTION.primeRate(order.PrimeRateSid,false);
+    DataRate rate=ACTION.costRate(order.ExRateSid,false);
 
     //cost
 

@@ -124,126 +124,46 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="sbUSD">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="txHKD"/>
             </item>
-            <item row="1" column="0">
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="txRMB"/>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="txMYR"/>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLineEdit" name="txSGD"/>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="txUSD"/>
+            </item>
+            <item row="2" column="0">
              <widget class="QLabel" name="lb1">
               <property name="text">
                <string>港幣(HKD)</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="sbHKD">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="lb2">
               <property name="text">
                <string>人民幣(RMB)</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="sbRMB">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
+            <item row="4" column="0">
              <widget class="QLabel" name="lb3">
               <property name="text">
                <string>林吉特(MYR)</string>
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="sbMYR">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
+            <item row="5" column="0">
              <widget class="QLabel" name="lb4">
               <property name="text">
                <string>新加元(SGD)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QDoubleSpinBox" name="sbSGD">
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
               </property>
              </widget>
             </item>

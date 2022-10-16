@@ -2,7 +2,7 @@
 #define STAGEREPORT_H
 
 #include <QWidget>
-
+#include <QButtonGroup>
 //#include <QChart>
 //#include <QtCharts/QChartView>
 //#include <QtCharts>
@@ -28,7 +28,7 @@ public:
 private:
     Ui::StageReport *ui;
 
-
+    QButtonGroup m_btns;
 };
 
 #endif // STAGEREPORT_H

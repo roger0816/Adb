@@ -47,25 +47,26 @@ font: 18px &quot;Microsoft JhengHei UI&quot;;
 
 QPushButton{
 background-color: rgb(255, 255, 255);
-border-radius:8px;
+border-radius:5px;
 color: rgb(41,41,41);
-border: 1px solid #000000; }
+border: 1px solid #000000; 
+ padding: 5px;
+}
 
 
-QPushButton:hover 
-{ 
-background-color: #55aaff; 
-border-style: outset; 
-border-width: 2px; 
-font: 700 18px &quot;Microsoft JhengHei UI&quot;; 
+
+QPushButton:hover {
+    background-color: #ecf5ff;
+    color: #409eff;
 }
-QPushButton:pressed { 
-border-style: outset; 
-border-width: 0px; 
-font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
-color:rgb(241,241,241);
-background-color:#3c78b4;
+
+
+QPushButton:pressed, QPushButton:checked {
+    border: 1px solid #3a8ee6;
+    color: #409eff;
 }
+
+
 QPushButton:disabled { 
 border-style: outset; 
 border-width: 0px; 
@@ -74,7 +75,40 @@ color:gray;
 background-color:gray;
 }
 
-/**/
+
+
+
+
+
+
+/*
+QPushButton {
+    background-color: #ffffff;
+    border: 1px solid #dcdfe6;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+QPushButton:hover {
+    background-color: #ecf5ff;
+    color: #409eff;
+}
+
+QPushButton:pressed, QPushButton:checked {
+    border: 1px solid #3a8ee6;
+    color: #409eff;
+}
+
+#button3 {
+    border-radius: 20px;
+}
+*/
+/*
+QPushButton::hover::checked{
+	color: rgb(255, 255, 255);
+background-color: rgb(0, 170, 255);
+}
+*/
 
 
 
@@ -123,7 +157,7 @@ background-color:gray;
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>6</number>
+            <number>0</number>
            </property>
            <widget class="StageHomePage" name="pageHome"/>
            <widget class="StageCustomerService" name="pageService">

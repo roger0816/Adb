@@ -11,6 +11,18 @@ LayerPrimeCostRate::LayerPrimeCostRate(QWidget *parent) :
     ui->tb1->setColumnWidth(1,160);
 
     ui->tb1->setMouseTracking(true);
+
+//    QRegExp p("^([1-9][0-9]*)+(.[0-9]{1,3})?$");
+//   QRegExpValidator *r =new QRegExpValidator(p,this);
+    ui->txUSD->setValidator(UI.regRate);
+
+    ui->txHKD->setValidator(UI.regRate);
+
+    ui->txRMB->setValidator(UI.regRate);
+    ui->txMYR->setValidator(UI.regRate);
+
+    ui->txSGD->setValidator(UI.regRate);
+
 }
 
 LayerPrimeCostRate::~LayerPrimeCostRate()
@@ -46,12 +58,18 @@ void LayerPrimeCostRate::on_btnAdd_clicked()
 
     ui->tb0->setCellWidget(iRowCount-1,0,txt);
 
-    QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
-    sb->setAlignment(Qt::AlignCenter);
-    sb->setDecimals(3);
-    sb->setRange(0,99999);
+//    QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
+//    sb->setAlignment(Qt::AlignCenter);
+//    sb->setDecimals(3);
+//    sb->setRange(0,99999);
+//      ui->tb0->setCellWidget(iRowCount-1,1,sb);
+    QLineEdit *rate=new QLineEdit(ui->tb0);
+    rate->setAlignment(Qt::AlignCenter);
+    rate->setValidator(UI.regRate);
 
-    ui->tb0->setCellWidget(iRowCount-1,1,sb);
+    ui->tb0->setCellWidget(iRowCount-1,1,rate);
+
+
 
 
 }
@@ -79,13 +97,18 @@ void LayerPrimeCostRate::refreshRate()
         txt->setText(list.at(i).first);
         ui->tb0->setCellWidget(iRowCount-1,0,txt);
 
-        QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
-        sb->setAlignment(Qt::AlignCenter);
-        sb->setDecimals(3);
-        sb->setRange(0,99999);
-        sb->setValue(list.at(i).second.toDouble());
+//        QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
+//        sb->setAlignment(Qt::AlignCenter);
+//        sb->setDecimals(3);
+//        sb->setRange(0,99999);
+//        sb->setValue(list.at(i).second.toDouble());
 
-        ui->tb0->setCellWidget(iRowCount-1,1,sb);
+        QLineEdit *rate=new QLineEdit(ui->tb0);
+        rate->setAlignment(Qt::AlignCenter);
+        rate->setValidator(UI.regRate);
+        rate->setText(list.at(i).second);
+
+        ui->tb0->setCellWidget(iRowCount-1,1,rate);
 
     }
 
@@ -133,11 +156,11 @@ void LayerPrimeCostRate::on_btnSave_clicked()
     CListPair list;
 
     CPair tmp("新台幣(NTD)","1");
-    CPair tmp0(ui->lb0->text(),QString::number(ui->sbUSD->value()));
-    CPair tmp1(ui->lb1->text(),QString::number(ui->sbHKD->value()));
-    CPair tmp2(ui->lb2->text(),QString::number(ui->sbRMB->value()));
-    CPair tmp3(ui->lb3->text(),QString::number(ui->sbMYR->value()));
-    CPair tmp4(ui->lb4->text(),QString::number(ui->sbSGD->value()));
+    CPair tmp0(ui->lb0->text(),ui->txUSD->text());
+    CPair tmp1(ui->lb1->text(),ui->txHKD->text());
+    CPair tmp2(ui->lb2->text(),ui->txRMB->text());
+    CPair tmp3(ui->lb3->text(),ui->txMYR->text());
+    CPair tmp4(ui->lb4->text(),ui->txSGD->text());
 
     list<<tmp<<tmp0<<tmp1<<tmp2<<tmp3<<tmp4;
 
@@ -150,7 +173,7 @@ void LayerPrimeCostRate::on_btnSave_clicked()
         if(key.trimmed()=="")
             continue;
 
-        value =  dynamic_cast<QDoubleSpinBox*>(ui->tb0->cellWidget(i,1))->text();
+        value =  dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,1))->text();
 
         QPair< QString,QString > tmp(key,value);
 
@@ -182,12 +205,12 @@ void LayerPrimeCostRate::reLineEdit()
     {
         DataRate rate = m_listRate.last();
 
+        ui->txUSD->setText(QString::number(rate.USD()));
+        ui->txHKD->setText(QString::number(rate.HKD()));
 
-        ui->sbUSD->setValue(rate.USD());
-        ui->sbHKD->setValue(rate.HKD());
-        ui->sbRMB->setValue(rate.RMB());
-        ui->sbMYR->setValue(rate.MYR());
-        ui->sbSGD->setValue(rate.SGD());
+        ui->txRMB->setText(QString::number(rate.RMB()));
+        ui->txMYR->setText(QString::number(rate.MYR()));
+        ui->txSGD->setText(QString::number(rate.SGD()));
 
 
     }

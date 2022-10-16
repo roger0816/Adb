@@ -67,6 +67,7 @@ struct Data
 
 }
 
+
 class CLineEditClick : public QLineEdit
 {
     Q_OBJECT
@@ -82,6 +83,7 @@ public:
 };
 
 
+
 class LayerSchedule : public QWidget
 {
     Q_OBJECT
@@ -90,7 +92,9 @@ public:
     explicit LayerSchedule(QWidget *parent = nullptr);
     ~LayerSchedule();
 
+    void setEditMode(bool b);
 
+private:
     void showEvent(QShowEvent*) override;
 
     void refresh();
@@ -99,6 +103,8 @@ public:
     QButtonGroup m_group;
 
     Layer_Schedule::Data m_data[128][7];
+
+
 
 private slots:
     void on_btnSave_clicked();
@@ -118,13 +124,14 @@ private slots:
 
     void btnsClicked();
 
-    void on_tb1_cellChanged(int row, int column);
 
     void delayRefresh();
 
     void on_btnNext_clicked();
 
     void on_btnPre_clicked();
+
+    void on_tb0_cellClicked(int row, int column);
 
 public slots:
 
@@ -142,6 +149,9 @@ private:
 
     void read();
 
+    void setEditStatus();
+
+    void getEditStatus();
 
      QStringList m_listVHeader;
 
@@ -151,9 +161,15 @@ private:
      QString m_sYear="2022";
      QString m_sMonth="10";
 
+     QString m_sEditStatusSid="";
+
      QString m_sSid="";
 
+     bool m_bEditMode= false;
+
      void checkUserList();
+
+     void sendUserCheck(int iRow,int iCol);
 };
 
 #endif // LAYERSCHEDULE_H

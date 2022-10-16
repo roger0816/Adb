@@ -4,8 +4,8 @@ Launch::Launch(QObject *parent)
     : QObject{parent}
 {
 
-    QString sIp="206.189.185.20";
-
+    //QString sIp="206.189.185.20";
+     QString sIp="178.128.62.72";
    // QString sLocal="127.0.0.1";
 
     act.setDataFromServer(false);

@@ -153,7 +153,7 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
 
     sp->setDecimals(2);
 
-    sp->setRange(0.1,10000.00);
+    sp->setRange(0.0,10000.00);
 
     sp->setValue(cost);
 

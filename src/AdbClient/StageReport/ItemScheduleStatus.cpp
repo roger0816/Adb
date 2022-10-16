@@ -9,6 +9,7 @@ ItemScheduleStatus::ItemScheduleStatus(QWidget *parent) :
 
     ui->tbEdit->setMouseTracking(true);
 
+    ui->tabWidget->setTabVisible(1,false);
 }
 
 ItemScheduleStatus::~ItemScheduleStatus()
@@ -19,14 +20,7 @@ ItemScheduleStatus::~ItemScheduleStatus()
 QString ItemScheduleStatus::data()
 {
     QStringList listData;
-    //    for(int i=0;i<ui->tb->rowCount();i++)
-    //    {
-    //        QString st="%1::%2::%3";
 
-    //        st=st.arg(ui->tb->itemAt(i,0)->text())
-    //                .arg(ui->tb->itemAt(i,1)->text())
-    //                .arg(ui->tb->itemAt(i,2)->text());
-    //    }
 
     for(int i=0;i<m_data.length();i++)
     {
@@ -39,13 +33,13 @@ QString ItemScheduleStatus::data()
         listData.append(sTmp);
     }
 
-    return listData.join(";;");
+    return listData.join(",,");
 
 }
 
 void ItemScheduleStatus::setData(QString sData)
 {
-    QStringList listData = sData.split(";;");
+    QStringList listData = sData.split(",,");
 
     m_data.clear();
 
@@ -67,6 +61,13 @@ void ItemScheduleStatus::setData(QString sData)
 
     refresh();
 
+}
+
+void ItemScheduleStatus::setEditMode(bool b)
+{
+    m_bEditMode = b;
+
+    ui->tabWidget->setTabVisible(1,m_bEditMode);
 }
 
 void ItemScheduleStatus::refresh()
@@ -91,8 +92,8 @@ void ItemScheduleStatus::refresh()
         QString sContent = d["content"].toString().trimmed();
 
         QString sCost="x %1 + %2";
-        sCost = sCost.arg(d["cost"].toString().split(",,").first())
-                .arg(d["cost"].toString().split(",,").last());
+        sCost = sCost.arg(d["cost"].toString().split("+").first())
+                .arg(d["cost"].toString().split("+").last());
         ui->tbEdit->setItem(i,0,UI.tbItem(sTitle));
 
         ui->tbEdit->setItem(i,1,UI.tbItem(sContent));
@@ -162,7 +163,7 @@ void ItemScheduleStatus::on_btnAdd_clicked()
 
     d["title"] = ui->txTitle->text().trimmed();
     d["content"] = ui->txContent->text().trimmed();
-    d["cost"] = ui->spX->text()+",,"+ui->spAdd->text();
+    d["cost"] = ui->spX->text()+"+"+ui->spAdd->text();
 
     m_data.append(d);
 
@@ -202,6 +203,7 @@ void ItemScheduleStatus::on_tb_itemClicked(QTableWidgetItem *item)
 
     QString sText = ui->tb->item(iRow,0)->text();
 
-    emit sendClicked(sText);
+    if(m_bEditMode)
+        emit sendClicked(sText);
 }
 

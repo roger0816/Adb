@@ -1,13 +1,7 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include <QObject>
-//#include "CSqlClass.h"
-#include "RpkCore.h"
-#include "DEF.h"
-#include "QueryObj.h"
-#include "VojData.h"
-
+#include "ActionObj.h"
 
 namespace _KEY {
 static QString isRememberLogin="isRememberLogin";
@@ -18,7 +12,7 @@ static QString lastLogin="lastLogin";
 
 
 // client action
-class Action : public QObject
+class Action : public ActionObj
 {
     Q_OBJECT
 public:
@@ -31,16 +25,6 @@ public:
 
     void setDataBase(bool bMysql,QString sIp="127.0.0.1",QString sPort="3306");
 
-    bool action(ACT::_KEY act, QVariantList listData, QString &sError);
-
-    bool action(ACT::_KEY act, QVariantMap data, QString &sError);
-
-    bool action(ACT::_KEY act, QVariantMap data, QVariantMap &out, QString &sError);
-
-
-    bool action(ACT::_KEY act, QVariantMap data,QVariantList &listOut, QString &sError);
-
-    bool action(ACT::_KEY act, QVariantList listData, QVariantList &listOut, QString &sError);
 
 
     bool checkLogin(QString sUser,QString sPass,QString &sError);
@@ -138,23 +122,8 @@ public:
 
     double payTypeToNTD(QString payTypeSid, DataRate rate);
 
-    CData query(CData data);
-
-    QueryObj m_queryObj;
-
-private :
 
 
-    CData callServer(CData data);
-
-
-    bool m_bDataFromServer = true;
-
-    bool m_bUserMysql = false;
-
-    QString m_ip;
-
-    QString m_port;
 
 private:
     QList<UserData> m_listUser;
@@ -179,9 +148,6 @@ private:
 
     QVariantList m_exRate;
 
-signals:
-
-    void lockLoading(bool b);
 
 };
 

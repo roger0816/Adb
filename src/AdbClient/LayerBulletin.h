@@ -2,6 +2,7 @@
 #define LAYERBULLETIN_H
 
 #include <QWidget>
+#include <QButtonGroup>
 #include "Global.h"
 #include "GlobalUi.h"
 #include <QDateTime>
@@ -42,6 +43,8 @@ private:
      void intoSysTb(QVariantMap data);
 
      QString userName(QString sId);
+
+     QButtonGroup m_btns;
 };
 
 #endif // LAYERBULLETIN_H

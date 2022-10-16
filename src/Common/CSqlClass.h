@@ -72,6 +72,8 @@ private:
 
 signals:
 
+    void tbUpdate(QString tbName,QString sDateTime);
+
 };
 
 #endif // CSQLCLASS_H

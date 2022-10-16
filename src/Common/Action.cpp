@@ -1,7 +1,7 @@
 #include "Action.h"
 
 Action::Action(QObject *parent)
-    : QObject{parent}
+    : ActionObj{parent}
 {
 
 
@@ -36,89 +36,7 @@ void Action::setDataBase(bool bMysql, QString sIp, QString sPort)
     m_queryObj.m_sql.openDb(m_bUserMysql,sIp,sPort,"adp");
 }
 
-bool Action::action(ACT::_KEY act, QVariantList listData, QString &sError)
-{
-    QVariantList out;
-    qDebug()<<"lll1 : "<<listData.length();
 
-    return action(act,listData,out,sError);
-
-}
-
-bool Action::action(ACT::_KEY act, QVariantMap data, QString &sError)
-{
-    CData input;
-
-    input.iAciton = ACT::_KEY(act);
-
-    input.dData = data;
-
-    CData re;
-
-    re = query(input);
-
-    sError =re.sMsg;
-
-    return re.bOk;
-}
-
-bool Action::action(ACT::_KEY act, QVariantMap data, QVariantMap &out, QString &sError)
-{
-    CData input;
-
-    input.iAciton = ACT::_KEY(act);
-
-    input.dData = data;
-
-    CData re;
-
-    re = query(input);
-
-    out = re.dData;
-
-    sError =re.sMsg;
-
-    return re.bOk;
-}
-
-bool Action::action(ACT::_KEY act, QVariantMap data,QVariantList &listOut, QString &sError)
-{
-    CData input;
-
-    input.iAciton = ACT::_KEY(act);
-
-    input.dData = data;
-
-    CData re;
-
-    re = query(input);
-
-    listOut = re.listData;
-
-    sError =re.sMsg;
-
-    return re.bOk;
-}
-
-bool Action::action(ACT::_KEY act, QVariantList listData, QVariantList &listOut, QString &sError)
-{
-    CData data;
-
-    data.iAciton = ACT::_KEY(act);
-
-    data.listData = listData;
-
-
-    CData re;
-
-    re = query(data);
-
-    listOut =re.listData;
-
-    sError = re.sMsg;
-
-    return re.bOk;
-}
 
 bool Action::checkLogin(QString sUser, QString sPass, QString &sError)
 {
@@ -139,7 +57,8 @@ qDebug()<<"check login : "<<sUser<<" , "<<sPass<<" , error : "<<sError;
     if(bOk)
     {
         m_currentUser.setData(dRe.dData);
-
+        m_sCurrentUserId = m_currentUser.Sid;
+        m_sCurrentUserName = m_currentUser.Name;
     }
 
     return bOk;
@@ -349,39 +268,8 @@ QList<GroupData> Action::getGroupData(int iType,QString &sError)
 }
 
 
-CData Action::query(CData data)
-{
-    //    qDebug()<<"query : " <<data.iAciton;
-    //    qDebug()<<"listData : "<<data.listData;
-    data.sUser = m_currentUser.Id;
 
-    if(m_bDataFromServer)
-        return callServer(data);
-    else
-        return m_queryObj.queryData(data);
-}
 
-CData Action::callServer(CData data)
-{
-
-    emit lockLoading(true);
-
-    CData re;
-
-    QByteArray out;
-
-    qDebug()<<"call server : "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
-    qDebug()<<data.enCodeJson();
-    RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
-
-    re.deCodeJson(out);
-
-    qDebug()<<"server return : "<<re.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
-    qDebug()<<out;
-    emit lockLoading(false);
-
-    return re;
-}
 
 
 void Action::reQuerty()

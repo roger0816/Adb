@@ -243,7 +243,10 @@ void CTcpClient::slotReadyRead()
         qDebug()<<"send len : "<<re.length();
 
         if(bSendSignal)
+        {
+            qDebug()<<"rpk lib send siganl : "<<sId<<" , "<<re;
             emit signalReply(sId,re,1);
+        }
         else
             emit finished(sId,re,1);
 

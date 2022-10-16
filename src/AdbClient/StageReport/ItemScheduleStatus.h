@@ -19,6 +19,8 @@ public:
 
     void setData(QString sData);
 
+    void setEditMode(bool b);
+
 private:
 
     void refresh();
@@ -40,6 +42,8 @@ private slots:
 
 private:
     Ui::ItemScheduleStatus *ui;
+
+    bool m_bEditMode= false;
 };
 
 #endif // ITEMSCHEDULESTATUS_H

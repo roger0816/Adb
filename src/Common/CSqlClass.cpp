@@ -3,7 +3,7 @@
 CSqlClass::CSqlClass(QObject *parent)
     : QObject{parent}
 {
-   bool bOk = RPKCORE.database.openDb("local.db");
+    bool bOk = RPKCORE.database.openDb("local.db");
 
     m_local = RPKCORE.database.getDb(0);
 
@@ -21,8 +21,10 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
     QVariantMap data = input;
 
-    if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
-        data["UpdateTime"] =QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+    QString sDateTime =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+
+    //if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
+    data["UpdateTime"] =sDateTime;
 
     QStringList listKey = data.keys();
 
@@ -43,7 +45,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
         sTmp="REPLACE";
 
     QString sCmd = sTmp+" INTO "+sTableName+" (%1) "
-                                                      " VALUES(%2);";
+                                            " VALUES(%2);";
 
     QString tmpKey,tmpValue;
 
@@ -75,7 +77,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
         query.bindValue(j,data[sKey]);
 
-        qDebug()<<data[sKey];
+        qDebug()<<sKey<< ": "<<data[sKey];
 
     }
 
@@ -83,6 +85,12 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
     sError =  query.lastError().text();
     qDebug()<<"sql : "<<bOk;
+    if(bOk)
+    {
+        emit tbUpdate(sTableName,sDateTime);
+    }
+    else
+        qDebug()<<sError;
     return bOk;
 
     //ex :
@@ -143,7 +151,6 @@ bool CSqlClass::queryTb(QString sTableName, QVariantList &listOut, QString &sErr
 bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList &listOut, QString &sError)
 {
 
-    qDebug()<<"AA 0 :"<<conditions;
 
     listOut.clear();
 
@@ -220,6 +227,9 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 {
     QString sCmd="UPDATE "+sTableName+" SET ";
 
+    data["UpdateTime"] =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+
+
     QStringList listKey = data.keys();
 
     bool bFirst = true;
@@ -290,7 +300,7 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 
 
     bool bOk = sql.exec() ;
-   qDebug()<<"sql update cmd : "<<sql.lastQuery();
+    qDebug()<<"sql update cmd : "<<sql.lastQuery();
     sError = sql.lastError().text();
 
     return bOk;
@@ -423,22 +433,22 @@ void CSqlClass::createTableSqlite()
     sql.clear();
 
 
-     sql.exec("CREATE TABLE 'GroupData' (  \
-        'Sid'	INTEGER,    \
-        'Id'	TEXT,   \
-        'Type'	TEXT,   \
-        'Name'	TEXT,   \
-        'Value'	TEXT,   \
-        'Blob'	BLOB,   \
-        'UpdateTime'	TEXT,   \
-        'Note1'	TEXT,   \
-        'Note2'	TEXT,   \
-        'NoteBlob'	BLOB,   \
-        PRIMARY KEY('Sid' AUTOINCREMENT) \
-    );");
+    sql.exec("CREATE TABLE 'GroupData' (  \
+             'Sid'	INTEGER,    \
+             'Id'	TEXT,   \
+             'Type'	TEXT,   \
+             'Name'	TEXT,   \
+             'Value'	TEXT,   \
+             'Blob'	BLOB,   \
+             'UpdateTime'	TEXT,   \
+             'Note1'	TEXT,   \
+             'Note2'	TEXT,   \
+             'NoteBlob'	BLOB,   \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
 
 
-        sql.clear();
+    sql.clear();
 
     sql.exec("CREATE TABLE 'FactoryClass' (      \
              'Sid'	INTEGER,                    \
@@ -565,16 +575,15 @@ void CSqlClass::createTableSqlite()
 
 
     sql.exec("CREATE TABLE 'Schedule' ( \
-        'Sid'	INTEGER, \
-        'Id'	TEXT, \
-        'Header'	TEXT, \
-        'Data'	TEXT, \
-        'UserCheck'	TEXT, \
-        'EditStatus'	INTEGER, \
-        'Note'	TEXT, \
-        'UpdateTime'	TEXT, \
-        PRIMARY KEY('Sid' AUTOINCREMENT) \
-    );");
+             'Sid'	INTEGER, \
+             'Id'	TEXT, \
+             'Header'	TEXT, \
+             'Data'	TEXT, \
+             'UserCheck'	TEXT, \
+             'Note'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
 
 
 }
@@ -943,11 +952,11 @@ void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 
         qDebug()<< QSqlDatabase::drivers();
 
-       m_db =QSqlDatabase::addDatabase("QMYSQL");
+        m_db =QSqlDatabase::addDatabase("QMYSQL");
         //m_db =QSqlDatabase::addDatabase("QMYSQL","adp");
 
 
-      //  m_db.setHostName("206.189.185.20");
+        //  m_db.setHostName("206.189.185.20");
 
         m_db.setHostName(sIp);
 

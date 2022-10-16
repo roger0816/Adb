@@ -22,21 +22,13 @@ void Label3::paintEvent(QPaintEvent *)
 
     QPainter p(this);
 
-
-
     auto drawString =[=](int i,QPainter &p)
     {
-        //        QFont fBk,fTarget;
 
-        //        fBk.setFamily("Arial");
-        //        fBk.setPixelSize(9);
-
-        //        fTarget.setFamily("Arial");
-        //        fTarget.setPixelSize(14);
 
         if(i!=m_iIdx)
         {
-            p.setPen(Qt::lightGray);
+            p.setPen(Qt::gray);
 
             p.setFont(QFont("Arial",9));
 
@@ -52,16 +44,30 @@ void Label3::paintEvent(QPaintEvent *)
             {
                 if(m_iIdx==0)
                     p.drawText(r,Qt::AlignHCenter | Qt::AlignTop,m_sText[i]);
-                 else
-                     p.drawText(r,Qt::AlignHCenter | Qt::AlignBottom,m_sText[i]);
+                else
+                    p.drawText(r,Qt::AlignHCenter | Qt::AlignBottom,m_sText[i]);
             }
 
         }
         else
         {
+
+
             p.setPen(Qt::black);
 
-            p.setFont(QFont("Arial",14));
+            QFont f("Arial");
+
+            f.setPointSize(14);
+
+            if(!m_bFlag)
+            {
+                f.setBold(true);
+
+                f.setPointSize(15);
+            }
+
+
+            p.setFont(f);
 
             if(i==0)
                 p.drawText(r,Qt::AlignLeft | Qt::AlignVCenter,m_sText[i]);
@@ -84,11 +90,14 @@ void Label3::paintEvent(QPaintEvent *)
         p.drawRect(rect());
     }
 
-    drawString(LABEL_3::_Left,p);
+    if(m_bVisable[LABEL_3::_Left])
+        drawString(LABEL_3::_Left,p);
 
-    drawString(LABEL_3::_Right,p);
+    if(m_bVisable[LABEL_3::_Right])
+        drawString(LABEL_3::_Right,p);
 
-    drawString(LABEL_3::_Cent,p);
+    if(m_bVisable[LABEL_3::_Cent])
+        drawString(LABEL_3::_Cent,p);
 
 
 
@@ -184,6 +193,11 @@ void Label3::setVisable(bool bL, bool bC, bool bR)
     m_bVisable[LABEL_3::_Cent] = bC;
 
     m_bVisable[LABEL_3::_Right] = bR;
+}
+
+void Label3::setFlag(bool b)
+{
+    m_bFlag = b;
 }
 
 void Label3::setBorder(bool b)

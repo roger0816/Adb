@@ -20,6 +20,12 @@ public:
 
 
     CSqlClass m_sql;
+private:
+
+    void updateKeep(QString sKey,QString sDateTime);
+
+    QMap<QString,QString> m_keepUpdate;
+
 signals:
 
 };

@@ -6,6 +6,8 @@ StageHomePage::StageHomePage(QWidget *parent) :
     ui(new Ui::StageHomePage)
 {
     ui->setupUi(this);
+
+    ui->tabWidget->setCurrentIndex(0);
 }
 
 StageHomePage::~StageHomePage()

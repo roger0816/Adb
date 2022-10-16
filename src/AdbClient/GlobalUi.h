@@ -46,6 +46,7 @@ public:
 
     void toolTip(QString st);
 
+    QRegExpValidator *regRate =new QRegExpValidator(QRegExp("^([1-9][0-9]*)+(.[0-9]{1,3})?$"),this);
 private:
     static GlobalUi *m_pInstance;
 

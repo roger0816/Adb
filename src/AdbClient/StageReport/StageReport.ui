@@ -184,8 +184,8 @@ border-width: 0px;
       </item>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
-        <widget class="LayerSchedule" name="page"/>
-        <widget class="QWidget" name="page_2"/>
+        <widget class="LayerSchedule" name="pageSchedule"/>
+        <widget class="LayerSchedule" name="page_2"/>
        </widget>
       </item>
      </layout>

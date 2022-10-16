@@ -16,6 +16,16 @@ CData QueryObj::queryData(CData data)
 
     bool bOk =false;
 
+    if(data.iAciton==1)  //heartbee
+    {
+        int iRe=1;
+
+        re.dData["heartBee"]="OK";
+
+        sOkMsg ="OK";
+
+    }
+
     if(data.iAciton==ACT::LOGIN)
     {
         int iRe=-1;
@@ -595,6 +605,11 @@ CData QueryObj::queryData(CData data)
     re.iState = ACT_RECALL;
 
     return re;
+}
+
+void QueryObj::updateKeep(QString sKey, QString sDateTime)
+{
+
 }
 
 

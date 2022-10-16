@@ -7,6 +7,14 @@ LayerBulletin::LayerBulletin(QWidget *parent) :
     ui(new Ui::LayerBulletin)
 {
     ui->setupUi(this);
+
+    m_btns.addButton(ui->btn0,0);
+
+    m_btns.addButton(ui->btn1,1);
+
+    connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 LayerBulletin::~LayerBulletin()

@@ -19,11 +19,18 @@ int main(int argc, char *argv[])
     QString sServerPort = GLOBAL.config("ServerPort").toString();
 
     bool b = GLOBAL.config("UseServer").toBool();
-    b = false;
+
+#if 0
     ACTION.setDataFromServer(b,sServerIp,sServerPort);
-//    ACTION.setDataBase(true,sServerIp,"3306");
+
     if(!b)
         ACTION.setDataBase(false);
+#else
+    ACTION.setDataFromServer(true,"127.0.0.1","6000");
+
+
+  //  ACTION.setDataBase(true,sServerIp,"3306");
+#endif
 
     ACTION.reQuerty();
 

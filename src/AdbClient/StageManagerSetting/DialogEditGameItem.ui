@@ -77,6 +77,9 @@
            <property name="decimals">
             <number>0</number>
            </property>
+           <property name="minimum">
+            <double>-9999.000000000000000</double>
+           </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
            </property>
@@ -93,6 +96,9 @@
           <widget class="QDoubleSpinBox" name="sbOrderUSD">
            <property name="alignment">
             <set>Qt::AlignCenter</set>
+           </property>
+           <property name="minimum">
+            <double>-999.000000000000000</double>
            </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
@@ -277,6 +283,9 @@
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
+           <property name="minimum">
+            <double>-9999.000000000000000</double>
+           </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
            </property>
@@ -300,6 +309,9 @@
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
+           <property name="minimum">
+            <double>-9999.000000000000000</double>
+           </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
            </property>
@@ -315,6 +327,9 @@
            </property>
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="minimum">
+            <double>-9999.000000000000000</double>
            </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
@@ -334,6 +349,9 @@
            </property>
            <property name="decimals">
             <number>2</number>
+           </property>
+           <property name="minimum">
+            <double>-9999.000000000000000</double>
            </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
@@ -385,6 +403,9 @@
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
+           <property name="minimum">
+            <double>-9999.000000000000000</double>
+           </property>
            <property name="maximum">
             <double>9999.000000000000000</double>
            </property>
@@ -400,6 +421,9 @@
            </property>
            <property name="buttonSymbols">
             <enum>QAbstractSpinBox::NoButtons</enum>
+           </property>
+           <property name="minimum">
+            <double>-9999.000000000000000</double>
            </property>
            <property name="maximum">
             <double>9999.000000000000000</double>

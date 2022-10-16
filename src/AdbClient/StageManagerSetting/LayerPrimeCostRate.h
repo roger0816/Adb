@@ -2,6 +2,7 @@
 #define LAYERPRIMECOSTRATE_H
 
 #include <QWidget>
+#include <QRegExpValidator>
 #include "Global.h"
 #include "GlobalUi.h"
 

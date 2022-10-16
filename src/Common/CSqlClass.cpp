@@ -963,7 +963,7 @@ void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 
         m_db.setPort(sPort.toInt());
 
-        m_db.setUserName("root");
+        m_db.setUserName("roger");
 
         m_db.setPassword("Aa111111");
 

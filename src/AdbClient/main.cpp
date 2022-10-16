@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     if(!b)
         ACTION.setDataBase(false);
 #else
-    ACTION.setDataFromServer(true,"127.0.0.1","6000");
+    ACTION.setDataFromServer(true,"178.128.62.72","6000");
 
 
   //  ACTION.setDataBase(true,sServerIp,"3306");

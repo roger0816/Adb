@@ -18,7 +18,7 @@ ActionObj::ActionObj(QObject *parent)
 
   });
 
-  m_timer.start(1000);
+  //m_timer.start(1000);
 }
 
 

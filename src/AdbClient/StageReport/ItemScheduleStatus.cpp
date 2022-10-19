@@ -11,7 +11,12 @@ ItemScheduleStatus::ItemScheduleStatus(QWidget *parent) :
 
     ui->tbEdit->setMouseTracking(true);
 
+#if (QT_VERSION<= QT_VERSION_CHECK(5,15,0))
+    ui->tabWidget->setTabEnabled(1,false);
+#else
     ui->tabWidget->setTabVisible(1,false);
+#endif
+
 }
 
 ItemScheduleStatus::~ItemScheduleStatus()
@@ -71,8 +76,11 @@ void ItemScheduleStatus::setData(QString sData)
 void ItemScheduleStatus::setEditMode(bool b)
 {
     m_bEditMode = b;
-
+#if (QT_VERSION< QT_VERSION_CHECK(5,15,0))
+    ui->tabWidget->setTabEnabled(1,m_bEditMode);
+#else
     ui->tabWidget->setTabVisible(1,m_bEditMode);
+#endif
 }
 
 void ItemScheduleStatus::refresh()

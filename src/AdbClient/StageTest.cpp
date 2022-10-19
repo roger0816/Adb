@@ -1,6 +1,7 @@
 #include "StageTest.h"
 #include "ui_StageTest.h"
-#include "Label3.h"
+
+#include "Global.h"
 
 
 StageTest::StageTest(QWidget *parent) :
@@ -8,32 +9,7 @@ StageTest::StageTest(QWidget *parent) :
     ui(new Ui::StageTest)
 {
     ui->setupUi(this);
-
-
-    for(int i=0;i<ui->tableWidget->rowCount();i++)
-    {
-
-        Label3 *l0 = new Label3(ui->tableWidget);
-
-            Label3 *l1 = new Label3(ui->tableWidget);
-                Label3 *l2 = new Label3(ui->tableWidget);
-                    Label3 *l3 = new Label3(ui->tableWidget);
-                        Label3 *l4 = new Label3(ui->tableWidget);
-        ui->tableWidget->setCellWidget(i,0,l0);
-
-        ui->tableWidget->setCellWidget(i,1,l1);
-
-        ui->tableWidget->setCellWidget(i,2,l2);
-
-        ui->tableWidget->setCellWidget(i,3,l3);
-
-        ui->tableWidget->setCellWidget(i,4,l4);
-
-
-    }
-
-
-
+// login super user     root :   1234    for test class
 }
 
 StageTest::~StageTest()
@@ -41,4 +17,34 @@ StageTest::~StageTest()
     delete ui;
 }
 
+
+
+void StageTest::on_pushButton_clicked()
+{
+    QVariantMap in;
+
+    QVariantList out;
+
+    QString sError;
+
+    ACTION.action(ACT::QUERY_ORDER,in,out,sError);
+
+
+    foreach(QVariant tar,out)
+    {
+        QVariantMap d = tar.toMap();
+
+        QStringList keys=d.keys();
+
+        foreach(QString key,keys)
+        {
+            QVariant v=d[key];
+            ui->textEdit->append(key+"="+v.typeName()+" : "+v.toString());
+        }
+        ui->textEdit->append("\n");
+
+    }
+
+
+}
 

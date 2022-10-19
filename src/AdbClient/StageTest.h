@@ -2,9 +2,7 @@
 #define STAGETEST_H
 
 #include <QWidget>
-#include "DialogInput.h"
-#include "DialogCommon.h"
-#include "LayerSayCost.h"
+
 
 namespace Ui {
 class StageTest;
@@ -19,6 +17,8 @@ public:
     ~StageTest();
 
 private slots:
+
+    void on_pushButton_clicked();
 
 private:
     Ui::StageTest *ui;

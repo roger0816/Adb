@@ -234,9 +234,11 @@ void Global::loadConfig()
 
 Global &Global::Instance()
 {
-    if(m_pInstance==0)
-        m_pInstance=new Global();
-    return *m_pInstance;
+//    if(m_pInstance==0)
+//        m_pInstance=new Global();
+//    return *m_pInstance;
+    static Global global;
+    return global;
 }
 
 QVariant Global::config(QString st)

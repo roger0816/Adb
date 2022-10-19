@@ -26,6 +26,10 @@ public:
 
     QString sMsg;
 
+
+    QString sTrigger;
+
+
     bool bOk;
 
     int iState = ACT_SEND;
@@ -35,6 +39,8 @@ public:
     QVariantList listData;
 
     QVariantMap dData;
+
+
 
     QByteArray enCodeJson()
     {
@@ -55,6 +61,9 @@ public:
         d.insert("ok",bOk);
 
         d.insert("status",iState);
+
+        d.insert("trigger",sTrigger);
+
 
         QJsonObject obj;
 
@@ -96,6 +105,8 @@ public:
         listName = map["listName"].toList();
 
         listData = map["listData"].toList();
+
+        sTrigger = map["trigger"].toString();
 
 
         return true;

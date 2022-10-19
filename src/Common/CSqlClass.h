@@ -17,6 +17,7 @@ class CSqlClass : public QObject
 public:
     explicit CSqlClass(QObject *parent = nullptr);
 
+
     bool insertTb(QString sTableName, QVariantMap input, QString &sError,bool bOrRplace=false);
 
     bool delFromTb(QString sTableName,QVariantMap conditions, QString &sError);
@@ -26,7 +27,6 @@ public:
     bool queryTb(QString sTableName, QVariantMap conditions, QVariantList &listOut, QString &sError);
 
     bool updateTb(QString sTableName, QVariantMap conditions, QVariantMap data, QString &sError);
-
 
 
     bool checkLogin(QString sUser,QString sPass,QVariantMap &out,QString &sError);
@@ -54,9 +54,17 @@ public:
     bool lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QString &sError);
 
 
-    void openDb(bool bMysql, QString sIp, QString sPort="3306",QString sDbName="adp");
+    bool openDb(bool bMysql, QString sIp, QString sPort="3306",QString sDbName="adp");
 
     bool bRunMysql = false;
+
+
+   // void setTrigger(QString sTableName, QString sDateTime);
+
+    void saveTrigger(QString sApi,QString sDateTime);
+
+    QMap<QString,QString> readTrigger();
+
 private:
     void createTable();
 
@@ -69,6 +77,9 @@ private:
     QSqlDatabase m_local;
 
     QStringList fieldNames(QSqlRecord record);
+
+
+   // void loadTrigger();
 
 signals:
 

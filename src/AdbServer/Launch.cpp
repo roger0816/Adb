@@ -5,14 +5,12 @@ Launch::Launch(QObject *parent)
 {
 
     //QString sIp="206.189.185.20";
-     QString sIp="178.128.62.72";
+   //  QString sIp="178.128.62.72";
+      QString sIp="167.172.87.35";
+
    // QString sLocal="127.0.0.1";
 
-    act.setDataFromServer(false);
-
-    act.setDataBase(true,sIp);
-
-
+    queryObj.setDataBase(true,sIp);
 
 
     RPKCORE.network.runTcpServer("6000");
@@ -21,20 +19,28 @@ Launch::Launch(QObject *parent)
 
 
 
-
 }
 
 void Launch::getData(QByteArray dData, uintptr_t handleId)
 {
 
+
+
     CData data;
 
     data.deCodeJson(dData);
 
-    qDebug()<<"server get Data: "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss.zzz");
+    if(data.iAciton==1)
+    {
+        RPKCORE.network.recallClient(queryObj.heartBeat(),handleId);
+
+        return;
+    }
 
 
-    CData reData = act.query(data);
+
+
+    CData reData = queryObj.queryData(data);
 
     QByteArray re = reData.enCodeJson();
 
@@ -42,6 +48,6 @@ void Launch::getData(QByteArray dData, uintptr_t handleId)
 
 
 
-    qDebug()<<"server recal: "<<reData.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss.zzz");
+  //  qDebug()<<"server recal: "<<reData.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss.zzz");
 
 }

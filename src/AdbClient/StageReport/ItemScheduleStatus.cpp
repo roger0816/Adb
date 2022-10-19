@@ -7,6 +7,8 @@ ItemScheduleStatus::ItemScheduleStatus(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->tb->hideColumn(2);
+
     ui->tbEdit->setMouseTracking(true);
 
     ui->tabWidget->setTabVisible(1,false);
@@ -28,7 +30,9 @@ QString ItemScheduleStatus::data()
 
         QString sTmp=d["title"].toString()+
                 "::"+d["content"].toString()+
-                "::"+d["cost"].toString();
+                "::"+d["cost"].toString()+
+                "::"+d["color"].toString();
+
 
         listData.append(sTmp);
     }
@@ -49,11 +53,12 @@ void ItemScheduleStatus::setData(QString sData)
 
         QStringList tmp = listData.at(i).split("::");
 
-        if(tmp.length()>2)
+        if(tmp.length()>3)
         {
             d["title"] = tmp.first();
             d["content"] = tmp.at(1);
             d["cost"] = tmp.at(2);
+            d["color"] = tmp.at(3);
             m_data.append(d);
         }
 
@@ -94,32 +99,43 @@ void ItemScheduleStatus::refresh()
         QString sCost="x %1 + %2";
         sCost = sCost.arg(d["cost"].toString().split("+").first())
                 .arg(d["cost"].toString().split("+").last());
-        ui->tbEdit->setItem(i,0,UI.tbItem(sTitle));
+
+        QTableWidgetItem *item =  UI.tbItem(sTitle);
+
+        item->setForeground(QColor(d["color"].toString()));
+
+        ui->tbEdit->setItem(i,0,item);
 
         ui->tbEdit->setItem(i,1,UI.tbItem(sContent));
 
         ui->tbEdit->setItem(i,2,UI.tbItem(sCost));
 
+        QTableWidgetItem *item2 =  UI.tbItem(sTitle);
+        item2->setForeground(QColor(d["color"].toString()));
 
-        ui->tb->setItem(i,0,UI.tbItem(sTitle));
+         ui->tb->setItem(i,0,item2);
 
         ui->tb->setItem(i,1,UI.tbItem(sContent));
 
-        ui->tb->setItem(i,2,UI.tbItem(sCost));
+       // ui->tb->setItem(i,2,UI.tbItem(sCost));
+
+        ui->tb->setItem(i,2,UI.tbItem(d["color"].toString()));
 
 
     }
 
 }
 
-bool ItemScheduleStatus::checkHasTitle(QString sTitle)
+bool ItemScheduleStatus::checkHasTitle(QString sTitle,QString sColor)
 {
 
     for(int i=0;i<m_data.length();i++)
     {
         QString sTmp = m_data.at(i).toMap()["title"].toString();
 
-        if(sTitle==sTmp)
+        QString sTmp2 = m_data.at(i).toMap()["color"].toString();
+
+        if(sTitle==sTmp && sColor == sTmp2)
             return true;
 
     }
@@ -137,7 +153,7 @@ void ItemScheduleStatus::on_btnAdd_clicked()
 
     }
 
-    if(checkHasTitle(ui->txTitle->text().trimmed()))
+    if(checkHasTitle(ui->txTitle->text().trimmed(),m_sAddColor))
     {
         DMSG.showMsg("","此狀態已存在，不能重覆新增",QStringList()<<"OK");
 
@@ -145,26 +161,12 @@ void ItemScheduleStatus::on_btnAdd_clicked()
     }
 
 
-    int iIdx = ui->tbEdit->rowCount();
-
-    ui->tbEdit->setRowCount(iIdx+1);
-
-    ui->tbEdit->setItem(iIdx,0,UI.tbItem(ui->txTitle->text().trimmed()));
-
-
-    ui->tbEdit->setItem(iIdx,1,UI.tbItem(ui->txContent->text().trimmed()));
-
-    QString sTmp="x %1 + %2";
-
-    ui->tbEdit->setItem(iIdx,2,UI.tbItem(sTmp.arg(ui->spX->value()).arg(ui->spAdd->value())));
-
-
     QVariantMap d;
 
     d["title"] = ui->txTitle->text().trimmed();
     d["content"] = ui->txContent->text().trimmed();
     d["cost"] = ui->spX->text()+"+"+ui->spAdd->text();
-
+    d["color"]= m_sAddColor;
     m_data.append(d);
 
     refresh();
@@ -203,7 +205,35 @@ void ItemScheduleStatus::on_tb_itemClicked(QTableWidgetItem *item)
 
     QString sText = ui->tb->item(iRow,0)->text();
 
+    QString sColor = ui->tb->item(iRow,2)->text();
+
     if(m_bEditMode)
-        emit sendClicked(sText);
+        emit sendClicked(sText,sColor);
+}
+
+
+void ItemScheduleStatus::on_btnStyle_clicked()
+{
+
+    QColorDialog dialog;
+
+  //  dialog.setOption(QColorDialog::DontUseNativeDialog);
+
+    dialog.setCurrentColor(QColor(m_sAddColor));
+
+    if(dialog.exec()!=1)
+        return;
+
+    QColor color = dialog.selectedColor();
+
+   // QColor color = dialog.getColor(txColor,nullptr,"",QColorDialog::ShowAlphaChannel);
+
+    ui->btnStyle->setStyleSheet("background-color:"+color.name());
+
+    ui->txTitle->setStyleSheet("color:"+color.name());
+
+    m_sAddColor = color.name();
+
+
 }
 

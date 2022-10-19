@@ -75,7 +75,7 @@ background-color: rgb(244, 244, 244);
 QPushButton { 
 	border:none; 
 	background-color: rgba(255, 255, 255,0);
-	font: 700 20px &quot;Microsoft JhengHei UI&quot;; 
+	font: 700 18px &quot;Microsoft JhengHei UI&quot;; 
     min-width: 4em; 
     min-height:1.2em; 
 	padding: 6px; 
@@ -88,7 +88,7 @@ QPushButton:hover
 background-color: rgb(198, 200, 223); 
 border-style: outset; 
 border-width: 2px; 
-font: 800 22px &quot;Microsoft JhengHei UI&quot;; 
+font: 800 20px &quot;Microsoft JhengHei UI&quot;; 
 }
 QPushButton:pressed { 
 border-style: outset; 
@@ -194,7 +194,7 @@ border-width: 0px;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>支付設定</string>
+            <string>成本參數</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -223,7 +223,7 @@ border-width: 0px;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>廠商設定</string>
+            <string>訂單負責人</string>
            </property>
            <property name="checkable">
             <bool>true</bool>

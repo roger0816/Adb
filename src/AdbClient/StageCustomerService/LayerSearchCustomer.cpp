@@ -21,7 +21,7 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
 
     ui->pageOrder->m_bOrderMode=true;
 
-    changePage(0);
+ //   changePage(0);
 }
 
 LayerSearchCustomer::~LayerSearchCustomer()
@@ -32,6 +32,17 @@ LayerSearchCustomer::~LayerSearchCustomer()
 void LayerSearchCustomer::refresh(bool bReQuery)
 {
     qDebug()<<"refresh serachCustomer";
+
+    if(m_bFirstShow)
+    {
+
+        changePage(0);
+
+        m_bFirstShow = false;
+    }
+
+
+
     QVariantList in;
 
     QString sError;
@@ -110,7 +121,7 @@ void LayerSearchCustomer::changePage(int iPage)
         d["CustomerId"] =data["Id"];
         QVariantList out;
         QString sError;
-        ACTION.action(ACT::QUERY_GAME_INFO,d,out,sError);
+        ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,out,sError);
 
         if(out.length()>0)
         {

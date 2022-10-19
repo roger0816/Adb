@@ -115,7 +115,7 @@ void LayerCustomer::on_btnEdit_clicked()
 
     ACTION.action(ACT::QUERY_GAME_LIST,in,outGame,sError);
 
-    ACTION.action(ACT::QUERY_GAME_INFO,in,outGameInfo,sError);
+    ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,outGameInfo,sError);
 
 
     dialog.setData(outClass,outGame,outGameInfo,m_listData.at(ui->tb->currentRow()).toMap());

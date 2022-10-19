@@ -87,7 +87,7 @@ public slots:
 
     void on_btnSayCostBack_clicked();
 
-    void spValue(int i);
+    void spValue(int);
 private slots:
     void on_cbGame_currentTextChanged(const QString &arg1);
     void on_cbAccount_currentTextChanged(const QString &arg1);

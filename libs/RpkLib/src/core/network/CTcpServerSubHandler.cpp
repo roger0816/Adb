@@ -28,7 +28,7 @@ void CTcpServerSubHandler::responcesClient(QByteArray data)
 
     psend.insert(data);
 
-    qDebug() << "CTcpServerSubHandler" <<  (uintptr_t)this << "responces";
+ //   qDebug() << "CTcpServerSubHandler" <<  (uintptr_t)this << "responces";
 
     this->socket->write(psend.package());
 
@@ -53,7 +53,7 @@ void CTcpServerSubHandler::readyRead()
 
 void CTcpServerSubHandler::disconnected()
 {
-    qDebug() << descriptor << " Disconnected";
+  //  qDebug() << descriptor << " Disconnected";
 
     socket->deleteLater();
 

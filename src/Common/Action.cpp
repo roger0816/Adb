@@ -13,7 +13,7 @@ Action::Action(QObject *parent)
 }
 
 
-void Action::setDataFromServer(bool b, QString sIp, QString sPort)
+void Action::setServer(bool b, QString sIp, QString sPort)
 {
     //b = false  is no use server
     qDebug()<<"sIp: "<<sIp<<" ,port :  "<<sPort;
@@ -23,17 +23,6 @@ void Action::setDataFromServer(bool b, QString sIp, QString sPort)
 
     m_bDataFromServer = b;
 
-    if(!b)
-        m_bUserMysql = false;
-}
-
-void Action::setDataBase(bool bMysql, QString sIp, QString sPort)
-{
-    bool bUserMysql = bMysql;
-
-    m_bUserMysql = bUserMysql;
-
-    m_queryObj.m_sql.openDb(m_bUserMysql,sIp,sPort,"adp");
 }
 
 
@@ -822,7 +811,7 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
 
             re.append(data);
 
-            qDebug()<<"data append : "<<data.USD();
+
         }
 
     }
@@ -941,9 +930,9 @@ double Action::payTypeToNTD(QString payTypeSid, DataRate rate)
         listValue.push_front("1");
 
     double r = rate.listData.findValue(listValue.last()).toDouble();
-    qDebug()<<"r : "<<r;
+
     re=1.00*r;
-      qDebug()<<"re : "<<re;
+
     for(int i=0;i<7;i++)
     {
         double d = listValue.at(i).toDouble();

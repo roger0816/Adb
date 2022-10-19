@@ -134,7 +134,7 @@
          </font>
         </property>
         <property name="text">
-         <string>廠商</string>
+         <string>訂單負責人設定</string>
         </property>
        </widget>
       </item>

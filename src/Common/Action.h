@@ -21,11 +21,7 @@ public:
     ~Action();
 
 
-    void setDataFromServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
-
-    void setDataBase(bool bMysql,QString sIp="127.0.0.1",QString sPort="3306");
-
-
+    void setServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
 
     bool checkLogin(QString sUser,QString sPass,QString &sError);
 

@@ -12,6 +12,8 @@
 #include <QMouseEvent>
 #include "Label3.h"
 
+#define SCHEDULE_STATUS_ID "999999"
+
 namespace Ui {
 class LayerSchedule;
 }
@@ -25,6 +27,7 @@ struct Data
     QString sUserSid;
     QString sCost;
     QString sStatus;
+    QString sStatusColor;
     QString sCheck="0";
     //if sText is not "" , it's normal text
     QString sText="";
@@ -32,18 +35,19 @@ struct Data
 
     QString s3TextData()
     {
-        return sUserSid+"::"+sCost+"::"+sStatus;
+        return sUserSid+"::"+sCost+"::"+sStatus+"::"+sStatusColor;
     }
 
     void set3TextData(QString sTmp)
     {
         QStringList list = sTmp.split("::");
 
-        if(list.length()>=3)
+        if(list.length()>3)
         {
             sUserSid= list.first();
             sCost= list.at(1);
             sStatus= list.at(2);
+            sStatusColor = list.at(3);
 
         }
         else if(list.length()>=1)
@@ -58,7 +62,7 @@ struct Data
         sUserSid="";
         sCost="";
         sStatus="";
-
+        sStatusColor="";
         sCheck="0";
         sText="";
     }
@@ -149,9 +153,7 @@ private:
 
     void read();
 
-    void setEditStatus();
 
-    void getEditStatus();
 
      QStringList m_listVHeader;
 
@@ -161,9 +163,7 @@ private:
      QString m_sYear="2022";
      QString m_sMonth="10";
 
-     QString m_sEditStatusSid="";
 
-     QString m_sSid="";
 
      bool m_bEditMode= false;
 

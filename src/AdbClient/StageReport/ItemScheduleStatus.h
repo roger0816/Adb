@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "GlobalUi.h"
+#include <QColorDialog>
 namespace Ui {
 class ItemScheduleStatus;
 }
@@ -27,10 +28,12 @@ private:
 
     QVariantList m_data;
 
-    bool checkHasTitle(QString sTitle);
+    bool checkHasTitle(QString sTitle, QString sColor);
+
+    QString m_sAddColor="#c0c0c0";
 signals:
 
-    void sendClicked(QString sText);
+    void sendClicked(QString sText,QString sColor="");
 private slots:
     void on_btnAdd_clicked();
 
@@ -39,6 +42,8 @@ private slots:
     void on_tbEdit_itemEntered(QTableWidgetItem *item);
 
     void on_tb_itemClicked(QTableWidgetItem *item);
+
+    void on_btnStyle_clicked();
 
 private:
     Ui::ItemScheduleStatus *ui;

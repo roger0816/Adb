@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include "Global.h"
+#include <QCloseEvent>
+
 namespace Ui {
 class DialogLogin;
 }
@@ -19,13 +21,17 @@ public:
 
     void setRelease(bool b);
 
+    void closeEvent(QCloseEvent *) override;
+
 private slots:
     void on_btnLogin_clicked();
 
 signals:
-    void signalLogin();
+  //  void signalLogin();
 private:
     Ui::DialogLogin *ui;
+private:
+    int m_iRec=-1;
 };
 
 #endif // DIALOGLOGIN_H

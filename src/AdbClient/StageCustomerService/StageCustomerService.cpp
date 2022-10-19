@@ -18,8 +18,6 @@ StageCustomerService::StageCustomerService(QWidget *parent) :
     connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
 
 
-
-    qDebug()<<"new customerService";
 }
 
 StageCustomerService::~StageCustomerService()

@@ -117,7 +117,6 @@ int CTcpClient::connectHost(QString sIp, QString sPort, QByteArray arrInput, QBy
 int CTcpClient::connectHost(QString sId, QString sIp, QString sPort, QByteArray arrInput, int iWaitMsec)
 {
 
-    qDebug()<<"unblock";
 
     if(sId.trimmed()=="")
         sId =QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
@@ -164,7 +163,7 @@ int CTcpClient::connectHost(QString sId, QString sIp, QString sPort, QByteArray 
 
     tcp->connectToHost(sIp,sPort.toInt());
 
-    qDebug()<<"return fn";
+
     return 1;
 }
 
@@ -185,7 +184,6 @@ void CTcpClient::error(QAbstractSocket::SocketError error)
 
 void CTcpClient::slotConnected()
 {
-    qDebug()<<"connected ";
 
     QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
 
@@ -200,7 +198,7 @@ void CTcpClient::slotConnected()
 
 void CTcpClient::slotDisconnected()
 {
-    qDebug()<<"disconnected";
+
     QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
     tcp->disconnect();
     tcp->deleteLater();
@@ -213,7 +211,7 @@ void CTcpClient::slotReadyRead()
     QString sId = tcp->property(CTcp::id).toString();
 
     QByteArray readData = tcp->readAll();
-    qDebug()<<"ready read len : "<<readData.length();
+   // qDebug()<<"ready read len : "<<readData.length();
     bool bOk = false;
 
     /*
@@ -240,11 +238,11 @@ void CTcpClient::slotReadyRead()
 
         QByteArray re =check.unPackage();
 
-        qDebug()<<"send len : "<<re.length();
+      //  qDebug()<<"send len : "<<re.length();
 
         if(bSendSignal)
         {
-            qDebug()<<"rpk lib send siganl : "<<sId<<" , "<<re;
+           // qDebug()<<"rpk lib send siganl : "<<sId<<" , "<<re;
             emit signalReply(sId,re,1);
         }
         else

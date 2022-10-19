@@ -96,7 +96,7 @@ void CTcpServer::handlerFinish()
 void CTcpServer::incomingConnection(qintptr socketDescriptor)
 {
     // We have a new connection
-    qDebug() << "CTcpServer " << socketDescriptor << " Connecting...";
+   // qDebug() << "CTcpServer " << socketDescriptor << " Connecting...";
 
     // Every new connection will be run in a newly created thread
     CTcpServerSubHandler *handler = new CTcpServerSubHandler(socketDescriptor, this);
@@ -115,7 +115,7 @@ void CTcpServer::slotRetrun(QByteArray arrReturn, uintptr_t handlerID)
 {
     CTcpServerSubHandler *handler = (CTcpServerSubHandler *)handlerID;
 
-    qDebug() << "CTcpServer handler" <<  (uintptr_t)handler << "responcesClient";
+  //  qDebug() << "CTcpServer handler" <<  (uintptr_t)handler << "responcesClient";
 
     if(handlerList.contains(handler))
         handler->responcesClient(arrReturn);

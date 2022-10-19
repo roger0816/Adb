@@ -41,7 +41,7 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
         connect(m_listBtn[i],SIGNAL(clicked()),this,SLOT(btnsClicked()));
     }
 
-    connect(ui->itemStatus,&ItemScheduleStatus::sendClicked,this,[=](QString sText)
+    connect(ui->itemStatus,&ItemScheduleStatus::sendClicked,this,[=](QString sText,QString sColor)
     {
         int iRow = ui->tb0->currentRow();
 
@@ -52,6 +52,7 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
 
 
         m_data[iRow][iCol].sStatus = sText;
+        m_data[iRow][iCol].sStatusColor = sColor;
 
         refresh();
 
@@ -200,9 +201,10 @@ void LayerSchedule::refresh()
 
                 }
 
+                qDebug()<<"row : "<<iRow<<" icol : "<<iCol<<" : "<<data.sStatusColor;
                 l->setText(data.sCost,data.sUserSid,data.sStatus);
 
-
+                l->setText(2,data.sStatus,data.sStatusColor);
 
                 ui->tb0->setCellWidget(iRow,iCol,l);
             }
@@ -220,6 +222,9 @@ void LayerSchedule::refresh()
 
 void LayerSchedule::on_btnSave_clicked()
 {
+
+    qDebug()<<"btn save clicked ";
+
     if(m_bEditMode)
     {
         int ret = DMSG.showMsg("","是否儲存？",QStringList()<<"否"<<"是");
@@ -282,7 +287,6 @@ void LayerSchedule::refreshCb()
 void LayerSchedule::write()
 {
 
-
     qDebug()<<"write : ";
 
     QStringList listData;
@@ -296,16 +300,12 @@ void LayerSchedule::write()
         QStringList check;
         for(int j=0;j<ui->tb0->columnCount();j++)
         {
-            qDebug()<<"iRow : "<<i<<" iCol : "<<j;
+
             if(i%m_listVHeader.length()==0)
             {
 
-                //                qDebug()<<"data : "<<ui->tb0->itemAt(i,j)->text();
-                //                listRow.append(ui->tb0->itemAt(i,j)->text());
-
-
-                QLineEdit *t = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j));
-                qDebug()<<"note : "<<t->text();
+                //QLineEdit *t = dynamic_cast<QLineEdit*>(ui->tb0->cellWidget(i,j));
+                // qDebug()<<"note : "<<t->text();
 
             }
             else if(ui->tb0->verticalHeaderItem(i)->text()=="備註"
@@ -322,13 +322,12 @@ void LayerSchedule::write()
 
                 sTmp=sTmp.replace("::",":");
 
-                qDebug()<<"note : "<<t->text();
+
                 listRow.append(t->text());
             }
             else
             {
                 listRow.append(m_data[i][j].s3TextData());
-                qDebug()<<"3data : "<<m_data[i][j].s3TextData();
 
                 QString c = m_data[i][j].sCheck;
 
@@ -349,7 +348,17 @@ void LayerSchedule::write()
     }
 
 
-    setEditStatus();
+    QVariantMap dStatus;
+
+    dStatus["Data"] = ui->itemStatus->data();
+
+    dStatus["Id"]=SCHEDULE_STATUS_ID;
+
+    QString sError;
+
+    ACTION.action(ACT::ADD_SCHEDULE,dStatus,sError);
+
+
 
 
     QVariantMap d;
@@ -362,10 +371,6 @@ void LayerSchedule::write()
 
     d["Id"]=m_sYear+m_sMonth;
 
-    //  d["EditStatus"] = ui->itemStatus->data();
-
-    d["Sid"] = m_sSid;
-    QString sError;
 
     ACTION.action(ACT::ADD_SCHEDULE,d,sError);
 
@@ -374,20 +379,8 @@ void LayerSchedule::write()
 void LayerSchedule::read()
 {
 
-    m_sSid="";
-
-    for(int i=0;i<128;i++)
-    {
-        for(int j=0;j<7;j++)
-            m_data[i][j].clear();
-    }
-
-    getEditStatus();
-
 
     QVariantMap in;
-
-    in["Id"]=m_sYear+m_sMonth;
 
     QVariantList out;
 
@@ -396,15 +389,38 @@ void LayerSchedule::read()
     ACTION.action(ACT::QUERY_SCHEDULE,in,out,sError);
 
     if(out.length()<1)
+    {
+        ui->itemStatus->setData("");
         return;
+    }
 
-    QVariantMap data = out.first().toMap();
-    m_sSid = data["Sid"].toString();
+
+    auto getData=[=](QString sId)
+    {
+        QVariantMap re;
+        for(int i=0;i<out.length();i++)
+        {
+            if(out.at(i).toMap()["Id"]==sId)
+                re = out.at(i).toMap();
+        }
+
+        return re;
+    };
+
+
+    ui->itemStatus->setData(getData(SCHEDULE_STATUS_ID)["Data"].toString());
+
+
+    for(int i=0;i<128;i++)
+    {
+        for(int j=0;j<7;j++)
+            m_data[i][j].clear();
+    }
+
+    QVariantMap data = getData(m_sYear+m_sMonth);
+
     QStringList listData = data["Data"].toString().split(";;");
     QStringList listCheck = data["UserCheck"].toString().split(";;");
-
-    // ui->itemStatus->setData(data["EditStatus"].toString());
-
 
     for(int i=0;i<128 && i<listData.length();i++)
     {
@@ -429,56 +445,11 @@ void LayerSchedule::read()
             m_data[i][j].sCheck=c;
 
         }
-
-
-
-
     }
-
-
-
-
-    //  QStringList list=data["Header"].toString().split(",,");
-
-
-
-
-
 }
 
-void LayerSchedule::setEditStatus()
-{
-    QVariantMap d;
 
-    d["Data"] = ui->itemStatus->data();
-    d["Sid"]=m_sEditStatusSid;
-    d["Id"]="0";
 
-    QString sError;
-
-    ACTION.action(ACT::ADD_SCHEDULE,d,sError);
-}
-
-void LayerSchedule::getEditStatus()
-{
-    QVariantMap in;
-
-    in["Id"]="0";
-
-    QVariantList out;
-
-    QString sError;
-
-    ACTION.action(ACT::QUERY_SCHEDULE,in,out,sError);
-    if(out.length()<1)
-    {
-        ui->itemStatus->setData("");
-        return;
-    }
-    m_sEditStatusSid=out.first().toMap()["Sid"].toString();
-    ui->itemStatus->setData(out.first().toMap()["Data"].toString());
-
-}
 
 int LayerSchedule::checkDayOfWeek(QString yyyy, QString MM, QString dd)
 {

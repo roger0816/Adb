@@ -12,6 +12,8 @@
 
 #define ACTION Global::Instance().m_action
 
+#define QUERY Global::Instance().m_action.m_queryObj
+
 
 //#define DATA Global::Instance().m_data
 

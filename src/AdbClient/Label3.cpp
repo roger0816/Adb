@@ -28,9 +28,18 @@ void Label3::paintEvent(QPaintEvent *)
 
         if(i!=m_iIdx)
         {
-            p.setPen(Qt::gray);
 
-            p.setFont(QFont("Arial",9));
+            QColor color(Qt::gray);
+
+            if(m_sColor[i]!="")
+                color.setNamedColor(m_sColor[i]);
+
+            p.setPen(color);
+
+            QFont f("Arial");
+            f.setPixelSize(14);
+
+            p.setFont(f);
 
             if(i==0)
             {
@@ -42,6 +51,11 @@ void Label3::paintEvent(QPaintEvent *)
             }
             else
             {
+
+                f.setPixelSize(16);
+
+                p.setFont(f);
+
                 if(m_iIdx==0)
                     p.drawText(r,Qt::AlignHCenter | Qt::AlignTop,m_sText[i]);
                 else
@@ -52,18 +66,23 @@ void Label3::paintEvent(QPaintEvent *)
         else
         {
 
+            QColor color(Qt::black);
 
-            p.setPen(Qt::black);
+            if(m_sColor[i]!="")
+                color.setNamedColor(m_sColor[i]);
+
+
+            p.setPen(color);
 
             QFont f("Arial");
 
-            f.setPointSize(14);
+            f.setPixelSize(14);
 
             if(!m_bFlag)
             {
                 f.setBold(true);
 
-                f.setPointSize(15);
+                f.setPointSize(16);
             }
 
 
@@ -117,12 +136,12 @@ void Label3::setText(QString sCurrentText)
     m_sText[m_iIdx]=sCurrentText;
 }
 
-void Label3::setText(int idx, QString sText)
+void Label3::setText(int idx, QString sText, QString sColorName)
 {
     int i = qBound(0,idx,2);
 
-
     m_sText[i] = sText;
+    m_sColor[i] = sColorName;
 }
 
 void Label3::setText(QString sTextL, QString sTextC, QString sTextR)

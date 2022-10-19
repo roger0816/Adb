@@ -4,7 +4,7 @@
 #include <QObject>
 #include <QDebug>
 #include "RpkCore.h"
-#include "Action.h"
+#include "Query.h"
 
 class Launch : public QObject
 {
@@ -13,7 +13,7 @@ public:
     explicit Launch(QObject *parent = nullptr);
 
 private:
-    Action act;
+    Query queryObj;
 signals:
 
 public slots:

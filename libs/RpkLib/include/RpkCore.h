@@ -24,8 +24,8 @@ public:
     static RpkCore& INS();
 
 
-private :
-    static RpkCore * m_pInstance;
+//private :
+//    static RpkCore * m_pInstance;
 };
 
 #endif // RPKCORE_H

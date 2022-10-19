@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QPaintEvent>
 #include <QPainter>
+#include <QDebug>
 
 namespace LABEL_3 {
 enum _INDEX{_Left=0,_Cent,_Right};
@@ -23,9 +24,9 @@ public:
 
     void setText(QString sCurrentText);
 
-    void setText(int idx,QString sText);
+    void setText(int idx,QString sText,QString sColorName="");
 
-    void setText(QString sTextL,QString sTextC,QString sTextR);
+    void setText(QString sTextL, QString sTextC, QString sTextR);
 
     QString text();
 
@@ -46,6 +47,7 @@ public:
 signals:
 private:
     QString m_sText[3]={"aaaa","bbbbbbb","cccccc"};
+    QString m_sColor[3] = {"","",""};
     bool m_bVisable[3]={true,true,true};
     int m_iIdx=0;
     bool m_bBorder=false;

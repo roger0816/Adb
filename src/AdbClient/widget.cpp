@@ -12,7 +12,6 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
 
-
     this->setWindowTitle("艾比代管理系統");
 
     connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));

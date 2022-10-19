@@ -15,6 +15,7 @@ CSqlClass::CSqlClass(QObject *parent)
 
 }
 
+
 bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,bool bOrRplace)
 {
 
@@ -87,7 +88,8 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
     qDebug()<<"sql : "<<bOk;
     if(bOk)
     {
-        emit tbUpdate(sTableName,sDateTime);
+       // setTrigger(sTableName,sDateTime);
+        //db寫入修改記錄、並存在server 的map
     }
     else
         qDebug()<<sError;
@@ -104,6 +106,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
 bool CSqlClass::delFromTb(QString sTableName, QVariantMap conditions, QString &sError)
 {
+    QString sDateTime =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
 
     bool bRe =false;
     QSqlQuery query(m_db);
@@ -135,7 +138,12 @@ bool CSqlClass::delFromTb(QString sTableName, QVariantMap conditions, QString &s
 
     bRe = query.exec();
 
-    sError = query.lastError().text();
+    if(bRe)
+    {
+      //  setTrigger(sTableName,sDateTime);
+    }
+    else
+        sError = query.lastError().text();
 
     return bRe;
 }
@@ -177,14 +185,15 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
     query.prepare(sCmd+sSub);
 
-    qDebug()<<"query tb "<<sCmd+sSub;
+
+    QString sLog="query tb "+sCmd+sSub+" : ";
+
+    QVariantList listTmp;
 
     for(int j=0;j<listKey.length();j++)
     {
-
-
         query.bindValue(j,conditions[listKey.at(j)]);
-
+        listTmp.append(conditions[listKey.at(j)]);
     }
 
     /*  ex
@@ -194,7 +203,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
             query.exec();
             */
 
-    qDebug()<<"AA : "<<query.lastQuery();
+
     bool bOk = query.exec();
 
     QStringList listHeader = fieldNames(query.record());
@@ -218,8 +227,16 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
     }
 
     sError =  query.lastError().text();
+
+    qDebug()<<sLog<<listTmp<<" : "<<bOk;
+
     if(!bOk)
+    {
         qDebug()<< sError;
+
+    }
+
+
     return bOk;
 }
 
@@ -352,7 +369,13 @@ void CSqlClass::createTableSqlite()
 
     sql.clear();
 
+    sql.exec("CREATE TABLE 'TriggerData' ( \
+             'ApiGroup'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('TableName') \
+             );");
 
+    sql.clear();
 
     sql.exec("CREATE TABLE 'ExchangeRate' ( \
              'Sid'	INTEGER, \
@@ -607,6 +630,69 @@ QStringList CSqlClass::fieldNames(QSqlRecord record)
     return list;
 }
 
+//void CSqlClass::setTrigger(QString sTableName, QString sDateTime)
+//{
+//    // REPLACE INTO Trigger (TableName,UpdateTime) VALUES(sTableNam,sDateTime);
+//    QString sCmd ="REPLACE INTO TriggerData (TableName,UpdateTime) VALUES('%1','%2');";
+//    sCmd=sCmd.arg(sTableName,sDateTime);
+//    QSqlQuery query(m_db);
+
+
+//    bool bRe=query.exec(sCmd);
+
+//        qDebug()<<"sCmd : "<<sCmd<<" , "<<bRe;
+//    if(bRe)
+//        emit tbUpdate(sTableName,sDateTime);
+//}
+
+void CSqlClass::saveTrigger(QString sApi, QString sDateTime)
+{
+    QString sCmd ="REPLACE INTO TriggerData (ApiGroup,UpdateTime) VALUES('%1','%2');";
+    sCmd=sCmd.arg(sApi,sDateTime);
+    QSqlQuery query(m_db);
+
+
+    bool bRe=query.exec(sCmd);
+
+        qDebug()<<"sCmd : "<<sCmd<<" , "<<bRe;
+    if(bRe)
+        emit tbUpdate(sApi,sDateTime);
+}
+
+QMap<QString, QString> CSqlClass::readTrigger()
+{
+    QMap<QString,QString> re;
+    QSqlQuery query(m_db);
+    query.exec("select * from TriggerData");
+    while(query.next())
+    {
+        QString sApi = query.value(0).toString();
+
+        QString sUpdateTime = query.value(1).toString();
+
+        re[sApi] = sUpdateTime;
+    }
+
+    return re;
+}
+
+//void CSqlClass::loadTrigger()
+//{
+
+//    QSqlQuery query(m_db);
+//    query.exec("select * from TriggerData");
+//    while(query.next())
+//    {
+//        QString sTableName = query.value(0).toString();
+
+//        QString sUpdateTime = query.value(1).toString();
+
+//        emit tbUpdate(sTableName,sUpdateTime);
+
+//    }
+
+//}
+
 bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QString &sError)
 {
     qDebug()<<"user :"<<sUser<<" ,pass:"<<sPass;
@@ -699,7 +785,7 @@ bool CSqlClass::editUser(QVariantMap data, QString &sError)
                  " WHERE Id =? ;";
 
     QSqlQuery query(m_db);
-    //    qDebug()<<"AA "<<sCmd;
+
     query.prepare(sCmd);
 
     query.bindValue(0,data["Password"]);
@@ -944,7 +1030,7 @@ bool CSqlClass::lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QS
     return bRe;
 }
 
-void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
+bool CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 {
     bool bOk = false;
     if(bMysql)
@@ -993,12 +1079,12 @@ void CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
     qDebug()<<"db open : "<<bOk;
 
     if(bOk)
+    {
         createTable();
 
+    }
 
-
-
-    qDebug()<<"local db open : "<<bOk;
+    return bOk;
 }
 
 

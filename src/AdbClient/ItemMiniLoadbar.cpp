@@ -9,6 +9,8 @@ ItemMiniLoadbar::ItemMiniLoadbar(QWidget *parent) :
 
     m_bIsRun = false;
 
+    m_list.append(false);
+
     m_iIdx = 0;
 
     m_iMsec = 0;
@@ -18,7 +20,7 @@ ItemMiniLoadbar::ItemMiniLoadbar(QWidget *parent) :
         m_listRes<<":/loading/loading1-"+QString::number(i)<<".png";
     }
 
-    startTimer(100);
+    startTimer(50);
 
     //    QPixmap pixmap(":/icon/icon/iconImage.png");
 
@@ -53,17 +55,15 @@ void ItemMiniLoadbar::setLoading(bool bIsLoading)
 void ItemMiniLoadbar::timerEvent(QTimerEvent *)
 {
 
+    //連續二次沒run 才中止，防止loading 不連續感
+    bool bRun = m_bIsRun;
+
+    if(m_list.last())
+        bRun= true;
+
     m_list.append(m_bIsRun);
     while(m_list.length()>3)
         m_list.pop_front();
-
-    bool bRun = false;
-
-    for(int i=0;i<m_list.length();i++)
-    {
-        if(m_list.at(i))
-            bRun = true;
-    }
 
 
     if(!bRun)

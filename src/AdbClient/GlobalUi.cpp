@@ -1,6 +1,6 @@
 #include "GlobalUi.h"
 
-GlobalUi *GlobalUi::m_pInstance = nullptr;
+//GlobalUi *GlobalUi::m_pInstance = nullptr;
 
 GlobalUi::GlobalUi(QObject *parent)
     : QObject{parent}
@@ -10,9 +10,13 @@ GlobalUi::GlobalUi(QObject *parent)
 
 GlobalUi &GlobalUi::Instance()
 {
-    if(m_pInstance==0)
-        m_pInstance=new GlobalUi();
-    return *m_pInstance;
+//    if(m_pInstance==0)
+//        m_pInstance=new GlobalUi();
+//    return *m_pInstance;
+
+    static GlobalUi globalUi;
+
+    return globalUi;
 }
 
 int GlobalUi::showMsg(QString sTitle, QString sMsg, QStringList listBtn)

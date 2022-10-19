@@ -40,6 +40,12 @@ void DialogLogin::setRelease(bool b)
     ui->lbRelease->setVisible(b);
 }
 
+void DialogLogin::closeEvent(QCloseEvent *)
+{
+    qDebug()<<"dialog login close  ";
+   // done(m_iRec);
+}
+
 void DialogLogin::on_btnLogin_clicked()
 {
 
@@ -50,6 +56,7 @@ void DialogLogin::on_btnLogin_clicked()
 
     if(ui->txUser->text().toLower().trimmed()=="root" && ui->txPass->text()=="1234")
     {
+
         bOk = true;
 
         ACTION.m_currentUser.Id="root";
@@ -66,9 +73,8 @@ void DialogLogin::on_btnLogin_clicked()
             st=ui->txUser->text().trimmed();
 
         ACTION.setKeyValue("loginSave",st);
-
-        emit signalLogin();
-        done(1);
+        m_iRec = 1;
+        done(m_iRec);
 
     }
     else

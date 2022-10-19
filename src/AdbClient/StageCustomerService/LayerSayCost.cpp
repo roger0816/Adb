@@ -90,34 +90,7 @@ void LayerSayCost::orderMode()
     QList<UserData> listUser =ACTION.getUser(true);
     QStringList listCb;
     //    listCb.append("艾比代");
-    /*
-    m_listOwnerUser.clear();
 
-    for(int i=0;i<listUser.length();i++)
-    {
-        if(listUser.at(i).Lv==USER_LV::_LV2)
-        {
-            m_listOwnerUser.append(listUser.at(i));
-
-            listCb.append(listUser.at(i).Name);
-        }
-
-    }
-    */
-
-    /*
-    QList<DataFactory> listFac = ACTION.getFactoryClass("",true);
-
-    for(int i=0;i<listFac.length();i++)
-    {
-        listCb.append(listFac.at(i).Name);
-    }
-
-
-    ui->cbSelect->clear();
-
-    ui->cbSelect->addItems(listCb);
-    */
     ui->wSelect->show();
 
 
@@ -196,7 +169,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     d["CustomerId"] = m_dataCustomer.Id;
 
 
-    ACTION.action(ACT::QUERY_GAME_INFO,d,m_listGameInfo,sError);
+    ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,m_listGameInfo,sError);
 
 
     QStringList cbName;
@@ -318,7 +291,7 @@ void LayerSayCost::refreshInfo()
 
 double LayerSayCost::checkTotal()
 {
-    qDebug()<<"checkTotal";
+
     double re = 0;
 
 
@@ -347,8 +320,7 @@ double LayerSayCost::checkTotal()
 
         if(m_dataCustomer.Currency.toUpper().indexOf("USD"))
         {
-            qDebug()<<"cost : "<<r;
-            qDebug()<<"costRate : "<<m_costRate.USD();
+
             r=r/m_costRate.USD();
 
         }
@@ -376,16 +348,19 @@ double LayerSayCost::checkTotal()
 
     m_iBouns = bouns;
 
+
+    if(re<0)
+        re=0.00;
+
     ui->lbTotal->setText(QString::number(re,'f',2));
     //    DATA.rate()
-
 
     return re;
 }
 
 void LayerSayCost::addPayTypeToCb()
 {
-
+    qDebug()<<"add pay type to cb";
     if(m_listInto.length()<1)
         return;
 
@@ -533,7 +508,7 @@ void LayerSayCost::on_btnSayCostBack_clicked()
     emit back(1);
 }
 
-void LayerSayCost::spValue(int i)
+void LayerSayCost::spValue(int )
 {
 
     checkTotal();
@@ -621,8 +596,6 @@ void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 
     ui->cbServer->addItems(server);
 
-    return;
-
 
     //    for(int i=0;i<m_listGameInfo.length();i++)
     //    {
@@ -705,6 +678,8 @@ void LayerSayCost::on_cbChr_currentTextChanged(const QString &arg1)
 
 void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
 {
+
+
     if(column!=0)
         return;
 
@@ -718,8 +693,9 @@ void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
         if(data["Name"] != sItemName)
             continue;
 
+        int iMappingIdx =ACTION.mapping(m_listInto,"Sid",data["Sid"].toString());
 
-        if(ACTION.mapping(m_listInto,"Sid",data["Sid"].toString())<0)
+        if(iMappingIdx<0)
         {
 
             CListPair t;
@@ -738,9 +714,12 @@ void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
         else
         {
 
-            int iCurrentCount = m_listInto.at(row).toMap()["Count"].toInt();
+            int iCurrentCount = m_listInto.at(iMappingIdx).toMap()["Count"].toInt();
+
             data["Count"] =iCurrentCount+1;
-            m_listInto[row] = data;
+
+            m_listInto[iMappingIdx] = data;
+
 
         }
 

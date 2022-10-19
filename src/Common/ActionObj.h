@@ -10,38 +10,44 @@
 #include "VojData.h"
 #include <QTimer>
 
+
+
+
 class ActionObj : public QObject
 {
     Q_OBJECT
 public:
     explicit ActionObj(QObject *parent = nullptr);
 
+    ~ActionObj();
 
+    void setStartSyanc(bool b);
 
     virtual bool userCacheData(){return false;}
 
-    bool action(ACT::_KEY act, QVariantList listData, QString &sError);
+    bool action(int act, QVariantList listData, QString &sError);
 
-    bool action(ACT::_KEY act, QVariantMap data, QString &sError);
+    bool action(int act, QVariantMap data, QString &sError);
 
-    bool action(ACT::_KEY act, QVariantMap data, QVariantMap &out, QString &sError);
+    bool action(int act, QVariantMap data, QVariantMap &out, QString &sError);
 
 
-    bool action(ACT::_KEY act, QVariantMap data,QVariantList &listOut, QString &sError);
+    bool action(int act, QVariantMap data,QVariantList &listOut, QString &sError);
 
-    bool action(ACT::_KEY act, QVariantList listData, QVariantList &listOut, QString &sError);
+    bool action(int act, QVariantList listData, QVariantList &listOut, QString &sError);
 
     CData query(CData data);
-protected:
+
     QueryObj m_queryObj;
 
-
+protected:
     CData callServer(CData data);
 
+    bool isQueryApi(int iApi);
+
+    bool isNeedFromServer(int iApi);
 
     bool m_bDataFromServer = true;
-
-    bool m_bUserMysql = false;
 
     QString m_ip;
 
@@ -55,18 +61,22 @@ private:
 
     QTimer m_timer;
 
-    QVariantMap m_sDataCache;
+    QMap<QString,QString > m_dLocalTrigger;
 
-    QMap<QString,int > m_dLocalIdx;
+    QMap<QString,QString > m_dUpdateTrigger;
 
-    QMap<QString,int > m_dUpdateIdx;
+    QVariantMap m_dKeepData;
+
+    void writeTrigger(QString sTrigger,bool isFromHeartBeat);
+
+
 
 signals:
 
     void lockLoading(bool b);
 
 public slots:
-    void updateIndx(QString sId,QByteArray data,int Error);
+    void updateIndx(QString sId, QByteArray data, int);
 
 
 };

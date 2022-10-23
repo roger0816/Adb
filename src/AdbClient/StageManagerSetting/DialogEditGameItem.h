@@ -53,7 +53,7 @@ private slots:
 
     void valueChange(double arg);
 
-
+    double valueToUp(double d, int decimals);
 
     void on_sbOrderUSD_valueChanged(double arg1);
 

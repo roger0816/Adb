@@ -628,37 +628,12 @@ struct DataRate :public DataObj
 
         listData = CListPair(data["Name"].toString());
 
-        /*
-        QStringList tmp = data["Name"].toString().split(";");
-
-        listData.clear();
-
-
-        for(int i=0;i<tmp.length();i++)
-        {
-            QPair<QString,QString> data;
-            data.first = tmp.at(i).split("=").first();
-            data.second = tmp.at(i).split("=").last();
-
-            listData.append(data);
-        }
-        */
-
     }
 
 
     QVariantMap data()
     {
         QVariantMap re = DataObj::data();
-
-        //        QStringList list;
-
-        //        for(int i=0;i<listData.length();i++)
-        //        {
-        //            QString sTmp = listData.at(i).first+"="+listData.at(i).second;
-
-        //            list.append(sTmp);
-        //        }
 
         re["Name"] = listData.toString();
 
@@ -679,6 +654,11 @@ struct DataRate :public DataObj
     //QList<QPair<QString,QString> > listData;
 
     CListPair listData;
+
+    double findValue(QString currency)
+    {
+        return listData.findValue(currency).toDouble();
+    }
 
     double NTD()
     {

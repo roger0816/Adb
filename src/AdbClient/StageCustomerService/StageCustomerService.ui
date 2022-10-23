@@ -219,12 +219,12 @@ border-width: 0px;
              <string notr="true"/>
             </property>
            </widget>
-           <widget class="LayerCustomer" name="page_3">
+           <widget class="LayerCustomer" name="page1">
             <property name="styleSheet">
              <string notr="true"/>
             </property>
            </widget>
-           <widget class="QWidget" name="page_2">
+           <widget class="QWidget" name="page2">
             <property name="styleSheet">
              <string notr="true">background-color: rgb(85, 170, 255);</string>
             </property>

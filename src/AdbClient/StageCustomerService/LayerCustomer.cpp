@@ -13,6 +13,13 @@ LayerCustomer::~LayerCustomer()
     delete ui;
 }
 
+void LayerCustomer::init()
+{
+    ui->btnEdit->setEnabled(false);
+
+    QTimer::singleShot(50,this,SLOT(refresh()));
+}
+
 void LayerCustomer::on_btnAdd_clicked()
 {
     DialogCustomerEdit dialog;
@@ -94,9 +101,7 @@ void LayerCustomer::refresh()
 
 void LayerCustomer::showEvent(QShowEvent *)
 {
-    ui->btnEdit->setEnabled(false);
 
-    QTimer::singleShot(30,this,SLOT(refresh()));
 }
 
 

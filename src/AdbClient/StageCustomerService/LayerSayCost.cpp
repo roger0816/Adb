@@ -18,19 +18,6 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
 
     ui->wSelect->hide();
 
-    //    ui->cbServer->hide();
-
-    //    ui->cbChr->hide();
-
-    //    ui->lbCHrT->hide();
-
-    //    ui->lbServerT->hide();
-
-    //        label->setText(
-    //                                       QObject::tr("<font color = red>%1</font>").arg("abc"))+
-    //                                       QObject::tr("<font color = blue>%1</font>").arg("efg")+
-    //                                       "hij"
-    //                                       );
 
 }
 

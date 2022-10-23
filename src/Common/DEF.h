@@ -260,7 +260,29 @@ struct CListPair : public QList< CPair >
     {
         CPair re;
 
-        int iIdx = listFirst().indexOf(sKey);
+        int iIdx =-1;
+
+
+
+//        if(sKey.length()>=3)
+//        {
+//            for(int i=0;i<listFirst().length();i++)
+//            {
+//                QString st = listFirst().at(i);
+
+//                if(st.contains(sKey))
+//                {
+//                    iIdx=i;
+//                    break;
+//                }
+//            }
+//        }
+//        else
+        {
+            iIdx= listFirst().indexOf(sKey);
+
+        }
+
 
         if(iIdx>=0)
             re = at(iIdx);

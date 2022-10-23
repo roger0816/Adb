@@ -15,11 +15,14 @@ class StageCustomerService : public QWidget
 public:
     explicit StageCustomerService(QWidget *parent = nullptr);
     ~StageCustomerService();
-
+    void init();
 private:
     Ui::StageCustomerService *ui;
 
     QButtonGroup m_btns;
+
+private slots:
+    void changePage(int iPage);
 
 
 };

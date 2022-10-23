@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>622</width>
-    <height>484</height>
+    <width>865</width>
+    <height>496</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -226,6 +226,11 @@
            <column>
             <property name="text">
              <string>金額</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>售價匯率</string>
             </property>
            </column>
            <column>

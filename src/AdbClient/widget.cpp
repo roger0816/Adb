@@ -59,6 +59,7 @@ Widget::~Widget()
 
 void Widget::slotPage(int iIdx)
 {
+
     ui->stackedWidget->setCurrentIndex(iIdx);
 }
 

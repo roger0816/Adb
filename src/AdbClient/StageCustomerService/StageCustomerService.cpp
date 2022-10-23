@@ -15,13 +15,25 @@ StageCustomerService::StageCustomerService(QWidget *parent) :
 
     ui->btn2->hide();
 
-    connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
+    connect(&m_btns,SIGNAL(buttonClicked(int)),this,SLOT(changePage(int)));
 
-
+    changePage(0);
 }
 
 StageCustomerService::~StageCustomerService()
 {
     delete ui;
+}
+
+void StageCustomerService::changePage(int iPage)
+{
+
+    ui->stackedWidget->setCurrentIndex(iPage);
+
+    if(iPage==0)
+         ui->page->init();
+
+    if(iPage==1)
+         ui->page1->init();
 }
 

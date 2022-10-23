@@ -21,7 +21,8 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
 
     ui->pageOrder->m_bOrderMode=true;
 
- //   changePage(0);
+
+    changePage(0);
 }
 
 LayerSearchCustomer::~LayerSearchCustomer()
@@ -29,18 +30,17 @@ LayerSearchCustomer::~LayerSearchCustomer()
     delete ui;
 }
 
+void LayerSearchCustomer::init()
+{
+
+    ui->stackedWidget->setCurrentWidget(ui->page0);
+
+    QTimer::singleShot(50,[this](){ refresh(true); });
+}
+
 void LayerSearchCustomer::refresh(bool bReQuery)
 {
     qDebug()<<"refresh serachCustomer";
-
-    if(m_bFirstShow)
-    {
-
-        changePage(0);
-
-        m_bFirstShow = false;
-    }
-
 
 
     QVariantList in;
@@ -48,6 +48,8 @@ void LayerSearchCustomer::refresh(bool bReQuery)
     QString sError;
     if(bReQuery)
         ACTION.action(ACT::QUERY_CUSTOMER,in,m_listData,sError);
+
+    qDebug()<<"CUSTOMER len : "<<m_listData.length();
 
     ui->tb->setRowCount(0);
 
@@ -182,9 +184,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
 void LayerSearchCustomer::showEvent(QShowEvent *)
 {
-    ui->stackedWidget->setCurrentWidget(ui->page0);
 
-    QTimer::singleShot(50,[this](){ refresh(true); });
 }
 
 bool LayerSearchCustomer::checkSearch(QVariantMap data)

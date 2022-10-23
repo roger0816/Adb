@@ -18,6 +18,8 @@ public:
     explicit LayerSearchCustomer(QWidget *parent = nullptr);
     ~LayerSearchCustomer();
 
+    void init();
+
 private slots:
     void on_btnCheck_clicked();
 
@@ -48,7 +50,6 @@ private:
 
     int m_iIdx=-1;
 
-    bool m_bFirstShow = true;
 
 public slots:
     void slotBack(int iPage=0);

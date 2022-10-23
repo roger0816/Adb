@@ -24,9 +24,18 @@ public:
 private:
 
     void refresh();
+
+    void mergeData();
     Ui::DialogCustomerCostHistory *ui;
 
     CustomerData m_cus;
+
+
+    QVariantList m_listOrder;
+    QVariantList m_listAddCost;
+
+    QVariantList m_listRowData;
+
 };
 
 #endif // DIALOGCUSTOMERCOSTHISTORY_H

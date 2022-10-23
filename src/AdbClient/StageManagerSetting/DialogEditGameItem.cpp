@@ -293,6 +293,35 @@ void DialogEditGameItem::valueChange(double arg)
     m_bLock = false;
 }
 
+double DialogEditGameItem::valueToUp(double d, int decimals)
+{
+
+    //to do
+    Q_UNUSED(decimals)
+    return d;
+    QStringList list = QString::number(d).split(".");
+
+    if(list.length()<2)
+        return d;
+
+    if(list.last().length()<=decimals)
+        return d;
+
+    QString sInt = list.first();
+
+    QString sFloat = list.last().mid(0,decimals);
+
+    if(sFloat.mid(decimals,1)!="0")
+    {
+        sFloat= QString::number(sFloat.toInt()+1);
+    }
+
+    QString sRe = sInt+"."+sFloat;
+
+    return sRe.toDouble();
+
+}
+
 
 
 

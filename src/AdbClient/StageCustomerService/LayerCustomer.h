@@ -18,6 +18,8 @@ public:
     explicit LayerCustomer(QWidget *parent = nullptr);
     ~LayerCustomer();
 
+    void init();
+
 private slots:
     void on_btnAdd_clicked();
 

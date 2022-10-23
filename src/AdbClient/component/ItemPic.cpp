@@ -182,7 +182,7 @@ void ItemPic::on_btnChip_clicked()
 
     UI.m_mainWidget->move(-10000,0);
 
-   QTimer::singleShot(500,this,[=](){ captrue->showCaptureScreen();});
+   QTimer::singleShot(50,this,[=](){ captrue->showCaptureScreen();});
 
 
     //  mutiScreen::Instance()->showCaptureScreen();

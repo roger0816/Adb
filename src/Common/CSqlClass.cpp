@@ -536,7 +536,7 @@ void CSqlClass::createTableSqlite()
              'LoginType'	TEXT,                           \
              'LoginAccount'	TEXT,                       \
              'ServerName'	TEXT,                       \
-             'Character'	TEXT,                           \
+             'Characters'	TEXT,                           \
              'LastTime'	TEXT,                           \
              'UpdateTime'	TEXT,                       \
              'Note1'	TEXT,                               \

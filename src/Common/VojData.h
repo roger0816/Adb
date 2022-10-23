@@ -349,7 +349,7 @@ struct CustomerGameInfo :public DataObj
         LoginType = data["LoginType"].toString();
         LoginAccount = data["LoginAccount"].toString();
         ServerName = data["ServerName"].toString();
-        Character = data["Character"].toString();
+        Characters = data["Characters"].toString();
         LastTime = data["LastTime"].toString();
         Note1 = data["Note1"].toString();
 
@@ -364,7 +364,7 @@ struct CustomerGameInfo :public DataObj
         d["LoginType"] = LoginType;
         d["LoginAccount"] = LoginAccount;
         d["ServerName"] = ServerName;
-        d["Character"] = Character;
+        d["Characters"] = Characters;
         d["LastTime"] = LastTime;
         d["Note1"] = Note1;
 
@@ -377,7 +377,7 @@ struct CustomerGameInfo :public DataObj
     QString LoginType;
     QString LoginAccount;
     QString ServerName;
-    QString Character;
+    QString Characters;
     QString LastTime;
     QString Note1;
 };

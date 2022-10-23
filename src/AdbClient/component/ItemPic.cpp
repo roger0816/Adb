@@ -1,6 +1,8 @@
 #include "ItemPic.h"
 #include "ui_ItemPic.h"
 
+
+
 ItemPic::ItemPic(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ItemPic)
@@ -9,27 +11,19 @@ ItemPic::ItemPic(QWidget *parent) :
 
     m_img = new QImage;
 
-
-    m_dialogDetal = new QDialog(this);
-
-    QGridLayout *lay=new QGridLayout;
-
-    m_lbDetailPic = new QLabel(m_dialogDetal);
-
-    m_lbDetailPic->setStyleSheet("background-color:black;");
-
-    lay->addWidget(m_lbDetailPic);
-
-    m_dialogDetal->setLayout(lay);
-
     m_dialogDetal->resize(1024,768);
     connect(ui->btnLbPicClear,&QPushButton::clicked,this,&ItemPic::clear);
 
+    connect(ui->btnUpload,&QPushButton::clicked,this,&ItemPic::slotUpload);
+
+    connect(captrue,&mutiScreen::capture_done,this,&ItemPic::slotCaptrue);
 
 }
 
 ItemPic::~ItemPic()
 {
+    delete captrue;
+
     delete m_img;
 
     delete ui;
@@ -46,6 +40,47 @@ void ItemPic::setData(QByteArray data)
 
     ui->lbPic->setPixmap(QPixmap::fromImage(m_img->scaled(ui->lbPic->size(),Qt::KeepAspectRatio)));
 
+}
+
+void ItemPic::setDataFromFilePath(QString sFile)
+{
+
+    if(sFile=="")
+    {
+        sFile= QFileDialog::getOpenFileName(this,"選擇圖檔",".","*.png *.jpg");
+    }
+
+    if(sFile!="")
+    {
+
+        m_sFilePath = sFile;
+
+        m_img->load(sFile);
+
+
+
+        m_bHasPic= true;
+
+        reSetPic();
+
+        QFile file(m_sFilePath);
+        if(file.open(QIODevice::ReadOnly))
+        {
+
+            m_data =file.readAll().toHex();
+            file.close();
+        }
+    }
+}
+
+void ItemPic::showEvent(QShowEvent *)
+{
+    reSetPic();
+}
+
+void ItemPic::resizeEvent(QResizeEvent *)
+{
+    reSetPic();
 }
 
 
@@ -70,60 +105,70 @@ QVariantMap ItemPic::data()
 void ItemPic::clear()
 {
     m_sFilePath="";
-    ui->lbPic->clear();
-    ui->lbPic->setStyleSheet("border-image: url(:/image0.png); \
-                             background-color: #f3f3f3;");
+
+    m_bHasPic = false;
+
+    reSetPic();
 }
 
 void ItemPic::showDetail()
 {
-
-    m_lbDetailPic->setPixmap(QPixmap::fromImage(m_img->scaled(m_lbDetailPic->size(),Qt::KeepAspectRatio)));
-
-
+    m_dialogDetal->m_img = m_img;
 
     m_dialogDetal->exec();
+
+}
+
+void ItemPic::slotCaptrue()
+{
+    //UI.m_mainWidget->show();
+
+    UI.m_mainWidget->move(m_pos);
+
+    QPixmap p =captrue->get_screen()->copy();
+
+    QByteArray data;
+
+    QImage image = p.toImage();
+
+    QBuffer buffer(&data);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG"); // writes image into ba in PNG format
+
+    setData(data.toHex());
+
 }
 
 void ItemPic::mousePressEvent(QMouseEvent *e)
 {
 
-    if(e->y()<ui->lbPic->height())
+    if(e->y()<ui->lbPic->height() && m_bHasPic)
     {
         showDetail();
     }
 
 }
 
-void ItemPic::on_btnUpload_clicked(QString sFilePath)
+void ItemPic::reSetPic()
 {
-    QString sFile =sFilePath;
-
-    if(sFilePath=="")
+    if(m_bHasPic)
     {
-        sFile= QFileDialog::getOpenFileName(this,"選擇圖檔",".","*.png *.jpg");
-    }
-
-    if(sFile!="")
-    {
-
-        m_sFilePath = sFile;
-
-        m_img->load(sFile);
-
         ui->lbPic->setStyleSheet(" background-color: #f3f3f3;");
 
         ui->lbPic->setPixmap(QPixmap::fromImage(m_img->scaled(ui->lbPic->size(),Qt::KeepAspectRatio)));
 
-
-        QFile file(m_sFilePath);
-        if(file.open(QIODevice::ReadOnly))
-        {
-
-            m_data =file.readAll().toHex();
-            file.close();
-        }
     }
+    else
+    {
+        ui->lbPic->clear();
+        ui->lbPic->setStyleSheet("border-image: url(:/image0.png); \
+                                 background-color: #f3f3f3;");
+    }
+}
+
+void ItemPic::slotUpload()
+{
+    setDataFromFilePath();
 
 }
 
@@ -131,21 +176,17 @@ void ItemPic::on_btnUpload_clicked(QString sFilePath)
 void ItemPic::on_btnChip_clicked()
 {
 
-        QVariantMap in;
+   //UI.m_mainWidget->hide();  //會觸發父層多個showEvent導致回來不在同畫面
 
-        QVariantList listOut;
+    m_pos=UI.m_mainWidget->pos();
 
-        QString sError;
-        ACTION.action(ACT::QUERY_PIC,in,listOut,sError);
-        qDebug()<<"dl length : "<<listOut.length();
-        if(listOut.length()>0)
-        {
-            QByteArray data;
+    UI.m_mainWidget->move(-10000,0);
 
-            data.append(listOut.first().toMap()["Data"].toByteArray());
-            qDebug()<<"data size "<<data.size();
-           setData(data);
-        }
+   QTimer::singleShot(500,this,[=](){ captrue->showCaptureScreen();});
+
+
+    //  mutiScreen::Instance()->showCaptureScreen();
+
 }
 
 

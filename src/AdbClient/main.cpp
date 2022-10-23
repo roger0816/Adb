@@ -87,6 +87,8 @@ int main(int argc, char *argv[])
 
     Widget w;
 
+    UI.m_mainWidget=&w;
+
     DialogLogin login;
 
     login.setRelease(b);

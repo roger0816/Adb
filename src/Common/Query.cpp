@@ -148,8 +148,6 @@ CData Query::implementRecall(CData data)
     {
         qDebug()<<"qeury game item : ";
 
-        qDebug()<<"ll1 : "<<data.listData.length();
-
         QVariantMap d;
 
         d["Sid"] = data.dData["Sid"];
@@ -249,7 +247,7 @@ CData Query::implementRecall(CData data)
 
     else if(data.iAciton==ACT::ADD_CUSTOM_CLASS)
     {
-
+        data.dData["Type"] = "group";
         bOk = m_sql.insertTb(SQL_TABLE::CustomerClass(),data.dData,sError);
         sOkMsg = "客戶分類新增完成";
     }
@@ -266,21 +264,52 @@ CData Query::implementRecall(CData data)
     {
 
         bOk = m_sql.delFromTb(SQL_TABLE::CustomerClass(),data.dData,sError);
-
         sOkMsg ="客戶分類刪除完成";
     }
 
     else if(data.iAciton==ACT::QUERY_CUSTOM_CLASS)
     {
 
-        QVariantMap d;
-
-        if(data.listData.length()>0)
-            d = data.listData.first().toMap();
-
+        QVariantMap d=data.dData;
+        d["Type"] = "group";
         bOk = m_sql.queryTb(SQL_TABLE::CustomerClass(),d,re.listData,sError);
 
     }
+
+    else if(data.iAciton==ACT::ADD_CUSTOM_DEBIT)
+    {
+        data.dData["Type"] = "debit";
+        bOk = m_sql.insertTb(SQL_TABLE::CustomerClass(),data.dData,sError);
+        sOkMsg = "入帳管道新增完成";
+    }
+
+    else if(data.iAciton==ACT::EDIT_CUSTOM_DEBIT)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.updateTb(SQL_TABLE::CustomerClass(),d,data.dData,sError);
+        sOkMsg = "入帳管道修改完成";
+    }
+
+    else if(data.iAciton==ACT::DEL_CUSTOM_DEBIT)
+    {
+
+        bOk = m_sql.delFromTb(SQL_TABLE::CustomerClass(),data.dData,sError);
+
+        sOkMsg ="入帳管道刪除完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_CUSTOM_DEBIT)
+    {
+
+        QVariantMap d = data.dData;
+
+        d["Type"] = "debit";
+        bOk = m_sql.queryTb(SQL_TABLE::CustomerClass(),d,re.listData,sError);
+
+    }
+
+
 
     else if(data.iAciton==ACT::ADD_FACTORY_CLASS)
     {
@@ -567,14 +596,6 @@ CData Query::implementRecall(CData data)
 
         sOkMsg = "修改完成";
     }
-
-    else if(data.iAciton==ACT::QUERY_SCHEDULE)
-    {
-
-        bOk = m_sql.queryTb(SQL_TABLE::Schedule(),data.dData,re.listData,sError);
-
-    }
-
     else if(data.iAciton==ACT::ADD_SCHEDULE)
     {
 
@@ -583,6 +604,30 @@ CData Query::implementRecall(CData data)
 
         sOkMsg = "修改完成";
     }
+
+    else if(data.iAciton==ACT::QUERY_SCHEDULE)
+    {
+
+        bOk = m_sql.queryTb(SQL_TABLE::Schedule(),data.dData,re.listData,sError);
+
+    }
+
+    else if(data.iAciton==ACT::UPLOAD_PIC)
+    {
+
+
+        bOk = m_sql.insertTb(SQL_TABLE::PicData(),data.dData,sError,true);
+
+        sOkMsg = "圖片上傳完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_PIC)
+    {
+
+        bOk = m_sql.queryTb(SQL_TABLE::PicData(),data.dData,re.listData,sError);
+
+    }
+
 
 
 

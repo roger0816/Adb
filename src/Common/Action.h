@@ -23,7 +23,7 @@ public:
 
     void setServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
 
-    bool checkLogin(QString sUser,QString sPass,QString &sError);
+    int checkLogin(QString sUser,QString sPass,QString &sError);
 
     bool addUser(QString sUser, QString sPass, QString sCid, QString sName, int iLv, QDate startDate, QString &sError);
 

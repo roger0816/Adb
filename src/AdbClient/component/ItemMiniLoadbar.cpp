@@ -20,7 +20,7 @@ ItemMiniLoadbar::ItemMiniLoadbar(QWidget *parent) :
         m_listRes<<":/loading/loading1-"+QString::number(i)<<".png";
     }
 
-    startTimer(50);
+    startTimer(m_iTimerMsec);
 
     //    QPixmap pixmap(":/icon/icon/iconImage.png");
 
@@ -84,14 +84,15 @@ void ItemMiniLoadbar::timerEvent(QTimerEvent *)
 
 
 
-    m_iMsec +=200;
+    m_iMsec +=m_iTimerMsec;
 
-    if(m_iMsec >= 20000)
+    if(m_iMsec >= 99999)
         m_iMsec = 0;
 
     if(ui->lbPic->isVisible())
     {
-        m_iIdx++;
+        if(m_iMsec%(m_iTimerMsec*10)==0)
+            m_iIdx++;
 
         if(m_iIdx>=m_listRes.length())
             m_iIdx = 0;

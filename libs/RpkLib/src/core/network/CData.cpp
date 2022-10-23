@@ -1,5 +1,5 @@
 #include "CData.h"
-
+#include <QDebug>
 CData::CData()
 {
 

@@ -81,16 +81,13 @@ void LayerCustomer::refresh()
         ui->tb->setItem(i,3,UI.tbItem(data["Currency"]));
         ui->tb->setItem(i,4,UI.tbItem(data["Money"]));
 
-        ui->tb->setItem(i,5,UI.tbItem(data["PayType"]));
-        ui->tb->setItem(i,6,UI.tbItem(data["PayInfo"]));
-
         QDateTime updatetime =QDateTime::fromString(data["UpdateTime"].toString(),"yyyyMMddhhmmss");
 
         QString sUserName = ACTION.getUser(data["UserSid"].toString()).Name;
 
-        ui->tb->setItem(i,9,UI.tbItem(updatetime));
-        ui->tb->setItem(i,10,UI.tbItem(sUserName));
-        ui->tb->setItem(i,11,UI.tbItem(data["Note1"]));
+        ui->tb->setItem(i,7,UI.tbItem(updatetime));
+        ui->tb->setItem(i,8,UI.tbItem(sUserName));
+        ui->tb->setItem(i,9,UI.tbItem(data["Note1"]));
 
     }
 }

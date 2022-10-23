@@ -27,7 +27,7 @@ void Action::setServer(bool b, QString sIp, QString sPort)
 
 
 
-bool Action::checkLogin(QString sUser, QString sPass, QString &sError)
+int Action::checkLogin(QString sUser, QString sPass, QString &sError)
 {
 qDebug()<<"check login : "<<sUser<<" , "<<sPass<<" , error : "<<sError;
     CData data;
@@ -40,39 +40,28 @@ qDebug()<<"check login : "<<sUser<<" , "<<sPass<<" , error : "<<sError;
     CData dRe = query(data);
 
     bool bOk = dRe.bOk;
-    qDebug()<<"re ok : "<<dRe.bOk;
+
     sError = dRe.sMsg;
+
+    int iRe = 0;
 
     if(bOk)
     {
         m_currentUser.setData(dRe.dData);
         m_sCurrentUserId = m_currentUser.Sid;
         m_sCurrentUserName = m_currentUser.Name;
+
+        iRe =1;
+    }
+    else
+    {
+        if(dRe.iState==0)
+            iRe = -1;
+        else
+            iRe = 0;
     }
 
-    return bOk;
-
-
-    //    m_sCurrentLoginUser.clear();
-
-    //    int iRe = -1;
-
-    //    if(bOk && data.listData.length()>0)
-    //    {
-
-
-    //        m_sCurrentLoginUser = data.sUser;
-
-    //        iRe = dRe.listData.first().toInt();
-
-    //        if(m_sCurrentLoginUser=="root")
-    //            iRe =99;
-    //    }
-
-    //    m_iUserLv = iRe;
-
-    //    return iRe;
-
+    return iRe;
 
 }
 
@@ -496,8 +485,6 @@ void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
 
 
     QString sError;
-
-    qDebug()<<"lll0"<<listSend.length();
 
     action(ACT::EDIT_GAME_ITEM,listSend,sError);
 

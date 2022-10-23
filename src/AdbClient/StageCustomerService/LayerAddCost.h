@@ -26,6 +26,8 @@ private:
 
     CustomerCost m_lastCostData;
 
+    QVariantList m_listDebit;
+
     void checkTotal();
 
     void showEvent(QShowEvent*) override;
@@ -41,6 +43,8 @@ signals:
 
 public slots:
 
+    void refresh();
+
     void on_btnAddCostBack_clicked();
 
 private slots:
@@ -51,6 +55,7 @@ private slots:
     void on_btnOk_clicked();
 
     void on_sbAdd_valueChanged(double arg1);
+
 };
 
 #endif // LAYERADDCOST_H

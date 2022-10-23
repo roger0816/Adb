@@ -88,7 +88,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
     qDebug()<<"sql : "<<bOk;
     if(bOk)
     {
-       // setTrigger(sTableName,sDateTime);
+        // setTrigger(sTableName,sDateTime);
         //db寫入修改記錄、並存在server 的map
     }
     else
@@ -140,7 +140,7 @@ bool CSqlClass::delFromTb(QString sTableName, QVariantMap conditions, QString &s
 
     if(bRe)
     {
-      //  setTrigger(sTableName,sDateTime);
+        //  setTrigger(sTableName,sDateTime);
     }
     else
         sError = query.lastError().text();
@@ -171,17 +171,36 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
     QStringList listKey = conditions.keys();
 
 
+    QString sOrderBy="";
+
+    int iCount = 0;
 
     for(int i=0;i<listKey.length();i++)
     {
-        if(i==0)
+        QString sKey = listKey.at(i);
+        if(sKey.toUpper()=="ASC")
+        {
+            sOrderBy =" Order By "+conditions[sKey].toString();
+            continue;
+        }
+        if(sKey.toUpper()=="DESC")
+        {
+            sOrderBy =" Order By "+conditions[sKey].toString()+" DESC";
+            continue;
+        }
+
+
+        if(iCount==0)
             sSub+="  WHERE ";
         else
             sSub+=" AND ";
 
-        sSub+= listKey.at(i)+" =? ";
-
+        sSub+= sKey+" =? ";
+        iCount++;
     }
+
+    if(sOrderBy!="")
+        sSub=sSub+sOrderBy;
 
     query.prepare(sCmd+sSub);
 
@@ -190,10 +209,17 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
     QVariantList listTmp;
 
+    iCount =0;
     for(int j=0;j<listKey.length();j++)
     {
-        query.bindValue(j,conditions[listKey.at(j)]);
-        listTmp.append(conditions[listKey.at(j)]);
+        QString sKey =listKey.at(j);
+        if(sKey.toUpper()=="ASC" || sKey.toUpper()=="DESC")
+            continue;
+
+        query.bindValue(iCount,conditions[sKey]);
+        listTmp.append(conditions[sKey]);
+
+        iCount++;
     }
 
     /*  ex
@@ -526,12 +552,14 @@ void CSqlClass::createTableSqlite()
              'Currency'	TEXT,                               \
              'Rate'	TEXT,                   \
              'AddRate'	TEXT,                   \
-             'Type'	TEXT,                               \
-             'Change'	TEXT,                        \
-             'Value'	TEXT,                            \
+             'DebitSid'	TEXT,                               \
+             'DebitNote'	TEXT,                               \
+             'ChangeValue'	TEXT,                        \
+             'Total'	TEXT,                            \
              'UserSid'	TEXT,                           \
              'UpdateTime'	TEXT,                       \
              'OrderTime'	TEXT,                       \
+             'PicMd5'	TEXT,                               \
              'Note1'	TEXT,                               \
              'Note2'	TEXT,                               \
              PRIMARY KEY('Sid' AUTOINCREMENT)            \
@@ -608,6 +636,16 @@ void CSqlClass::createTableSqlite()
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
 
+    sql.clear();
+    sql.exec("CREATE TABLE 'PicData' ( \
+             'Sid'	INTEGER, \
+             'Md5'	BLOB, \
+             'Type'	TEXT, \
+             'Data'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
+
 
 }
 
@@ -654,7 +692,7 @@ void CSqlClass::saveTrigger(QString sApi, QString sDateTime)
 
     bool bRe=query.exec(sCmd);
 
-        qDebug()<<"sCmd : "<<sCmd<<" , "<<bRe;
+    qDebug()<<"sCmd : "<<sCmd<<" , "<<bRe;
     if(bRe)
         emit tbUpdate(sApi,sDateTime);
 }

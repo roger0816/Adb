@@ -45,7 +45,7 @@ protected:
 
     bool isQueryApi(int iApi);
 
-    bool isNeedFromServer(int iApi);
+    bool isNeedFromServer(int iApi, const QVariantMap conditions);
 
     bool m_bDataFromServer = true;
 
@@ -67,16 +67,18 @@ private:
 
     QVariantMap m_dKeepData;
 
-    void writeTrigger(QString sTrigger,bool isFromHeartBeat);
+   // void writeTrigger(QString sTrigger,bool isFromHeartBeat);
 
-
+    QString apiCacheKey(QString sApi, QVariantMap conditions);
 
 signals:
 
     void lockLoading(bool b);
 
+    void updateTrigger(QString sApiGroup);
+
 public slots:
-    void updateIndx(QString sId, QByteArray data, int);
+    void serverTrigger(QString sId, QByteArray data, int);
 
 
 };

@@ -90,16 +90,6 @@
         </column>
         <column>
          <property name="text">
-          <string>付款方式</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>帳號資訊</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>消費紀錄</string>
          </property>
         </column>

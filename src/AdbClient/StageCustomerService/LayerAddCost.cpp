@@ -16,7 +16,7 @@ LayerAddCost::~LayerAddCost()
 void LayerAddCost::setCustomer(QVariantMap data)
 {
 
-   // m_rate = ACTION.rate("",true).last();
+    // m_rate = ACTION.rate("",true).last();
 
     m_rate = ACTION.primeRate("",true);
 
@@ -58,9 +58,9 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     m_lastCostData.Currency = m_dataCustomer.Currency;
 
-    ui->lbCurrentCost->setText(m_lastCostData.Value);
+    ui->lbCurrentCost->setText(m_lastCostData.Total);
 
-    ui->lbCurrentCost_2->setText(m_lastCostData.Value);
+    ui->lbCurrentCost_2->setText(m_lastCostData.Total);
 
     ui->lbTime->setText(time.toString("yyyy/MM/dd hh:mm"));
 }
@@ -71,17 +71,17 @@ void LayerAddCost::checkTotal()
     m_addValue = ui->sb->value();
 
 
-  //  QString sCustomerKey = GLOBAL.originCurrency(ui->lbCurrency->text());
+    //  QString sCustomerKey = GLOBAL.originCurrency(ui->lbCurrency->text());
 
     int iTmp = qBound(0,m_rate.listKey().indexOf(ui->lbCurrency->text()),m_rate.listData.length()-1);
 
     double sCustomerRate = m_rate.listData.at(iTmp).second.toDouble();
 
-     double sSelectRate=1;
+    double sSelectRate=1;
 
     if(ui->cbCurrency->currentText()!=ui->lbCurrency->text())
     {
-      //  QString sSelectKey = GLOBAL.originCurrency(ui->cbCurrency->currentText());
+        //  QString sSelectKey = GLOBAL.originCurrency(ui->cbCurrency->currentText());
         int iIdx = qBound(0,m_rate.listKey().indexOf(ui->cbCurrency->currentText()),m_rate.listData.length()-1);
         sSelectRate = m_rate.listData.at(iIdx).second.toDouble();
 
@@ -99,23 +99,39 @@ void LayerAddCost::checkTotal()
     //  ui->lbChange->setText(ui->lbCurrency->text()+" : $ "+QString::number(m_addValue,'f',2));
 
 
-    m_lastCostData.Change=QString::number(m_addValue,'f',2);
+    m_lastCostData.ChangeValue=QString::number(m_addValue,'f',2);
 
-    m_lastCostData.Value= QString::number(m_addValue+ ui->lbCurrentCost->text().toDouble(),'f',2);
+    m_lastCostData.Total= QString::number(m_addValue+ ui->lbCurrentCost->text().toDouble(),'f',2);
 
-    ui->lbAdd->setText(m_lastCostData.Change);
+    ui->lbAdd->setText(m_lastCostData.ChangeValue);
 
-    ui->lbAfAdd->setText(m_lastCostData.Value);
+    ui->lbAfAdd->setText(m_lastCostData.Total);
 }
 
 void LayerAddCost::showEvent(QShowEvent *)
 {
     ui->lbTime->setText(QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm"));
 
+    QTimer::singleShot(50,Qt::PreciseTimer,this,SLOT(refresh()));
 
-//    QPair<QString,QString>s("新台幣(NTD)","1");
 
-//    m_rate.listData.insert(0,s);
+}
+
+void LayerAddCost::refresh()
+{
+    QString sError;
+    QVariantMap tmp;
+    tmp["ASC"]="Id";
+    QVariantList listOut;
+    ACTION.action(ACT::QUERY_CUSTOM_DEBIT,tmp,listOut,sError);
+
+    m_listDebit = listOut;
+
+    QStringList list =GLOBAL.listMapToList(m_listDebit,"Name");
+
+    ui->cbDebit->clear();
+
+    ui->cbDebit->addItems(list);
 }
 
 void LayerAddCost::on_btnAddCostBack_clicked()
@@ -141,8 +157,8 @@ void LayerAddCost::on_btnCopy_clicked()
 void LayerAddCost::on_cbCurrency_currentIndexChanged(int index)
 {
 
-//    if(m_bLock)
-//        return;
+    //    if(m_bLock)
+    //        return;
 
     m_bLock= true;
 
@@ -169,40 +185,63 @@ void LayerAddCost::on_btnOk_clicked()
     m_lastCostData.Sid="";
     m_lastCostData.OrderId="-1";
     m_lastCostData.Note1=ui->txNote1->toPlainText();
-    m_lastCostData.Type=ui->txType->text();
+
+    QVariantMap debit = m_listDebit.at(qBound(0,ui->cbDebit->currentIndex(),m_listDebit.length()-1)).toMap();
+    m_lastCostData.DebitSid=debit["Sid"].toString();
+    m_lastCostData.DebitNote=ui->txDebitNote->text();
+
     m_lastCostData.AddRate = ui->sbAdd->text();
     //m_lastCostData.Rate = ACTION.rate().Sid;
 
-   // m_lastCostData.Rate = ACTION.rate("",true,true).last().Sid;
+    // m_lastCostData.Rate = ACTION.rate("",true,true).last().Sid;
 
     m_lastCostData.Rate = ACTION.costRate("",true).Sid;
 
 
-    QString sMsg = "請確認加值內容\n "+ui->lbCurrency->text()+": $"+m_lastCostData.Change+"\n確定要送出嗎?";
+
+    QString sMsg = "請確認加值內容\n "+ui->lbCurrency->text()+": $"+m_lastCostData.ChangeValue+"\n確定要送出嗎?";
 
     int iRet = UI.showMsg("提醒!",sMsg,QStringList()<<"否"<<"是");
     if(iRet==1)
     {
         QString sError;
 
-        bool b=ACTION.setCustomerCost(m_lastCostData,sError);
+        QVariantMap picData;
 
-        UI.showMsg("",sError,"OK");
+        picData = ui->wPic->data();
 
-        if(b)
+        bool bOk= ACTION.action(ACT::UPLOAD_PIC,picData,sError);
+
+        if(!bOk)
         {
-            m_dataCustomer.Money=m_lastCostData.Value;
-
-            QVariantMap out;
-
-            ACTION.action(ACT::EDIT_CUSTOMER,m_dataCustomer.data(),out,sError);
-
-            setCustomer(m_dataCustomer.data());
-
-            checkTotal();
+            DMSG.showMsg("","圖片上傳失敗\n"+sError,"OK");
         }
 
-       emit back();
+        else
+        {
+            sError.clear();
+
+            m_lastCostData.PicMd5 = picData["Md5"].toString();
+
+            bool b=ACTION.setCustomerCost(m_lastCostData,sError);
+
+            UI.showMsg("",sError,"OK");
+
+            if(b)
+            {
+                m_dataCustomer.Money=m_lastCostData.Total;
+
+                QVariantMap out;
+
+                ACTION.action(ACT::EDIT_CUSTOMER,m_dataCustomer.data(),out,sError);
+
+                setCustomer(m_dataCustomer.data());
+
+                checkTotal();
+            }
+
+            emit back();
+        }
     }
 
 
@@ -214,6 +253,42 @@ void LayerAddCost::on_btnOk_clicked()
 
 void LayerAddCost::on_sbAdd_valueChanged(double arg1)
 {
-       checkTotal();
+    checkTotal();
 }
+
+
+//void LayerAddCost::on_pushButton_clicked()
+//{
+//    QVariantMap in;
+
+//    in = ui->wPic->data();
+
+//    QString sError;
+
+//    ACTION.action(ACT::UPLOAD_PIC,in,sError);
+
+//    DMSG.showMsg("",sError,"OK");
+
+//}
+
+
+//void LayerAddCost::on_pushButton_2_clicked()
+//{
+//    QVariantMap in;
+
+//    QVariantList listOut;
+
+//    QString sError;
+//    ACTION.action(ACT::QUERY_PIC,in,listOut,sError);
+//    qDebug()<<"dl length : "<<listOut.length();
+//    if(listOut.length()>0)
+//    {
+//        QByteArray data;
+
+//        data.append(listOut.first().toMap()["Data"].toByteArray());
+//        qDebug()<<"data size "<<data.size();
+//       ui->wPic->setData(data);
+//    }
+
+//}
 

@@ -216,25 +216,28 @@ struct CustomerData :public DataObj
 struct CustomerCost
 {
     CustomerCost(){}
+
     CustomerCost(QVariantMap data)
     {
         Sid = data["Sid"].toString();
         CustomerSid = data["CustomerSid"].toString();
         Currency = data["Currency"].toString();
         OrderId = data["OrderId"].toString();
-        Change = data["Change"].toString();
-        Type = data["Type"].toString();
+        ChangeValue = data["ChangeValue"].toString();
+        DebitSid = data["DebitSid"].toString();
+        DebitNote = data["DebitNote"].toString();
         Rate = data["Rate"].toString();
         AddRate = data["AddRate"].toString();
 
-        Value = data["Value"].toString();
+        Total = data["Total"].toString();
 
-        if(Value=="")
-            Value="0";
+        if(Total=="")
+            Total="0";
 
         UserSid = data["UserSid"].toString();
         OrderTime = data["OrderTime"].toString();
         UpdateTime = data["UpdateTime"].toString();
+        PicMd5 = data["PicMd5"].toString();
         Note1 = data["Note1"].toString();
         Note2 = data["Note2"].toString();
     }
@@ -247,14 +250,16 @@ struct CustomerCost
         re["CustomerSid"]=CustomerSid;
         re["OrderId"]=OrderId;
         re["Currency"]=Currency;
-        re["Type"]=Type;
+        re["DebitSid"]=DebitSid;
+        re["DebitNote"]=DebitNote;
         re["Rate"]=Rate;
         re["AddRate"]=AddRate;
-        re["Change"]=Change;
-        re["Value"]=Value;
+        re["ChangeValue"]=ChangeValue;
+        re["Total"]=Total;
         re["UserSid"]=UserSid;
         re["OrderTime"]=OrderTime;
         re["UpdateTime"]=UpdateTime;
+        re["PicMd5"]=PicMd5;
         re["Note1"]=Note1;
         re["Note2"]=Note2;
 
@@ -268,13 +273,15 @@ struct CustomerCost
     QString OrderId;
     QString Rate;
     QString AddRate="0";
-    QString Type;
+    QString DebitSid;
+    QString DebitNote;
     QString Currency;
-    QString Change ="0";
-    QString Value ="0";
+    QString ChangeValue ="0";
+    QString Total ="0";
     QString UserSid;
     QString OrderTime;
     QString UpdateTime;
+    QString PicMd5;
     QString Note1;
     QString Note2;
 

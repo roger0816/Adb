@@ -5,7 +5,7 @@ ActionObj::ActionObj(QObject *parent)
 {
 
     connect(&RPKCORE.network,SIGNAL(replyFromServer(QString,QByteArray,int))
-            ,this,SLOT(updateIndx(QString,QByteArray,int)));
+            ,this,SLOT(serverTrigger(QString,QByteArray,int)));
 
     m_timer.connect(&m_timer,&QTimer::timeout,this,[=]()
     {
@@ -14,7 +14,7 @@ ActionObj::ActionObj(QObject *parent)
 
         data.iAciton=1;
 
-        RPKCORE.network.connectHost("getUpdate",m_ip,m_port,data.enCodeJson());
+        RPKCORE.network.connectHost("getTrigger",m_ip,m_port,data.enCodeJson());
 
     });
 
@@ -145,6 +145,9 @@ CData ActionObj::callServer(CData data)
     CData re;
 
     QString sApi = QString::number(data.iAciton);
+
+    QString sCacheKey = apiCacheKey(sApi,data.dData);
+
     while(sApi.length()<4)
         sApi="0"+sApi;
 
@@ -152,18 +155,20 @@ CData ActionObj::callServer(CData data)
 
     bool bIsQuery = isQueryApi(data.iAciton);
 
-    bool bNeedFromeServer =isNeedFromServer(data.iAciton);
+    bool bNeedFromeServer =isNeedFromServer(data.iAciton,data.dData);
+
+       qDebug()<<"call aip :"+sApi<<",data from server:"<<bNeedFromeServer<<",cacheKey:"<<sCacheKey;
 
     if(!bNeedFromeServer)
     {
-        re.deCodeJson(m_dKeepData[sApi].toByteArray());
+
+        re.deCodeJson(m_dKeepData[sCacheKey].toByteArray());
 
         return re;
     }
 
     qDebug()<<"api : "<<sApi<<"is query api :"<< bIsQuery<<" , need frome server: "<<bNeedFromeServer;
-    qDebug()<<"local trigger : "<<m_dLocalTrigger;
-    qDebug()<<"update trigger : "<<m_dUpdateTrigger;
+
 
 
     emit lockLoading(true);
@@ -175,22 +180,48 @@ CData ActionObj::callServer(CData data)
     qDebug()<<data.enCodeJson().toStdString().c_str();
     RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
 
+
     re.deCodeJson(out);
 
-    if(re.bOk &&bIsQuery)
+
+    auto  clearGroupCache = [=](QString sGroup)
     {
-        if(isQueryApi(data.iAciton))
+        QStringList listKey = m_dKeepData.keys();
+        foreach(QString v , listKey)
+        {
+            if(v.length()>2&&v.left(2) ==sGroup)
+            {
+                m_dKeepData[v]=QVariant();
+            }
+        }
+    };
+
+
+
+    if(re.bOk)
+    {
+
+        QString sCacheKey = apiCacheKey(sApi,data.dData);
+
+
+
+        if(bIsQuery)
         {
             m_dLocalTrigger[sGroup] = re.sTrigger;
+
+            m_dKeepData[sCacheKey] = out;
         }
         else
         {
             //如果上傳新資料，本地端該群資料需重取，只用heartbeat 會有時間差
             m_dLocalTrigger[sGroup] = "0";
 
+            clearGroupCache(sGroup);
+
         }
 
-        m_dKeepData[sApi] = out;
+
+
 
     }
 
@@ -210,8 +241,9 @@ bool ActionObj::isQueryApi(int iApi)
     return m_queryObj.isQueryApi(iApi);
 }
 
-bool ActionObj::isNeedFromServer(int iApi)
+bool ActionObj::isNeedFromServer(int iApi, const QVariantMap conditions)
 {
+
     QString sApi=QString::number(iApi);
 
     while(sApi.length()<4)
@@ -230,39 +262,90 @@ bool ActionObj::isNeedFromServer(int iApi)
 
 
     if(m_dLocalTrigger[sGroup]=="0")
+    {
         return true;
+    }
+    QString sCacheKey = apiCacheKey(sApi,conditions);
 
-    if(m_dKeepData.keys().indexOf(sApi)<0)
+    qDebug()<<m_dKeepData[sCacheKey];
+
+    if(!m_dKeepData.keys().contains(sCacheKey)
+            || m_dKeepData[sCacheKey].toString()=="")
+    {
+        qDebug()<<"no cacheData";
+
         return true;
-
+    }
 
     return m_dLocalTrigger[sGroup] != m_dUpdateTrigger[sGroup];
 
 }
 
-void ActionObj::updateIndx(QString sId, QByteArray data, int )
+QString ActionObj::apiCacheKey(QString  sApi,QVariantMap conditions)
 {
 
-    if(sId=="getUpdate")
+    QString sRe = sApi;
+
+    QString sCondition="_";
+
+    QStringList listTmp = conditions.keys();
+
+    foreach(QString v, listTmp)
+    {
+        sCondition+=v+"="+conditions[v].toString();
+    }
+
+    if(listTmp.length()>0)
+        sRe=sRe+sCondition;
+
+    return sRe;
+}
+
+void ActionObj::serverTrigger(QString sId, QByteArray data, int )
+{
+
+    if(sId=="getTrigger")
     {
 
-        QString sTrigger(data);
+        CData re(data);
 
-        QStringList listSt = sTrigger.split(",");
-
-        QMap<QString,QString> d;
-
-        foreach(QString st,listSt)
+        if(re.iAciton==1 && re.iState==ACT_RECALL)
         {
 
-            QStringList tmp = st.split("=");
+            QString sTrigger(re.dData["trigger"].toString());
 
-            d[tmp.first()] = tmp.last();
+            QStringList listSt = sTrigger.split(",");
+
+            QMap<QString,QString> d;
+
+            foreach(QString st,listSt)
+            {
+
+                QStringList tmp = st.split("=");
+
+                QString sApiGroup = tmp.first();
+
+                QString sTrigger = tmp.last();
+
+                d[sApiGroup] = sTrigger;
+
+                if(m_dLocalTrigger[tmp.first()]!=""
+                        && m_dLocalTrigger[tmp.first()]!="0" )
+                {
+                    if(m_dLocalTrigger[sApiGroup] !=sTrigger)
+
+                        emit updateTrigger(sApiGroup);
+                }
+
+
+            }
+
+            m_dUpdateTrigger = d;
+
+
+
 
         }
-
-        m_dUpdateTrigger = d;
-
     }
 
 

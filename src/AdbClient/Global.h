@@ -31,6 +31,8 @@ public:
 
 //    GLOBAL_DATA::Data m_data;
 
+    QStringList listMapToList(const QVariantList list,QString sKey);
+
     bool isDiff(QStringList listKey, QVariantMap pre, QVariantMap current);
 
     QString displayCurrency(QString st);

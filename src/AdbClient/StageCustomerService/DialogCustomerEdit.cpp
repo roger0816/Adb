@@ -67,9 +67,9 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     ui->cbCost->setCurrentIndex(iCbIdx);
 
-    ui->txPayType->setText(m_data["PayType"].toString());
+//    ui->txPayType->setText(m_data["PayType"].toString());
 
-    ui->txPayInfo->setText(m_data["PayInfo"].toString());
+//    ui->txPayInfo->setText(m_data["PayInfo"].toString());
 
     ui->txNote1->setText(m_data["Note1"].toString());
 
@@ -92,9 +92,9 @@ QVariantMap DialogCustomerEdit::data()
 
     m_data["Name"] = ui->txName->text().trimmed();
 
-    m_data["PayType"] = ui->txPayType->text().trimmed();
+//    m_data["PayType"] = ui->txPayType->text().trimmed();
 
-    m_data["PayInfo"] = ui->txPayInfo->text().trimmed();
+//    m_data["PayInfo"] = ui->txPayInfo->text().trimmed();
 
     int iClassIdx =qBound(0,ui->cbClass->currentIndex(),m_listClass.length()-1);
 

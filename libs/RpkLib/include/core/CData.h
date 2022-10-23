@@ -20,7 +20,7 @@ public:
 
     explicit CData(QByteArray data);
 
-    int iAciton;
+    int iAciton=0;
 
     QString sUser;
 
@@ -30,7 +30,7 @@ public:
     QString sTrigger;
 
 
-    bool bOk;
+    bool bOk =false;
 
     int iState = ACT_SEND;
 
@@ -80,6 +80,9 @@ public:
 
     bool deCodeJson(QByteArray jsonData)
     {
+        if(jsonData.length()==0)
+            return false;
+
         QByteArray tmp = QString(END_DATA).toLatin1();
 
         QByteArray d =jsonData.remove(jsonData.length()-tmp.length(),tmp.length());

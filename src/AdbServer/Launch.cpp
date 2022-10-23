@@ -30,15 +30,6 @@ void Launch::getData(QByteArray dData, uintptr_t handleId)
 
     data.deCodeJson(dData);
 
-    if(data.iAciton==1)
-    {
-        RPKCORE.network.recallClient(queryObj.heartBeat(),handleId);
-
-        return;
-    }
-
-
-
 
     CData reData = queryObj.queryData(data);
 

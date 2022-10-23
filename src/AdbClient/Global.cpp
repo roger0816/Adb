@@ -13,6 +13,21 @@ Global::~Global()
     qDebug()<<"~Global";
 }
 
+QStringList Global::listMapToList(const QVariantList list, QString sKey)
+{
+    QStringList listRe;
+
+    foreach(QVariant v,list)
+    {
+        if(v.toMap().keys().contains(sKey))
+        {
+              listRe.append(v.toMap()[sKey].toString());
+        }
+    }
+
+    return listRe;
+}
+
 
 
 

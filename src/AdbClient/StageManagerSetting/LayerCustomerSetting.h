@@ -23,18 +23,27 @@ public:
 
 private slots:
 
+    void refresh();
+
     void on_btnCusClassAdd_clicked();
 
     void on_btnCusClassEdit_clicked();
 
     void on_tbCusClass_cellDoubleClicked(int, int);
 
-    void refresh();
+
+    void on_btnDebitEdit_clicked();
+
+    void on_btnDebitAdd_clicked();
+
+    void on_tbDebit_cellDoubleClicked(int, int);
 
 private:
     Ui::LayerCustomerSetting *ui;
 
          QVariantList m_listCustomer;
+
+         QVariantList m_listDebit;
 };
 
 #endif // LAYERCUSTOMERSETTING_H

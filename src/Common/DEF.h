@@ -31,7 +31,7 @@ struct SQL_TABLE
     static QString PayType(){return "PayType";}
     static QString UserBonus(){return "UserBonus";}
     static QString Schedule(){return "Schedule";}
-
+    static QString PicData(){return "PicData";}
 };
 
 namespace ACT
@@ -81,7 +81,12 @@ enum _KEY
     ADD_CUSTOM_CLASS = 1701,
     EDIT_CUSTOM_CLASS,
     DEL_CUSTOM_CLASS,
+    ADD_CUSTOM_DEBIT = 1711,
+    EDIT_CUSTOM_DEBIT,
+    DEL_CUSTOM_DEBIT,
+
     QUERY_CUSTOM_CLASS=1731,
+    QUERY_CUSTOM_DEBIT,
 
     ADD_FACTORY_CLASS = 1801,
     EDIT_FACTORY_CLASS,
@@ -116,7 +121,10 @@ enum _KEY
 
 
     ADD_PRIMERATE=2501,
-    QUERY_PRIMERATE=2531
+    QUERY_PRIMERATE=2531,
+
+    UPLOAD_PIC=2601,
+    QUERY_PIC=2603
 
 
 };

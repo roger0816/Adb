@@ -40,6 +40,8 @@ private:
 
     QList<bool> m_list;
 
+    int m_iTimerMsec = 50;
+
 private slots:
 
     void slotChangeEnaled();

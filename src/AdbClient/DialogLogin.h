@@ -2,11 +2,19 @@
 #define DIALOGLOGIN_H
 
 #include <QDialog>
+#include <QPaintEvent>
+#include <QPainter>
 #include "Global.h"
 #include <QCloseEvent>
+#include <QBitmap>
 
 namespace Ui {
 class DialogLogin;
+}
+
+
+namespace _DialogLogin {
+enum{ _Close=-1,_LoginFail, _LoginOk=1};
 }
 
 class DialogLogin : public QDialog
@@ -23,6 +31,8 @@ public:
 
     void closeEvent(QCloseEvent *) override;
 
+    void paintEvent(QPaintEvent *) override;
+
 private slots:
     void on_btnLogin_clicked();
 
@@ -31,7 +41,7 @@ signals:
 private:
     Ui::DialogLogin *ui;
 private:
-    int m_iRec=-1;
+
 };
 
 #endif // DIALOGLOGIN_H

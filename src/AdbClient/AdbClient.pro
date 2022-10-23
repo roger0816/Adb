@@ -15,13 +15,15 @@ UI_DIR =$$PWD/obj
 DESTDIR =$$PWD/../../bin/
 
 INCLUDEPATH+= \
+              component \
               StageCustomerService \
               StageOrder \
               StageReport \
               StageManagerSetting
 
 SOURCES += \
-    CSideMenu.cpp \
+    component/CLinkTable.cpp \
+    component/CSideMenu.cpp \
     DialogBulletinEdit.cpp \
     DialogCommon.cpp \
     DialogEditUser.cpp \
@@ -30,8 +32,9 @@ SOURCES += \
     DialogMsg.cpp \
     Global.cpp \
     GlobalUi.cpp \
-    ItemMiniLoadbar.cpp \
-    Label3.cpp \
+    component/ItemMiniLoadbar.cpp \
+    component/ItemPic.cpp \
+    component/Label3.cpp \
     LayerBulletin.cpp \
     LayerOrder.cpp \
     StageAccount.cpp \
@@ -68,7 +71,8 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
-    CSideMenu.h \
+    component/CLinkTable.h \
+    component/CSideMenu.h \
     DialogBulletinEdit.h \
     DialogCommon.h \
     DialogEditUser.h \
@@ -77,8 +81,9 @@ HEADERS += \
     DialogMsg.h \
     Global.h \
     GlobalUi.h \
-    ItemMiniLoadbar.h \
-    Label3.h \
+    component/ItemMiniLoadbar.h \
+    component/ItemPic.h \
+    component/Label3.h \
     LayerBulletin.h \
     LayerOrder.h \
     StageAccount.h \
@@ -114,14 +119,14 @@ HEADERS += \
     widget.h
 
 FORMS += \
-    CSideMenu.ui \
+    component/CSideMenu.ui \
     DialogBulletinEdit.ui \
     DialogCommon.ui \
     DialogEditUser.ui \
     DialogInput.ui \
     DialogLogin.ui \
     DialogMsg.ui \
-    ItemMiniLoadbar.ui \
+    component/ItemMiniLoadbar.ui \
     LayerBulletin.ui \
     LayerOrder.ui \
     StageAccount.ui \
@@ -154,6 +159,7 @@ FORMS += \
     StageReport/LayerSchedule.ui \
     StageReport/StageReport.ui \
     StageTest.ui \
+    component/ItemPic.ui \
     widget.ui
 
 # Default rules for deployment.

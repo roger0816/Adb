@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
+    <width>402</width>
     <height>300</height>
    </rect>
   </property>
@@ -178,6 +178,9 @@ background-color:#3c78b4;
          </item>
          <item row="2" column="1">
           <widget class="QCheckBox" name="checkBox">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="text">
             <string>儲存帳號</string>
            </property>

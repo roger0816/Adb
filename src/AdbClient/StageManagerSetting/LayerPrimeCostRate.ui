@@ -76,13 +76,13 @@
        <widget class="QWidget" name="widget_3" native="true">
         <property name="minimumSize">
          <size>
-          <width>100</width>
-          <height>100</height>
+          <width>180</width>
+          <height>160</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>240</width>
+          <width>180</width>
           <height>16777215</height>
          </size>
         </property>
@@ -117,13 +117,6 @@
             </size>
            </property>
            <layout class="QFormLayout" name="formLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="lb0">
-              <property name="text">
-               <string>美金(USD)</string>
-              </property>
-             </widget>
-            </item>
             <item row="2" column="1">
              <widget class="QLineEdit" name="txHKD"/>
             </item>
@@ -142,28 +135,35 @@
             <item row="2" column="0">
              <widget class="QLabel" name="lb1">
               <property name="text">
-               <string>港幣(HKD)</string>
+               <string>港幣</string>
               </property>
              </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="lb2">
               <property name="text">
-               <string>人民幣(RMB)</string>
+               <string>人民幣</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="lb3">
               <property name="text">
-               <string>林吉特(MYR)</string>
+               <string>林吉特</string>
               </property>
              </widget>
             </item>
             <item row="5" column="0">
              <widget class="QLabel" name="lb4">
               <property name="text">
-               <string>新加元(SGD)</string>
+               <string>新加坡元</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lb0">
+              <property name="text">
+               <string>美金</string>
               </property>
              </widget>
             </item>
@@ -185,7 +185,10 @@
             <bool>false</bool>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>110</number>
+            <number>90</number>
+           </attribute>
+           <attribute name="horizontalHeaderStretchLastSection">
+            <bool>true</bool>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
@@ -240,7 +243,7 @@
              <widget class="QPushButton" name="btnSub">
               <property name="minimumSize">
                <size>
-                <width>45</width>
+                <width>40</width>
                 <height>0</height>
                </size>
               </property>
@@ -259,7 +262,7 @@
              <widget class="QPushButton" name="btnAdd">
               <property name="minimumSize">
                <size>
-                <width>45</width>
+                <width>40</width>
                 <height>0</height>
                </size>
               </property>
@@ -291,7 +294,7 @@
              <widget class="QPushButton" name="btnSave">
               <property name="minimumSize">
                <size>
-                <width>100</width>
+                <width>80</width>
                 <height>0</height>
                </size>
               </property>

@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+
     RUN_MODE mode = _RELEASE;
 
     if(argc>=2)
@@ -94,9 +95,9 @@ int main(int argc, char *argv[])
 
 #if 1
 
+    int iRet =login.exec();
 
-
-    if(login.exec())
+    if(iRet==_DialogLogin::_LoginOk)
     {
         ACTION.reQuerty();
 
@@ -104,7 +105,7 @@ int main(int argc, char *argv[])
 
         w.show();
     }
-    else
+    else if(_DialogLogin::_Close)
     {
         return 0;
     }
@@ -112,9 +113,9 @@ int main(int argc, char *argv[])
 
 #else
     ACTION.m_currentUser.Id="root";
-    ACTION.m_currentUser.Name="Test001";
+    ACTION.m_currentUser.Name="root";
     ACTION.m_currentUser.Lv=99;
-    ACTION.m_currentUser.Sid="1";
+    ACTION.m_currentUser.Sid="0";
     w.show();
 #endif
 

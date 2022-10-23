@@ -207,7 +207,7 @@ void DialogCustomerEdit::refresh()
 
         ui->tbGameList->setItem(iIdx,2,UI.tbItem(data["LoginAccount"].toString()));
 
-        ui->tbGameList->setItem(iIdx,3,UI.tbItem(data["Character"].toString()));
+        ui->tbGameList->setItem(iIdx,3,UI.tbItem(data["Characters"].toString()));
 
         ui->tbGameList->setItem(iIdx,4,UI.tbItem(data["ServerName"].toString()));
 
@@ -275,7 +275,7 @@ void DialogCustomerEdit::on_btnAddGame_clicked()
 
     data["ServerName"] =ui->txServer->text().trimmed();
 
-    data["Character"] = ui->txChr->text().trimmed();
+    data["Characters"] = ui->txChr->text().trimmed();
 
     m_listGameInfo.append(data);
 

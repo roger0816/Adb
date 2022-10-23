@@ -559,9 +559,10 @@ void CSqlClass::createTableSqlite()
              'UserSid'	TEXT,                           \
              'UpdateTime'	TEXT,                       \
              'OrderTime'	TEXT,                       \
-             'PicMd5'	TEXT,                               \
+             'Pic0'	TEXT,                               \
+             'Pic1'	TEXT,                               \
+             'Note0'	TEXT,                               \
              'Note1'	TEXT,                               \
-             'Note2'	TEXT,                               \
              PRIMARY KEY('Sid' AUTOINCREMENT)            \
              );");
 

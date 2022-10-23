@@ -237,9 +237,10 @@ struct CustomerCost
         UserSid = data["UserSid"].toString();
         OrderTime = data["OrderTime"].toString();
         UpdateTime = data["UpdateTime"].toString();
-        PicMd5 = data["PicMd5"].toString();
+        Pic0 = data["Pic0"].toString();
+        Pic1 = data["Pic1"].toString();
         Note1 = data["Note1"].toString();
-        Note2 = data["Note2"].toString();
+        Note0 = data["Note0"].toString();
     }
 
     QVariantMap data()
@@ -259,9 +260,10 @@ struct CustomerCost
         re["UserSid"]=UserSid;
         re["OrderTime"]=OrderTime;
         re["UpdateTime"]=UpdateTime;
-        re["PicMd5"]=PicMd5;
+        re["Pic0"]=Pic0;
+        re["Pic1"]=Pic1;
+        re["Note0"]=Note0;
         re["Note1"]=Note1;
-        re["Note2"]=Note2;
 
         return re;
     }
@@ -281,9 +283,10 @@ struct CustomerCost
     QString UserSid;
     QString OrderTime;
     QString UpdateTime;
-    QString PicMd5;
+    QString Pic0;
+    QString Pic1;
+    QString Note0;
     QString Note1;
-    QString Note2;
 
 };
 

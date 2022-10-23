@@ -22,6 +22,7 @@ INCLUDEPATH+= \
               StageManagerSetting
 
 SOURCES += \
+    StageCustomerService/DialogCustomerCostHistory.cpp \
     component/CLinkTable.cpp \
     component/CSideMenu.cpp \
     DialogBulletinEdit.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
     DialogMsg.cpp \
     Global.cpp \
     GlobalUi.cpp \
+    component/DialogObj.cpp \
     component/ItemMiniLoadbar.cpp \
     component/ItemPic.cpp \
     component/Label3.cpp \
@@ -71,6 +73,7 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
+    StageCustomerService/DialogCustomerCostHistory.h \
     component/CLinkTable.h \
     component/CSideMenu.h \
     DialogBulletinEdit.h \
@@ -81,6 +84,7 @@ HEADERS += \
     DialogMsg.h \
     Global.h \
     GlobalUi.h \
+    component/DialogObj.h \
     component/ItemMiniLoadbar.h \
     component/ItemPic.h \
     component/Label3.h \
@@ -119,6 +123,7 @@ HEADERS += \
     widget.h
 
 FORMS += \
+    StageCustomerService/DialogCustomerCostHistory.ui \
     component/CSideMenu.ui \
     DialogBulletinEdit.ui \
     DialogCommon.ui \
@@ -177,4 +182,10 @@ RESOURCES += \
 
 win32: TARGET =AdbClientWin
 unix: TARGET =AdbClientUnix
+
+
+include(component/mutiScreen/mutiScreen.pri)
+
+
+
 

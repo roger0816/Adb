@@ -1,6 +1,14 @@
 #include "mutiscreen.h"
 #include <QDesktopWidget>
 #include <QApplication>
+#include "screenapi.h"
+#include <QList>
+#include <QPixmap>
+
+
+
+QList  <frmScreen*> mScreenlist;
+
 
 mutiScreen::mutiScreen(QObject *parent) : QObject(parent)
 {
@@ -42,11 +50,39 @@ void mutiScreen::showCaptureScreen()
     }
 }
 
+QPixmap *mutiScreen::getCaptureScreen()
+{
+
+
+    showCaptureScreen();
+    QEventLoop loop;
+
+    loop.connect(this,&mutiScreen::capture_done,&loop,&QEventLoop::quit);
+
+    loop.exec();
+
+    return get_screen();
+
+}
+
+QByteArray mutiScreen::getCaptureData()
+{
+    QPixmap *p = getCaptureScreen();
+
+    QByteArray data;
+    QImage image = p->toImage();
+    QBuffer buffer(&data);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "PNG"); // writes image into ba in PNG format
+
+    return data.toHex();
+}
+
 void mutiScreen::screenImageReady()
 {
     frmScreen * s = qobject_cast<frmScreen *>(sender());
 
-    this->capicture_pix = s->get_screen()->copy();
+    capicture_pix = s->get_screen()->copy();
 
     foreach(frmScreen * s ,mScreenlist )
     {

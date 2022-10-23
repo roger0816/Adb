@@ -1,19 +1,12 @@
-#if _MSC_VER >= 1600
-#pragma execution_character_set("utf-8")
-#endif
-
 #include "screenapi.h"
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QFont>
 #include <QPainter>
-#include <QFileDialog>
-#include <QDateTime>
 #include <QMouseEvent>
 #include <QScreen>
 #include <QDebug>
-
-#define STRDATETIME QDateTime::currentDateTime().toString("yyyyMMddhhmmss")
+#include <QMutex>
 
 ScreenAPI::ScreenAPI(QSize size)
 {

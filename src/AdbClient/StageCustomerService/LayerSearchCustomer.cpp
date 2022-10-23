@@ -184,7 +184,7 @@ void LayerSearchCustomer::showEvent(QShowEvent *)
 {
     ui->stackedWidget->setCurrentWidget(ui->page0);
 
-    QTimer::singleShot(30,[this](){ refresh(true); });
+    QTimer::singleShot(50,[this](){ refresh(true); });
 }
 
 bool LayerSearchCustomer::checkSearch(QVariantMap data)
@@ -266,5 +266,14 @@ void LayerSearchCustomer::on_btnOrder_clicked()
 void LayerSearchCustomer::on_btnAddCost_clicked()
 {
     changePage(3);
+}
+
+
+void LayerSearchCustomer::on_btnHistory_clicked()
+{
+    DialogCustomerCostHistory dialog;
+    CustomerData customer(m_listData.at(m_iIdx).toMap());
+    dialog.setCustomer(customer);
+    dialog.exec();
 }
 

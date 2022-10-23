@@ -7,12 +7,8 @@
 #include <QPoint>
 #include <QSize>
 #include <QPixmap>
-#include <QLabel>
-
-#include <QWidget>
 #include <QDialog>
-#include <QMutex>
-#include <QMenu>
+
 
 class ScreenAPI
 {
@@ -36,8 +32,6 @@ public:
     int height();
     bool isInArea(QPoint pos);          // 檢測pos是否在截圖區域內
     void move(QPoint p);                // 按 p 移動截圖區域
-
-
 
 private:
     QPoint leftUpPos, rightDownPos;     //記錄 截圖區域 左上角、右下角

@@ -184,7 +184,7 @@ void LayerAddCost::on_btnOk_clicked()
 
     m_lastCostData.Sid="";
     m_lastCostData.OrderId="-1";
-    m_lastCostData.Note1=ui->txNote1->toPlainText();
+    m_lastCostData.Note0=ui->txNote0->toPlainText();
 
     QVariantMap debit = m_listDebit.at(qBound(0,ui->cbDebit->currentIndex(),m_listDebit.length()-1)).toMap();
     m_lastCostData.DebitSid=debit["Sid"].toString();
@@ -208,20 +208,29 @@ void LayerAddCost::on_btnOk_clicked()
 
         QVariantMap picData;
 
-        picData = ui->wPic->data();
+        picData = ui->wPic0->data();
 
         bool bOk= ACTION.action(ACT::UPLOAD_PIC,picData,sError);
 
         if(!bOk)
         {
-            DMSG.showMsg("","圖片上傳失敗\n"+sError,"OK");
+            DMSG.showMsg("","圖片1上傳失敗\n"+sError,"OK");
         }
 
-        else
+        picData = ui->wPic1->data();
+
+        bOk= ACTION.action(ACT::UPLOAD_PIC,picData,sError);
+
+        if(!bOk)
+        {
+            DMSG.showMsg("","圖片2上傳失敗\n"+sError,"OK");
+        }
+
+        if(bOk)
         {
             sError.clear();
 
-            m_lastCostData.PicMd5 = picData["Md5"].toString();
+            m_lastCostData.Pic0 = picData["Md5"].toString();
 
             bool b=ACTION.setCustomerCost(m_lastCostData,sError);
 
@@ -257,38 +266,4 @@ void LayerAddCost::on_sbAdd_valueChanged(double arg1)
 }
 
 
-//void LayerAddCost::on_pushButton_clicked()
-//{
-//    QVariantMap in;
-
-//    in = ui->wPic->data();
-
-//    QString sError;
-
-//    ACTION.action(ACT::UPLOAD_PIC,in,sError);
-
-//    DMSG.showMsg("",sError,"OK");
-
-//}
-
-
-//void LayerAddCost::on_pushButton_2_clicked()
-//{
-//    QVariantMap in;
-
-//    QVariantList listOut;
-
-//    QString sError;
-//    ACTION.action(ACT::QUERY_PIC,in,listOut,sError);
-//    qDebug()<<"dl length : "<<listOut.length();
-//    if(listOut.length()>0)
-//    {
-//        QByteArray data;
-
-//        data.append(listOut.first().toMap()["Data"].toByteArray());
-//        qDebug()<<"data size "<<data.size();
-//       ui->wPic->setData(data);
-//    }
-
-//}
 

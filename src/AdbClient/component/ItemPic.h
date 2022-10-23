@@ -74,9 +74,11 @@ public:
     void setData(QByteArray data);
 
     void setDataFromFilePath(QString sFile="");
+
+    void setReadOnly(bool b);
 private:
 
-    mutiScreen *captrue = new mutiScreen();
+   // mutiScreen *captrue = new mutiScreen(this);
 
     QPoint m_pos;
 
@@ -102,13 +104,16 @@ private:
 private slots:
     void slotUpload();
 
-    void on_btnChip_clicked();
+    void slotClear();
 
-    void clear();
+    void slotClip();
+
+    void slotDownload();
 
     void showDetail();
 
-    void slotCaptrue();
+
+
 
 private:
     Ui::ItemPic *ui;

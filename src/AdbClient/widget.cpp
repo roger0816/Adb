@@ -11,7 +11,16 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
+    QFile file(":/style.qss");
 
+    if(file.open(QIODevice::ReadOnly))
+    {
+
+        QString style= QLatin1String(file.readAll());
+
+        qApp->setStyleSheet(style);
+        file.close();
+    }
     this->setWindowTitle("艾比代管理系統");
 
     connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));

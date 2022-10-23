@@ -1,0 +1,28 @@
+QWidget{font: 18px 'Microsoft JhengHei UI'; }
+
+QPushButton{ font: 18px 'Microsoft JhengHei UI';
+background-color: rgb(255, 255, 255);
+border-radius:5px;
+color: rgb(41,41,41);
+border: 1px solid #000000;
+padding: 5px;}
+
+QPushButton:hover {
+background-color: #ecf5ff;
+color: #409eff;
+}
+
+
+QPushButton:pressed, QPushButton:checked {
+border: 1px solid #3a8ee6;
+color: #409eff;
+}
+
+
+QPushButton:disabled {
+border-style: outset;
+border-width: 0px;
+font: 700 24px "Microsoft JhengHei UI";
+color:gray;
+background-color:gray;
+}

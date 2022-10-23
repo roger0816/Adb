@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 
         w.show();
     }
-    else if(_DialogLogin::_Close)
+    else if(iRet==_DialogLogin::_Close)
     {
         return 0;
     }

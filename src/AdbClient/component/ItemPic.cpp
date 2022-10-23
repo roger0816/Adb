@@ -12,25 +12,33 @@ ItemPic::ItemPic(QWidget *parent) :
     m_img = new QImage;
 
     m_dialogDetal->resize(1024,768);
-    connect(ui->btnLbPicClear,&QPushButton::clicked,this,&ItemPic::clear);
 
     connect(ui->btnUpload,&QPushButton::clicked,this,&ItemPic::slotUpload);
 
-    connect(captrue,&mutiScreen::capture_done,this,&ItemPic::slotCaptrue);
+    connect(ui->btnLbPicClear,&QPushButton::clicked,this,&ItemPic::slotClear);
 
+    connect(ui->btnClip,&QPushButton::clicked,this,&ItemPic::slotClip);
+
+    connect(ui->btnDownload,&QPushButton::clicked,this,&ItemPic::slotDownload);
+
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 ItemPic::~ItemPic()
 {
-    delete captrue;
-
-    delete m_img;
+    qDebug()<<"~itemPic";
+    //delete m_img;
 
     delete ui;
+
+        qDebug()<<"~itemPic ok";
 
 }
 void ItemPic::setData(QByteArray data)
 {
+    if(data.length()<1)
+        return;
     m_data=data;
 
 
@@ -73,6 +81,11 @@ void ItemPic::setDataFromFilePath(QString sFile)
     }
 }
 
+void ItemPic::setReadOnly(bool b)
+{
+    ui->stackedWidget->setCurrentIndex(b);
+}
+
 void ItemPic::showEvent(QShowEvent *)
 {
     reSetPic();
@@ -102,14 +115,7 @@ QVariantMap ItemPic::data()
 }
 
 
-void ItemPic::clear()
-{
-    m_sFilePath="";
 
-    m_bHasPic = false;
-
-    reSetPic();
-}
 
 void ItemPic::showDetail()
 {
@@ -119,25 +125,8 @@ void ItemPic::showDetail()
 
 }
 
-void ItemPic::slotCaptrue()
-{
-    //UI.m_mainWidget->show();
 
-    UI.m_mainWidget->move(m_pos);
 
-    QPixmap p =captrue->get_screen()->copy();
-
-    QByteArray data;
-
-    QImage image = p.toImage();
-
-    QBuffer buffer(&data);
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "PNG"); // writes image into ba in PNG format
-
-    setData(data.toHex());
-
-}
 
 void ItemPic::mousePressEvent(QMouseEvent *e)
 {
@@ -172,22 +161,37 @@ void ItemPic::slotUpload()
 
 }
 
+void ItemPic::slotClear()
+{
+    m_sFilePath="";
 
-void ItemPic::on_btnChip_clicked()
+    m_bHasPic = false;
+
+    reSetPic();
+}
+
+
+void ItemPic::slotClip()
 {
 
    //UI.m_mainWidget->hide();  //會觸發父層多個showEvent導致回來不在同畫面
 
     m_pos=UI.m_mainWidget->pos();
 
-    UI.m_mainWidget->move(-10000,0);
+    UI.m_mainWidget->move(-10000,0);  //hide qApp
 
-   QTimer::singleShot(50,this,[=](){ captrue->showCaptureScreen();});
+    QByteArray data = mutiScreen::Instance()->getCaptureData();
 
+    UI.m_mainWidget->move(m_pos);  //Show qApp
 
-    //  mutiScreen::Instance()->showCaptureScreen();
+    setData(data);
+
 
 }
 
+void ItemPic::slotDownload()
+{
+
+}
 
 

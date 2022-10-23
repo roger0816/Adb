@@ -2,11 +2,10 @@
 #define MUTISCREEN_H
 
 #include <QObject>
-#include <QWidget>
-#include <screenapi.h>
-#include <QList>
 #include <QPixmap>
-
+#include <QMutex>
+#include <QEventLoop>
+#include <QBuffer>
 class mutiScreen : public QObject
 {
     Q_OBJECT
@@ -31,6 +30,13 @@ public:
         return _instance;
     }
 
+    QPixmap* getCaptureScreen();
+
+    QByteArray getCaptureData();
+
+
+
+
 signals:
 
     void capture_done();
@@ -39,10 +45,11 @@ public slots:
 
    void showCaptureScreen();
 
+
 private:
     static mutiScreen *_instance;
-    QList  <frmScreen*> mScreenlist;
     QPixmap capicture_pix;
+
 
 private slots:
     void screenImageReady();

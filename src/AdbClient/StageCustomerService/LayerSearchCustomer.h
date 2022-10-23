@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include <QDateTime>
+#include "DialogCustomerCostHistory.h"
 namespace Ui {
 class LayerSearchCustomer;
 }
@@ -54,6 +55,7 @@ public slots:
 
 private slots:
     void refresh(bool bReQuery = true);
+    void on_btnHistory_clicked();
 };
 
 #endif // LAYERSEARCHCUSTOMER_H

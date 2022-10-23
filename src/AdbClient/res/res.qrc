@@ -14,5 +14,6 @@
         <file>image0.png</file>
         <file>imageUpload.png</file>
         <file>user.png</file>
+        <file>style.qss</file>
     </qresource>
 </RCC>

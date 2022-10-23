@@ -201,7 +201,6 @@ void LayerSchedule::refresh()
 
                 }
 
-                qDebug()<<"row : "<<iRow<<" icol : "<<iCol<<" : "<<data.sStatusColor;
                 l->setText(data.sCost,data.sUserSid,data.sStatus);
 
                 l->setText(2,data.sStatus,data.sStatusColor);

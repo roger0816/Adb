@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cd ../libs/RpkLib/src/core
+cd libs/RpkLib/src/core
 qmake RpkCore.pro
 make
 

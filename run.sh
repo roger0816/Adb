@@ -5,5 +5,5 @@
 #make clean
 #make
 
-cd ../../bin
+cd bin/
 ./AdbServerUnix

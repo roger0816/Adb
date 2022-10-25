@@ -76,6 +76,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent *);
     void paintEvent(QPaintEvent *);
     void showEvent(QShowEvent *);
+    void keyPressEvent(QKeyEvent *event);
 
 private slots:
     void InitForm();

@@ -239,6 +239,17 @@ void frmScreen::showEvent(QShowEvent *)
     p.drawPixmap(0, 0, pix);
 }
 
+void frmScreen::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Qt::Key_Escape:
+        break;
+        default:
+            QDialog::keyPressEvent(event);
+    }
+}
+
 void frmScreen::SaveScreenOther()
 {
     int x = screen_api_p->getLeftUp().x();

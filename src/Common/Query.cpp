@@ -357,8 +357,10 @@ CData Query::implementRecall(CData data)
 
         bOk  =m_sql.lsatCustomerId(sSid,sId,sReId,sError);
 
+        QVariantMap tmp;
+        tmp["Id"]=sReId;
 
-        re.dData["Id"] = sReId;
+        re.listData.append(tmp);
     }
 
     else if(data.iAciton==ACT::ADD_CUSTOMER)
@@ -485,7 +487,10 @@ CData Query::implementRecall(CData data)
 
         bOk  =m_sql.lastOrderId(sDate,sReId,sError);
 
-        re.dData["Id"] = sReId;
+        QVariantMap tmp;
+        tmp["Id"]=sReId;
+
+        re.listData.append(tmp);
     }
 
     else if(data.iAciton==ACT::LAST_ORDER_NAME)
@@ -496,7 +501,10 @@ CData Query::implementRecall(CData data)
         QString sOwner = data.dData["Owner"].toString();
         bOk  =m_sql.lastOrderName(sOwner,sDate,sReId,sError);
 
-        re.dData["Name"] = sReId;
+        QVariantMap tmp;
+        tmp["Name"] =sReId;
+
+        re.listData.append(tmp);
     }
 
 

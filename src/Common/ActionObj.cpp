@@ -38,6 +38,27 @@ void ActionObj::setStartSyanc(bool b)
 
 }
 
+bool ActionObj::action(int act, QString sKey, QVariant sValue, QVariantMap &output)
+{
+    QVariantList list;
+
+    QVariantMap in;
+    in[sKey]=sValue;
+    int iRet=action(act,in,list);
+
+    if(list.length()>0)
+        output=list.first().toMap();
+
+    return iRet;
+}
+
+bool ActionObj::action(int act, QVariantMap input, QVariantList &output)
+{
+    QString sError;
+
+    return action(act,input,output,sError);
+}
+
 
 
 
@@ -78,7 +99,9 @@ bool ActionObj::action(int act, QVariantMap data, QVariantMap &out, QString &sEr
 
     re = query(input);
 
-    out = re.dData;
+   // out = re.dData;
+    if(re.listData.length()>0)
+    out = re.listData.first().toMap();
 
     sError =re.sMsg;
 

@@ -427,6 +427,8 @@ struct OrderData :public DataObj
         Note3 = data["Note3"].toString();
         Note4 = data["Note4"].toString();
         Note5 = data["Note5"].toString();
+        Pic0 = data["Pic0"].toString();
+        Pic1 = data["Pic1"].toString();
         UpdateTime = data["UpdateTime"].toString();
         OrderDate = data["OrderDate"].toString();
         OrderTime = data["OrderTime"].toString();
@@ -458,6 +460,8 @@ struct OrderData :public DataObj
         re["Note3"] = Note3;
         re["Note4"] = Note4;
         re["Note5"] = Note5;
+        re["Pic0"] = Pic0;
+        re["Pic1"] = Pic1;
         re["OrderDate"] = OrderDate;
         re["OrderTime"] = OrderTime;
 
@@ -488,6 +492,8 @@ struct OrderData :public DataObj
     QString Note3;
     QString Note4;
     QString Note5;
+    QString Pic0;
+    QString Pic1;
     QString UpdateTime;
     QString OrderDate;
     QString OrderTime;

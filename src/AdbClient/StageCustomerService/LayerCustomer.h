@@ -3,8 +3,10 @@
 
 #include <QWidget>
 #include "DialogCustomerEdit.h"
+#include "DialogCustomerCostHistory.h"
 #include "Global.h"
 #include "GlobalUi.h"
+
 
 namespace Ui {
 class LayerCustomer;
@@ -28,6 +30,8 @@ private slots:
     void on_btnEdit_clicked();
 
     void on_tb_cellPressed(int row, int column);
+
+    void on_tb_cellClicked(int row, int column);
 
 private:
     Ui::LayerCustomer *ui;

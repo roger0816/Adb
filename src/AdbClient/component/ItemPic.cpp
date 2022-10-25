@@ -39,15 +39,21 @@ void ItemPic::setData(QByteArray data)
 {
     if(data.length()<1)
         return;
-    m_data=data;
+
+    m_bHasPic=true;
+
+    m_dataHex=data;
 
 
-    m_img->loadFromData(QByteArray::fromHex(m_data));
+    m_img->loadFromData(QByteArray::fromHex(m_dataHex));
 
-    ui->lbPic->setStyleSheet(" background-color: #f3f3f3;");
+    reSetPic();
 
-    ui->lbPic->setPixmap(QPixmap::fromImage(m_img->scaled(ui->lbPic->size(),Qt::KeepAspectRatio)));
+}
 
+void ItemPic::setFileName(QString m_sName)
+{
+    m_sFileName=m_sName;
 }
 
 void ItemPic::setDataFromFilePath(QString sFile)
@@ -75,7 +81,7 @@ void ItemPic::setDataFromFilePath(QString sFile)
         if(file.open(QIODevice::ReadOnly))
         {
 
-            m_data =file.readAll().toHex();
+            m_dataHex =file.readAll().toHex();
             file.close();
         }
     }
@@ -85,6 +91,12 @@ void ItemPic::setReadOnly(bool b)
 {
     ui->stackedWidget->setCurrentIndex(b);
 }
+
+void ItemPic::setEnableDetailMode(bool b)
+{
+    m_bEnableDetail =b;
+}
+
 
 void ItemPic::showEvent(QShowEvent *)
 {
@@ -103,11 +115,11 @@ QVariantMap ItemPic::data()
 
     QString sMd5;
 
-    sMd5.append(QCryptographicHash::hash(m_data,QCryptographicHash::Md5).toHex());
+    sMd5.append(QCryptographicHash::hash(m_dataHex,QCryptographicHash::Md5).toHex());
 
     re["Md5"]=sMd5;
 
-    re["Data"]=m_data;
+    re["Data"]=m_dataHex;
 
 
 
@@ -119,6 +131,8 @@ QVariantMap ItemPic::data()
 
 void ItemPic::showDetail()
 {
+    if(!m_bEnableDetail)
+        return;
     m_dialogDetal->m_img = m_img;
 
     m_dialogDetal->exec();
@@ -186,12 +200,19 @@ void ItemPic::slotClip()
 
     setData(data);
 
-
 }
 
 void ItemPic::slotDownload()
 {
+    QString sDir =QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
 
+    QString sFileName = sDir+"/"+m_sFileName+".png";
+
+    bool bOk = m_img->save(sFileName,"PNG");
+
+    emit finishedSaveImage(sFileName,bOk);
 }
+
+
 
 

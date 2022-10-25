@@ -195,7 +195,7 @@ void LayerAddCost::on_btnOk_clicked()
 
     // m_lastCostData.Rate = ACTION.rate("",true,true).last().Sid;
 
-    m_lastCostData.Rate = ACTION.costRate("",true).Sid;
+    m_lastCostData.Rate = ACTION.primeRate("",true).Sid;
 
 
 
@@ -215,8 +215,15 @@ void LayerAddCost::on_btnOk_clicked()
         if(!bOk)
         {
             DMSG.showMsg("","圖片1上傳失敗\n"+sError,"OK");
-        }
 
+            return ;
+        }
+        else
+        {
+            m_lastCostData.Pic0 = picData["Md5"].toString();
+
+        }
+        //
         picData = ui->wPic1->data();
 
         bOk= ACTION.action(ACT::UPLOAD_PIC,picData,sError);
@@ -224,13 +231,21 @@ void LayerAddCost::on_btnOk_clicked()
         if(!bOk)
         {
             DMSG.showMsg("","圖片2上傳失敗\n"+sError,"OK");
+
+            return ;
+        }
+        else
+        {
+            m_lastCostData.Pic1 = picData["Md5"].toString();
+
         }
 
         if(bOk)
         {
             sError.clear();
 
-            m_lastCostData.Pic0 = picData["Md5"].toString();
+
+            m_lastCostData.Pic1 = picData["Md5"].toString();
 
             bool b=ACTION.setCustomerCost(m_lastCostData,sError);
 
@@ -240,9 +255,8 @@ void LayerAddCost::on_btnOk_clicked()
             {
                 m_dataCustomer.Money=m_lastCostData.Total;
 
-                QVariantMap out;
 
-                ACTION.action(ACT::EDIT_CUSTOMER,m_dataCustomer.data(),out,sError);
+                ACTION.action(ACT::EDIT_CUSTOMER,m_dataCustomer.data(),sError);
 
                 setCustomer(m_dataCustomer.data());
 

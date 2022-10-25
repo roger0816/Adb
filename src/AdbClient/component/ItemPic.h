@@ -73,12 +73,19 @@ public:
 
     void setData(QByteArray data);
 
+    void setFileName(QString m_sName);
+
+
     void setDataFromFilePath(QString sFile="");
 
     void setReadOnly(bool b);
+
+    void setEnableDetailMode(bool b=true);
 private:
 
    // mutiScreen *captrue = new mutiScreen(this);
+
+    bool m_bEnableDetail=true;
 
     QPoint m_pos;
 
@@ -86,7 +93,7 @@ private:
 
     QString m_sFilePath="";
 
-    QByteArray m_data=QByteArray();
+    QByteArray m_dataHex=QByteArray();
 
     DialogPicDetail *m_dialogDetal=new DialogPicDetail(this);
 
@@ -101,6 +108,8 @@ private:
 
     bool m_bHasPic =false;
 
+    QString m_sFileName = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+
 private slots:
     void slotUpload();
 
@@ -112,7 +121,9 @@ private slots:
 
     void showDetail();
 
+signals:
 
+    void finishedSaveImage(QString ,bool);
 
 
 private:

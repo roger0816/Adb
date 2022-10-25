@@ -233,12 +233,24 @@ void LayerSearchCustomer::on_btnClear_clicked()
 
 void LayerSearchCustomer::on_tb_cellClicked(int row, int column)
 {
+    if(row<0 || row>=m_listData.length())
+        return;
+
     if(column==0)
     {
         m_iIdx = row;
 
-
         changePage(1);
+    }
+    else if(column==6)
+    {
+        QVariantMap v = m_listData.at(row).toMap();
+
+        DialogCustomerCostHistory dialog;
+
+        dialog.setCustomer(CustomerData(v));
+
+        dialog.exec();
     }
 }
 

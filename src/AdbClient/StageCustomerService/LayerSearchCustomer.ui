@@ -50,7 +50,7 @@
       <item row="0" column="0">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>4</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page0">
          <layout class="QGridLayout" name="gridLayout_3">
@@ -118,7 +118,7 @@
             </column>
             <column>
              <property name="text">
-              <string>歷史</string>
+              <string>消費紀錄</string>
              </property>
             </column>
            </widget>
@@ -399,7 +399,7 @@ background-color:gray;
 */</string>
                   </property>
                   <property name="text">
-                   <string>查看</string>
+                   <string>查詢</string>
                   </property>
                   <property name="flat">
                    <bool>true</bool>

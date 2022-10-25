@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>865</width>
-    <height>496</height>
+    <width>1280</width>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,7 +55,7 @@
           <number>0</number>
          </property>
          <item row="0" column="2">
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="btn0">
            <property name="maximumSize">
             <size>
              <width>90</width>
@@ -65,19 +65,31 @@
            <property name="text">
             <string>全部</string>
            </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
           </widget>
          </item>
          <item row="1" column="2">
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="btn1">
            <property name="text">
             <string>加值</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
          <item row="2" column="2">
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="btn2">
            <property name="text">
             <string>消費</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -213,6 +225,9 @@
          </property>
          <item row="0" column="0">
           <widget class="QTableWidget" name="tableWidget">
+           <attribute name="horizontalHeaderDefaultSectionSize">
+            <number>120</number>
+           </attribute>
            <column>
             <property name="text">
              <string>單號</string>
@@ -230,7 +245,12 @@
            </column>
            <column>
             <property name="text">
-             <string>售價匯率</string>
+             <string>匯率</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>狀態</string>
             </property>
            </column>
            <column>
@@ -240,56 +260,24 @@
            </column>
            <column>
             <property name="text">
-             <string>人員</string>
+             <string>接單人員</string>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>圖1</string>
+             <string/>
             </property>
            </column>
            <column>
             <property name="text">
-             <string>圖2</string>
+             <string/>
             </property>
            </column>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="widget_4" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <property name="leftMargin">
-          <number>0</number>
-         </property>
-         <property name="topMargin">
-          <number>0</number>
-         </property>
-         <property name="rightMargin">
-          <number>0</number>
-         </property>
-         <property name="bottomMargin">
-          <number>0</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton_4">
-           <property name="maximumSize">
-            <size>
-             <width>90</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>close</string>
-           </property>
+           <column>
+            <property name="text">
+             <string>備註</string>
+            </property>
+           </column>
           </widget>
          </item>
         </layout>

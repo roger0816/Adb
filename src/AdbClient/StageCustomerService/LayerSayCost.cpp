@@ -273,6 +273,8 @@ void LayerSayCost::refreshInfo()
 
     }
 
+    ui->cbGame->setEnabled(ui->tbInfo->rowCount()==0);
+
     checkTotal();
 }
 
@@ -728,6 +730,8 @@ void LayerSayCost::on_tbInfo_cellPressed(int row, int column)
 
         refreshInfo();
     }
+
+
 }
 
 

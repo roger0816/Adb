@@ -54,6 +54,7 @@ public:
     bool lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QString &sError);
 
 
+
     bool openDb(bool bMysql, QString sIp, QString sPort="3306",QString sDbName="adp");
 
     bool bRunMysql = false;

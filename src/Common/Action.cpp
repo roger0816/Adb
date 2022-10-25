@@ -258,6 +258,9 @@ void Action::reQuerty()
 
     getCustomerClass(true);
 
+    costRate("",true);
+
+    primeRate("",true);
   //  rate("",true);
 }
 
@@ -575,9 +578,8 @@ bool Action::setCustomerCost(CustomerCost costData,QString &sError)
 {
     bool bRe = false;
 
-    QVariantMap out;
 
-    bRe = action(ACT::ADD_CUSTOMER_COST,costData.data(),out,sError);
+    bRe = action(ACT::ADD_CUSTOMER_COST,costData.data(),sError);
 
     return bRe;
 }
@@ -609,7 +611,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 {
     bool bRe = false;
     QVariantMap out;
-    bRe = action(ACT::REPLACE_ORDER,order.data(),out,sError);
+    bRe = action(ACT::REPLACE_ORDER,order.data(),sError);
     return bRe;
 
 }
@@ -753,7 +755,7 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
 {
     QList<DataRate> re  ;
 
-    if(bRequest || (m_primeRate.length()<1 || m_primeRate.length()<1))
+    if(bRequest || (m_primeRate.length()<1 || m_exRate.length()<1))
     {
         QVariantList out;
 
@@ -783,8 +785,6 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
     if(bExchangeType)
         target=m_exRate;
 
-      qDebug()<<"m_exRate len : "<<m_exRate.length();
-    qDebug()<<"target rate len : "<<target.length();
 
     if(sSid=="")
     {
@@ -819,8 +819,6 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
 
     if(re.length()<1)
         re.append(DataRate());
-
-
     return re;
 }
 

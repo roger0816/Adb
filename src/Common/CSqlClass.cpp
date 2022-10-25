@@ -593,6 +593,8 @@ void CSqlClass::createTableSqlite()
              'Note3'	TEXT,                   \
              'Note4'	TEXT,                   \
              'Note5'	TEXT,                   \
+             'Pic0'	TEXT,                               \
+             'Pic1'	TEXT,                               \
              'UpdateTime'	TEXT,           \
              'OrderDate'	TEXT,                 \
              'OrderTime'	TEXT,                 \

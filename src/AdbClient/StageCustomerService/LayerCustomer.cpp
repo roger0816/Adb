@@ -74,27 +74,41 @@ void LayerCustomer::refresh()
 
     for(int i=0;i<m_listData.length();i++)
     {
-        QVariantMap data = m_listData.at(i).toMap();
+        QVariantMap v = m_listData.at(i).toMap();
+
+        CustomerData data(v);
 
         ui->tb->setRowCount(i+1);
 
-        ui->tb->setItem(i,0,UI.tbItem(data["Id"]));
+        ui->tb->setItem(i,0,UI.tbItem(data.Id));
 
-        QString sClassSid = ACTION.getCustomerClass(data["Class"].toString()).Name;
+        QString sClassSid = ACTION.getCustomerClass(data.Class).Name;
 
-        ui->tb->setItem(i,1,UI.tbItem(sClassSid));
-        ui->tb->setItem(i,2,UI.tbItem(data["Name"]));
+        ui->tb->setItem(i,1,UI.tbItem(data.Sid));
+        ui->tb->setItem(i,2,UI.tbItem(data.Name));
 
-        ui->tb->setItem(i,3,UI.tbItem(data["Currency"]));
-        ui->tb->setItem(i,4,UI.tbItem(data["Money"]));
+        ui->tb->setItem(i,3,UI.tbItem(data.Currency));
+        ui->tb->setItem(i,4,UI.tbItem(data.Money));
 
-        QDateTime updatetime =QDateTime::fromString(data["UpdateTime"].toString(),"yyyyMMddhhmmss");
+        ui->tb->setItem(i,5,UI.tbItem("查詢",GlobalUi::_BUTTON));
 
-        QString sUserName = ACTION.getUser(data["UserSid"].toString()).Name;
+        QVariantMap in;
+
+        in["CustomerId"] = data.Sid;
+        in["Desc"]="Sid";
+
+        QVariantMap gameInfoV;
+
+      //  ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,gameInfoV);
+
+
+        QDateTime updatetime =QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss");
+
+        QString sUserName = ACTION.getUser(data.UserSid).Name;
 
         ui->tb->setItem(i,7,UI.tbItem(updatetime));
         ui->tb->setItem(i,8,UI.tbItem(sUserName));
-        ui->tb->setItem(i,9,UI.tbItem(data["Note1"]));
+        ui->tb->setItem(i,9,UI.tbItem(data.Note1));
 
     }
 }
@@ -160,5 +174,21 @@ void LayerCustomer::on_btnEdit_clicked()
 void LayerCustomer::on_tb_cellPressed(int row, int column)
 {
     ui->btnEdit->setEnabled(true);
+}
+
+
+void LayerCustomer::on_tb_cellClicked(int row, int column)
+{
+    if(row<0 || row>=m_listData.length())
+        return ;
+
+
+    QVariantMap v = m_listData.at(row).toMap();
+
+    DialogCustomerCostHistory dialog;
+
+    dialog.setCustomer(CustomerData(v));
+
+    dialog.exec();
 }
 

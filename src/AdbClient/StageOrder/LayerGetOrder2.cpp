@@ -110,7 +110,7 @@ void LayerGetOrder2::refreshUser(bool bRe)
         }
     }
 
-
+ on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
 }
 
 QVariantMap LayerGetOrder2::gameItem(QString sSid)
@@ -130,6 +130,23 @@ QVariantMap LayerGetOrder2::gameItem(QString sSid)
 
 void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
 {
+
+    if(row<0 || row>=ui->tbUser->rowCount())
+        return;
+
+    if(column<0 || column>=ui->tbUser->columnCount())
+        return;
+
+    if(ui->tbUser->item(row,column)->text()
+            .split("(").last().split(")").first().toInt()<1)
+        return;
+
+    ui->tbUser->setCurrentCell(row,column);
+
+    m_iPreUserCol = column;
+    m_iPreUserRow = row;
+
+
     int iIdx = row*ui->tbUser->columnCount()+column;
     QString sKey= m_listFactory.at(iIdx).Name;
     m_currentDataKey = sKey;
@@ -191,7 +208,14 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
             {
 
                 ui->tbOrder->setItem(i,6,UI.tbItem(ACTION.getUser(order.PaddingUser,true).Name+" 處理中"));
-                ui->tbOrder->setItem(i,7,UI.tbItem(""));
+                if(order.PaddingUser==ACTION.m_currentUser.Sid)
+                {
+                    ui->tbOrder->setItem(i,7,UI.tbItem("處理訂單",true));
+                }
+                else
+                {
+                    ui->tbOrder->setItem(i,7,UI.tbItem(""));
+                }
             }
         }
 
@@ -323,11 +347,15 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
         order.PaddingUser="";
 
-        order.User[3] = ACTION.m_currentUser.Sid;
-
+        order.User[4] = ACTION.m_currentUser.Sid;
+        order.StepTime[4]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
         ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
         order.Step="4";
+
+        order.Note0[4] =ui->txNote->toPlainText();
+
+        order.Pic0 = ui->wPic0->uploadPic();
 
         ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
@@ -355,7 +383,7 @@ void LayerGetOrder2::refresh()
 
     tmp.Name="艾比代";
 
-//    m_listFactory.append(tmp);
+    //    m_listFactory.append(tmp);
 
     m_listFactory.append(ACTION.getFactoryClass("",true));
 

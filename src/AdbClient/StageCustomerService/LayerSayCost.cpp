@@ -140,14 +140,6 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     QString sCurrency = "新台幣";
 
     sCurrency = GLOBAL.displayCurrency(m_dataCustomer.Currency);
-    //    if(m_dataCustomer.Currency=="HKD")
-    //        sCurrency = "港幣";
-    //    else if(m_dataCustomer["Currency"]=="RMB")
-    //        sCurrency = "人民幣";
-    //    else if(m_dataCustomer["Currency"]=="MYR")
-    //        sCurrency = "林吉特";
-    //    else if(m_dataCustomer["Currency"]=="SGD")
-    //        sCurrency = "新加坡元";
 
     ui->lbCurrency->setText(sCurrency);
 
@@ -164,6 +156,8 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     for(int i=0;i<m_listGameInfo.length();i++)
     {
         QVariantMap tmp = m_listGameInfo.at(i).toMap();
+
+
 
         QString sName= ACTION.getGameName(tmp["GameSid"].toString());
 
@@ -585,23 +579,6 @@ void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 
     ui->cbServer->addItems(server);
 
-
-    //    for(int i=0;i<m_listGameInfo.length();i++)
-    //    {
-    //        QVariantMap d = m_listGameInfo.at(i).toMap();
-
-    //        if(d["GameSid"].toString() == m_sCurrentGameSid &&
-    //                d["LoginAccount"].toString() == arg1)
-    //        {
-    //            ui->lbLoginType->setText(d["LoginType"].toString());
-
-    //            ui->lbServer->setText(d["ServerName"].toString());
-
-    //            ui->lbChr->setText(d["Character"].toString());
-
-
-    //        }
-    //    }
 }
 
 
@@ -616,14 +593,16 @@ void LayerSayCost::on_cbServer_currentTextChanged(const QString &arg1)
     {
         QVariantMap tmp = m_listGameInfo.at(i).toMap();
 
-        QString sName= tmp["Character"].toString();
+        CustomerGameInfo data(tmp);
 
-        if(tmp["GameSid"].toString() == m_sCurrentGameSid &&
-                tmp["LoginAccount"].toString() == ui->cbAccount->currentText() &&
-                tmp["ServerName"].toString() == ui->cbServer->currentText() &&
-                chr.indexOf(sName)<0)
+
+
+        if(data.GameSid == m_sCurrentGameSid &&
+                data.LoginAccount == ui->cbAccount->currentText() &&
+                data.ServerName == ui->cbServer->currentText() &&
+                chr.indexOf(data.Characters)<0)
         {
-            chr.append(sName);
+            chr.append(data.Characters);
         }
 
 
@@ -646,13 +625,14 @@ void LayerSayCost::on_cbChr_currentTextChanged(const QString &arg1)
 
         QVariantMap d = m_listGameInfo.at(i).toMap();
 
+        CustomerGameInfo data(d);
 
-        if(d["GameSid"].toString() == m_sCurrentGameSid &&
-                d["ServerName"].toString() == ui->cbServer->currentText() &&
-                d["Character"].toString() == arg1 &&
-                d["LoginAccount"].toString() == ui->cbAccount->currentText())
+        if(data.GameSid == m_sCurrentGameSid &&
+                data.ServerName == ui->cbServer->currentText() &&
+                data.Characters == arg1 &&
+                data.LoginAccount == ui->cbAccount->currentText())
         {
-            ui->lbLoginType->setText(d["LoginType"].toString());
+            ui->lbLoginType->setText(data.LoginType);
 
             //            ui->lbServer->setText(d["ServerName"].toString());
 
@@ -816,16 +796,17 @@ void LayerSayCost::on_btnSayOk_clicked()
     {
         m_order.Owner="";
         // m_order.Sid="";
-        m_order.Note0 = ui->txNote1->toPlainText();
+        m_order.Note0[0] = ui->txNote1->toPlainText();
         m_order.User[0] = ACTION.m_currentUser.Sid;
         m_order.Bouns = QString::number(m_iBouns,'f',2);
+        m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
         m_order.Step="0";
     }
     else
     {
         //  m_order.Sid="";
         // m_order.ExRateSid = m_exRateSid;
-        m_order.Note0 = ui->txNote1->toPlainText();
+        m_order.Note0[1] = ui->txNote1->toPlainText();
         m_order.User[1] = ACTION.m_currentUser.Sid;
         m_order.StepTime[1] = m_date.toString("yyyyMMddhhmmss");
         //        m_order.OrderDate = m_date.toString("yyyyMMdd");
@@ -846,6 +827,13 @@ void LayerSayCost::on_btnSayOk_clicked()
         m_order.OrderTime = m_date.toString("hhmmss");
     }
 
+
+       QVariantMap d= m_listGameInfo.at(qBound(0,ui->cbGame->currentIndex(),m_listGameInfo.length()-1)).toMap();
+
+
+       CustomerGameInfo info(d);
+       m_order.GameSid = info.GameSid;
+
     QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+
             QString::number(ui->cbAccount->currentIndex())+","+
             QString::number(ui->cbServer->currentIndex())+","+
@@ -857,7 +845,6 @@ void LayerSayCost::on_btnSayOk_clicked()
     m_order.CustomerSid = m_dataCustomer.Sid;
     m_order.Cost=QString::number(m_iTotal,'f',2);
 
-    qDebug()<<"bound : "<<m_order.Bouns<<" ,  "<<m_iBouns;
 
     CListPair list;
 
@@ -910,9 +897,9 @@ void LayerSayCost::delayShowEvent()
     m_listPayType = ACTION.getAddValueType();
 
 
-    m_date = QDateTime::currentDateTime();
+    m_date = GLOBAL.dateTimeUtc8();
 
-    QString sDate = m_date.QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm");
+    QString sDate = m_date.toString("yyyy/MM/dd hh:mm");
     ui->lbTime->setText(sDate);
 
     QString sError;

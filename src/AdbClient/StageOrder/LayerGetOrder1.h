@@ -31,6 +31,8 @@ private slots:
 
     void refresh();
 
+    void on_btnDelay_clicked();
+
 private:
     Ui::LayerGetOrder1 *ui;
 
@@ -49,6 +51,13 @@ private:
     QString  m_currentDataKey="";
 
     LayerSayCost *m_layerCost  = nullptr;
+
+private:
+
+    int m_iPreUserRow=-1;
+    int m_iPreUserCol=-1;
+
+
 };
 
 #endif // LAYERGETORDER1_H

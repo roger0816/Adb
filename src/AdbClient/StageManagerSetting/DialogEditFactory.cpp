@@ -43,7 +43,6 @@ void DialogEditFactory::setData(QVariantMap data)
 
     }
 
-    ui->sb->setValue(m_data["CostRate"].toDouble());
 
     if(data["Sid"]=="")
     {
@@ -58,8 +57,6 @@ QVariantMap DialogEditFactory::data()
     m_data["Id"] = ui->txId->text();
 
     m_data["Name"]= ui->txName->text();
-
-    m_data["CostRate"] = ui->sb->text();
 
 
     CListPair listPaydata =ACTION.getAddValueType(true);

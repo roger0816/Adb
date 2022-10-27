@@ -123,7 +123,7 @@
                <item row="0" column="0">
                 <widget class="QLabel" name="label_3">
                  <property name="text">
-                  <string>客戶分類:</string>
+                  <string>客群:</string>
                  </property>
                 </widget>
                </item>
@@ -137,7 +137,7 @@
                <item row="1" column="0">
                 <widget class="QLabel" name="label">
                  <property name="text">
-                  <string>客戶編號:</string>
+                  <string>編號:</string>
                  </property>
                 </widget>
                </item>
@@ -154,6 +154,16 @@
                  </property>
                 </widget>
                </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>備註:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QTextEdit" name="txNote1"/>
+               </item>
                <item row="2" column="0">
                 <widget class="QLabel" name="label_5">
                  <property name="text">
@@ -165,14 +175,35 @@
                 <widget class="QLineEdit" name="txName"/>
                </item>
                <item row="3" column="0">
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>等級:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="cbVip">
+                 <item>
+                  <property name="text">
+                   <string>一般</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>VIP</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="0">
                 <widget class="QLabel" name="label_2">
                  <property name="text">
                   <string>幣別:</string>
                  </property>
                 </widget>
                </item>
-               <item row="3" column="1">
-                <widget class="QComboBox" name="cbCost">
+               <item row="4" column="1">
+                <widget class="QComboBox" name="cbCurrency">
                  <item>
                   <property name="text">
                    <string>新台幣(NTD)</string>
@@ -199,16 +230,6 @@
                   </property>
                  </item>
                 </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="QLabel" name="label_8">
-                 <property name="text">
-                  <string>備註:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="1">
-                <widget class="QTextEdit" name="txNote1"/>
                </item>
               </layout>
              </widget>
@@ -282,6 +303,11 @@
                  <column>
                   <property name="text">
                    <string>角色</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>密碼</string>
                   </property>
                  </column>
                  <column>
@@ -375,25 +401,35 @@
                      <item row="0" column="1">
                       <widget class="QLineEdit" name="txGameAccount"/>
                      </item>
-                     <item row="1" column="0">
+                     <item row="2" column="0">
                       <widget class="QLabel" name="label_12">
                        <property name="text">
                         <string>伺服器:</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="1" column="1">
+                     <item row="2" column="1">
                       <widget class="QLineEdit" name="txServer"/>
                      </item>
-                     <item row="2" column="0">
+                     <item row="3" column="0">
                       <widget class="QLabel" name="label_13">
                        <property name="text">
                         <string>角色:</string>
                        </property>
                       </widget>
                      </item>
-                     <item row="2" column="1">
+                     <item row="3" column="1">
                       <widget class="QLineEdit" name="txChr"/>
+                     </item>
+                     <item row="1" column="0">
+                      <widget class="QLabel" name="label_7">
+                       <property name="text">
+                        <string>密碼:</string>
+                       </property>
+                      </widget>
+                     </item>
+                     <item row="1" column="1">
+                      <widget class="QLineEdit" name="txPassword"/>
                      </item>
                     </layout>
                    </widget>
@@ -577,8 +613,6 @@
  </widget>
  <tabstops>
   <tabstop>cbClass</tabstop>
-  <tabstop>txName</tabstop>
-  <tabstop>cbCost</tabstop>
   <tabstop>txNote1</tabstop>
   <tabstop>tbGameList</tabstop>
   <tabstop>btnOk</tabstop>

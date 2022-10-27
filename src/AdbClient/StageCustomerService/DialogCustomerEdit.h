@@ -81,7 +81,10 @@ private:
 
     QString gameToSid(QString sName);
 
-    QStringList m_listRateKey;
+
+    DataRate m_lastPrimeRate;
+
+    QString m_sOriginCurrency; //辨別它是否改幣別
 };
 
 #endif // DIALOGCUSTOMEREDIT_H

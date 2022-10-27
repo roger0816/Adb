@@ -133,10 +133,15 @@ void LayerPrimeCostRate::refreshTbDetail()
 
         if(listData.length()>0)
             listData.pop_front();
-
-        ui->tb1->setItem(iRow,2,UI.tbItem(listData.toString().replace(",,","="),GlobalUi::_TOOLTIP));
-
         ui->tb1->setItem(iRow,1,UI.tbItem(QDateTime::fromString(rate.UpdateTime,"yyyyMMddhhmmss").toString("MM/dd hh:mm:ss")));
+        QString sUserName = ACTION.getUser(rate.UserSid).Name;
+
+        ui->tb1->setItem(iRow,2,UI.tbItem(sUserName));
+
+
+        ui->tb1->setItem(iRow,3,UI.tbItem(listData.toString().replace(",,","="),GlobalUi::_TOOLTIP));
+
+
 
     }
 }
@@ -184,6 +189,8 @@ void LayerPrimeCostRate::on_btnSave_clicked()
 
     rate.listData = list;
 
+    rate.UserSid = ACTION.m_currentUser.Sid;
+
     QString sError;
 
     ACTION.addRate(rate.data(),sError,m_bExchangeType);
@@ -229,7 +236,7 @@ void LayerPrimeCostRate::on_tb1_itemEntered(QTableWidgetItem *item)
     if(row<0 || row>=ui->tb1->rowCount())
         return;
 
-    if(column==2)
+    if(column==3)
     {
 
         QString st = item->text().replace(";","\n").replace("="," : ");

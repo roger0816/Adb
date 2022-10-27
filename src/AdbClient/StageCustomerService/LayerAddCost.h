@@ -38,6 +38,8 @@ private:
 
     bool m_bLock=false;
 
+    QString getNewOrderId();
+
 signals:
     void back(int iPage=0);
 
@@ -54,7 +56,7 @@ private slots:
     void on_sb_valueChanged(int);
     void on_btnOk_clicked();
 
-    void on_sbAdd_valueChanged(double arg1);
+    void on_sbAdd_valueChanged(double);
 
 };
 

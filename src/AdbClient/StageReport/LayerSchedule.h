@@ -10,6 +10,7 @@
 #include <QButtonGroup>
 #include <QSpinBox>
 #include <QMouseEvent>
+#include <QKeyEvent>
 #include "Label3.h"
 
 #define SCHEDULE_STATUS_ID "999999"
@@ -103,12 +104,12 @@ private:
 
     void refresh();
 
-
+    void keyPressEvent(QKeyEvent * e) override;
     QButtonGroup m_group;
 
     Layer_Schedule::Data m_data[128][7];
 
-
+    bool checkGrid(int iRow=-1,int iCol=-1);
 
 private slots:
     void on_btnSave_clicked();
@@ -136,6 +137,12 @@ private slots:
     void on_btnPre_clicked();
 
     void on_tb0_cellClicked(int row, int column);
+
+    void on_btnClearCost_clicked();
+
+    void on_btnClearUserSid_clicked();
+
+    void on_btnClearStatus_clicked();
 
 public slots:
 

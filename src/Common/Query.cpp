@@ -493,6 +493,21 @@ CData Query::implementRecall(CData data)
         re.listData.append(tmp);
     }
 
+    else if(data.iAciton==ACT::LAST_CUSTOMER_COST_ID)
+    {
+        QString sReId="";
+
+      //  QString sDate = data.dData["OrderTime"].toString();
+        QString sDate =QDate::currentDate().toString("yyyyMMdd");
+        bOk  =m_sql.lastCustomerAddCostId(sDate,sReId,sError);
+
+        QVariantMap tmp;
+        tmp["OrderId"]=sReId;
+
+        re.listData.append(tmp);
+    }
+
+
     else if(data.iAciton==ACT::LAST_ORDER_NAME)
     {
         QString sReId="";

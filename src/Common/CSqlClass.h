@@ -49,6 +49,9 @@ public:
 
     bool lsatCustomerId(QString sClassSid,QString sClassId,QString &out,QString &sError);
 
+    bool lastCustomerAddCostId(QString sDate, QString &sId, QString &sError);
+
+
     bool lastOrderId(QString sDate, QString &sId, QString &sError);
 
     bool lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QString &sError);
@@ -65,6 +68,8 @@ public:
     void saveTrigger(QString sApi,QString sDateTime);
 
     QMap<QString,QString> readTrigger();
+
+    QDateTime currentDateTime();
 
 private:
     void createTable();

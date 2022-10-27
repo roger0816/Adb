@@ -69,6 +69,9 @@ void Widget::slotPage(int iIdx)
 
 void Widget::on_btnTest_clicked()
 {
+
+  ui->stackedWidget->setCurrentIndex(6);
+  return ;
     CData data;
 
     data.iAciton=ACT::LOGIN;
@@ -95,14 +98,7 @@ void Widget::on_btnTest_clicked()
 
     outData.deCodeJson(out);
 
-    qDebug()<<outData.iAciton;
 
-    qDebug()<<outData.sUser;
-    qDebug()<<outData.sMsg;
-    qDebug()<<outData.listData;
-    qDebug()<<outData.listName;
-
-    qDebug()<<outData.dData;
 
 }
 
@@ -161,5 +157,14 @@ void Widget::on_btnLogout_clicked()
     UI.m_dialogLogin->init();
 
     UI.m_dialogLogin->exec();
+}
+
+void Widget::slotLogin()
+{
+            ACTION.reQuerty();
+
+            ACTION.setStartSyanc(true);
+
+            show();
 }
 

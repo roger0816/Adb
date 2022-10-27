@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QDebug>
+#include "Global.h"
 #include <QVariantMap>
 #include "VojData.h"
 #include "DEF.h"

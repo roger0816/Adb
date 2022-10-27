@@ -21,7 +21,7 @@ QStringList Global::listMapToList(const QVariantList list, QString sKey)
     {
         if(v.toMap().keys().contains(sKey))
         {
-              listRe.append(v.toMap()[sKey].toString());
+            listRe.append(v.toMap()[sKey].toString());
         }
     }
 
@@ -94,6 +94,16 @@ QString Global::originCurrency(QString st)
         sRe="MYR";
     else if(st.trimmed()=="新加坡元")
         sRe="SGD";
+    return sRe;
+}
+
+QString Global::displayCustomerLv(QString iLv)
+{
+
+    QString sRe="一般";
+    if(iLv=="1")
+        sRe = "VIP";
+
     return sRe;
 }
 
@@ -249,9 +259,9 @@ void Global::loadConfig()
 
 Global &Global::Instance()
 {
-//    if(m_pInstance==0)
-//        m_pInstance=new Global();
-//    return *m_pInstance;
+    //    if(m_pInstance==0)
+    //        m_pInstance=new Global();
+    //    return *m_pInstance;
     static Global global;
     return global;
 }
@@ -260,6 +270,11 @@ QVariant Global::config(QString st)
 {
 
     return m_config.value(st);
+}
+
+QDateTime Global::dateTimeUtc8()
+{
+    return QDateTime::currentDateTimeUtc().addSecs(60*60*8);
 }
 
 QString Global::strNumber(double number)

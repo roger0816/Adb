@@ -63,16 +63,49 @@ void DialogGameEdit::on_btnOk_clicked()
 {
     ui->lbMsg->clear();
 
+    QVariantList listOut;
 
-    if(ui->txId->text().trimmed()=="" || ui->txName->text().trimmed()=="")
+    bool b = ACTION.action(ACT::QUERY_GAME_LIST,QVariantMap(),listOut);
+
+    if(!b)
+    {
+        ui->lbMsg->setText("錯誤代號401");
+        return;
+    }
+
+    QString sId = ui->txId->text().trimmed();
+    QString sName = ui->txName->text().trimmed();
+
+    bool bHasOne = false;
+
+    GameList gameList;
+    gameList.setGameList(listOut);
+
+    foreach(GameList::GameData data,gameList.listData)
+    {
+        if(data.Id.toUpper()==sId.toUpper() || data.Name.toUpper()==sName.toUpper())
+        {
+            bHasOne = true;
+            break;
+        }
+    }
+
+    if(bHasOne)
+    {
+        ui->lbMsg->setText("代號或名稱，不能重復。");
+        return;
+    }
+
+
+    if(sId=="" || sName=="")
     {
         ui->lbMsg->setText("代號與名稱，不能空白。");
         return;
     }
 
-    m_sId = ui->txId->text().trimmed();
+    m_sId = sId;
 
-    m_sName = ui->txName->text().trimmed();
+    m_sName = sName;
 
     m_bEnable = ui->cbEnable->isChecked();
 

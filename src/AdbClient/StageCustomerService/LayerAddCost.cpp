@@ -6,6 +6,8 @@ LayerAddCost::LayerAddCost(QWidget *parent) :
     ui(new Ui::LayerAddCost)
 {
     ui->setupUi(this);
+
+
 }
 
 LayerAddCost::~LayerAddCost()
@@ -49,7 +51,7 @@ void LayerAddCost::setCustomer(QVariantMap data)
     if(list.length()>0)
         m_lastCostData = list.last();
 
-    QDateTime time = QDateTime::currentDateTime();
+    QDateTime time = GLOBAL.dateTimeUtc8();
     m_lastCostData.UserSid = ACTION.m_currentUser.Sid;
 
     m_lastCostData.CustomerSid = m_dataCustomer.Sid;
@@ -70,12 +72,10 @@ void LayerAddCost::checkTotal()
 
     m_addValue = ui->sb->value();
 
-
-    //  QString sCustomerKey = GLOBAL.originCurrency(ui->lbCurrency->text());
-
     int iTmp = qBound(0,m_rate.listKey().indexOf(ui->lbCurrency->text()),m_rate.listData.length()-1);
 
     double sCustomerRate = m_rate.listData.at(iTmp).second.toDouble();
+
 
     double sSelectRate=1;
 
@@ -84,6 +84,8 @@ void LayerAddCost::checkTotal()
         //  QString sSelectKey = GLOBAL.originCurrency(ui->cbCurrency->currentText());
         int iIdx = qBound(0,m_rate.listKey().indexOf(ui->cbCurrency->currentText()),m_rate.listData.length()-1);
         sSelectRate = m_rate.listData.at(iIdx).second.toDouble();
+
+        qDebug()<<"select rate : "<<sSelectRate;
 
         m_addValue = m_addValue*(sSelectRate+ui->sbAdd->value())/sCustomerRate;
 
@@ -110,11 +112,31 @@ void LayerAddCost::checkTotal()
 
 void LayerAddCost::showEvent(QShowEvent *)
 {
-    ui->lbTime->setText(QDateTime::currentDateTime().toString("yyyy/MM/dd hh:mm"));
+    ui->lbTime->setText(GLOBAL.dateTimeUtc8().toString("yyyy/MM/dd hh:mm"));
 
     QTimer::singleShot(50,Qt::PreciseTimer,this,SLOT(refresh()));
 
 
+}
+
+QString LayerAddCost::getNewOrderId()
+{
+    QString sRe ;
+
+    QVariantMap out;
+
+    QString sError;
+
+    ACTION.action(ACT::LAST_CUSTOMER_COST_ID,QVariantMap(),out,sError);
+
+    QString sLast = out["OrderId"].toString();
+
+    QStringList list = sLast.split("-");
+    int iIdx = list.last().toInt();
+
+    sRe = list.first()+"_"+QString::number(iIdx);
+
+    return sRe;
 }
 
 void LayerAddCost::refresh()
@@ -181,9 +203,19 @@ void LayerAddCost::on_sb_valueChanged(int )
 
 void LayerAddCost::on_btnOk_clicked()
 {
+    if(ui->sb->value()==0)
+    {
+        DMSG.showMsg("","請設定金額","OK");
+
+        return ;
+    }
+
+
 
     m_lastCostData.Sid="";
-    m_lastCostData.OrderId="-1";
+
+
+    m_lastCostData.OrderId=getNewOrderId();
     m_lastCostData.Note0=ui->txNote0->toPlainText();
 
     QVariantMap debit = m_listDebit.at(qBound(0,ui->cbDebit->currentIndex(),m_listDebit.length()-1)).toMap();
@@ -204,67 +236,66 @@ void LayerAddCost::on_btnOk_clicked()
     int iRet = UI.showMsg("提醒!",sMsg,QStringList()<<"否"<<"是");
     if(iRet==1)
     {
-        QString sError;
+         QString sError;
 
-        QVariantMap picData;
-
-        picData = ui->wPic0->data();
-
-        bool bOk= ACTION.action(ACT::UPLOAD_PIC,picData,sError);
-
-        if(!bOk)
+        if(ui->wPic0->m_bHasPic)
         {
-            DMSG.showMsg("","圖片1上傳失敗\n"+sError,"OK");
 
-            return ;
-        }
-        else
-        {
-            m_lastCostData.Pic0 = picData["Md5"].toString();
+            QString sMd5 = ui->wPic0->uploadPic();
 
+            if(sMd5=="")
+            {
+                DMSG.showMsg("","圖片1上傳失敗\n"+sError,"OK");
+
+                return ;
+            }
+            else
+            {
+                m_lastCostData.Pic0 = sMd5;
+            }
         }
         //
-        picData = ui->wPic1->data();
 
-        bOk= ACTION.action(ACT::UPLOAD_PIC,picData,sError);
-
-        if(!bOk)
+        if(ui->wPic1->m_bHasPic)
         {
-            DMSG.showMsg("","圖片2上傳失敗\n"+sError,"OK");
-
-            return ;
-        }
-        else
-        {
-            m_lastCostData.Pic1 = picData["Md5"].toString();
-
-        }
-
-        if(bOk)
-        {
-            sError.clear();
 
 
-            m_lastCostData.Pic1 = picData["Md5"].toString();
+            QString sMd5 = ui->wPic1->uploadPic();
 
-            bool b=ACTION.setCustomerCost(m_lastCostData,sError);
-
-            UI.showMsg("",sError,"OK");
-
-            if(b)
+            if(sMd5=="")
             {
-                m_dataCustomer.Money=m_lastCostData.Total;
+                DMSG.showMsg("","圖片1上傳失敗\n"+sError,"OK");
 
-
-                ACTION.action(ACT::EDIT_CUSTOMER,m_dataCustomer.data(),sError);
-
-                setCustomer(m_dataCustomer.data());
-
-                checkTotal();
+                return ;
+            }
+            else
+            {
+                m_lastCostData.Pic1 = sMd5;
             }
 
-            emit back();
         }
+
+
+
+
+        bool b=ACTION.setCustomerCost(m_lastCostData,sError);
+
+        UI.showMsg("",sError,"OK");
+
+        if(b)
+        {
+            m_dataCustomer.Money=m_lastCostData.Total;
+
+
+            ACTION.action(ACT::EDIT_CUSTOMER,m_dataCustomer.data(),sError);
+
+            setCustomer(m_dataCustomer.data());
+
+            checkTotal();
+        }
+
+        emit back();
+
     }
 
 
@@ -274,7 +305,7 @@ void LayerAddCost::on_btnOk_clicked()
 
 
 
-void LayerAddCost::on_sbAdd_valueChanged(double arg1)
+void LayerAddCost::on_sbAdd_valueChanged(double )
 {
     checkTotal();
 }

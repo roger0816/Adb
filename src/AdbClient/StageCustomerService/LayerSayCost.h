@@ -53,6 +53,7 @@ private:
 
     QDateTime m_date;
 
+
     double m_iTotal=0.0;
 
     double m_iBouns=0.0;

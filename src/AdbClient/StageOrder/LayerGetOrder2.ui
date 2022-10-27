@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>699</width>
-    <height>527</height>
+    <width>796</width>
+    <height>534</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -203,7 +203,7 @@
         </property>
         <widget class="QWidget" name="page0"/>
         <widget class="QWidget" name="page1">
-         <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,0,0,0">
+         <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,0,0,0,0,0">
           <property name="horizontalSpacing">
            <number>20</number>
           </property>
@@ -230,7 +230,7 @@
               </widget>
              </item>
              <item>
-              <widget class="QTextEdit" name="textEdit">
+              <widget class="QTextEdit" name="txNote">
                <property name="styleSheet">
                 <string notr="true">font: 16px &quot;Microsoft JhengHei UI&quot;;</string>
                </property>
@@ -246,7 +246,7 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
-          <item row="0" column="2" rowspan="2">
+          <item row="0" column="4" rowspan="2">
            <widget class="QGroupBox" name="groupBox_5">
             <property name="minimumSize">
              <size>
@@ -319,20 +319,7 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
-          <item row="0" column="1">
-           <spacer name="horizontalSpacer">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item row="0" column="3" rowspan="2">
+          <item row="0" column="5" rowspan="2">
            <widget class="QGroupBox" name="groupBox_3">
             <property name="minimumSize">
              <size>
@@ -394,6 +381,42 @@ p, li { white-space: pre-wrap; }
             </layout>
            </widget>
           </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="2" rowspan="2">
+           <widget class="ItemPic" name="wPic0" native="true">
+            <property name="minimumSize">
+             <size>
+              <width>160</width>
+              <height>120</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
        </widget>
@@ -403,6 +426,14 @@ p, li { white-space: pre-wrap; }
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ItemPic</class>
+   <extends>QWidget</extends>
+   <header>ItemPic.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

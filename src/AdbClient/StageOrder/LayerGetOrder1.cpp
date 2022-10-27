@@ -13,6 +13,8 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
     m_layerCost->setReadOnly();
     m_layerCost->hide();
 
+    ui->lbDelay->hide();
+
     ui->wBottom->setCurrentIndex(0);
 }
 
@@ -111,7 +113,7 @@ void LayerGetOrder1::refreshUser(bool bRe)
         }
     }
 
-
+     on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
 }
 
 QVariantMap LayerGetOrder1::gameItem(QString sSid)
@@ -131,6 +133,25 @@ QVariantMap LayerGetOrder1::gameItem(QString sSid)
 
 void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 {
+    if(row<0 || row>=ui->tbUser->rowCount())
+        return;
+
+    if(column<0 || column>=ui->tbUser->columnCount())
+        return;
+
+    if(ui->tbUser->item(row,column)->text()
+            .split("(").last().split(")").first().toInt()<1)
+        return;
+
+
+   // QTableWidgetItem *item =ui->tbUser->item(row,column);
+    ui->tbUser->setCurrentCell(row,column);
+
+
+
+    m_iPreUserCol = column;
+    m_iPreUserRow = row;
+
     int iIdx = row*ui->tbUser->columnCount()+column;
     QString sKey= m_listFactory.at(iIdx).Name;
     m_currentDataKey = sKey;
@@ -194,15 +215,15 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 
 
             ui->tbOrder->setItem(i,6,UI.tbItem(ACTION.getUser(order.PaddingUser,true).Name+" 處理中"));
-            ui->tbOrder->setItem(i,7,UI.tbItem(""));
-            //            if(order.PaddingUser==ACTION.m_currentUser.Sid)
-            //            {
-            //                ui->tbOrder->setItem(i,7,UI.tbItem("釋放接單",true));
-            //            }
-            //            else
-            //            {
-            //               ui->tbOrder->setItem(i,7,UI.tbItem(""));
-            //           }
+
+            if(order.PaddingUser==ACTION.m_currentUser.Sid)
+            {
+                ui->tbOrder->setItem(i,7,UI.tbItem("處理訂單",true));
+            }
+            else
+            {
+                ui->tbOrder->setItem(i,7,UI.tbItem(""));
+            }
 
         }
 
@@ -243,11 +264,15 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
             QString sError;
             order.PaddingUser=ACTION.m_currentUser.Sid;
             order.Step="2";
+            order.User[2] = ACTION.m_currentUser.Sid;
+            order.StepTime[2]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
+
             ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
             UI.showMsg("",sError,"OK");
 
             refreshUser();
+
         }
 
         return;
@@ -275,7 +300,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
             if(GLOBAL.toList(order.CanSelectPayType).indexOf(sSid)>=0)
                 listCb.append(list.at(i).toMap()["Name"].toString());
         }
-
+        ui->cbAddValueType->clear();
         ui->cbAddValueType->addItems(listCb);
 
 
@@ -303,6 +328,10 @@ void LayerGetOrder1::on_btnBackOrder_clicked()
         QString sError;
 
         order.PaddingUser="";
+        order.StepTime[2]="";
+
+        order.User[2] = "";
+
 
         order.Step="1";
 
@@ -311,6 +340,7 @@ void LayerGetOrder1::on_btnBackOrder_clicked()
         UI.showMsg("",sError,"OK");
 
         refreshUser();
+
 
         return;
     }
@@ -342,6 +372,7 @@ void LayerGetOrder1::on_btnFinish_clicked()
 
         int iIdxPayType = m_listPayType.listSecond().indexOf(ui->cbAddValueType->currentText());
 
+
         if(iIdxPayType>=0)
         {
             QString PayTypeSid = m_listPayType.listFirst().at(iIdxPayType);
@@ -349,13 +380,33 @@ void LayerGetOrder1::on_btnFinish_clicked()
         }
         order.Step="3";
 
-        order.User[2] = ACTION.m_currentUser.Sid;
+        order.StepTime[3]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
+
+
+        order.User[3] = ACTION.m_currentUser.Sid;
+
+        QString sNote= ui->txNote->toPlainText();
+
+
+        if(ui->lbDelay->isVisible())
+        {
+            sNote="["+ui->lbDelay->text()+"]\n"+sNote;
+        }
+
+
+        order.Note0[3]=sNote;
+
+
+        order.Pic0 = ui->wPic0->uploadPic();
+
 
         ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
         UI.showMsg("",sError,"OK");
 
+
         refreshUser();
+
 
         return;
     }
@@ -372,38 +423,18 @@ void LayerGetOrder1::refresh()
 
     m_listFactory.clear();
 
-
-    DataFactory tmp;
-
-    tmp.Id="ABD";
-
-    tmp.Name="艾比代";
-
-    // m_listFactory.append(tmp);
-
     m_listFactory.append(ACTION.getFactoryClass("",true));
 
     ui->tbOrder->setRowCount(0);
 
     ui->cbAddValueType->clear();
-    /*
-    QVariantList list;
 
-    QVariantMap d;
-
-    QString sError;
-
-    ACTION.action(ACT::QUERY_ADDVALUE_TYPE,d,list,sError);
-
-    QStringList listCb;
-
-    for(int i=0;i<list.length();i++)
-    {
-        listCb.append(list.at(i).toMap()["Name"].toString());
-    }
-
-    ui->cbAddValueType->addItems(listCb);
-    */
     refreshUser();
+}
+
+
+void LayerGetOrder1::on_btnDelay_clicked()
+{
+    ui->lbDelay->setVisible(ui->btnDelay->isChecked());
 }
 

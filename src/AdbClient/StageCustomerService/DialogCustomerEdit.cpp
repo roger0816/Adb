@@ -34,12 +34,12 @@ void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
     ui->cbGame->clear();
 
     ui->cbGame->addItems(mapToList(m_listGame,"Name"));
-    m_listRateKey.clear();
-    m_listRateKey = ACTION.listRate("",true).last().listKey();
-    m_listRateKey.push_front("新台幣(NTD)");
-    ui->cbCost->clear();
 
-    ui->cbCost->addItems(m_listRateKey);
+    m_lastPrimeRate=ACTION.primeRate("");
+
+    ui->cbCurrency->clear();
+
+    ui->cbCurrency->addItems(m_lastPrimeRate.listKey());
 }
 
 void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,QVariantList listGameInfo,QVariantMap data)
@@ -58,14 +58,21 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
     ui->cbClass->setEnabled(false);
 
     ui->lbId->setText(m_data["Id"].toString());
-
+    int vip = 0;
+    if(m_data["Vip"]=="1")
+        vip=1;
+    ui->cbVip->setCurrentIndex(vip);
     ui->txName->setText(m_data["Name"].toString());
 
     QString sCurrency = m_data["Currency"].toString();
 
-    int iCbIdx =qBound(0,m_listRateKey.indexOf(sCurrency),ui->cbCost->count()-1);
+    m_sOriginCurrency=sCurrency;
 
-    ui->cbCost->setCurrentIndex(iCbIdx);
+    int iCbIdx =qBound(0,m_lastPrimeRate.listKey().indexOf(sCurrency),ui->cbCurrency->count()-1);
+
+    ui->cbCurrency->setCurrentIndex(iCbIdx);
+
+    ui->cbCurrency->setEnabled(false);
 
 //    ui->txPayType->setText(m_data["PayType"].toString());
 
@@ -92,6 +99,12 @@ QVariantMap DialogCustomerEdit::data()
 
     m_data["Name"] = ui->txName->text().trimmed();
 
+    m_data["Vip"]="0";
+
+    if(ui->cbVip->currentIndex()==1)
+        m_data["Vip"]="1";
+
+
 //    m_data["PayType"] = ui->txPayType->text().trimmed();
 
 //    m_data["PayInfo"] = ui->txPayInfo->text().trimmed();
@@ -100,7 +113,7 @@ QVariantMap DialogCustomerEdit::data()
 
     m_data["Class"] = mapToList(m_listClass,"Sid").at(iClassIdx);
 
-    QString sCurrency = ui->cbCost->currentText();
+    QString sCurrency = ui->cbCurrency->currentText();
 
     m_data["Currency"] = sCurrency;
 
@@ -209,9 +222,11 @@ void DialogCustomerEdit::refresh()
 
         ui->tbGameList->setItem(iIdx,3,UI.tbItem(data["Characters"].toString()));
 
-        ui->tbGameList->setItem(iIdx,4,UI.tbItem(data["ServerName"].toString()));
+        ui->tbGameList->setItem(iIdx,4,UI.tbItem(data["LoginPassword"].toString()));
 
-        ui->tbGameList->setItem(iIdx,5,UI.tbItem(data["LoginType"].toString()));
+        ui->tbGameList->setItem(iIdx,5,UI.tbItem(data["ServerName"].toString()));
+
+        ui->tbGameList->setItem(iIdx,6,UI.tbItem(data["LoginType"].toString()));
 
 
     }
@@ -273,6 +288,8 @@ void DialogCustomerEdit::on_btnAddGame_clicked()
 
     data["LoginAccount"] = ui->txGameAccount->text().trimmed();
 
+    data["LoginPassword"] = ui->txPassword->text().trimmed();
+
     data["ServerName"] =ui->txServer->text().trimmed();
 
     data["Characters"] = ui->txChr->text().trimmed();
@@ -284,37 +301,7 @@ void DialogCustomerEdit::on_btnAddGame_clicked()
 
     return;
 
-    /*
-    int iIdx = ui->cbGame->currentIndex();
 
-    if(iIdx<0 || iIdx>=m_listGame.length())
-        return;
-
-    QVariantMap dataGame = m_listGame.at(iIdx).toMap();
-
-    QString sName = dataGame["Name"].toString();
-
-
-
-    QVariantMap data;
-
-    data["GameSid"] = dataGame["Sid"];
-
-    m_listGameInfo.append(data);
-
-    int iRowCount = ui->tbGameList->rowCount();
-    ui->tbGameList->setRowCount(iRowCount+1);
-
-    QPushButton *btn = new QPushButton(this);
-    btn->setMaximumWidth(52);
-    btn->setText("移除");
-
-    m_btns.addButton(btn);
-
-    ui->tbGameList->setItem(iRowCount,0,UI.tbItem(sName));
-
-     ui->tbGameList->setCellWidget(iRowCount,1,btn);
-     */
 }
 
 
@@ -345,8 +332,9 @@ void DialogCustomerEdit::on_tbGameList_cellClicked(int row, int col)
         ui->cbGame->setCurrentText(ui->tbGameList->item(row,1)->text());
         ui->txGameAccount->setText(ui->tbGameList->item(row,2)->text());
         ui->txChr->setText(ui->tbGameList->item(row,3)->text());
-        ui->txServer->setText(ui->tbGameList->item(row,4)->text());
-        ui->txLoginType->setText(ui->tbGameList->item(row,5)->text());
+        ui->txPassword->setText(ui->tbGameList->item(row,4)->text());
+        ui->txServer->setText(ui->tbGameList->item(row,5)->text());
+        ui->txLoginType->setText(ui->tbGameList->item(row,6)->text());
 
 
     }
@@ -367,6 +355,26 @@ void DialogCustomerEdit::on_cbClass_currentIndexChanged(int index)
 
 void DialogCustomerEdit::on_btnOk_clicked()
 {
+
+    if(m_sOriginCurrency!=ui->cbCurrency->currentText())
+    {
+        int iRet =DMSG.showMsg("","確定要轉換幣別，餘額將以當前成本匯率轉換，是否繼續？",QStringList()<<"否"<<"是");
+
+        if(iRet!=1)
+            return;
+
+    int iIdx =qBound(0,ui->cbCurrency->currentIndex(),m_lastPrimeRate.listValue().length()-1);
+
+     double iOriginRate = m_lastPrimeRate.listValue().at(iIdx).toDouble();
+
+     double money =m_data["Money"].toDouble();
+
+     m_data["Money"] = money/iOriginRate;
+
+
+    }
+
+
 
     for(int i=0;i<m_listGameInfo.length();i++)
     {

@@ -33,11 +33,13 @@ public:
 
     void paintEvent(QPaintEvent *) override;
 
+
+
 private slots:
     void on_btnLogin_clicked();
 
 signals:
-  //  void signalLogin();
+    void signalLogin();
 private:
     Ui::DialogLogin *ui;
 private:

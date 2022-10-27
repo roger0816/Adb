@@ -217,6 +217,68 @@ void LayerSchedule::refresh()
 
 }
 
+void LayerSchedule::keyPressEvent(QKeyEvent *e)
+{
+    int iRow = ui->tb0->currentRow();
+    int iCol =ui->tb0->currentColumn();
+
+    if(m_bEditMode && checkGrid(iRow,iCol))
+    {
+
+        if(e->key()==Qt::Key_Space || e->key()==Qt::Key_Backspace)
+        {
+
+            m_data[iRow][iCol].sCheck="0";
+
+            if(m_group.checkedButton()==ui->btnCost)
+                m_data[iRow][iCol].sCost ="";
+            else  if(m_group.checkedButton()==ui->btnStatus)
+                m_data[iRow][iCol].sStatus ="";
+            else
+                m_data[iRow][iCol].sUserSid ="";
+            refresh();
+
+
+
+        }
+
+        else if (e->key()==Qt::Key_Escape)
+        {
+
+            m_data[iRow][iCol].sCheck="0";
+
+            m_data[iRow][iCol].sCost ="";
+
+            m_data[iRow][iCol].sStatus ="";
+
+            m_data[iRow][iCol].sUserSid ="";
+
+            refresh();
+
+
+        }
+    }
+}
+
+bool LayerSchedule::checkGrid(int iRow, int iCol)
+{
+    if(iRow==-1)
+        iRow = ui->tb0->currentRow();
+
+    if(iCol==-1)
+        iCol = ui->tb0->currentColumn();
+
+    bool b=false;
+
+    if(iRow%m_listVHeader.length()!=0 && iRow>=0
+            && iRow< ui->tb0->rowCount()
+            && iCol>=0 && iCol< ui->tb0->columnCount())
+        b=true;
+
+
+    return b;
+}
+
 
 
 void LayerSchedule::on_btnSave_clicked()
@@ -548,23 +610,45 @@ void LayerSchedule::on_btnChangeBtn_clicked()
 void LayerSchedule::btnsClicked()
 {
     QPushButton *btn = dynamic_cast<QPushButton*>(sender());
+    QString sCost=btn->text();
 
 
-    int iRow= ui->tb0->currentRow();
-    int iCol = ui->tb0->currentColumn();
-    if(iRow%m_listVHeader.length()!=0 && iRow>=0 && iRow< ui->tb0->rowCount()
-            && iCol>=0 && iCol< ui->tb0->columnCount())
+
+#if 0
+    QList<QTableWidgetItem*> listSelect = ui->tb0->selectedItems();
+    foreach(QTableWidgetItem *item, listSelect)
     {
 
 
+        int iRow= item->row();
+        int iCol = item->column();
+
+        qDebug()<<"row : "<<iRow<<" , col : "<<iCol;
+        if(checkGrid(iRow,iCol))
+        {
+
+            qDebug()<<"row : "<<iRow<<" , col : "<<iCol;
+            m_data[iRow][iCol].sCost = btn->text();
+            m_data[iRow][iCol].sCheck="0";
+        }
+    }
+
+    refresh();
+
+    ui->tb0->setFocus();
+#else
+    int iRow= ui->tb0->currentRow();
+    int iCol = ui->tb0->currentColumn();
+    if(checkGrid(iRow,iCol))
+    {
+
         m_data[iRow][iCol].sCost = btn->text();
         m_data[iRow][iCol].sCheck="0";
-
         refresh();
-
 
     }
     ui->tb0->setFocus();
+#endif
 }
 
 
@@ -572,8 +656,8 @@ void LayerSchedule::btnsClicked()
 void LayerSchedule::delayRefresh()
 {
 
-    m_sYear = QDateTime::currentDateTimeUtc().toString("yyyy");
-    m_sMonth = QDateTime::currentDateTimeUtc().toString("MM");
+    m_sYear = GLOBAL.dateTimeUtc8().toString("yyyy");
+    m_sMonth = GLOBAL.dateTimeUtc8().toString("MM");
 
     ui->lbTitle->setText(m_sYear+" / "+m_sMonth);
 
@@ -689,5 +773,57 @@ void LayerSchedule::on_tb0_cellClicked(int row, int column)
         }
 
     }
+}
+
+
+void LayerSchedule::on_btnClearCost_clicked()
+{
+    for(int iRow=0;iRow<128;iRow++)
+    {
+        for(int iCol=0;iCol<7;iCol++)
+        {
+            m_data[iRow][iCol].sCost = "";
+            m_data[iRow][iCol].sCheck="0";
+        }
+
+    }
+
+    refresh();
+
+}
+
+
+
+
+void LayerSchedule::on_btnClearUserSid_clicked()
+{
+    for(int iRow=0;iRow<128;iRow++)
+    {
+        for(int iCol=0;iCol<7;iCol++)
+        {
+            m_data[iRow][iCol].sUserSid = "";
+            m_data[iRow][iCol].sCheck="0";
+        }
+
+    }
+
+    refresh();
+
+}
+
+
+void LayerSchedule::on_btnClearStatus_clicked()
+{
+    for(int iRow=0;iRow<128;iRow++)
+    {
+        for(int iCol=0;iCol<7;iCol++)
+        {
+            m_data[iRow][iCol].sStatus = "";
+            m_data[iRow][iCol].sCheck="0";
+        }
+
+    }
+
+    refresh();
 }
 

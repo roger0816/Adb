@@ -31,7 +31,8 @@ private slots:
 
 
     void on_btnLogout_clicked();
-
+public slots:
+    void slotLogin();
 private:
     Ui::Widget *ui;
     QButtonGroup m_btns;

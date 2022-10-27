@@ -261,6 +261,8 @@ void Action::reQuerty()
     costRate("",true);
 
     primeRate("",true);
+
+
   //  rate("",true);
 }
 
@@ -343,9 +345,7 @@ QList<DataFactory> Action::getFactoryClass(QString sSid, bool bQuery)
 
         foreach(QVariant v,list)
         {
-            DataFactory tmp;
-
-            tmp.setData(v.toMap());
+            DataFactory tmp(v.toMap());
 
             m_listFactoryClass.append(tmp);
         }
@@ -638,6 +638,8 @@ OrderData Action::getOrderByCustomerSid(QString sSid, bool bRequest)
         getOrder(bRequest);
 
     OrderData re;
+    re.Sid="";
+    re.Id="";  //is no order
 
     for(int i=0;i<m_listOrder.length();i++)
     {

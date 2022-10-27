@@ -170,13 +170,14 @@ struct CustomerData :public DataObj
 
     void setData(QVariantMap data)
     {
+
         DataObj::setData(data);
 
         Class = data["Class"].toString();
         Money = data["Money"].toString();
         if(Money=="")
             Money="0";
-
+        Vip = data["Vip"].toString();
         Currency = data["Currency"].toString();
         PayType =data["PayType"].toString();
         PayInfo =data["PayInfo"].toString();
@@ -192,6 +193,7 @@ struct CustomerData :public DataObj
         QVariantMap d = DataObj::data();
 
         d["Class"] = Class;
+        d["Vip"] = Vip;
         d["Money"] = Money;
         d["Currency"] = Currency;
         d["PayType"] = PayType;
@@ -203,6 +205,7 @@ struct CustomerData :public DataObj
         return d;
     }
 
+    QString Vip;
     QString Class;
     QString Money="0";
     QString Currency;
@@ -345,12 +348,15 @@ struct CustomerGameInfo :public DataObj
 
     void setData(QVariantMap data)
     {
+
+
         DataObj::setData(data);
 
         CustomerId = data["CustomerId"].toString();
         GameSid = data["GameSid"].toString();
         LoginType = data["LoginType"].toString();
         LoginAccount = data["LoginAccount"].toString();
+        LoginPassword = data["LoginPassword"].toString();
         ServerName = data["ServerName"].toString();
         Characters = data["Characters"].toString();
         LastTime = data["LastTime"].toString();
@@ -366,6 +372,7 @@ struct CustomerGameInfo :public DataObj
         d["GameSid"] = GameSid;
         d["LoginType"] = LoginType;
         d["LoginAccount"] = LoginAccount;
+        d["LoginPassword"] = LoginPassword;
         d["ServerName"] = ServerName;
         d["Characters"] = Characters;
         d["LastTime"] = LastTime;
@@ -379,6 +386,7 @@ struct CustomerGameInfo :public DataObj
     QString GameSid;
     QString LoginType;
     QString LoginAccount;
+    QString LoginPassword;
     QString ServerName;
     QString Characters;
     QString LastTime;
@@ -390,13 +398,18 @@ struct OrderData :public DataObj
 {
     OrderData()
     {
-        while(User.length()<5)
+        while(User.length()<6)
             User.append("");
-        while(StepTime.length()<5)
+        while(StepTime.length()<6)
             StepTime.append("");
+
+        while(Note0.length()<6)
+            Note0.append("");
 
         while(Money.length()<3)
             Money.append("");
+
+
     }
     OrderData(QVariantMap data):DataObj(){OrderData();setData(data);}
 
@@ -413,6 +426,7 @@ struct OrderData :public DataObj
         User = data["User"].toString().split(",");
         Owner = data["Owner"].toString();
         PaddingUser = data["PaddingUser"].toString();
+        GameSid = data["GameSid"].toString();
         Item = data["Item"].toString();
         Cost = data["Cost"].toString();
         Bouns = data["Bouns"].toString();
@@ -421,7 +435,7 @@ struct OrderData :public DataObj
         ExRateSid = data["ExRateSid"].toString();
         PrimeRateSid = data["PrimeRateSid"].toString();
         Money = data["Money"].toString().split(";");
-        Note0 = data["Note0"].toString();
+        Note0 = data["Note0"].toString().split(",");
         Note1 = data["Note1"].toString();
         Note2 = data["Note2"].toString();
         Note3 = data["Note3"].toString();
@@ -432,6 +446,16 @@ struct OrderData :public DataObj
         UpdateTime = data["UpdateTime"].toString();
         OrderDate = data["OrderDate"].toString();
         OrderTime = data["OrderTime"].toString();
+
+        while(Note0.length()<6)
+            Note0.append("");
+        while(User.length()<6)
+            User.append("");
+        while(StepTime.length()<6)
+            StepTime.append("");
+
+        while(Money.length()<3)
+            Money.append("");
 
     }
 
@@ -446,6 +470,7 @@ struct OrderData :public DataObj
         re["User"] = User.join(",");
         re["Owner"] = Owner;
         re["PaddingUser"] = PaddingUser;
+        re["GameSid"] = GameSid;
         re["Item"] = Item;
         re["Cost"] = Cost;
         re["Bouns"] = Bouns;
@@ -454,7 +479,7 @@ struct OrderData :public DataObj
         re["ExRateSid"] = ExRateSid;
         re["PrimeRateSid"] = PrimeRateSid;
         re["Money"] = Money.join(";");
-        re["Note0"] = Note0;
+        re["Note0"] = Note0.join(",");
         re["Note1"] = Note1;
         re["Note2"] = Note2;
         re["Note3"] = Note3;
@@ -464,6 +489,8 @@ struct OrderData :public DataObj
         re["Pic1"] = Pic1;
         re["OrderDate"] = OrderDate;
         re["OrderTime"] = OrderTime;
+
+
 
 
         return re;
@@ -479,6 +506,7 @@ struct OrderData :public DataObj
     QString PaddingUser;
     QString PayType;
     QString CanSelectPayType;
+    QString GameSid;
     QString Item;
     QString Cost="0";
     QString Bouns="0";
@@ -486,7 +514,7 @@ struct OrderData :public DataObj
     QString ExRateSid="";
     QString PrimeRateSid="";
     QStringList Money;
-    QString Note0;
+    QStringList Note0;
     QString Note1;
     QString Note2;
     QString Note3;
@@ -506,15 +534,17 @@ struct OrderData :public DataObj
 
 struct DataFactory :public DataObj
 {
+    DataFactory(){}
     bool Enable;
+
+    DataFactory(QVariantMap data){setData(data);}
 
     void setData(QVariantMap data)
     {
         DataObj::setData(data);
 
         Currency = data["Currency"].toString();
-        SellCurrency = data["SellCurrency"].toString();
-        Cost = data["Cost"].toString();
+
         PayTypdSid = data["PayTypeSid"].toString().split(SPLIT1);
     }
 
@@ -523,16 +553,14 @@ struct DataFactory :public DataObj
         QVariantMap re =DataObj::data();
 
         re["Currency"] = Currency;
-        re["SellCurrency"] = SellCurrency;
-        re["Cost"] = Cost;
+
         re["PayTypeSid"] = PayTypdSid.join(SPLIT1);
         return re;
     }
 
     QStringList PayTypdSid;
     QString Currency;
-    QString SellCurrency;
-    QString Cost;
+
 };
 
 struct DataGameList :public DataObj
@@ -633,16 +661,17 @@ struct DataRate :public DataObj
         DataObj::setData(data);
 
         listData = CListPair(data["Name"].toString());
-
+        UserSid = data["UserSid"].toString();
     }
 
+    QString UserSid;
 
     QVariantMap data()
     {
         QVariantMap re = DataObj::data();
 
         re["Name"] = listData.toString();
-
+        re["UserSid"] =UserSid;
         return re;
     }
 
@@ -805,98 +834,6 @@ struct GameList
 };
 
 
-//struct DataAddValueType
-//{
-//    DataAddValueType (){}
-
-//    void setData(QVariantList list)
-//    {
-//        m_listData =  list;
-//    }
-
-//    QVariantList data()
-//    {
-//        return m_listData;
-//    }
-
-//    QStringList listKey()
-//    {
-//        QStringList listRe;
-
-//        for(int i=0;i<m_listData.length();i++)
-//        {
-//            QVariantMap data = m_listData.at(i).toMap();
-
-//            listRe.append(data["Name"].toString());
-//        }
-
-//        return listRe;
-//    }
-
-
-//    QVariantList m_listData;
-
-//};
-
-//struct GameItem
-//{
-
-//    GameItem(){}
-
-//    GameItem(QVariantMap data){setData(data);}
-
-//    void setData(QVariantMap data)
-//    {
-//        Sid = data["Sid"].toInt();
-
-//        GameId = data["GameSid"].toInt();
-
-//        Enable = data["Enable"].toBool();
-
-//        Name = data["Name"].toString();
-
-//        OrderNTD = data["OrderNTD"].toDouble();
-
-//        Bouns = data["Bouns"].toDouble();
-
-//        NTD = data["NTD"].toDouble();
-
-//        EnableCost = data["EnableCost"].toBool();
-
-//        Cost = data["Cost"].toString();
-
-//        Note1 = data["Note1"].toString();
-
-//        Note2 = data["Note2"].toString();
-
-//        UpdateTime = data["UpdateTime"].toString();
-
-//    }
-
-//    int Sid;
-
-//    int GameId;
-
-//    bool Enable;
-
-//    QString  Name;
-
-//    double OrderNTD;
-
-//    double Bouns;
-
-//    double NTD;
-
-//    bool EnableCost;
-
-//    QString Cost;
-
-//    QString Note1;
-
-//    QString Note2;
-
-//    QString UpdateTime;
-//};
 
 
 

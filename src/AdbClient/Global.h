@@ -39,6 +39,8 @@ public:
 
     QString originCurrency(QString st);
 
+    QString displayCustomerLv(QString iLv);
+
     QString sidAdd(QString last);
 
     QVariantList reData(QVariantList data,QStringList listKey);
@@ -61,7 +63,7 @@ public:
 
     QVariant config(QString st);
 
-
+    QDateTime dateTimeUtc8();
 
 private:
     static Global *m_pInstance;

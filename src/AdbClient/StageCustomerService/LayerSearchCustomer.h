@@ -6,6 +6,7 @@
 #include "GlobalUi.h"
 #include <QDateTime>
 #include "DialogCustomerCostHistory.h"
+#include <QKeyEvent>
 namespace Ui {
 class LayerSearchCustomer;
 }
@@ -44,12 +45,15 @@ private:
 
     QVariantList m_listData;
 
-    bool checkSearch(QVariantMap data);
+    bool checkSearch(CustomerData data);
 
     QString m_sSearchKey="";
 
     int m_iIdx=-1;
 
+    void keyPressEvent(QKeyEvent *e) override;
+
+    QString getLastGame(QString sCustomerId);
 
 public slots:
     void slotBack(int iPage=0);

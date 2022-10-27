@@ -1,22 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ItemPic</class>
- <widget class="QWidget" name="ItemPic">
+ <class>ItemPicObj</class>
+ <widget class="QWidget" name="ItemPicObj">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
-    <height>320</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
    <property name="topMargin">
     <number>0</number>
    </property>
@@ -47,13 +44,13 @@ border: 1px solid #ffffff;
        <number>2</number>
       </property>
       <property name="topMargin">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="rightMargin">
        <number>2</number>
       </property>
       <property name="bottomMargin">
-       <number>2</number>
+       <number>0</number>
       </property>
       <property name="spacing">
        <number>0</number>
@@ -79,15 +76,22 @@ background-color: #f3f3f3;</string>
         </property>
         <property name="styleSheet">
          <string notr="true">background-color: #f3f3f3;
+font: 12px &quot;Microsoft JhengHei UI&quot;;
 </string>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="stackedWidgetPage1">
          <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="topMargin">
+           <number>1</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
           <item>
-           <widget class="QPushButton" name="btnUpload">
+           <widget class="QPushButton" name="btnSelectPic">
             <property name="styleSheet">
              <string notr="true"/>
             </property>
@@ -102,6 +106,9 @@ background-color: #f3f3f3;</string>
           </item>
           <item>
            <widget class="QPushButton" name="btnLbPicClear">
+            <property name="styleSheet">
+             <string notr="true"/>
+            </property>
             <property name="text">
              <string>清除</string>
             </property>
@@ -126,6 +133,12 @@ background-color: #f3f3f3;</string>
         </widget>
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_3">
+          <property name="topMargin">
+           <number>1</number>
+          </property>
+          <property name="bottomMargin">
+           <number>4</number>
+          </property>
           <item row="0" column="0">
            <widget class="QPushButton" name="btnDownload">
             <property name="maximumSize">

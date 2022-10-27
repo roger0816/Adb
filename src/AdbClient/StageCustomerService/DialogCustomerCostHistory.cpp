@@ -146,7 +146,7 @@ void DialogCustomerCostHistory::refresh(int)
         {
             OrderData d(v);
 
-            ui->tableWidget->setItem(i,0,UI.tbItem(d.Sid));
+            ui->tableWidget->setItem(i,0,UI.tbItem(d.Id));
             ui->tableWidget->setItem(i,1,UI.tbItem("消費"));
             ui->tableWidget->setItem(i,2,UI.tbItem(d.Cost));
 
@@ -224,7 +224,7 @@ QVariantList DialogCustomerCostHistory::filterData()
 void DialogCustomerCostHistory::mergeData()
 {
     //merge cost and order  for table data
-
+    m_listRowData.clear();
     foreach(QVariant v, m_listAddCost)
     {
         CustomerCost d(v.toMap());

@@ -23,6 +23,7 @@ INCLUDEPATH+= \
 
 SOURCES += \
     StageCustomerService/DialogCustomerCostHistory.cpp \
+    StageOrder/ItemOrderSelector.cpp \
     component/CLinkTable.cpp \
     component/CSideMenu.cpp \
     DialogBulletinEdit.cpp \
@@ -36,6 +37,7 @@ SOURCES += \
     component/DialogObj.cpp \
     component/ItemMiniLoadbar.cpp \
     component/ItemPic.cpp \
+    component/ItemPicObj.cpp \
     component/Label3.cpp \
     LayerBulletin.cpp \
     LayerOrder.cpp \
@@ -74,6 +76,7 @@ SOURCES += \
 
 HEADERS += \
     StageCustomerService/DialogCustomerCostHistory.h \
+    StageOrder/ItemOrderSelector.h \
     component/CLinkTable.h \
     component/CSideMenu.h \
     DialogBulletinEdit.h \
@@ -87,6 +90,7 @@ HEADERS += \
     component/DialogObj.h \
     component/ItemMiniLoadbar.h \
     component/ItemPic.h \
+    component/ItemPicObj.h \
     component/Label3.h \
     LayerBulletin.h \
     LayerOrder.h \
@@ -124,6 +128,7 @@ HEADERS += \
 
 FORMS += \
     StageCustomerService/DialogCustomerCostHistory.ui \
+    StageOrder/ItemOrderSelector.ui \
     component/CSideMenu.ui \
     DialogBulletinEdit.ui \
     DialogCommon.ui \
@@ -164,7 +169,7 @@ FORMS += \
     StageReport/LayerSchedule.ui \
     StageReport/StageReport.ui \
     StageTest.ui \
-    component/ItemPic.ui \
+    component/ItemPicObj.ui \
     widget.ui
 
 # Default rules for deployment.

@@ -16,11 +16,38 @@ typedef enum
 
 }RUN_MODE;
 
+//class classA
+//{
+//public:
+//    void setW(QWidget *w){ m_w=&w; }
+//    void change()
+//    {
+//        if(*m_w!=nullptr)
+//        {
+//            *m_w->resize(600,600); //这行怎么写
+//            qDebug()<<"AAAAAAA";
+//        }
+
+//    }
+//    QWidget *m_w=nullptr;
+//};
+
 
 
 int main(int argc, char *argv[])
 {
+
     QApplication a(argc, argv);
+
+//    QWidget *ww=nullptr;
+//    classA aa;
+//    aa.setW(ww);
+
+//    ww=new QWidget();
+//    ww->resize(100,100);
+//    ww->show();
+//    aa.change();
+
 
 
     RUN_MODE mode = _RELEASE;
@@ -91,21 +118,19 @@ int main(int argc, char *argv[])
 
     DialogLogin login;
 
+    login.connect(&login,&DialogLogin::signalLogin,&w,&Widget::slotLogin);
+
     login.setRelease(b);
 
     UI.m_dialogLogin = &login;
 
-#if 1
+#if 0
 
     int iRet =login.exec();
 
     if(iRet==_DialogLogin::_LoginOk)
     {
-        ACTION.reQuerty();
-
-        ACTION.setStartSyanc(true);
-
-        w.show();
+        //is signal slot done
     }
     else if(iRet==_DialogLogin::_Close)
     {
@@ -114,11 +139,12 @@ int main(int argc, char *argv[])
 
 
 #else
-    ACTION.m_currentUser.Id="root";
-    ACTION.m_currentUser.Name="root";
+    ACTION.m_currentUser.Id="sysroot";
+    ACTION.m_currentUser.Name="sysroot";
     ACTION.m_currentUser.Lv=99;
     ACTION.m_currentUser.Sid="0";
-    w.show();
+    ACTION.m_currentUser.Cid="R00";
+    w.slotLogin();
 #endif
 
 

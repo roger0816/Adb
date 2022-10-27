@@ -55,7 +55,9 @@ void LayerSearchCustomer::refresh(bool bReQuery)
 
     for(int i=0;i<m_listData.length();i++)
     {
-        QVariantMap data = m_listData.at(i).toMap();
+        QVariantMap v = m_listData.at(i).toMap();
+
+        CustomerData data(v);
 
         bool bCheck = checkSearch(data);
 
@@ -69,19 +71,27 @@ void LayerSearchCustomer::refresh(bool bReQuery)
 
         ui->tb->setItem(iIdx,0,UI.tbItem("進入",GlobalUi::_BUTTON));
 
-        ui->tb->setItem(iIdx,1,UI.tbItem(data["Id"]));
+        ui->tb->setItem(iIdx,1,UI.tbItem(data.Id));
+        qDebug()<<"data class : "<<data.Class;
+        QString sClassName = ACTION.getCustomerClass(data.Class).Name;
+        qDebug()<<"class 2 "<<sClassName;
+        ui->tb->setItem(iIdx,2,UI.tbItem(sClassName));
 
-        ui->tb->setItem(iIdx,2,UI.tbItem(data["Name"]));
+        ui->tb->setItem(iIdx,3,UI.tbItem(data.Name));
 
-        ui->tb->setItem(iIdx,3,UI.tbItem(data["Currency"]));
+        QString sLv = GLOBAL.displayCustomerLv(data.Vip);
 
-        ui->tb->setItem(iIdx,4,UI.tbItem(data["PayInfo"]));
+        ui->tb->setItem(iIdx,4,UI.tbItem(sLv));
 
-        QDateTime date=QDateTime::fromString(data["UpdateTime"].toString(),"yyyyMMddhhmmss");
+        ui->tb->setItem(iIdx,5,UI.tbItem(data.Currency));
 
-        ui->tb->setItem(iIdx,5,UI.tbItem(date.date()));
+        ui->tb->setItem(iIdx,6,UI.tbItem(data.PayInfo));
 
-        ui->tb->setItem(iIdx,6,UI.tbItem("查詢",GlobalUi::_BUTTON));
+        QDateTime date=QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss");
+
+        ui->tb->setItem(iIdx,7,UI.tbItem(date.date()));
+
+        //   ui->tb->setItem(iIdx,8,UI.tbItem("查詢",GlobalUi::_BUTTON));
 
     }
 
@@ -90,8 +100,9 @@ void LayerSearchCustomer::refresh(bool bReQuery)
 
 void LayerSearchCustomer::changePage(int iPage)
 {
-    if(iPage<0 || iPage>=ui->stackedWidget->count())
+    if(iPage<0 || m_iIdx<0 || iPage>=ui->stackedWidget->count())
         return;
+
 
     QVariantList tmp;
     QString sError;
@@ -99,69 +110,92 @@ void LayerSearchCustomer::changePage(int iPage)
     ACTION.action(ACT::QUERY_CUSTOMER,tmp,m_listData,sError);
 
 
+    if(m_listData.length()<1 && m_iIdx>=m_listData.length())
+    {
+        return;
+    }
+
+    CustomerData customer(m_listData.at(m_iIdx).toMap());
+
+    OrderData order= ACTION.getOrderByCustomerSid(customer.Sid,true);
+
+    QString sLastGameSid=order.GameSid;
+    qDebug()<<"lastGameSid : "<<sLastGameSid;
+
     if(iPage==1)
     {
 
-        QVariantMap data = m_listData.at(m_iIdx).toMap();
+        ui->lbClass->setText(ACTION.getCustomerClass(customer.Class).Name);
 
-        ui->lbClass->setText(ACTION.getCustomerClass(data["Class"].toString()).Name);
+        ui->lbId->setText(customer.Id);
 
-        ui->lbId->setText(data["Id"].toString());
+        ui->lbName->setText(customer.Name);
 
-        ui->lbName->setText(data["Name"].toString());
+        ui->lbCurrency->setText(customer.Currency);
 
-        ui->lbCurrency->setText(data["Currency"].toString());
+        ui->lbPayType->setText(customer.PayType);
 
-        ui->lbPayType->setText(data["PayType"].toString());
+        ui->lbPayInfo->setText(customer.PayInfo);
 
-        ui->lbPayInfo->setText(data["PayInfo"].toString());
-
-        ui->lbMoney->setText(data["Money"].toString());
+        ui->lbMoney->setText(customer.Money);
 
         QVariantMap d;
 
-        d["CustomerId"] =data["Id"];
+        d["CustomerId"] =customer.Id;
         QVariantList out;
         QString sError;
         ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,out,sError);
 
-        if(out.length()>0)
+
+        ui->lbGame->clear();
+        ui->lbLoginType->clear();
+        ui->lbGameAccount->clear();
+        ui->lbServer->clear();
+        ui->lbChr->clear();
+
+        for(int i=0;i<out.length() && sLastGameSid!="";i++ )
         {
-            QVariantMap dataGame = out.last().toMap();
+            CustomerGameInfo dataGame (out.at(i).toMap());
 
-            ui->lbGame->setText(ACTION.getGameName(dataGame["GameSid"].toString()));
+            qDebug()<<"CCCCCCCCCCCCC "<<dataGame.GameSid;
 
-            ui->lbLoginType->setText(dataGame["LoginType"].toString());
+            if(dataGame.GameSid == sLastGameSid)
+            {
 
-            ui->lbGameAccount->setText(dataGame["LoginAccount"].toString());
+                ui->lbGame->setText(ACTION.getGameName(dataGame.GameSid));
 
-            ui->lbServer->setText(dataGame["ServerName"].toString());
+                ui->lbLoginType->setText(dataGame.LoginType);
 
-            ui->lbChr->setText(dataGame["Character"].toString());
+                ui->lbGameAccount->setText(dataGame.LoginAccount);
 
+                ui->lbServer->setText(dataGame.ServerName);
+
+                ui->lbChr->setText(dataGame.Characters);
+
+            }
 
         }
+
+
+
 
 
     }
     else if(iPage==2)
     {
-        ui->pageSayCost->setCustomer(m_listData.at(m_iIdx).toMap());
+        ui->pageSayCost->setCustomer(customer.data());
 
     }
 
     else if(iPage==3)
     {
-        ui->pageAddCost->setCustomer(m_listData.at(m_iIdx).toMap());
+        ui->pageAddCost->setCustomer(customer.data());
 
 
     }
 
     else if(iPage==4)
     {
-        CustomerData customer(m_listData.at(m_iIdx).toMap());
-
-        OrderData order= ACTION.getOrderByCustomerSid(customer.Sid,true);
 
 
         if(order.Step!="0" || order.Sid=="")
@@ -172,7 +206,7 @@ void LayerSearchCustomer::changePage(int iPage)
         }
 
 
-        ui->pageOrder->setCustomer(m_listData.at(m_iIdx).toMap());
+        ui->pageOrder->setCustomer(customer.data());
 
 
     }
@@ -184,29 +218,54 @@ void LayerSearchCustomer::changePage(int iPage)
 
 void LayerSearchCustomer::showEvent(QShowEvent *)
 {
-
+    QTimer::singleShot(50,[this](){ refresh(false); });
 }
 
-bool LayerSearchCustomer::checkSearch(QVariantMap data)
+bool LayerSearchCustomer::checkSearch(CustomerData data)
 {
     if(m_sSearchKey.trimmed()=="")
         return true;
 
+    QStringList listKey = m_sSearchKey.split("&");
+
+
     bool bRe = false;
 
-    if(data["Name"].toString().indexOf(m_sSearchKey)>=0)
-        bRe = true;
-    else if(data["Id"].toString().indexOf(m_sSearchKey)>=0)
-        bRe =true;
-    else if(data["Currency"].toString().indexOf(m_sSearchKey)>=0)
-        bRe =true;
-    else if(data["PayInfo"].toString().indexOf(m_sSearchKey)>=0)
-        bRe =true;
-    else if(data["UpdateTime"].toString().indexOf(m_sSearchKey)>=0)
-        bRe =true;
+    QList<int> listOk;
 
+    foreach(QString v, listKey)
+    {
+        int iOk = 0;
+        QString dateTime=QDateTime::fromString("yyyyMMddhhmmss").toString("yyyy/MM/dd hh:mm:ss");
+
+        QString sKey = v.toUpper().trimmed();
+        //  if(data["Name"].toString().indexOf(m_sSearchKey,Qt::CaseInsensitive)>=0)
+        //奇怪，Qt::CaseInsensitive 不起作用
+        if(data.Name.toUpper().contains(sKey))
+            iOk = 1;
+        else if(data.Id.toUpper().contains(sKey))
+            iOk =1;
+        else if(data.Currency.toUpper().contains(sKey))
+            iOk =1;
+        else if(data.PayInfo.toUpper().contains(sKey))
+            iOk =1;
+        else if(dateTime.toUpper().contains(sKey))
+            iOk =1;
+
+        listOk.append(iOk);
+    }
+
+    bRe = !listOk.contains(0);
 
     return bRe;
+}
+
+void LayerSearchCustomer::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key()==Qt::Key_Enter || e->key()==Qt::Key_Return)
+    {
+        on_btnCheck_clicked();
+    }
 }
 
 void LayerSearchCustomer::slotBack(int iPage)

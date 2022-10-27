@@ -35,7 +35,6 @@ public:
 
     bool action(int act, QVariantMap data, QVariantMap &out, QString &sError);
 
-
     bool action(int act, QVariantMap data,QVariantList &listOut, QString &sError);
 
     bool action(int act, QVariantList listData, QVariantList &listOut, QString &sError);

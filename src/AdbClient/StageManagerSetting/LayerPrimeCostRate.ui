@@ -67,6 +67,11 @@
         </column>
         <column>
          <property name="text">
+          <string>修改人</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>內容</string>
          </property>
         </column>
@@ -76,13 +81,13 @@
        <widget class="QWidget" name="widget_3" native="true">
         <property name="minimumSize">
          <size>
-          <width>180</width>
+          <width>210</width>
           <height>160</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>180</width>
+          <width>210</width>
           <height>16777215</height>
          </size>
         </property>
@@ -135,35 +140,35 @@
             <item row="2" column="0">
              <widget class="QLabel" name="lb1">
               <property name="text">
-               <string>港幣</string>
+               <string>港幣(HKD)</string>
               </property>
              </widget>
             </item>
             <item row="3" column="0">
              <widget class="QLabel" name="lb2">
               <property name="text">
-               <string>人民幣</string>
+               <string>人民幣(RMB)</string>
               </property>
              </widget>
             </item>
             <item row="4" column="0">
              <widget class="QLabel" name="lb3">
               <property name="text">
-               <string>林吉特</string>
+               <string>林吉特(MYR)</string>
               </property>
              </widget>
             </item>
             <item row="5" column="0">
              <widget class="QLabel" name="lb4">
               <property name="text">
-               <string>新加坡元</string>
+               <string>新加坡元(SGD)</string>
               </property>
              </widget>
             </item>
             <item row="0" column="0">
              <widget class="QLabel" name="lb0">
               <property name="text">
-               <string>美金</string>
+               <string>美金(USD)</string>
               </property>
              </widget>
             </item>

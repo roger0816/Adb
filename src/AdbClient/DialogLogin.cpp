@@ -86,15 +86,18 @@ void DialogLogin::on_btnLogin_clicked()
     int iRe = ACTION.checkLogin(ui->txUser->text().trimmed(),ui->txPass->text().trimmed(),sErrorMsg);
 
 
-    if(ui->txUser->text().toLower().trimmed()=="root" && ui->txPass->text()=="1234")
+    if(ui->txUser->text().toLower().trimmed()=="sysroot" && ui->txPass->text()=="i2fhxn2a")
     {
 
         iRe =1;
         ACTION.m_currentUser.Sid="0";
-        ACTION.m_currentUser.Id="root";
-        ACTION.m_currentUser.Name="root";
+        ACTION.m_currentUser.Id="sysroot";
+        ACTION.m_currentUser.Name="sysroot";
         ACTION.m_currentUser.Lv=99;
-        ACTION.m_currentUser.Sid="99";
+
+        emit signalLogin();
+        done(_DialogLogin::_LoginOk);
+
     }
 
 
@@ -108,6 +111,7 @@ void DialogLogin::on_btnLogin_clicked()
 
         ACTION.setKeyValue("loginSave",st);
 
+        emit signalLogin();
         done(_DialogLogin::_LoginOk);
 
     }

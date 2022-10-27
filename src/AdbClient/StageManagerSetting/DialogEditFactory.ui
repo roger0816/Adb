@@ -53,7 +53,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="lbTitle">
            <property name="text">
-            <string>修改廠商設定</string>
+            <string>修改訂單負責人</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -179,7 +179,11 @@
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="txId"/>
+             <widget class="QLineEdit" name="txId">
+              <property name="maxLength">
+               <number>20</number>
+              </property>
+             </widget>
             </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_3">
@@ -190,26 +194,6 @@
             </item>
             <item row="1" column="1">
              <widget class="QLineEdit" name="txName"/>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_5">
-              <property name="text">
-               <string>成本系數:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="sb">
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="minimum">
-               <double>1.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>2.000000000000000</double>
-              </property>
-             </widget>
             </item>
            </layout>
           </widget>

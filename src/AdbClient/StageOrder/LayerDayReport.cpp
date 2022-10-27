@@ -249,11 +249,13 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             data.PaddingUser="";
 
-            data.User[4] = ACTION.m_currentUser.Sid;
+            data.User[5] = ACTION.m_currentUser.Sid;
 
             ACTION.action(ACT::REPLACE_ORDER,data.data(),sError);
 
             data.Step="5";
+
+              data.StepTime[5]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
             QStringList listMoney;
 

@@ -73,12 +73,17 @@
         </column>
         <column>
          <property name="text">
-          <string>分類</string>
+          <string>客群</string>
          </property>
         </column>
         <column>
          <property name="text">
           <string>名稱</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>等級</string>
          </property>
         </column>
         <column>

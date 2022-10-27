@@ -22,7 +22,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
     QVariantMap data = input;
 
-    QString sDateTime =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+    QString sDateTime =currentDateTime().toString("yyyyMMddhhmmss");
 
     //if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
     data["UpdateTime"] =sDateTime;
@@ -106,7 +106,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
 bool CSqlClass::delFromTb(QString sTableName, QVariantMap conditions, QString &sError)
 {
-    QString sDateTime =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+    QString sDateTime =currentDateTime().toString("yyyyMMddhhmmss");
 
     bool bRe =false;
     QSqlQuery query(m_db);
@@ -270,7 +270,7 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 {
     QString sCmd="UPDATE "+sTableName+" SET ";
 
-    data["UpdateTime"] =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+    data["UpdateTime"] =currentDateTime().toString("yyyyMMddhhmmss");
 
 
     QStringList listKey = data.keys();
@@ -407,6 +407,7 @@ void CSqlClass::createTableSqlite()
              'Sid'	INTEGER, \
              'Id'	TEXT, \
              'Name'	TEXT, \
+             'UserSid'	TEXT, \
              'UpdateTime'	TEXT, \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
@@ -417,6 +418,7 @@ void CSqlClass::createTableSqlite()
              'Sid'	INTEGER, \
              'Id'	TEXT, \
              'Name'	TEXT, \
+             'UserSid'	TEXT, \
              'UpdateTime'	TEXT, \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
@@ -515,6 +517,7 @@ void CSqlClass::createTableSqlite()
     sql.exec("CREATE TABLE 'CustomerData' (     \
              'Sid'	INTEGER,                    \
              'Id'	TEXT NOT NULL,              \
+             'Vip'	TEXT,                       \
              'Class'	TEXT NOT NULL,             \
              'Name'	TEXT,                       \
              'Money'	INTEGER DEFAULT 0,          \
@@ -535,6 +538,7 @@ void CSqlClass::createTableSqlite()
              'GameSid'	TEXT,                           \
              'LoginType'	TEXT,                           \
              'LoginAccount'	TEXT,                       \
+             'LoginPassword'	TEXT,                       \
              'ServerName'	TEXT,                       \
              'Characters'	TEXT,                           \
              'LastTime'	TEXT,                           \
@@ -579,6 +583,7 @@ void CSqlClass::createTableSqlite()
              'User'	TEXT,                   \
              'Owner'	TEXT,                   \
              'PaddingUser'	TEXT,                   \
+             'GameSid'	TEXT,                   \
              'Item'	TEXT,                   \
              'Cost'	TEXT,                   \
              'Bouns'	TEXT,                   \
@@ -717,6 +722,11 @@ QMap<QString, QString> CSqlClass::readTrigger()
     return re;
 }
 
+QDateTime CSqlClass::currentDateTime()
+{
+    return QDateTime::currentDateTimeUtc().addSecs(60*60*8);
+}
+
 //void CSqlClass::loadTrigger()
 //{
 
@@ -796,8 +806,8 @@ bool CSqlClass::addUser(QString sId, QString sPass, QString sCid, QString sName,
         query.bindValue(4,iLv);
         query.bindValue(5,startDate);
 
-        query.bindValue(6,QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
-        query.bindValue(7,QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+        query.bindValue(6,currentDateTime().toString("yyyyMMddhhmmss"));
+        query.bindValue(7,currentDateTime().toString("yyyyMMddhhmmss"));
 
         query.exec();
     }
@@ -842,7 +852,7 @@ bool CSqlClass::editUser(QVariantMap data, QString &sError)
     query.bindValue(10,data["Note2"]);
     query.bindValue(11,data["Note3"]);
     query.bindValue(12,data["CreateTime"]);
-    query.bindValue(13,data["UpdateTime"]);
+    query.bindValue(13,currentDateTime().toString("yyyyMMddhhmmss"));
     query.bindValue(14,data["Id"]);
 
     bRe = query.exec();
@@ -948,7 +958,7 @@ bool CSqlClass::saveExchange(QVariantList list, QString &sError)
 
     query.bindValue(1,listValue.join(";"));
 
-    query.bindValue(2,QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+    query.bindValue(2,currentDateTime().toString("yyyyMMddhhmmss"));
 
     bRe = query.exec();
 
@@ -1008,6 +1018,8 @@ bool CSqlClass::lsatCustomerId(QString sClassSid, QString sClassId, QString &out
 
     QSqlQuery query(m_db);
 
+
+
     QString sCmd = "SELECT Id FROM CustomerData WHERE Class='%1' ORDER BY Id DESC; ";
 
     bool bRe = query.exec(sCmd.arg(sClassSid));
@@ -1018,6 +1030,31 @@ bool CSqlClass::lsatCustomerId(QString sClassSid, QString sClassId, QString &out
     }
 
     sError = query.lastError().text();
+
+    return bRe;
+}
+
+bool CSqlClass::lastCustomerAddCostId(QString sDate, QString &sId, QString &sError)
+{
+    QString tmpDate = sDate;
+    sId=tmpDate.remove(0,2)+"-0000";
+    QSqlQuery query(m_db);
+   // SELECT * FROM CustomerCost where OrderTime like "%202210%" ORDER BY OrderId DESC;
+    QString sCmd = "SELECT * FROM CustomerCost where OrderTime like '%%1%' ORDER BY OrderId DESC;";
+
+    sCmd = sCmd.arg(sDate);
+
+    qDebug()<<"cmd : "<<sCmd;
+
+    bool bRe = query.exec(sCmd);
+
+    if(query.next())
+    {
+        sId = query.value("OrderId").toString();
+    }
+
+    sError = query.lastError().text();
+
 
     return bRe;
 }

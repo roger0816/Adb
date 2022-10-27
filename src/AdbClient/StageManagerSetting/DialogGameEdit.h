@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "DialogMsg.h"
 #include <QRegExpValidator>
+#include "Global.h"
 
 namespace Ui {
 class DialogGameEdit;

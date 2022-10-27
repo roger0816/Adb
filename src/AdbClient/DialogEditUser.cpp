@@ -79,7 +79,7 @@ void DialogEditUser::on_btnOk_clicked()
 
     m_data.Note1 = ui->txNote->text().trimmed();
 
-    m_data.UpdateTime = QDateTime::currentDateTime().toString("yyyyMMddhhmmss");
+    m_data.UpdateTime = GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
     done(1);
 }

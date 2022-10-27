@@ -29,8 +29,6 @@ private slots:
 
     void on_btnEdit_clicked();
 
-    void on_tb_cellPressed(int row, int column);
-
     void on_tb_cellClicked(int row, int column);
 
 private:

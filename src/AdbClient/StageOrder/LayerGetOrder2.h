@@ -47,6 +47,8 @@ private:
     QString  m_currentDataKey="";
 
     LayerSayCost *m_layerCost  = nullptr;
+    int m_iPreUserRow=-1;
+    int m_iPreUserCol=-1;
 };
 
 #endif // LAYERGETORDER2_H

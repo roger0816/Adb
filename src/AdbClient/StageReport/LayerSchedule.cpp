@@ -564,16 +564,18 @@ void LayerSchedule::on_tbUserList_itemClicked(QTableWidgetItem *item)
 
     QString st = item->text();
 
-    int iRow=0;
-    int iCol=0;
+    QItemSelectionModel *selectionModel = ui->tb0->selectionModel();
 
-    iRow = ui->tb0->currentRow();
+    QModelIndexList indexes = selectionModel->selectedIndexes();
 
-    iCol = ui->tb0->currentColumn();
+    QModelIndex index;
 
-    m_data[iRow][iCol].sUserSid = st;
+    QStringList userString;
 
-    m_data[iRow][iCol].sCheck="0";
+    foreach(index, indexes) {
+       m_data[index.row()][index.column()].sUserSid = st;
+       m_data[index.row()][index.column()].sCheck="0";
+    }
 
     refresh();
     //    ui->tb0->setItem(iRow,iCol,UI.tbItem(st));
@@ -612,30 +614,24 @@ void LayerSchedule::btnsClicked()
     QPushButton *btn = dynamic_cast<QPushButton*>(sender());
     QString sCost=btn->text();
 
+#if 1
+    QItemSelectionModel *selectionModel = ui->tb0->selectionModel();
 
+    QModelIndexList indexes = selectionModel->selectedIndexes();
 
-#if 0
-    QList<QTableWidgetItem*> listSelect = ui->tb0->selectedItems();
-    foreach(QTableWidgetItem *item, listSelect)
-    {
+    QModelIndex index;
 
+    QStringList userString;
 
-        int iRow= item->row();
-        int iCol = item->column();
-
-        qDebug()<<"row : "<<iRow<<" , col : "<<iCol;
-        if(checkGrid(iRow,iCol))
-        {
-
-            qDebug()<<"row : "<<iRow<<" , col : "<<iCol;
-            m_data[iRow][iCol].sCost = btn->text();
-            m_data[iRow][iCol].sCheck="0";
-        }
+    foreach(index, indexes) {
+       m_data[index.row()][index.column()].sCost = btn->text();
+       m_data[index.row()][index.column()].sCheck="0";
     }
 
     refresh();
 
     ui->tb0->setFocus();
+
 #else
     int iRow= ui->tb0->currentRow();
     int iCol = ui->tb0->currentColumn();

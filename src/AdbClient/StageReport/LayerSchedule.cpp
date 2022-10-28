@@ -43,6 +43,24 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
 
     connect(ui->itemStatus,&ItemScheduleStatus::sendClicked,this,[=](QString sText,QString sColor)
     {
+
+
+        QItemSelectionModel *selectionModel = ui->tb0->selectionModel();
+
+        QModelIndexList indexes = selectionModel->selectedIndexes();
+
+        QModelIndex index;
+
+        QStringList userString;
+
+        foreach(index, indexes) {
+           m_data[index.row()][index.column()].sStatus = sText;
+            m_data[index.row()][index.column()].sStatusColor = sColor;
+           m_data[index.row()][index.column()].sCheck="0";
+        }
+
+
+        /*
         int iRow = ui->tb0->currentRow();
 
         int iCol = ui->tb0->currentColumn();
@@ -53,6 +71,7 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
 
         m_data[iRow][iCol].sStatus = sText;
         m_data[iRow][iCol].sStatusColor = sColor;
+        */
 
         refresh();
 
@@ -73,6 +92,7 @@ void LayerSchedule::setEditMode(bool b)
 {
     m_bEditMode = b;
 
+    ui->wFn->setVisible(m_bEditMode);
 
     ui->wKind->setVisible(m_bEditMode);
 

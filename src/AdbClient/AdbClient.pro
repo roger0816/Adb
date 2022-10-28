@@ -23,6 +23,7 @@ INCLUDEPATH+= \
 
 SOURCES += \
     StageCustomerService/DialogCustomerCostHistory.cpp \
+    StageManagerSetting/LayerItemCount.cpp \
     StageOrder/ItemOrderSelector.cpp \
     component/CLinkTable.cpp \
     component/CSideMenu.cpp \
@@ -76,6 +77,7 @@ SOURCES += \
 
 HEADERS += \
     StageCustomerService/DialogCustomerCostHistory.h \
+    StageManagerSetting/LayerItemCount.h \
     StageOrder/ItemOrderSelector.h \
     component/CLinkTable.h \
     component/CSideMenu.h \
@@ -128,6 +130,7 @@ HEADERS += \
 
 FORMS += \
     StageCustomerService/DialogCustomerCostHistory.ui \
+    StageManagerSetting/LayerItemCount.ui \
     StageOrder/ItemOrderSelector.ui \
     component/CSideMenu.ui \
     DialogBulletinEdit.ui \

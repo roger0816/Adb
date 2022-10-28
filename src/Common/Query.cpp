@@ -87,22 +87,7 @@ CData Query::implementRecall(CData data)
 
     }
 
-    //    else if(data.iAciton==ACT::SAVE_EXCHANGE)
-    //    {
-    //        bOk = m_sql.saveExchange(data.listData,sError);
-    //    }
 
-    //    else if(data.iAciton==ACT::READ_EXCHANGE)
-    //    {
-    //        bOk = true;
-
-    //        int iIdx = -1;
-
-    //        if(data.listData.length()>0)
-    //            iIdx = data.listData.first().toInt();
-
-    //        re.listData = m_sql.readExchange(iIdx);
-    //    }
 
     else if(data.iAciton==ACT::ADD_GAME_LIST)
     {
@@ -648,6 +633,41 @@ CData Query::implementRecall(CData data)
     {
 
         bOk = m_sql.queryTb(SQL_TABLE::PicData(),data.dData,re.listData,sError);
+
+    }
+
+    else if(data.iAciton==ACT::ADD_ITEM_COUNT)
+    {
+
+        bOk = m_sql.insertTb(SQL_TABLE::GameItemCount(),data.dData,sError);
+        sOkMsg = "新增完成";
+
+    }
+
+    else if(data.iAciton==ACT::EDIT_ITEM_COUNT)
+    {
+
+        QVariantMap d;
+        d["GameItemSid"] = data.dData["GameItemSid"];
+        bOk = m_sql.updateTb(SQL_TABLE::GameItemCount(),d,data.dData,sError);
+        sOkMsg = "修改完成";
+
+    }
+
+    else if(data.iAciton==ACT::DEL_ITEM_COUNT)
+    {
+
+        bOk = m_sql.delFromTb(SQL_TABLE::GameItemCount(),data.dData,sError);
+
+        sOkMsg ="刪除完成";
+
+    }
+
+
+    else if(data.iAciton==ACT::QUERY_ITEM_COUNT)
+    {
+
+        bOk = m_sql.queryTb(SQL_TABLE::GameItemCount(),re.listData,sError);
 
     }
 

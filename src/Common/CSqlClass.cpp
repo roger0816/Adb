@@ -654,6 +654,22 @@ void CSqlClass::createTableSqlite()
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
 
+    sql.clear();
+    sql.exec("CREATE TABLE 'GameItemCount' ( \
+             'Sid'	INTEGER, \
+              'Id'	TEXT, \
+             'GameItemSid'	TEXT, \
+             'Name'	TEXT, \
+             'UserSid'	TEXT, \
+             'ChangeValue'	INTEGER, \
+             'Total'	INTEGER, \
+             'UpdateTime'	TEXT, \
+             'Note'	TEXT, \
+            'Pic0'	TEXT, \
+            'Pic1'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
+
 
 }
 
@@ -768,8 +784,6 @@ bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QStri
         for(int i=0;i<list.length();i++)
         {
             QString sKey =  list.at(i);
-
-
 
             out[sKey] = query.value(sKey);
         }

@@ -358,14 +358,27 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
         QString sError;
 
-        ACTION.action(ACT::ADD_GAME_ITEM,data,sError);
+        bool b = ACTION.action(ACT::ADD_GAME_ITEM,data,sError);
+
+
+        if(!b)
+        {
+            UI.showMsg("",sError,"OK");
+
+            return;
+        }
+        DataItemCount dataCount;
+
+        dataCount.Id = data["GameSid"].toString();
+        dataCount.GameItemSid = data["Sid"].toString();
+        dataCount.Name = data["Name"].toString();
+
+        ACTION.action(ACT::ADD_ITEM_COUNT,dataCount.data(),sError);
 
         UI.showMsg("",sError,"OK");
+
+
         refreshItemList();
-
-
-
-
 
 
 
@@ -431,6 +444,17 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
         UI.showMsg("",sError,"OK");
 
+
+        DataItemCount dataCount;
+
+        dataCount.Id = data["GameSid"].toString();
+        dataCount.GameItemSid = data["Sid"].toString();
+        dataCount.Name = data["Name"].toString();
+
+        ACTION.action(ACT::EDIT_ITEM_COUNT,dataCount.data(),sError);
+
+
+
         refreshItemList();
 
     }
@@ -446,6 +470,13 @@ void LayerCostSetting::on_btnItemEdit_clicked()
         ACTION.action(ACT::DEL_GAME_ITEM,data,sError);
 
         UI.showMsg("",sError,"OK");
+
+
+        QVariantMap dataCount;
+        dataCount["GameItemSid"]=data["Sid"];
+
+        ACTION.action(ACT::DEL_ITEM_COUNT,dataCount,sError);
+
 
         refreshItemList();
 

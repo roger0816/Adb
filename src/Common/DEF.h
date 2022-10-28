@@ -32,6 +32,7 @@ struct SQL_TABLE
     static QString UserBonus(){return "UserBonus";}
     static QString Schedule(){return "Schedule";}
     static QString PicData(){return "PicData";}
+    static QString GameItemCount(){return "GameItemCount";}
 };
 
 namespace ACT
@@ -125,7 +126,12 @@ enum _KEY
     QUERY_PRIMERATE=2531,
 
     UPLOAD_PIC=2601,
-    QUERY_PIC=2603
+    QUERY_PIC=2603,
+
+    ADD_ITEM_COUNT=2701,
+    EDIT_ITEM_COUNT,
+    DEL_ITEM_COUNT,
+    QUERY_ITEM_COUNT=2703
 
 
 };

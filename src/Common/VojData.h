@@ -834,6 +834,63 @@ struct GameList
 };
 
 
+struct DataItemCount :public DataObj
+{
+    QString  UserSid;
+
+    QString  GameItemSid;
+
+    int ChangeValue=0;
+
+    int Total=0;
+
+    QString Note;
+
+    QString Pic0;
+    QString Pic1;
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
+        UserSid = data["UserSid"].toString();
+
+        GameItemSid=data["GameItemSid"].toString();
+
+        ChangeValue = data["ChangeValue"].toInt();
+
+        Total = data["Total"].toInt();
+
+        Pic0 = data["Pic0"].toString();
+
+        Pic1 = data["Pic1"].toString();
+        Note = data["Note"].toString();
+
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re =DataObj::data();
+
+        re["UserSid"] = UserSid;
+
+        re["GameItemSid"] = GameItemSid;
+
+        re["ChangeValue"] = ChangeValue;
+
+        re["Total"] = Total;
+
+        re["Pic0"] = Pic0;
+        re["Pic1"] = Pic1;
+
+
+        re["Note"] = Note;
+
+        return re;
+    }
+};
+
+
 
 
 

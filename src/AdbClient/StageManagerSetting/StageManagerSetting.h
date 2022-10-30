@@ -26,10 +26,13 @@ public:
 private:
     Ui::StageManagerSetting *ui;
 
+    QButtonGroup m_btns;
+
+
     void showEvent(QShowEvent *) override;
+private slots:
+    void changePage(int iIdx);
 
-
-     QButtonGroup m_btns;
 
 };
 

@@ -129,13 +129,16 @@ protected:
 private slots:
     void slotSetPic();
 
-    void slotClear();
 
     void slotClip();
 
     void slotDownload();
 
     void showDetail();
+
+public slots:
+    void slotClear();
+
 
 signals:
 

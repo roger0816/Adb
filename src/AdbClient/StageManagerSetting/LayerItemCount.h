@@ -2,6 +2,9 @@
 #define LAYERITEMCOUNT_H
 
 #include <QWidget>
+#include <QShowEvent>
+#include "Global.h"
+#include "GlobalUi.h"
 
 namespace Ui {
 class LayerItemCount;
@@ -15,6 +18,23 @@ public:
     explicit LayerItemCount(QWidget *parent = nullptr);
     ~LayerItemCount();
 
+    void refresh();
+private slots:
+    void on_cbGame_currentIndexChanged(int index);
+
+    void on_tb_cellClicked(int row, int column);
+
+private:
+    void showEvent(QShowEvent *) override;
+
+    QPair<int,int> checkCount(QString itemSid);
+
+
+    QList<DataGameList> m_listGame;
+
+   QList<DataGameItem> m_listGameItem;
+
+    QVariantList m_listData;
 private:
     Ui::LayerItemCount *ui;
 };

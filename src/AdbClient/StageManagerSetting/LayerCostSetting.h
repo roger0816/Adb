@@ -33,7 +33,7 @@ private slots:
     void on_btnItemAdd_clicked();
 
 
-    void on_tbGame_cellClicked(int row, int);
+    void on_tbGame_cellClicked(int, int);
 
     void on_btnItemEdit_clicked();
 
@@ -41,7 +41,7 @@ private slots:
 
     void on_tbGameItem_cellDoubleClicked(int row, int);
 
-    void on_tbGameItem_itemEntered(QTableWidgetItem *item);
+    void on_tbGameItem_itemEntered(QTableWidgetItem *);
 
     void on_tbGameItem_cellEntered(int row, int column);
 

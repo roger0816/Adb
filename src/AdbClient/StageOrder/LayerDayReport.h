@@ -39,9 +39,11 @@ private slots:
 
     void on_cbStep5_clicked();
 
-    void on_tb_cellClicked(int row, int column);
+    void on_tb_cellClicked(int, int);
 
     void delayRefresh();
+
+    void on_dateEdit_userDateChanged(const QDate &date);
 
 private:
     Ui::LayerDayReport *ui;
@@ -54,7 +56,7 @@ private:
 
     void checkMoney(int iRow, OrderData order, CustomerData customer);
 
-
+    bool m_bLockDate = false;
 };
 
 #endif // LAYERDAYREPORT_H

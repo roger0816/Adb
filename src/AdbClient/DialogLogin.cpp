@@ -77,6 +77,11 @@ void DialogLogin::paintEvent(QPaintEvent *)
 
 }
 
+void DialogLogin::setVer(QString sVer)
+{
+    ui->lbVersion->setText(sVer);
+}
+
 void DialogLogin::on_btnLogin_clicked()
 {
 

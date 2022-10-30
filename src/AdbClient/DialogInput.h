@@ -9,6 +9,7 @@
 #include <QHBoxLayout>
 #include <QFormLayout>
 #include "DialogMsg.h"
+#include <QRegExpValidator>
 
 namespace Ui {
 class DialogInput;
@@ -41,6 +42,8 @@ public:
     void setTitle(QString sTitle);
 
     void addInput(QString sLb, QVariantMap input);
+
+    void hideDelete();
 
     QVariantMap data();
 

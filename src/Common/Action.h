@@ -72,6 +72,9 @@ public:
 
     DataGameItem getGameItemFromSid(QString sSid,bool bQuery=false);
 
+    QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool bQuery=false);
+
+
     QString getGameName(QString sId);
     QString getGameId(QString sName);
 

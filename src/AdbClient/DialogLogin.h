@@ -33,7 +33,7 @@ public:
 
     void paintEvent(QPaintEvent *) override;
 
-
+    void setVer(QString sVer);
 
 private slots:
     void on_btnLogin_clicked();

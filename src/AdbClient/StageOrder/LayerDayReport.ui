@@ -85,6 +85,9 @@
               <property name="styleSheet">
                <string notr="true">font: 18px &quot;Microsoft JhengHei UI&quot;;</string>
               </property>
+              <property name="currentSection">
+               <enum>QDateTimeEdit::DaySection</enum>
+              </property>
              </widget>
             </item>
            </layout>

@@ -37,6 +37,11 @@ void DialogInput::addInput(QString sLb, QVariantMap input)
 
 }
 
+void DialogInput::hideDelete()
+{
+    ui->btnDel->hide();
+}
+
 QVariantMap DialogInput::data()
 {
     QVariantMap re;
@@ -82,6 +87,18 @@ void DialogInputItem::setData(QString title, QVariantMap data)
     m_data = data;
 
     lb->setText(title);
+    qDebug()<<"typetype :"<<m_data.first().type();
+   if(m_data.first().type()==QVariant::UInt)
+   {
+
+       txt->setValidator(new QRegExpValidator(QRegExp("^[0-9]*[1-9][0-9]*$")));
+       //"^[0-9]*[1-9][0-9]*$"　　//正整数
+
+   }
+   else
+   {
+
+   }
 
     txt->setText(m_data.first().toString());
 }

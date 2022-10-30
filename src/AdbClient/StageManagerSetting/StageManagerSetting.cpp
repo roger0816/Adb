@@ -18,11 +18,11 @@ StageManagerSetting::StageManagerSetting(QWidget *parent) :
     m_btns.addButton(ui->btn4,4);
 
     m_btns.addButton(ui->btn5,5);
-        m_btns.addButton(ui->btn6,6);
+    m_btns.addButton(ui->btn6,6);
     m_btns.addButton(ui->btn7,7);
-       m_btns.addButton(ui->btn8,8);
+    m_btns.addButton(ui->btn8,8);
 
-    connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
+    connect(&m_btns,SIGNAL(buttonClicked(int)),this,SLOT(changePage(int)));
 
 
     ui->stackedWidget->setCurrentIndex(0);
@@ -40,6 +40,14 @@ StageManagerSetting::~StageManagerSetting()
 void StageManagerSetting::showEvent(QShowEvent *)
 {
 
+}
+
+void StageManagerSetting::changePage(int iIdx)
+{
+    if(iIdx == ui->stackedWidget->indexOf(ui->pageItemCount))
+        ui->pageItemCount->refresh();
+
+    ui->stackedWidget->setCurrentIndex(iIdx);
 }
 
 

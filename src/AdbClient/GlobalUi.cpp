@@ -115,11 +115,11 @@ QTableWidgetItem *GlobalUi::tbItem(QVariant var, int iType, int iPixSize)
     {
         f.setUnderline(true);
 
-        item->setTextColor(QColor(85,170,255));
+        item->setForeground(QColor(85,170,255));
     }
     else if(type == _TOOLTIP)
     {
-        item->setTextColor(QColor(77,77,77));
+        item->setForeground(QColor(77,77,77));
     }
     else //_TXT
     {

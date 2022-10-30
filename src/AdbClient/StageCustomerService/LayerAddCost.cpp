@@ -210,6 +210,13 @@ void LayerAddCost::on_btnOk_clicked()
         return ;
     }
 
+    if(ui->cbDebit->count()<=0)
+    {
+        DMSG.showMsg("","請先到客戶設定，設定支付管道","OK");
+
+        return ;
+    }
+
 
 
     m_lastCostData.Sid="";
@@ -218,7 +225,11 @@ void LayerAddCost::on_btnOk_clicked()
     m_lastCostData.OrderId=getNewOrderId();
     m_lastCostData.Note0=ui->txNote0->toPlainText();
 
+
+
     QVariantMap debit = m_listDebit.at(qBound(0,ui->cbDebit->currentIndex(),m_listDebit.length()-1)).toMap();
+
+
     m_lastCostData.DebitSid=debit["Sid"].toString();
     m_lastCostData.DebitNote=ui->txDebitNote->text();
 

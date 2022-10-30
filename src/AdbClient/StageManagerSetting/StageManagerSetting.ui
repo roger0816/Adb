@@ -356,7 +356,7 @@ border-width: 0px;
          <item row="0" column="0">
           <widget class="QStackedWidget" name="stackedWidget">
            <property name="currentIndex">
-            <number>4</number>
+            <number>6</number>
            </property>
            <widget class="LayerPrimeCostRate" name="pageExchangeRate"/>
            <widget class="LayerCostSetting" name="pageCost"/>
@@ -364,7 +364,7 @@ border-width: 0px;
            <widget class="LayerAddValueType" name="pagePayType"/>
            <widget class="LayerFactory" name="pageFactory"/>
            <widget class="LayerCustomerSetting" name="pageCustomer"/>
-           <widget class="QWidget" name="page"/>
+           <widget class="LayerItemCount" name="pageItemCount"/>
            <widget class="LayerSysSetting" name="pageSysSetting"/>
            <widget class="LayerAccountManager" name="pageAccount"/>
           </widget>
@@ -418,6 +418,12 @@ border-width: 0px;
    <class>LayerAccountManager</class>
    <extends>QWidget</extends>
    <header>LayerAccountManager.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerItemCount</class>
+   <extends>QWidget</extends>
+   <header>LayerItemCount.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

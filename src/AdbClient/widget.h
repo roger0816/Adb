@@ -42,7 +42,7 @@ private:
     void resizeEvent(QResizeEvent *) override;
 
 
-    void setLv(int iLv);
+    void checkUserLv();
 
 };
 #endif // WIDGET_H

@@ -512,6 +512,25 @@ DataGameItem Action::getGameItemFromSid(QString sSid, bool bQuery)
     return re;
 }
 
+QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery)
+{
+    QList<DataGameItem> re;
+
+    QList<DataGameItem> list = getGameItem(bQuery);
+
+    foreach(DataGameItem v, list)
+    {
+        if(v.GameSid==sGameSid)
+        {
+           re.append(v);
+
+           break;
+        }
+    }
+
+    return re;
+}
+
 QString Action::getGameName(QString sId)
 {
     QString sRe="";

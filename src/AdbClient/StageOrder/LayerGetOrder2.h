@@ -31,6 +31,8 @@ private slots:
 
     void refresh();
 
+    void on_btnOrder2Copy_clicked();
+
 private:
     Ui::LayerGetOrder2 *ui;
 

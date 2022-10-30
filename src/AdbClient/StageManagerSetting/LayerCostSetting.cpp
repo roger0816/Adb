@@ -389,7 +389,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
 
 
-void LayerCostSetting::on_tbGame_cellClicked(int row, int )
+void LayerCostSetting::on_tbGame_cellClicked(int , int )
 {
 
     refreshItemList();
@@ -498,7 +498,7 @@ void LayerCostSetting::on_tbGameItem_cellDoubleClicked(int , int )
 
 
 
-void LayerCostSetting::on_tbGameItem_itemEntered(QTableWidgetItem *item)
+void LayerCostSetting::on_tbGameItem_itemEntered(QTableWidgetItem *)
 {
 
     // QToolTip::showText(QCursor::pos(),item->text());
@@ -517,12 +517,12 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
     if(column==4)
     {
         QString st=
-                   "新台幣 : %2 \n "
-                   "美金 : %3 \n "
-                   "港幣 : %4 \n "
-                   "人民幣 : %5 \n "
-                   "林吉特 : %6 \n ";
-        "新加坡元 : %7 ";
+                   "新台幣 : %1 \n "
+                   "美金 : %2 \n "
+                   "港幣 : %3 \n "
+                   "人民幣 : %4 \n "
+                   "林吉特 : %5 \n "
+        "新加坡元 : %6 ";
 
         st = st.arg(data["NTD"].toString())
                 .arg(data["USD"].toString())

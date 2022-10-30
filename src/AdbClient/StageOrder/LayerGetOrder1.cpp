@@ -259,7 +259,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
     if(column==7 && ui->tbOrder->item(row,7)->text()=="確認接單")
     {
-        if(1==UI.showMsg("",QString("請再次確認是否接單處理編號:%1？").arg(order.Id),QStringList()<<"否"<<"是"))
+        if(1==UI.showMsg("",QString("請確認是否鎖定處理編號:%1？").arg(order.Id),QStringList()<<"否"<<"是"))
         {
             QString sError;
             order.PaddingUser=ACTION.m_currentUser.Sid;
@@ -269,7 +269,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
             ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
-            UI.showMsg("",sError,"OK");
+           // UI.showMsg("",sError,"OK");
 
             refreshUser();
 
@@ -282,6 +282,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
     if(order.PaddingUser==ACTION.m_currentUser.Sid)
     {
 
+        ui->wPic0->slotClear();
 
         QVariantList list;
 

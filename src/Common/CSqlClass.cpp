@@ -559,8 +559,10 @@ void CSqlClass::createTableSqlite()
              'DebitSid'	TEXT,                               \
              'DebitNote'	TEXT,                               \
              'ChangeValue'	TEXT,                        \
-             'Total'	TEXT,                            \
+             'TotalCount'	TEXT,                            \
+             'TotalSell'	TEXT,                            \
              'UserSid'	TEXT,                           \
+             'OrderSid'	TEXT,                            \
              'UpdateTime'	TEXT,                       \
              'OrderTime'	TEXT,                       \
              'Pic0'	TEXT,                               \
@@ -659,6 +661,7 @@ void CSqlClass::createTableSqlite()
              'Sid'	INTEGER, \
               'Id'	TEXT, \
              'GameItemSid'	TEXT, \
+             'GameRate'	TEXT, \
              'Name'	TEXT, \
              'UserSid'	TEXT, \
              'ChangeValue'	INTEGER, \

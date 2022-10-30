@@ -396,7 +396,7 @@ border: 1px solid #5b5b5b; }</string>
                   <item row="4" column="0">
                    <widget class="QLabel" name="label_7">
                     <property name="text">
-                     <string>入帳管道:</string>
+                     <string>支付管道:</string>
                     </property>
                    </widget>
                   </item>

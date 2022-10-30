@@ -8,20 +8,25 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
     ui->setupUi(this);
 
     m_detialOrder = new LayerSayCost;
-      m_detialOrder->m_bOrderMode = true;
+    m_detialOrder->m_bOrderMode = true;
     m_detialOrder->setReadOnly();
     m_detialOrder->hide();
 
+    m_bLockDate = true;
+    ui->dateEdit->setDate(QDate::currentDate());
+    m_bLockDate = false;
+
+
     ui->tb->hideColumn(12);
-//    ui->tb->setColumnWidth(1,120);
-//    ui->tb->setColumnWidth(3,100);
+    //    ui->tb->setColumnWidth(1,120);
+    //    ui->tb->setColumnWidth(3,100);
     ui->tb->setColumnWidth(4,100);
     ui->tb->setColumnWidth(5,80);
     ui->tb->setColumnWidth(6,100);
     ui->tb->setColumnWidth(7,80);
-//     ui->tb->setColumnWidth(8,60);
-//    ui->tb->setColumnWidth(9,80);
-//    ui->tb->setColumnWidth(11,100);
+    //     ui->tb->setColumnWidth(8,60);
+    //    ui->tb->setColumnWidth(9,80);
+    //    ui->tb->setColumnWidth(11,100);
     //   ui->tb->setColumnWidth(7,80);
 }
 
@@ -45,7 +50,7 @@ void LayerDayReport::refreshTb()
 {
     qDebug()<<"LayerDayReport refresh ";
     m_listOrder = ACTION.getOrder(true);
-     qDebug()<<"getOrder list len : "<<m_listOrder.length();
+    qDebug()<<"getOrder list len : "<<m_listOrder.length();
     ui->tb->setRowCount(0);
     QString sError;
 
@@ -79,9 +84,9 @@ void LayerDayReport::refreshTb()
 
             if(data.User.length()>2)
             {
-               UserData user = ACTION.getUser(data.User.at(2));
+                UserData user = ACTION.getUser(data.User.at(2));
 
-               sUser = user.Name;
+                sUser = user.Name;
             }
 
 
@@ -117,10 +122,10 @@ void LayerDayReport::refreshTb()
                 sStatus="訂單結束";
             }
 
-        qDebug()<<"check status";
+            qDebug()<<"check status";
 
             ui->tb->setItem(iRow,6,UI.tbItem(sStatus));
-                     ui->tb->setItem(iRow,7,UI.tbItem(data.Bouns));
+            ui->tb->setItem(iRow,7,UI.tbItem(data.Bouns));
 
 
             if(data.Step=="4")
@@ -148,7 +153,7 @@ void LayerDayReport::refreshTb()
 
             }
 
-                /*
+            /*
                 QList<DataFactory> fac=ACTION.getFactoryClass("",true);
                 DataFactory target;
                 for(int i=0;i<fac.length();i++)
@@ -230,7 +235,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
         m_detialOrder->setCustomer(d,data.Sid);
 
-          //  m_detialOrder->refreshInfo();
+        //  m_detialOrder->refreshInfo();
         m_detialOrder->raise();
 
         m_detialOrder->show();
@@ -255,7 +260,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             data.Step="5";
 
-              data.StepTime[5]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
+            data.StepTime[5]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
             QStringList listMoney;
 
@@ -273,31 +278,31 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             if(data.User.length()>2)
             {
-               UserData user = ACTION.getUser(data.User.at(2));
+                UserData user = ACTION.getUser(data.User.at(2));
 
-               QVariantMap in;
-               QVariantList out;
+                QVariantMap in;
+                QVariantList out;
 
-               double dTotalBonus=0.0;
+                double dTotalBonus=0.0;
 
-               in["UserSid"] = user.Sid;
+                in["UserSid"] = user.Sid;
 
-               ACTION.action(ACT::QUERY_BOUNS,in,out,sError);
+                ACTION.action(ACT::QUERY_BOUNS,in,out,sError);
 
-               if(out.length()>0)
-               {
+                if(out.length()>0)
+                {
                     dTotalBonus = out.first().toMap()["Bonus"].toDouble();
                     in["Pay"] = out.first().toMap()["Pay"];
-               }
+                }
 
 
-               in["Bonus"] = dTotalBonus+data.Bouns;
+                in["Bonus"] = dTotalBonus+data.Bouns;
 
-               in["AddBonus"] = data.Bouns;
+                in["AddBonus"] = data.Bouns;
 
-               in["OrderSid"] = data.Sid;
+                in["OrderSid"] = data.Sid;
 
-               ACTION.action(ACT::ADD_BOUNS,in,sError);
+                ACTION.action(ACT::ADD_BOUNS,in,sError);
 
             }
 
@@ -348,14 +353,13 @@ void LayerDayReport::on_cbStep5_clicked()
 }
 
 
-void LayerDayReport::on_tb_cellClicked(int row, int column)
+void LayerDayReport::on_tb_cellClicked(int , int )
 {
 
 }
 
 void LayerDayReport::delayRefresh()
 {
-    ui->dateEdit->setDate(QDate::currentDate());
     ACTION.primeRate("",true);
     refreshTb();
 }
@@ -367,14 +371,14 @@ void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer
 
     //cost
 
-     int idx =rate.listKey().indexOf(customer.Currency);
+    int idx =rate.listKey().indexOf(customer.Currency);
 
-     if(idx<0)
-         return;
+    if(idx<0)
+        return;
 
-     double iCost = order.Cost.toDouble()*rate.listValue().at(idx).toDouble();
+    double iCost = order.Cost.toDouble()*rate.listValue().at(idx).toDouble();
 
-     ui->tb->setItem(iRow,11,UI.tbItem(QString::number(iCost,'f',2),GlobalUi::_TOOLTIP));
+    ui->tb->setItem(iRow,11,UI.tbItem(QString::number(iCost,'f',2),GlobalUi::_TOOLTIP));
 
     //primte
 
@@ -390,7 +394,7 @@ void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer
     CListPair listItem(order.Item);
 
     qDebug()<< "  listItem : "<<listItem.toString();
-     //item is  "game item sid " & " item count"
+    //item is  "game item sid " & " item count"
     double prime=0.00;
 
     for(int i=0;i<listItem.length();i++)
@@ -422,13 +426,22 @@ void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer
     ui->tb->setItem(iRow,14,UI.tbItem(QString::number(iCost-prime,'f',2),GlobalUi::_TOOLTIP));
 
 
-  //  int iTmp = listPay.listFirst().indexOf(data.AddValueType);
+    //  int iTmp = listPay.listFirst().indexOf(data.AddValueType);
 
 
-  // int idxRate = rate.listKey().indexOf(order.AddValueType);
+    // int idxRate = rate.listKey().indexOf(order.AddValueType);
 
 
 }
 
 
+
+
+void LayerDayReport::on_dateEdit_userDateChanged(const QDate &date)
+{
+    if(m_bLockDate)
+        return ;
+
+    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(delayRefresh()));
+}
 

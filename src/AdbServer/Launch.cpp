@@ -10,6 +10,8 @@ Launch::Launch(QObject *parent)
 
    // QString sLocal="127.0.0.1";
 
+      qDebug()<<"version : "<<ADP_VER;
+
     queryObj.setDataBase(true,sIp);
 
 

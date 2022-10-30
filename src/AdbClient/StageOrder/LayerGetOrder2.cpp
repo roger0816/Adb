@@ -110,7 +110,7 @@ void LayerGetOrder2::refreshUser(bool bRe)
         }
     }
 
- on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
+    on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
 }
 
 QVariantMap LayerGetOrder2::gameItem(QString sSid)
@@ -253,14 +253,14 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
     if(column==7 && ui->tbOrder->item(row,7)->text()=="訂單回報")
     {
-        if(1==UI.showMsg("",QString("請再次確認是否回報訂單 :%1？").arg(order.Id),QStringList()<<"否"<<"是"))
+        if(1==UI.showMsg("",QString("請確認是否鎖定處理訂單 :%1？").arg(order.Id),QStringList()<<"否"<<"是"))
         {
             QString sError;
             order.PaddingUser=ACTION.m_currentUser.Sid;
             order.Step="3";
             ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
-            UI.showMsg("",sError,"OK");
+          //  UI.showMsg("",sError,"OK");
 
             refreshUser();
         }
@@ -276,21 +276,22 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
         QVariantList listOut;
         QString sError;
         ACTION.action(ACT::QUERY_CUSTOMER_COST,tmp,listOut,sError);
-
+        QString sValue="0";
         if(listOut.length()>0)
         {
-            QString sValue = listOut.last().toMap()["Value"].toString();
-
-            ui->lbOri->setText(sValue);
-
-            ui->lbCost->setText(order.Cost);
-
-            double d = sValue.toDouble()-order.Cost.toDouble();
-
-            ui->lbFinal->setText(QString::number(d));
-
+            CustomerCost customerData(listOut.last().toMap());
+            sValue = customerData.Total;
         }
 
+        ui->lbOri->setText(sValue);
+
+        ui->lbCost->setText(order.Cost);
+
+        ui->wPic0->slotClear();
+
+        double d = sValue.toDouble()-order.Cost.toDouble();
+
+        ui->lbFinal->setText(QString::number(d));
 
         ui->wBottom->setCurrentIndex(1);
 
@@ -332,13 +333,32 @@ void LayerGetOrder2::on_btnBackOrder_clicked()
 
 void LayerGetOrder2::on_btnFinish_clicked()
 {
+    if(!ui->wPic0->m_bHasPic)
+    {
+        UI.showMsg("","請先更新餘額給客戶，並上傳截圖，再完成回報。","OK");
+
+        return;
+    }
+
+
+
     QVariantList listData =m_data[m_currentDataKey].toList();
 
     QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
 
     OrderData order(data);
 
-    int iRet= UI.showMsg("",QString("請再確認訂單(%1) \n已完成回報處理？").arg(order.Id),QStringList()<<"否"<<"是");
+    int iRet;
+
+    if(ui->lbFinal->text().toDouble()<0)
+    {
+        iRet= UI.showMsg("",QString("本次下單餘額不足，是否完成回報處理？"),QStringList()<<"否"<<"是");
+
+        if(iRet==0)
+            return;
+    }
+    else
+        iRet= UI.showMsg("",QString("請再確認訂單(%1) \n已完成回報處理？").arg(order.Id),QStringList()<<"否"<<"是");
 
     if(iRet==1)
     {
@@ -355,12 +375,13 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
         order.Note0[4] =ui->txNote->toPlainText();
 
-        order.Pic0 = ui->wPic0->uploadPic();
+        order.Pic1 = ui->wPic0->uploadPic();
 
         ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
-        UI.showMsg("",sError,"OK");
+       // UI.showMsg("",sError,"OK");
 
+        UI.showMsg("","回報完成",QStringList()<<"OK");
         refreshUser();
 
         return;
@@ -393,5 +414,14 @@ void LayerGetOrder2::refresh()
 
 
     refreshUser();
+}
+
+
+void LayerGetOrder2::on_btnOrder2Copy_clicked()
+{
+    QString sMsg = ui->lb0->text()+":    "+ui->lbOri->text()+"\n"+
+                   ui->lb1->text()+":    "+ui->lbCost->text()+"\n"+
+                    ui->lb2->text()+":    "+ui->lbFinal->text();
+    UI.copyMsg(sMsg);
 }
 

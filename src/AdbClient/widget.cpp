@@ -70,8 +70,8 @@ void Widget::slotPage(int iIdx)
 void Widget::on_btnTest_clicked()
 {
 
-  ui->stackedWidget->setCurrentIndex(6);
-  return ;
+    ui->stackedWidget->setCurrentIndex(6);
+    return ;
     CData data;
 
     data.iAciton=ACT::LOGIN;
@@ -104,8 +104,8 @@ void Widget::on_btnTest_clicked()
 
 void Widget::showEvent(QShowEvent *)
 {
-    ui->lbName->setText(ACTION.m_currentUser.Name);
-    setLv(ACTION.m_currentUser.Lv);
+
+
 }
 
 void Widget::resizeEvent(QResizeEvent *)
@@ -113,13 +113,29 @@ void Widget::resizeEvent(QResizeEvent *)
     UI.m_loading->resize(this->size());
 }
 
-void Widget::setLv(int iLv)
+void Widget::checkUserLv()
 {
+    ui->lbName->setText(ACTION.m_currentUser.Name);
+
+    int iLv = ACTION.m_currentUser.Lv;
+
+    qDebug()<<"USER LV :"<<iLv;
+
+    ui->btnTest->hide();
+
+
+    foreach(QAbstractButton *btn,m_btns.buttons())
+    {
+        btn->setEnabled(false);
+    }
+
     ui->btn0->setEnabled(true);
 
     ui->btn1->setEnabled(true);
 
     ui->btnAccount->setEnabled(true);
+
+
 
     if(iLv>=USER_LV::_LV2)
     {
@@ -140,6 +156,7 @@ void Widget::setLv(int iLv)
     if(iLv>=USER_LV::_ROOT)
     {
         ui->btnTest->setEnabled(true);
+        ui->btnTest->show();
     }
 
     UI.m_loading->resize(this->size());
@@ -161,10 +178,12 @@ void Widget::on_btnLogout_clicked()
 
 void Widget::slotLogin()
 {
-            ACTION.reQuerty();
+    ACTION.reQuerty();
 
-            ACTION.setStartSyanc(true);
+    ACTION.setStartSyanc(true);
 
-            show();
+    checkUserLv();
+
+    show();
 }
 

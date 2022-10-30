@@ -836,15 +836,26 @@ struct GameList
 
 struct DataItemCount :public DataObj
 {
+    DataItemCount(){}
+
+    DataItemCount(QVariantMap data){setData(data);}
+
+
+
     QString  UserSid;
 
     QString  GameItemSid;
 
     int ChangeValue=0;
 
-    int Total=0;
+    int TotalCount=0;
+
+    int TotalSell=0;
+    QString OrderSid;
 
     QString Note;
+
+    QString GameRate;
 
     QString Pic0;
     QString Pic1;
@@ -859,8 +870,10 @@ struct DataItemCount :public DataObj
 
         ChangeValue = data["ChangeValue"].toInt();
 
-        Total = data["Total"].toInt();
-
+        TotalCount = data["TotalCount"].toInt();
+         TotalSell = data["TotalSell"].toInt();
+         OrderSid = data["OrderSid"].toString();
+        GameRate = data["GameRate"].toString();
         Pic0 = data["Pic0"].toString();
 
         Pic1 = data["Pic1"].toString();
@@ -875,11 +888,13 @@ struct DataItemCount :public DataObj
         re["UserSid"] = UserSid;
 
         re["GameItemSid"] = GameItemSid;
+        re["GameRate"] = GameRate;
 
         re["ChangeValue"] = ChangeValue;
 
-        re["Total"] = Total;
-
+        re["TotalCount"] = TotalCount;
+        re["TotalSell"] = TotalSell;
+        re["OrderSid"] = OrderSid;
         re["Pic0"] = Pic0;
         re["Pic1"] = Pic1;
 

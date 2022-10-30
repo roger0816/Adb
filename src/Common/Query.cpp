@@ -667,7 +667,7 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::QUERY_ITEM_COUNT)
     {
 
-        bOk = m_sql.queryTb(SQL_TABLE::GameItemCount(),re.listData,sError);
+        bOk = m_sql.queryTb(SQL_TABLE::GameItemCount(),data.dData,re.listData,sError);
 
     }
 

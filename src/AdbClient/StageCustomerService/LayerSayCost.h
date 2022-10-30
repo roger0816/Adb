@@ -36,6 +36,8 @@ private:
 
     QVariantList m_listGameInfo;
 
+    bool checkHasInto(QString gameItemSid);
+
     QString m_sCurrentGameSid="";
 
     QVariantList m_listGameItem;

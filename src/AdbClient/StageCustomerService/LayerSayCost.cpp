@@ -231,6 +231,24 @@ void LayerSayCost::refreshInfo()
     qDebug()<<"refresh Into ";
     ui->tbInfo->setRowCount(0);
 
+    auto checkTbRow = [=](QString sName)
+    {
+
+        for(int i=0;i<ui->tbGameItem->rowCount();i++)
+        {
+            if(sName == ui->tbGameItem->item(i,1)->text())
+            {
+                ui->tbGameItem->setItem(i,0,UI.tbItem(""));
+
+                return i;
+            }
+        }
+
+        return -1;
+
+    };
+
+
     for(int i=0;i<m_listInto.length();i++)
     {
 
@@ -245,12 +263,17 @@ void LayerSayCost::refreshInfo()
         qDebug()<<"into target : "<<data;
         ui->tbInfo->setItem(iIdx,0,UI.tbItem("移除",GlobalUi::_BUTTON));
 
+
         ui->tbInfo->setItem(iIdx,1,UI.tbItem(data["Name"]));
+
+        checkTbRow(data["Name"].toString());
 
 
         QSpinBox *sp = new QSpinBox(this);
 
-        sp->setRange(1,99);
+        int iTotalItem = ACTION.checkItemCount(DataGameItem(data).Sid);
+
+        sp->setRange(1,iTotalItem);
 
         sp->setAlignment(Qt::AlignCenter);
 
@@ -270,6 +293,18 @@ void LayerSayCost::refreshInfo()
     ui->cbGame->setEnabled(ui->tbInfo->rowCount()==0);
 
     checkTotal();
+}
+
+bool LayerSayCost::checkHasInto(QString gameItemSid)
+{
+
+    for(int i=0;i<m_listInto.length();i++)
+    {
+        if(DataGameItem(m_listInto.at(i).toMap()).Sid==gameItemSid)
+            return true;
+    }
+
+    return false;
 }
 
 double LayerSayCost::checkTotal()
@@ -541,11 +576,24 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 
         ui->tbGameItem->setRowCount(iRow+1);
 
-        QVariantMap dItem = m_listGameItem.at(i).toMap();
+        DataGameItem item (m_listGameItem.at(i).toMap());
 
-        ui->tbGameItem->setItem(iRow,1,UI.tbItem(dItem["Name"]));
+        ui->tbGameItem->setItem(iRow,1,UI.tbItem(item.Name));
 
-        ui->tbGameItem->setItem(iRow,0,UI.tbItem("加入",GlobalUi::_BUTTON));
+
+        if(m_bReadOnly || checkHasInto(item.Sid))
+        {
+            ui->tbGameItem->setItem(iRow,0,UI.tbItem(""));
+
+        }
+        else
+        {
+            if(ACTION.checkItemCount(item.Sid)>0)
+                ui->tbGameItem->setItem(iRow,0,UI.tbItem("加入",GlobalUi::_BUTTON));
+            else
+                ui->tbGameItem->setItem(iRow,0,UI.tbItem("完售"));
+        }
+
 
     }
 
@@ -649,30 +697,31 @@ void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
 {
 
 
-    if(column!=0)
+    if(column!=0 || ui->tbGameItem->item(row,0)->text()!="加入")
         return;
-
 
     QString sItemName = ui->tbGameItem->item(row,1)->text();
 
     for(int i=0;i<m_listGameItem.length();i++)
     {
-        QVariantMap data = m_listGameItem.at(i).toMap();
+        // QVariantMap data = m_listGameItem.at(i).toMap();
 
-        if(data["Name"] != sItemName)
+        DataGameItem item(m_listGameItem.at(i).toMap());
+
+        if(item.Name!= sItemName)
             continue;
 
-        int iMappingIdx =ACTION.mapping(m_listInto,"Sid",data["Sid"].toString());
+        int iMappingIdx =ACTION.mapping(m_listInto,"Sid",item.Sid);
 
         if(iMappingIdx<0)
         {
 
             CListPair t;
-            t.fromString(DataGameItem(data).AddValueTypeSid);
+            t.fromString(item.AddValueTypeSid);
             if(checkPayType(t))
             {
-                data["Count"] = 1;
-                m_listInto.append(data);
+                item.Count = 1;
+                m_listInto.append(item.data());
             }
             else
             {
@@ -685,9 +734,9 @@ void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
 
             int iCurrentCount = m_listInto.at(iMappingIdx).toMap()["Count"].toInt();
 
-            data["Count"] =iCurrentCount+1;
+            item.Count =iCurrentCount+1;
 
-            m_listInto[iMappingIdx] = data;
+            m_listInto[iMappingIdx] = item.data();
 
 
         }
@@ -704,8 +753,32 @@ void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
 void LayerSayCost::on_tbInfo_cellPressed(int row, int column)
 {
 
+    auto checkTbRow = [=](QString sName)
+    {
+
+        for(int i=0;i<ui->tbGameItem->rowCount();i++)
+        {
+            if(sName == ui->tbGameItem->item(i,1)->text())
+                return i;
+        }
+
+        return -1;
+
+    };
+
+
+
+
     if(column==0 && row>=0 && row<m_listInto.length())
     {
+        QString sName = ui->tbInfo->item(row,1)->text();
+
+        int iTbRow = checkTbRow(sName);
+
+        if(iTbRow>=0)
+            ui->tbGameItem->setItem(iTbRow,0,UI.tbItem("加入",GlobalUi::_BUTTON));
+
+
         m_listInto.removeAt(row);
 
         refreshInfo();
@@ -828,11 +901,11 @@ void LayerSayCost::on_btnSayOk_clicked()
     }
 
 
-       QVariantMap d= m_listGameInfo.at(qBound(0,ui->cbGame->currentIndex(),m_listGameInfo.length()-1)).toMap();
+    QVariantMap d= m_listGameInfo.at(qBound(0,ui->cbGame->currentIndex(),m_listGameInfo.length()-1)).toMap();
 
 
-       CustomerGameInfo info(d);
-       m_order.GameSid = info.GameSid;
+    CustomerGameInfo info(d);
+    m_order.GameSid = info.GameSid;
 
     QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+
             QString::number(ui->cbAccount->currentIndex())+","+

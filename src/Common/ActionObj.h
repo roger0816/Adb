@@ -60,7 +60,7 @@ protected:
 
     QString m_sCurrentUserName;
 
-private:
+ protected:
 
     QTimer m_timer;
 

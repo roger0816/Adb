@@ -523,8 +523,6 @@ QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery
         if(v.GameSid==sGameSid)
         {
            re.append(v);
-
-           break;
         }
     }
 
@@ -952,5 +950,103 @@ double Action::payTypeToNTD(QString payTypeSid, DataRate rate)
 
 
     return re;
+}
+
+bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrderItem)
+{
+    bool bRe =true;
+
+    CListPair list(sOrderItem);
+
+    if(list.length()<1)
+        return false;
+
+    QString sError;
+
+    for(int i=0;i<list.length();i++)
+    {
+         QVariantMap tmp,tmpOut;
+         tmp["GameItemSid"] = list.at(i).first;
+        tmp["DESC"] = "Sid";
+
+        action(ACT::QUERY_ITEM_COUNT,tmp,tmpOut,sError);
+
+        DataItemCount itemLast(tmpOut);
+
+
+        DataItemCount item;
+
+        item.OrderSid=sOrderSid;
+
+        item.GameItemSid = list.at(i).first;
+
+        item.ChangeValue = list.at(i).second.toInt()*-1;
+
+        item.UserSid = sUserSid;
+
+        item.TotalSell= itemLast.TotalSell+list.at(i).second.toInt();
+
+        item.TotalCount = itemLast.TotalCount;
+
+
+        bool bOk =action(ACT::ADD_ITEM_COUNT,item.data(),sError);
+
+        if(!bOk)
+            bRe =false;
+
+    }
+
+    clearCacheData(ACT::QUERY_ITEM_COUNT);
+
+    qDebug()<<"clear cacheData ok";
+    return bRe;
+}
+
+int Action::checkItemCount(QString sGameItemSid)
+{
+
+    QVariantMap in;
+    in["ASC"]="Sid";
+    in["GameItemSid"]=sGameItemSid;
+    QVariantList listOut;
+
+    QString sError;
+
+    action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
+
+    if(listOut.length()<0)
+        return false;
+
+    DataItemCount item(listOut.last().toMap());
+
+    return item.TotalCount-item.TotalSell;
+}
+
+void Action::clearCacheData(int iApi)
+{
+    QString sApi =QString::number(iApi);
+
+    if(sApi.length()<2)
+        return;
+
+    QString sKey = sApi.mid(0,2);
+
+    QStringList listKey = m_dKeepData.keys();
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        QString sK = listKey.at(i);
+
+        if(sK.length()>2 && sK.mid(0,2) == sKey)
+        {
+           qDebug()<<"clear cache : "<<sK;
+           m_dKeepData[sK]="";
+
+        }
+
+    }
+
+    return ;
+
 }
 

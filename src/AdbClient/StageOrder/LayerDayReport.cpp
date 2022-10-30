@@ -48,9 +48,9 @@ void LayerDayReport::showEvent(QShowEvent *)
 
 void LayerDayReport::refreshTb()
 {
-    qDebug()<<"LayerDayReport refresh ";
+
     m_listOrder = ACTION.getOrder(true);
-    qDebug()<<"getOrder list len : "<<m_listOrder.length();
+
     ui->tb->setRowCount(0);
     QString sError;
 
@@ -273,10 +273,10 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
             data.Money = listMoney;
 
 
-            ACTION.action(ACT::REPLACE_ORDER,data.data(),sError);
+            bool bOk=ACTION.action(ACT::REPLACE_ORDER,data.data(),sError);
 
 
-            if(data.User.length()>2)
+            if(bOk && data.User.length()>2)
             {
                 UserData user = ACTION.getUser(data.User.at(2));
 
@@ -303,6 +303,8 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
                 in["OrderSid"] = data.Sid;
 
                 ACTION.action(ACT::ADD_BOUNS,in,sError);
+
+                ACTION.orderUpdateCount(data.Sid,user.Sid,data.Item);
 
             }
 

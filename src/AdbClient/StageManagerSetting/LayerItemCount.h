@@ -29,10 +29,14 @@ private:
 
     QPair<int,int> checkCount(QString itemSid);
 
+    void updateTb();
+
 
     QList<DataGameList> m_listGame;
 
    QList<DataGameItem> m_listGameItem;
+
+
 
     QVariantList m_listData;
 private:

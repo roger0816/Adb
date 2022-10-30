@@ -121,8 +121,13 @@ public:
 
     double payTypeToNTD(QString payTypeSid, DataRate rate);
 
+    bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
+
+    int checkItemCount(QString sGameItemSid);
 
 
+
+    void clearCacheData(int iApi);
 
 private:
     QList<UserData> m_listUser;

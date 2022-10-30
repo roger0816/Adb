@@ -6,6 +6,9 @@ LayerItemCount::LayerItemCount(QWidget *parent) :
     ui(new Ui::LayerItemCount)
 {
     ui->setupUi(this);
+
+    ui->cbGame->setProperty("lock",false);
+
 }
 
 LayerItemCount::~LayerItemCount()
@@ -15,7 +18,7 @@ LayerItemCount::~LayerItemCount()
 
 void LayerItemCount::showEvent(QShowEvent *)
 {
-    // QTimer::singleShot(50,this,[=](){ refresh();});
+     QTimer::singleShot(50,this,[=](){ refresh();});
 }
 
 QPair<int, int> LayerItemCount::checkCount(QString itemSid)
@@ -23,7 +26,6 @@ QPair<int, int> LayerItemCount::checkCount(QString itemSid)
     int iCount=0;
     int iCountSell=0;
 
-    qDebug()<<"IIIIIIIIIII : "<<m_listData.length();
 
     for(int i=0;i<m_listData.length();i++)
     {
@@ -53,43 +55,14 @@ QPair<int, int> LayerItemCount::checkCount(QString itemSid)
     return re;
 }
 
-void LayerItemCount::refresh()
+void LayerItemCount::updateTb()
 {
+    int iIdx = ui->cbGame->currentIndex();
 
-    QVariantMap in;
-    in["ASC"]="Sid";
-    QVariantList listOut;
-
-    QString sError;
-
-    ACTION.action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
-
-    m_listData = listOut;
-
-    m_listGame = ACTION.getGameList(true);
-
-    QStringList listCbName;
-
-    foreach(DataGameList v,m_listGame)
-    {
-        listCbName.append(v.Name);
-    }
-
-    ui->cbGame->addItems(listCbName);
-
-}
-
-
-
-void LayerItemCount::on_cbGame_currentIndexChanged(int index)
-{
-    if(index<0 || index>=m_listGame.length())
-        return;
-
-
-    QString sGameSid = m_listGame.at(index).Sid;
+    QString sGameSid = m_listGame.at(iIdx).Sid;
 
     m_listGameItem  = ACTION.getGameItemFromGameSid(sGameSid,true);
+
 
     ui->tb->setRowCount(0);
 
@@ -105,22 +78,82 @@ void LayerItemCount::on_cbGame_currentIndexChanged(int index)
         int iSell = p.first;
         int iCount = p.second;
 
-        if(iSell==0)
-            ui->tb->setItem(i,1,UI.tbItem(p.first));
-        else
-            ui->tb->setItem(i,1,UI.tbItem(p.first,GlobalUi::_BUTTON));
+        //        if(iSell!=0)
+        //            ui->tb->setItem(i,1,UI.tbItem(p.first,GlobalUi::_BUTTON));
+        //         else
+        ui->tb->setItem(i,1,UI.tbItem(p.first));
+
 
         int iTmp = iCount-iSell;
 
         ui->tb->setItem(i,2,UI.tbItem(iTmp));
 
-        if(iCount==0)
+//        if(iCount!=0)
+//            ui->tb->setItem(i,3,UI.tbItem(p.second,GlobalUi::_BUTTON));
+//        else
             ui->tb->setItem(i,3,UI.tbItem(p.second));
-        else
-            ui->tb->setItem(i,3,UI.tbItem(p.second,GlobalUi::_BUTTON));
+
 
         ui->tb->setItem(i,4,UI.tbItem("入庫",GlobalUi::_BUTTON));
     }
+}
+
+void LayerItemCount::refresh()
+{
+
+    QVariantMap in;
+    in["ASC"]="Sid";
+    QVariantList listOut;
+
+    QString sError;
+
+    ACTION.action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
+
+
+    m_listData = listOut;
+
+    m_listGame = ACTION.getGameList(true);
+
+    QStringList listCbName;
+
+    foreach(DataGameList v,m_listGame)
+    {
+        listCbName.append(v.Name);
+    }
+
+
+    ui->cbGame->setProperty("lock",true);
+
+    ui->cbGame->clear();
+
+    ui->cbGame->addItems(listCbName);
+
+    ui->cbGame->setProperty("lock",false);
+
+    int iIdx = ui->cbGame->currentIndex();
+
+    if(iIdx<0 || iIdx>= m_listGame.length())
+    {
+        ui->tb->setRowCount(0);
+
+        return;
+    }
+
+    updateTb();
+
+}
+
+
+
+void LayerItemCount::on_cbGame_currentIndexChanged(int index)
+{
+
+    qDebug()<<"iIdx : "<<index<<", "<<m_listGame.length()<<" , "<<ui->cbGame->property("lock").toBool();
+
+    if(index<0 || index>=m_listGame.length() || ui->cbGame->property("lock").toBool())
+        return;
+
+    updateTb();
 
 
 
@@ -148,6 +181,13 @@ void LayerItemCount::on_tb_cellClicked(int row, int column)
         int iRet = input.exec();
         if(iRet==1)
         {
+
+            if(input.data()["Count"].toInt()<=0 || input.data()["Count"].toInt()>10000)
+            {
+                DMSG.showMsg("","請輸入有效數量","OK");
+                return;
+
+            }
 
             DataGameItem item = m_listGameItem.at(row);
 
@@ -179,6 +219,8 @@ void LayerItemCount::on_tb_cellClicked(int row, int column)
             ACTION.action(ACT::ADD_ITEM_COUNT,data.data(),sError);
 
             DMSG.showMsg("",sError,"OK");
+
+            refresh();
         }
 
     }

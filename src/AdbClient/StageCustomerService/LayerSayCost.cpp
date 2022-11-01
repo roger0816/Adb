@@ -945,6 +945,7 @@ void LayerSayCost::on_btnSayOk_clicked()
 
     m_order.Item = list.toString();
 
+    m_order.UpdateTime = m_date.toString("yyyyMMddhhmmss");
     QString sError;
     bool bOk = ACTION.replaceOrder(m_order,sError);
 

@@ -258,8 +258,8 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
             QString sError;
             order.PaddingUser=ACTION.m_currentUser.Sid;
             order.Step="3";
-            ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
+             ACTION.replaceOrder(order,sError);
           //  UI.showMsg("",sError,"OK");
 
             refreshUser();
@@ -319,8 +319,8 @@ void LayerGetOrder2::on_btnBackOrder_clicked()
 
         order.Step="3";
 
-        ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
-
+        //ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
+        ACTION.replaceOrder(order,sError);
         UI.showMsg("",sError,"OK");
 
         refreshUser();
@@ -369,7 +369,6 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
         order.User[4] = ACTION.m_currentUser.Sid;
         order.StepTime[4]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
-        ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
         order.Step="4";
 
@@ -377,8 +376,8 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
         order.Pic1 = ui->wPic0->uploadPic();
 
-        ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
+         ACTION.replaceOrder(order,sError);
        // UI.showMsg("",sError,"OK");
 
         UI.showMsg("","回報完成",QStringList()<<"OK");

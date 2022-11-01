@@ -24,8 +24,8 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
     QString sDateTime =currentDateTime().toString("yyyyMMddhhmmss");
 
-    //if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
-    data["UpdateTime"] =sDateTime;
+    if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
+        data["UpdateTime"] =sDateTime;
 
     QStringList listKey = data.keys();
 

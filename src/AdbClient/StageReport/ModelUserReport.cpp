@@ -56,40 +56,78 @@ QVariant ModelUserReport::data(const QModelIndex &index, int role) const
 
     QVariant re;
 
-  if(role==Qt::TextAlignmentRole)
-      re=Qt::AlignCenter;
+
+
+
+    QString sText="";
+    QFont font;
+    QColor colorFront(Qt::darkGray);
+
+    int iRow = qBound(0,index.row() ,m_listUser.length()-1);
+
+
+    switch (index.column())
+    {
+    case 0:
+        sText = m_listUser.at(iRow).Cid;
+        break;
+    case 1:
+
+        sText = m_listUser.at(iRow).Name;
+        break;
+    case 2:
+        sText = GLOBAL.userLvToStr(m_listUser.at(iRow).Lv);
+        break;
+    case 3:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[0]);
+        break;
+    case 4:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[1]);
+        break;
+    case 5:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[2]);
+        break;
+    case 6:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[3]);
+        break;
+    case 7:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[4]);
+        break;
+    case 8:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[5]);
+        break;
+    default:
+        break;
+    }
+
+
+    if(index.column()>=3 && index.column()<9)
+    {
+        colorFront =QColor(85,170,255);
+
+      //  font.setUnderline(true);
+    }
 
 
     if(role==Qt::DisplayRole)
+        re=sText;
+
+    if(role==Qt::TextAlignmentRole)
+        re=Qt::AlignCenter;
+
+
+    if(role==Qt::ForegroundRole)
     {
-        QString sSt="";
-
-
-        int iRow = qBound(0,index.row() ,m_listUser.length()-1);
-
-        if(index.column()==0)
-            sSt = m_listUser.at(iRow).Cid;
-        else if(index.column()==1)
-            sSt = m_listUser.at(iRow).Name;
-        else if(index.column()==2)
-            sSt = GLOBAL.userLvToStr(m_listUser.at(iRow).Lv);
-        else if(index.column()==3)
-            sSt = m_listUser.at(iRow).iTotalStep[0];
-        if(index.column()==4)
-            sSt = m_listUser.at(iRow).iTotalStep[1];
-        if(index.column()==5)
-            sSt = m_listUser.at(iRow).iTotalStep[2];
-        if(index.column()==6)
-            sSt = m_listUser.at(iRow).iTotalStep[3];
-
-        if(index.column()==7)
-            sSt = m_listUser.at(iRow).iTotalStep[4];
-
-        if(index.column()==8)
-            sSt = m_listUser.at(iRow).iTotalStep[5];
-
-        re=sSt;
+        re=colorFront;
     }
+
+    if(role==Qt::FontRole)
+    {
+        re=font;
+
+    }
+
+
 
     return re;
 }
@@ -121,7 +159,7 @@ void ModelUserReport::requestAction()
         DataUserReport data(v.data());
 
         m_listUser.append(data);
-     //   m_dUser[data.Sid]=&m_listUser.last();
+        m_dUser[data.Sid]=&m_listUser.last();
     }
 
 
@@ -139,7 +177,7 @@ void ModelUserReport::requestAction()
         }
         else
         {
-           return sDate == m_dateTime.toString("yyyyMMdd");
+            return sDate == m_dateTime.toString("yyyyMMdd");
         }
 
     };
@@ -158,12 +196,26 @@ void ModelUserReport::requestAction()
         {
             QString sUserSid = listStepUser.at(j);
 
+            if(sUserSid.trimmed()=="")
+                continue;
             int iStep =j;
 
-            //m_dUser[sUserSid]->iTotalStep[iStep]+=1;
+            qDebug()<<"AAAAAAAAAA : "<<sUserSid<<" , add";
+
+            m_dUser[sUserSid]->iTotalStep[iStep]+=1;
+
+
         }
 
 
+    }
+
+
+    foreach(DataUserReport v, m_listUser)
+    {
+        qDebug()<<"sid : "<<v.Sid<<" , "<<v.iTotalStep[0]<<","<<v.iTotalStep[1]
+               <<","<<v.iTotalStep[2]<<","<<v.iTotalStep[3]<<","<<v.iTotalStep[4]
+              <<","<<v.iTotalStep[5];
     }
 
 

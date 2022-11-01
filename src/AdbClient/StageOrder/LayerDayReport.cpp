@@ -12,9 +12,6 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
     m_detialOrder->setReadOnly();
     m_detialOrder->hide();
 
-    m_bLockDate = true;
-    ui->dateEdit->setDate(QDate::currentDate());
-    m_bLockDate = false;
 
 
     ui->tb->hideColumn(12);
@@ -43,6 +40,11 @@ LayerDayReport::~LayerDayReport()
 
 void LayerDayReport::showEvent(QShowEvent *)
 {
+    m_bLockDate = true;
+    ui->dateEdit->setDate(GLOBAL.dateTimeUtc8().date());
+    m_bLockDate = false;
+
+
     QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(delayRefresh()));
 }
 
@@ -256,7 +258,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             data.User[5] = ACTION.m_currentUser.Sid;
 
-            ACTION.action(ACT::REPLACE_ORDER,data.data(),sError);
+            ACTION.replaceOrder(data,sError);
 
             data.Step="5";
 
@@ -273,8 +275,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
             data.Money = listMoney;
 
 
-            bool bOk=ACTION.action(ACT::REPLACE_ORDER,data.data(),sError);
-
+            bool bOk =ACTION.replaceOrder(data,sError);
 
             if(bOk && data.User.length()>2)
             {

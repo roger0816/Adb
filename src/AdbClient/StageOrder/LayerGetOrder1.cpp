@@ -267,8 +267,8 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
             order.User[2] = ACTION.m_currentUser.Sid;
             order.StepTime[2]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
-            ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
+            ACTION.replaceOrder(order,sError);
            // UI.showMsg("",sError,"OK");
 
             refreshUser();
@@ -336,7 +336,7 @@ void LayerGetOrder1::on_btnBackOrder_clicked()
 
         order.Step="1";
 
-        ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
+        ACTION.replaceOrder(order,sError);
 
         UI.showMsg("",sError,"OK");
 
@@ -400,8 +400,7 @@ void LayerGetOrder1::on_btnFinish_clicked()
 
         order.Pic0 = ui->wPic0->uploadPic();
 
-
-        ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
+        ACTION.replaceOrder(order,sError);
 
         UI.showMsg("",sError,"OK");
 

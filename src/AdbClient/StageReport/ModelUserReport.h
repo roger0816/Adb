@@ -3,7 +3,8 @@
 
 #include <QAbstractTableModel>
 #include "Global.h"
-
+#include <QFont>
+#include <QColor>
 
 namespace _ModelUserReport {
 

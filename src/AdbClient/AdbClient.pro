@@ -25,6 +25,8 @@ SOURCES += \
     StageCustomerService/DialogCustomerCostHistory.cpp \
     StageManagerSetting/LayerItemCount.cpp \
     StageOrder/ItemOrderSelector.cpp \
+    StageReport/LayerUserReport.cpp \
+    StageReport/ModelUserReport.cpp \
     component/CLinkTable.cpp \
     component/CSideMenu.cpp \
     DialogBulletinEdit.cpp \
@@ -36,6 +38,7 @@ SOURCES += \
     Global.cpp \
     GlobalUi.cpp \
     component/DialogObj.cpp \
+    component/ItemClock.cpp \
     component/ItemMiniLoadbar.cpp \
     component/ItemPic.cpp \
     component/ItemPicObj.cpp \
@@ -79,6 +82,8 @@ HEADERS += \
     StageCustomerService/DialogCustomerCostHistory.h \
     StageManagerSetting/LayerItemCount.h \
     StageOrder/ItemOrderSelector.h \
+    StageReport/LayerUserReport.h \
+    StageReport/ModelUserReport.h \
     component/CLinkTable.h \
     component/CSideMenu.h \
     DialogBulletinEdit.h \
@@ -90,6 +95,7 @@ HEADERS += \
     Global.h \
     GlobalUi.h \
     component/DialogObj.h \
+    component/ItemClock.h \
     component/ItemMiniLoadbar.h \
     component/ItemPic.h \
     component/ItemPicObj.h \
@@ -132,6 +138,7 @@ FORMS += \
     StageCustomerService/DialogCustomerCostHistory.ui \
     StageManagerSetting/LayerItemCount.ui \
     StageOrder/ItemOrderSelector.ui \
+    StageReport/LayerUserReport.ui \
     component/CSideMenu.ui \
     DialogBulletinEdit.ui \
     DialogCommon.ui \

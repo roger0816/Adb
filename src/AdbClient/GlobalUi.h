@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QApplication>
 #include <QClipboard>
+#include <QButtonGroup>
 #include <QToolTip>
 #include <QShowEvent>
 #include "DialogMsg.h"

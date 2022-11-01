@@ -274,7 +274,23 @@ QVariant Global::config(QString st)
 
 QDateTime Global::dateTimeUtc8()
 {
-    return QDateTime::currentDateTimeUtc().addSecs(60*60*8);
+    return QDateTime::currentDateTimeUtc().addSecs(60*60*8+m_virtualSec);
+}
+
+QString Global::userLvToStr(int iLv)
+{
+
+    QString sLv = "客服專員";
+    if(iLv==99)
+        sLv = "系統管理員";
+    else if(iLv==USER_LV::_LV2)
+        sLv = "儲值專員";
+    else if(iLv==USER_LV::_LV3)
+        sLv = "主管";
+    else if(iLv==USER_LV::_LV4)
+        sLv = "會計";
+
+    return sLv;
 }
 
 QString Global::strNumber(double number)

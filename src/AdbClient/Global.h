@@ -65,6 +65,10 @@ public:
 
     QDateTime dateTimeUtc8();
 
+    QString userLvToStr(int iLv);
+
+     int m_virtualSec=0;
+
 private:
     static Global *m_pInstance;
 

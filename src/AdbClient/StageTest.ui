@@ -24,7 +24,85 @@
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="ItemOrderSelector" name="widget" native="true"/>
+        <widget class="QWidget" name="widget" native="true">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="2">
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="1">
+           <widget class="QWidget" name="widget_3" native="true">
+            <layout class="QGridLayout" name="gridLayout_2">
+             <item row="0" column="1" rowspan="2">
+              <widget class="QLabel" name="label_9">
+               <property name="text">
+                <string>因為系統時間是抓取網路時間，
+無法修改電腦時間來做模擬資料輸入，
+請在這邊設定假時間校時</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QTimeEdit" name="timeEdit">
+               <property name="currentSection">
+                <enum>QDateTimeEdit::MinuteSection</enum>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3" colspan="2">
+              <widget class="QPushButton" name="btnTestDate">
+               <property name="text">
+                <string>設定</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QDateEdit" name="dateEdit">
+               <property name="currentSection">
+                <enum>QDateTimeEdit::DaySection</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item>
         <widget class="QWidget" name="widget_2" native="true">
@@ -44,7 +122,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="stackedWidgetPage1" native="true">
+     <widget class="QWidget" name="stackedWidgetPage1">
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
@@ -232,14 +310,6 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>ItemOrderSelector</class>
-   <extends>QWidget</extends>
-   <header>ItemOrderSelector.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -5,6 +5,7 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include <QDateTime>
+#include "DialogCustomerEdit.h"
 #include "DialogCustomerCostHistory.h"
 #include <QKeyEvent>
 namespace Ui {
@@ -61,6 +62,7 @@ public slots:
 private slots:
     void refresh(bool bReQuery = true);
     void on_btnHistory_clicked();
+    void on_btnDetail_clicked();
 };
 
 #endif // LAYERSEARCHCUSTOMER_H

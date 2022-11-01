@@ -42,15 +42,9 @@ void LayerAccountManager::refresh()
         ui->tb->setItem(i,2, UI.tbItem(user.Cid));
 
         int iLv =user.Lv;
-        QString sLv = "客服專員";
-        if(iLv==99)
-            sLv = "系統管理員";
-        else if(iLv==USER_LV::_LV2)
-            sLv = "儲值專員";
-        else if(iLv==USER_LV::_LV3)
-            sLv = "主管";
-        else if(iLv==USER_LV::_LV4)
-            sLv = "會計";
+        QString sLv = GLOBAL.userLvToStr(iLv);
+
+
 
         ui->tb->setItem(i,3, UI.tbItem(sLv));
         QString sDate = QDate::fromString(user.StartDay,"yyyyMMdd").toString("yyyy/MM/dd");

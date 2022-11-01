@@ -357,12 +357,12 @@
          </column>
          <column>
           <property name="text">
-           <string>員工編號</string>
+           <string>編號</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>權限</string>
+           <string>職級</string>
           </property>
          </column>
          <column>

@@ -100,7 +100,7 @@ int main(int argc, char *argv[])
 
     UI.m_dialogLogin = &login;
 
-#if 1
+#if 0
 
     int iRet =login.exec();
 

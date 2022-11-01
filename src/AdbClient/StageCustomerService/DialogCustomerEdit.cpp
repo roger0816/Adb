@@ -7,7 +7,9 @@ DialogCustomerEdit::DialogCustomerEdit(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowTitle("客戶資料設定");
+    setWindowFlags(windowFlags()  &  ~Qt::WindowContextHelpButtonHint);
+
+    this->setWindowTitle(" ");
 
     ui->tbGameList->setColumnWidth(0,56);
 
@@ -74,9 +76,9 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     ui->cbCurrency->setEnabled(false);
 
-//    ui->txPayType->setText(m_data["PayType"].toString());
+    //    ui->txPayType->setText(m_data["PayType"].toString());
 
-//    ui->txPayInfo->setText(m_data["PayInfo"].toString());
+    //    ui->txPayInfo->setText(m_data["PayInfo"].toString());
 
     ui->txNote1->setText(m_data["Note1"].toString());
 
@@ -84,10 +86,67 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     m_listGameInfo = listGameInfo;
 
-
-
-
     refresh();
+
+    if(ui->tbGameList->rowCount()>0)
+    {
+
+        ui->tbGameList->setCurrentCell(0,1);
+        on_tbGameList_cellClicked(0,1);
+    }
+
+}
+
+void DialogCustomerEdit::setData(QString sCustomerSid)
+{
+    QVariantMap tmp,outCustomer;
+    tmp["Sid"] = sCustomerSid;
+    QString sError;
+    ACTION.action(ACT::QUERY_CUSTOMER,tmp,outCustomer,sError);
+
+
+
+    QVariantList in,outClass,outGame,outGameInfo;
+
+
+
+    ACTION.action(ACT::QUERY_CUSTOM_CLASS,in,outClass,sError);
+
+    ACTION.action(ACT::QUERY_GAME_LIST,in,outGame,sError);
+
+    ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,outGameInfo,sError);
+
+    setData(outClass,outGame,outGameInfo,outCustomer);
+
+
+}
+
+void DialogCustomerEdit::setReadOnly(bool bReadOnly)
+{
+    bool bEnable =!bReadOnly;
+
+    ui->wBottom->setVisible(bEnable);
+
+    ui->wGameItemArea->setVisible(bEnable);
+
+    ui->cbClass->setEnabled(bEnable);
+    ui->cbCurrency->setEnabled(bEnable);
+    ui->cbGame->setEnabled(bEnable);
+
+    ui->cbVip->setEnabled(bEnable);
+    ui->txName->setReadOnly(!bEnable);
+    ui->txNote1->setReadOnly(!bEnable);
+
+    ui->txLoginType->setReadOnly(!bEnable);
+    ui->txGameAccount->setReadOnly(!bEnable);
+    ui->txPassword->setReadOnly(!bEnable);
+    ui->txChr->setReadOnly(!bEnable);
+    ui->txServer->setReadOnly(!bEnable);
+
+    ui->tbGameList->hideColumn(0);
+
+    ui->lbTitle->setText("客戶詳細資料");
+
 
 }
 
@@ -105,9 +164,9 @@ QVariantMap DialogCustomerEdit::data()
         m_data["Vip"]="1";
 
 
-//    m_data["PayType"] = ui->txPayType->text().trimmed();
+    //    m_data["PayType"] = ui->txPayType->text().trimmed();
 
-//    m_data["PayInfo"] = ui->txPayInfo->text().trimmed();
+    //    m_data["PayInfo"] = ui->txPayInfo->text().trimmed();
 
     int iClassIdx =qBound(0,ui->cbClass->currentIndex(),m_listClass.length()-1);
 
@@ -363,13 +422,13 @@ void DialogCustomerEdit::on_btnOk_clicked()
         if(iRet!=1)
             return;
 
-    int iIdx =qBound(0,ui->cbCurrency->currentIndex(),m_lastPrimeRate.listValue().length()-1);
+        int iIdx =qBound(0,ui->cbCurrency->currentIndex(),m_lastPrimeRate.listValue().length()-1);
 
-     double iOriginRate = m_lastPrimeRate.listValue().at(iIdx).toDouble();
+        double iOriginRate = m_lastPrimeRate.listValue().at(iIdx).toDouble();
 
-     double money =m_data["Money"].toDouble();
+        double money =m_data["Money"].toDouble();
 
-     m_data["Money"] = money/iOriginRate;
+        m_data["Money"] = money/iOriginRate;
 
 
     }

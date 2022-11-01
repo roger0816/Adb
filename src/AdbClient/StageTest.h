@@ -2,7 +2,8 @@
 #define STAGETEST_H
 
 #include <QWidget>
-
+#include "Global.h"
+#include "GlobalUi.h"
 
 namespace Ui {
 class StageTest;
@@ -16,9 +17,12 @@ public:
     explicit StageTest(QWidget *parent = nullptr);
     ~StageTest();
 
+    void showEvent(QShowEvent * )override;
+
 private slots:
 
-    void on_pushButton_clicked();
+
+    void on_btnTestDate_clicked();
 
 private:
     Ui::StageTest *ui;

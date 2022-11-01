@@ -33,6 +33,9 @@ public:
 
     void setData(QVariantList listClass, QVariantList listGame, QVariantList listGameInfo, QVariantMap data);
 
+    void setData(QString sCustomerSid);
+
+    void setReadOnly(bool bReadOnly=true);
     QVariantMap data();
 
     QVariantList dataGameInfo();

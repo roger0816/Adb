@@ -157,7 +157,6 @@ void LayerSearchCustomer::changePage(int iPage)
         {
             CustomerGameInfo dataGame (out.at(i).toMap());
 
-            qDebug()<<"CCCCCCCCCCCCC "<<dataGame.GameSid;
 
             if(dataGame.GameSid == sLastGameSid)
             {
@@ -345,6 +344,19 @@ void LayerSearchCustomer::on_btnHistory_clicked()
     DialogCustomerCostHistory dialog;
     CustomerData customer(m_listData.at(m_iIdx).toMap());
     dialog.setCustomer(customer);
+    dialog.exec();
+}
+
+
+void LayerSearchCustomer::on_btnDetail_clicked()
+{
+    CustomerData customer(m_listData.at(m_iIdx).toMap());
+    DialogCustomerEdit dialog;
+
+    dialog.setData(customer.Sid);
+
+    dialog.setReadOnly(true);
+
     dialog.exec();
 }
 

@@ -441,13 +441,6 @@ background-color:gray;
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_14">
-                  <property name="text">
-                   <string>登入方式:</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="0" column="1">
                  <widget class="QLabel" name="lbGame">
                   <property name="text">
@@ -458,18 +451,15 @@ background-color:gray;
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QLabel" name="lbLoginType">
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_14">
                   <property name="text">
-                   <string/>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignCenter</set>
+                   <string>登入方式:</string>
                   </property>
                  </widget>
                 </item>
-                <item row="2" column="1">
-                 <widget class="QLabel" name="lbGameAccount">
+                <item row="1" column="1">
+                 <widget class="QLabel" name="lbLoginType">
                   <property name="text">
                    <string/>
                   </property>
@@ -485,17 +475,20 @@ background-color:gray;
                   </property>
                  </widget>
                 </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="lbGameAccount">
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
                 <item row="3" column="0">
                  <widget class="QLabel" name="label_23">
                   <property name="text">
                    <string>伺服器:</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_24">
-                  <property name="text">
-                   <string>角色名稱:</string>
                   </property>
                  </widget>
                 </item>
@@ -509,6 +502,13 @@ background-color:gray;
                   </property>
                  </widget>
                 </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_24">
+                  <property name="text">
+                   <string>角色名稱:</string>
+                  </property>
+                 </widget>
+                </item>
                 <item row="4" column="1">
                  <widget class="QLabel" name="lbChr">
                   <property name="text">
@@ -516,6 +516,69 @@ background-color:gray;
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QPushButton" name="btnDetail">
+                  <property name="styleSheet">
+                   <string notr="true">
+
+
+
+QPushButton{
+background-color: rgb(255, 255, 255,0);
+border-radius:5px;
+    color: #409eff;
+border: 0px solid #000000; 
+text-decoration: underline;
+}
+
+
+/*
+QPushButton{
+background-color: rgb(255, 255, 255);
+border-radius:5px;
+color: rgb(41,41,41);
+border: 1px solid #000000; 
+ padding: 5px;
+}
+
+
+
+QPushButton:hover {
+    background-color: #ecf5ff;
+    color: #409eff;
+}
+
+
+QPushButton:pressed, QPushButton:checked {
+    border: 1px solid #3a8ee6;
+    color: #409eff;
+}
+
+
+QPushButton:disabled { 
+border-style: outset; 
+border-width: 0px; 
+font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
+color:gray;
+background-color:gray;
+}
+*/</string>
+                  </property>
+                  <property name="text">
+                   <string>詳細</string>
+                  </property>
+                  <property name="flat">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_2">
+                  <property name="text">
+                   <string/>
                   </property>
                  </widget>
                 </item>

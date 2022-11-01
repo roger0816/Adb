@@ -9,11 +9,10 @@ StageTest::StageTest(QWidget *parent) :
     ui(new Ui::StageTest)
 {
     ui->setupUi(this);
-// login super user     root :   1234    for test class
+    // login super user     root :   1234    for test class
 
 
 
-    ui->widget->setBtns(QStringList()<<"AA"<<"BB"<<"CC"<<"EE");
 }
 
 StageTest::~StageTest()
@@ -21,13 +20,29 @@ StageTest::~StageTest()
     delete ui;
 }
 
-
-
-void StageTest::on_pushButton_clicked()
+void StageTest::showEvent(QShowEvent *)
 {
-    //include "Global.h"
+
+    ui->dateEdit->setDate(GLOBAL.dateTimeUtc8().date());
+
+    ui->timeEdit->setTime(GLOBAL.dateTimeUtc8().time());
+
+}
 
 
 
+
+
+void StageTest::on_btnTestDate_clicked()
+{
+
+    QDateTime date;
+
+    date.setDate(ui->dateEdit->date());
+
+    date.setTime(ui->timeEdit->time());
+    GLOBAL.m_virtualSec=0;
+
+    GLOBAL.m_virtualSec = date.toSecsSinceEpoch() - GLOBAL.dateTimeUtc8().toSecsSinceEpoch();
 }
 

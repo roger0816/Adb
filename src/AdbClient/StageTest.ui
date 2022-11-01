@@ -54,7 +54,13 @@
              <item row="0" column="3">
               <widget class="QTimeEdit" name="timeEdit">
                <property name="currentSection">
-                <enum>QDateTimeEdit::MinuteSection</enum>
+                <enum>QDateTimeEdit::HourSection</enum>
+               </property>
+               <property name="displayFormat">
+                <string>hh:mm</string>
+               </property>
+               <property name="timeSpec">
+                <enum>Qt::UTC</enum>
                </property>
               </widget>
              </item>

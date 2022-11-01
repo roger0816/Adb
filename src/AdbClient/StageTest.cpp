@@ -30,9 +30,6 @@ void StageTest::showEvent(QShowEvent *)
 }
 
 
-
-
-
 void StageTest::on_btnTestDate_clicked()
 {
 
@@ -41,8 +38,13 @@ void StageTest::on_btnTestDate_clicked()
     date.setDate(ui->dateEdit->date());
 
     date.setTime(ui->timeEdit->time());
+
     GLOBAL.m_virtualSec=0;
 
-    GLOBAL.m_virtualSec = date.toSecsSinceEpoch() - GLOBAL.dateTimeUtc8().toSecsSinceEpoch();
+    GLOBAL.m_virtualSec = date.toUTC().addSecs(60*60*8).toSecsSinceEpoch() -GLOBAL.dateTimeUtc8().toSecsSinceEpoch();
+
+
+
+
 }
 

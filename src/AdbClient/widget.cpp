@@ -153,7 +153,7 @@ void Widget::checkUserLv()
         ui->btn4->setEnabled(true);
     }
 
-    if(iLv>=USER_LV::_ROOT)
+   // if(iLv>=USER_LV::_ROOT)
     {
         ui->btnTest->setEnabled(true);
         ui->btnTest->show();

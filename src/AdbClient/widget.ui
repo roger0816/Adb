@@ -288,7 +288,7 @@ color: rgb(95, 95, 0);</string>
           <widget class="QWidget" name="widget_4" native="true">
            <property name="minimumSize">
             <size>
-             <width>220</width>
+             <width>230</width>
              <height>33</height>
             </size>
            </property>
@@ -312,13 +312,13 @@ color: rgb(95, 95, 0);</string>
              <widget class="ItemClock" name="dateTimeEdit">
               <property name="minimumSize">
                <size>
-                <width>210</width>
+                <width>220</width>
                 <height>0</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>210</width>
+                <width>220</width>
                 <height>16777215</height>
                </size>
               </property>

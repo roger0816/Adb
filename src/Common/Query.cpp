@@ -399,7 +399,7 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::ADD_CUSTOMER_COST)
     {
         qDebug()<<"query Add customer cost : "<<data.dData;
-        bOk = m_sql.insertTb(SQL_TABLE::CustomerCost(),data.dData,sError);
+        bOk = m_sql.insertTb(SQL_TABLE::CustomerCost(),data.dData,sError,true);
         sOkMsg = "加值完成";
     }
 

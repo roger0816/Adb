@@ -219,8 +219,8 @@ struct CustomerData :public DataObj
 struct CustomerCost
 {
     CustomerCost(){}
-
-    CustomerCost(QVariantMap data)
+    CustomerCost(QVariantMap data){setData(data);}
+    void setData(QVariantMap data)
     {
         Sid = data["Sid"].toString();
         CustomerSid = data["CustomerSid"].toString();
@@ -231,7 +231,7 @@ struct CustomerCost
         DebitNote = data["DebitNote"].toString();
         Rate = data["Rate"].toString();
         AddRate = data["AddRate"].toString();
-
+        IsAddCost = data["IsAddCost"].toBool();
         Total = data["Total"].toString();
 
         if(Total=="")
@@ -258,6 +258,7 @@ struct CustomerCost
         re["DebitNote"]=DebitNote;
         re["Rate"]=Rate;
         re["AddRate"]=AddRate;
+        re["IsAddCost"] = IsAddCost;
         re["ChangeValue"]=ChangeValue;
         re["Total"]=Total;
         re["UserSid"]=UserSid;
@@ -278,6 +279,7 @@ struct CustomerCost
     QString OrderId;
     QString Rate;
     QString AddRate="0";
+    bool IsAddCost=true;
     QString DebitSid;
     QString DebitNote;
     QString Currency;
@@ -522,7 +524,6 @@ struct OrderData :public DataObj
     QString Note5;
     QString Pic0;
     QString Pic1;
-    QString UpdateTime;
     QString OrderDate;
     QString OrderTime;
 

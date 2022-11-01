@@ -86,7 +86,7 @@ public:
     QList<OrderData> getOrder(bool bRequest = false);
 
     OrderData getOrder(QString sSid, bool bRequest = false);
-    OrderData getOrderByCustomerSid(QString sSid, bool bRequest = false);
+    OrderData getOrderCustomerLast(QString sCustomerSid, bool bRequest = false);
 
 
 

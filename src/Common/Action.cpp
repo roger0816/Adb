@@ -7,7 +7,7 @@ Action::Action(QObject *parent)
 
 }
 
- Action::~Action()
+Action::~Action()
 {
     qDebug()<<"un Action";
 }
@@ -29,7 +29,7 @@ void Action::setServer(bool b, QString sIp, QString sPort)
 
 int Action::checkLogin(QString sUser, QString sPass, QString &sError)
 {
-qDebug()<<"check login : "<<sUser<<" , "<<sPass<<" , error : "<<sError;
+    qDebug()<<"check login : "<<sUser<<" , "<<sPass<<" , error : "<<sError;
     CData data;
 
     data.iAciton = ACT::LOGIN;
@@ -263,7 +263,7 @@ void Action::reQuerty()
     primeRate("",true);
 
 
-  //  rate("",true);
+    //  rate("",true);
 }
 
 QList<UserData> Action::getUser(bool bQuery)
@@ -503,9 +503,9 @@ DataGameItem Action::getGameItemFromSid(QString sSid, bool bQuery)
     {
         if(v.Sid==sSid)
         {
-           re =v;
+            re =v;
 
-           break;
+            break;
         }
     }
 
@@ -522,7 +522,7 @@ QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery
     {
         if(v.GameSid==sGameSid)
         {
-           re.append(v);
+            re.append(v);
         }
     }
 
@@ -627,9 +627,77 @@ QList<OrderData> Action::getOrder(bool bRequest)
 bool Action::replaceOrder(OrderData order, QString &sError)
 {
     bool bRe = false;
+
+    bool bToUpdateMoney = false;
+
+    if(order.Step=="4")
+        bToUpdateMoney=true;
+
     QVariantMap out;
     bRe = action(ACT::REPLACE_ORDER,order.data(),sError);
-    return bRe;
+
+    if(bRe && bToUpdateMoney)
+    {
+        QVariantList listOut;
+        QVariantMap in;
+        in["CustomerSid"]=order.CustomerSid;
+        in["DESC"]="Sid";
+
+        double iCurrentTotal=0;
+
+        action(ACT::QUERY_CUSTOMER_COST,in,listOut);
+
+        if(listOut.length()>0)
+            iCurrentTotal=CustomerCost(listOut.first().toMap()).Total.toDouble();
+
+        QString sOrderSid =getOrderCustomerLast(order.CustomerSid).Sid;
+
+
+
+
+
+
+        CustomerCost data;
+
+        data.UserSid = m_currentUser.Sid;
+
+        data.Rate = primeRate("").Sid;
+
+        data.CustomerSid=order.CustomerSid;
+
+        data.IsAddCost=false;
+
+        data.ChangeValue=QString::number(order.Cost.toDouble()*-1);
+
+        double cost =iCurrentTotal+data.ChangeValue.toDouble();
+
+        data.Total = QString::number(cost);
+
+        data.OrderId = sOrderSid;
+
+        QString sError;
+        bool bOk =action(ACT::ADD_CUSTOMER_COST,data.data(),sError);
+
+
+        if(bOk)
+        {
+            QVariantMap tmp,outCustomer;
+            tmp["Sid"]=order.CustomerSid;
+
+            action(ACT::QUERY_CUSTOMER,tmp,outCustomer,sError);
+
+            CustomerData customerData(outCustomer);
+            customerData.Money=data.Total;
+            bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);
+            if(bOk)
+                bRe = true;
+        }
+
+    }
+
+
+
+return bRe;
 
 }
 
@@ -649,7 +717,7 @@ OrderData Action::getOrder(QString sSid, bool bRequest)
     return re;
 }
 
-OrderData Action::getOrderByCustomerSid(QString sSid, bool bRequest)
+OrderData Action::getOrderCustomerLast(QString sCustomerSid, bool bRequest)
 {
     if(bRequest)
         getOrder(bRequest);
@@ -660,7 +728,7 @@ OrderData Action::getOrderByCustomerSid(QString sSid, bool bRequest)
 
     for(int i=0;i<m_listOrder.length();i++)
     {
-        if(m_listOrder.at(i).CustomerSid==sSid)
+        if(m_listOrder.at(i).CustomerSid==sCustomerSid)
         {
 
             re = m_listOrder.at(i);
@@ -965,8 +1033,8 @@ bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrder
 
     for(int i=0;i<list.length();i++)
     {
-         QVariantMap tmp,tmpOut;
-         tmp["GameItemSid"] = list.at(i).first;
+        QVariantMap tmp,tmpOut;
+        tmp["GameItemSid"] = list.at(i).first;
         tmp["DESC"] = "Sid";
 
         action(ACT::QUERY_ITEM_COUNT,tmp,tmpOut,sError);
@@ -1014,7 +1082,7 @@ int Action::checkItemCount(QString sGameItemSid)
 
     action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
 
-    if(listOut.length()<0)
+    if(listOut.length()<=0)
         return false;
 
     DataItemCount item(listOut.last().toMap());
@@ -1039,8 +1107,8 @@ void Action::clearCacheData(int iApi)
 
         if(sK.length()>2 && sK.mid(0,2) == sKey)
         {
-           qDebug()<<"clear cache : "<<sK;
-           m_dKeepData[sK]="";
+            qDebug()<<"clear cache : "<<sK;
+            m_dKeepData[sK]="";
 
         }
 

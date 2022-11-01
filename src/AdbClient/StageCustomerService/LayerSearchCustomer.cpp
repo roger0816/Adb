@@ -117,7 +117,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
     CustomerData customer(m_listData.at(m_iIdx).toMap());
 
-    OrderData order= ACTION.getOrderByCustomerSid(customer.Sid,true);
+    OrderData order= ACTION.getOrderCustomerLast(customer.Sid,true);
 
     QString sLastGameSid=order.GameSid;
     qDebug()<<"lastGameSid : "<<sLastGameSid;

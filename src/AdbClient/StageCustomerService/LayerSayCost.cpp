@@ -36,7 +36,7 @@ void LayerSayCost::orderMode()
 
     if(m_sLoadOrderSid=="")
     {
-        tmp= ACTION.getOrderByCustomerSid(m_dataCustomer.Sid,true);
+        tmp= ACTION.getOrderCustomerLast(m_dataCustomer.Sid,true);
 
 
         if(tmp.Step=="0")
@@ -336,25 +336,38 @@ double LayerSayCost::checkTotal()
         qDebug()<<"customer currency : "<<m_dataCustomer.Currency;
 
 
-        if(m_dataCustomer.Currency.toUpper().indexOf("USD"))
+        if(m_dataCustomer.Currency.toUpper().contains("USD"))
         {
 
             r=r/m_costRate.USD();
 
         }
 
-        else if(m_dataCustomer.Currency.toUpper().indexOf("HKD"))
+        else if(m_dataCustomer.Currency.toUpper().contains("HKD"))
         {
+
+
             r = r/m_costRate.HKD();
         }
 
-        else if(m_dataCustomer.Currency=="RMB")
-            r = r/m_costRate.RMB();
-        else if(m_dataCustomer.Currency=="MYR")
-            r = r/m_costRate.MYR();
-        else if(m_dataCustomer.Currency=="SGD")
-            r = r/m_costRate.SGD();
+        else if(m_dataCustomer.Currency.toUpper().contains("RMB"))
+        {
 
+
+            r = r/m_costRate.RMB();
+        }
+        else if(m_dataCustomer.Currency.toUpper().contains("MYR"))
+        {
+
+
+            r = r/m_costRate.MYR();
+        }
+        else if(m_dataCustomer.Currency.toUpper().contains("SGD"))
+        {
+
+
+            r = r/m_costRate.SGD();
+        }
 
         double cost = r* iPrice;
 
@@ -588,7 +601,10 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
         }
         else
         {
-            if(ACTION.checkItemCount(item.Sid)>0)
+
+            int iCount  =ACTION.checkItemCount(item.Sid);
+
+            if(iCount>0)
                 ui->tbGameItem->setItem(iRow,0,UI.tbItem("加入",GlobalUi::_BUTTON));
             else
                 ui->tbGameItem->setItem(iRow,0,UI.tbItem("完售"));
@@ -944,8 +960,8 @@ void LayerSayCost::on_btnSayOk_clicked()
     }
 
     m_order.Item = list.toString();
-
     m_order.UpdateTime = m_date.toString("yyyyMMddhhmmss");
+
     QString sError;
     bool bOk = ACTION.replaceOrder(m_order,sError);
 

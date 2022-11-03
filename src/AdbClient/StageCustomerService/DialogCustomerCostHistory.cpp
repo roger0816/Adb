@@ -225,13 +225,18 @@ void DialogCustomerCostHistory::mergeData()
 {
     //merge cost and order  for table data
     m_listRowData.clear();
-    foreach(QVariant v, m_listAddCost)
+    for(int i=0;i<m_listAddCost.length();i++)
     {
-        CustomerCost d(v.toMap());
-        //key is row index
+
+
+        CustomerCost d(m_listAddCost.at(i).toMap());
+
+        if(!d.IsAddCost)
+            continue;
+
         QVariantMap re;
 
-        re=v.toMap();
+        re=m_listAddCost.at(i).toMap();
 
         re["IsAddCost"] =true;
 

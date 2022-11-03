@@ -188,6 +188,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
     else if(iPage==3)
     {
+
         ui->pageAddCost->setCustomer(customer.data());
 
 

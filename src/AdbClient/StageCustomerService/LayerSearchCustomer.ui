@@ -653,6 +653,12 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="minimumSize">
+                <size>
+                 <width>180</width>
+                 <height>60</height>
+                </size>
+               </property>
                <property name="text">
                 <string>加值</string>
                </property>
@@ -666,6 +672,12 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="minimumSize">
+                <size>
+                 <width>180</width>
+                 <height>60</height>
+                </size>
+               </property>
                <property name="text">
                 <string>報價</string>
                </property>
@@ -678,6 +690,12 @@ font: 700 18px &quot;Microsoft JhengHei UI&quot;;
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="minimumSize">
+                <size>
+                 <width>180</width>
+                 <height>60</height>
+                </size>
                </property>
                <property name="text">
                 <string>下單</string>

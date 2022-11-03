@@ -37,7 +37,7 @@
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>60</height>
+          <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -47,37 +47,15 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">
-QPushButton{
-font: 20px &quot;Microsoft JhengHei UI&quot;;
-
-
-}
-
-
-
-QPushButton{background-color: rgb(255, 255, 255);
-border-radius:10px;
-color: rgb(41,41,41);
-border: 1px solid #000000; }
-
-
-QPushButton:hover 
-{ 
-background-color: #55aaff; 
-border-style: outset; 
-border-width: 2px; 
-font: 700 18px &quot;Microsoft JhengHei UI&quot;; 
-}
-QPushButton:pressed { 
-border-style: outset; 
-border-width: 0px; 
-font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
-color:rgb(241,241,241);
-background-color:#3c78b4;
-}</string>
+         <string notr="true"/>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>0</number>
+         </property>
          <item>
           <widget class="QLineEdit" name="txSearch">
            <property name="maximumSize">

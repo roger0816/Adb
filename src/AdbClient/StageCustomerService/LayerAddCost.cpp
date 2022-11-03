@@ -20,6 +20,10 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     // m_rate = ACTION.rate("",true).last();
 
+    ui->sb->setValue(0);
+
+
+
     m_rate = ACTION.primeRate("",true);
 
 
@@ -65,7 +69,11 @@ void LayerAddCost::setCustomer(QVariantMap data)
     ui->lbCurrentCost_2->setText(m_lastCostData.Total);
 
     ui->lbTime->setText(time.toString("yyyy/MM/dd hh:mm"));
+
+        checkTotal();
 }
+
+
 
 void LayerAddCost::checkTotal()
 {
@@ -132,9 +140,9 @@ QString LayerAddCost::getNewOrderId()
     QString sLast = out["OrderId"].toString();
 
     QStringList list = sLast.split("-");
-    int iIdx = list.last().toInt();
+    int iIdx = list.last().toInt()+1;
 
-    sRe = list.first()+"_"+QString::number(iIdx);
+    sRe = list.first()+"-"+QString::number(iIdx);
 
     return sRe;
 }
@@ -221,6 +229,7 @@ void LayerAddCost::on_btnOk_clicked()
 
     m_lastCostData.Sid="";
 
+    m_lastCostData.IsAddCost=true;
 
     m_lastCostData.OrderId=getNewOrderId();
     m_lastCostData.Note0=ui->txNote0->toPlainText();

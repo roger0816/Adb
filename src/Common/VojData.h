@@ -16,9 +16,9 @@ struct DataObj
     DataObj(QVariantMap data):DataObj(){setData(data);}
     QString Sid="";
 
-    QString Id;
+    QString Id="";
 
-    QString Name;
+    QString Name="";
 
     QString UpdateTime;
 
@@ -174,9 +174,10 @@ struct CustomerData :public DataObj
         DataObj::setData(data);
 
         Class = data["Class"].toString();
-        Money = data["Money"].toString();
+
         if(Money=="")
             Money="0";
+        Money = QString::number(data["Money"].toDouble());
         Vip = data["Vip"].toString();
         Currency = data["Currency"].toString();
         PayType =data["PayType"].toString();
@@ -194,7 +195,7 @@ struct CustomerData :public DataObj
 
         d["Class"] = Class;
         d["Vip"] = Vip;
-        d["Money"] = Money;
+        d["Money"] = Money.toDouble();
         d["Currency"] = Currency;
         d["PayType"] = PayType;
         d["PayInfo"] =PayInfo;
@@ -872,8 +873,8 @@ struct DataItemCount :public DataObj
         ChangeValue = data["ChangeValue"].toInt();
 
         TotalCount = data["TotalCount"].toInt();
-         TotalSell = data["TotalSell"].toInt();
-         OrderSid = data["OrderSid"].toString();
+        TotalSell = data["TotalSell"].toInt();
+        OrderSid = data["OrderSid"].toString();
         GameRate = data["GameRate"].toString();
         Pic0 = data["Pic0"].toString();
 

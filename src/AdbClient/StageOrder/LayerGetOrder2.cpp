@@ -259,8 +259,8 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
             order.PaddingUser=ACTION.m_currentUser.Sid;
             order.Step="3";
 
-             ACTION.replaceOrder(order,sError);
-          //  UI.showMsg("",sError,"OK");
+            ACTION.replaceOrder(order,sError);
+            //  UI.showMsg("",sError,"OK");
 
             refreshUser();
         }
@@ -341,13 +341,16 @@ void LayerGetOrder2::on_btnFinish_clicked()
     }
 
 
-
+    qDebug()<<"AAAAAAAAAA0";
     QVariantList listData =m_data[m_currentDataKey].toList();
 
-    QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
+    QVariantMap data;
+    if(listData.length()>0)
+        data=listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
 
     OrderData order(data);
 
+    qDebug()<<"AAAAAAAAAA1 : "<<ui->lbFinal->text().toDouble();
     int iRet;
 
     if(ui->lbFinal->text().toDouble()<0)
@@ -377,8 +380,11 @@ void LayerGetOrder2::on_btnFinish_clicked()
         order.Pic1 = ui->wPic0->uploadPic();
 
 
-         ACTION.replaceOrder(order,sError);
-       // UI.showMsg("",sError,"OK");
+        bool bOk =ACTION.replaceOrder(order,sError);
+
+        QString sMsg = "回報完成";
+        if(bOk)
+
 
         UI.showMsg("","回報完成",QStringList()<<"OK");
         refreshUser();
@@ -419,8 +425,8 @@ void LayerGetOrder2::refresh()
 void LayerGetOrder2::on_btnOrder2Copy_clicked()
 {
     QString sMsg = ui->lb0->text()+":    "+ui->lbOri->text()+"\n"+
-                   ui->lb1->text()+":    "+ui->lbCost->text()+"\n"+
-                    ui->lb2->text()+":    "+ui->lbFinal->text();
+            ui->lb1->text()+":    "+ui->lbCost->text()+"\n"+
+            ui->lb2->text()+":    "+ui->lbFinal->text();
     UI.copyMsg(sMsg);
 }
 

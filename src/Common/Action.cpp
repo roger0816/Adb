@@ -287,6 +287,38 @@ UserData Action::getUser(QString sSid,bool bQuery)
     return re;
 }
 
+CustomerData Action::getCustomer(QString sSid,bool bQuery)
+{
+    CustomerData data;
+
+    if(bQuery || m_listCustomer.length()<1)
+    {
+        QVariantMap in;
+        QVariantList listOut;
+
+        QString sError;
+        if(action(ACT::QUERY_CUSTOMER,in,listOut,sError))
+        {
+            foreach(QVariant v,listOut)
+                m_listCustomer.append(CustomerData(v.toMap()));
+        }
+
+    }
+
+    foreach(CustomerData vData,m_listCustomer)
+    {
+        if(vData.Sid == sSid)
+        {
+            data = vData;
+
+            break;
+        }
+    }
+
+    return data;
+
+}
+
 QList<DataCustomerClass> Action::getCustomerClass(bool bQuery)
 {
     if(bQuery)
@@ -636,6 +668,11 @@ bool Action::replaceOrder(OrderData order, QString &sError)
     QVariantMap out;
     bRe = action(ACT::REPLACE_ORDER,order.data(),sError);
 
+    if(!bRe)
+    {
+        return bRe;
+    }
+
     if(bRe && bToUpdateMoney)
     {
         QVariantList listOut;
@@ -645,16 +682,26 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
         double iCurrentTotal=0;
 
-        action(ACT::QUERY_CUSTOMER_COST,in,listOut);
+        bRe = action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError);
 
+        if(!bRe)
+        {
+            return bRe;
+        }
+
+        CustomerCost lastCost;
         if(listOut.length()>0)
-            iCurrentTotal=CustomerCost(listOut.first().toMap()).Total.toDouble();
+        {
+            lastCost.setData(listOut.first().toMap());
 
+            iCurrentTotal=lastCost.Total.toDouble();
+        }
+        else
+        {
+            iCurrentTotal = 0;
+        }
+        //剛寫入的訂單沒產生sid
         QString sOrderSid =getOrderCustomerLast(order.CustomerSid).Sid;
-
-
-
-
 
 
         CustomerCost data;
@@ -666,6 +713,8 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         data.CustomerSid=order.CustomerSid;
 
         data.IsAddCost=false;
+
+        data.Currency =  getCustomer(data.CustomerSid).Currency;
 
         data.ChangeValue=QString::number(order.Cost.toDouble()*-1);
 
@@ -681,23 +730,26 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
         if(bOk)
         {
-            QVariantMap tmp,outCustomer;
-            tmp["Sid"]=order.CustomerSid;
+            bRe = true;
 
-            action(ACT::QUERY_CUSTOMER,tmp,outCustomer,sError);
+            CustomerData customerData = getCustomer(order.CustomerSid);
 
-            CustomerData customerData(outCustomer);
             customerData.Money=data.Total;
+            qDebug()<<"AAAAAAAAAAAAA : "<<customerData.Money;
             bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);
-            if(bOk)
-                bRe = true;
+            qDebug()<<"AAAAAAAAAAA1 : "<<sError;
+
+        }
+        else
+        {
+            return bRe;
         }
 
     }
 
 
 
-return bRe;
+    return bRe;
 
 }
 

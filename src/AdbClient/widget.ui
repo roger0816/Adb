@@ -35,7 +35,7 @@
    <item row="0" column="0">
     <widget class="QWidget" name="wBg" native="true">
      <property name="styleSheet">
-      <string notr="true">
+      <string notr="true">/*
 QWidget{
 font: 18px &quot;Microsoft JhengHei UI&quot;;
 }
@@ -74,41 +74,12 @@ font: 700 24px &quot;Microsoft JhengHei UI&quot;;
 color:gray;
 background-color:gray;
 }
-
-
-
-
-
-
-
-/*
-QPushButton {
-    background-color: #ffffff;
-    border: 1px solid #dcdfe6;
-    padding: 5px;
-    border-radius: 5px;
-}
-
-QPushButton:hover {
-    background-color: #ecf5ff;
-    color: #409eff;
-}
-
-QPushButton:pressed, QPushButton:checked {
-    border: 1px solid #3a8ee6;
-    color: #409eff;
-}
-
-#button3 {
-    border-radius: 20px;
-}
 */
-/*
-QPushButton::hover::checked{
-	color: rgb(255, 255, 255);
-background-color: rgb(0, 170, 255);
-}
-*/
+
+
+
+
+
 
 
 
@@ -219,7 +190,6 @@ background-color: rgb(0, 170, 255);
           <widget class="QWidget" name="widget_3" native="true">
            <property name="font">
             <font>
-             <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -371,7 +341,6 @@ color: rgb(95, 95, 0);</string>
            </property>
            <property name="font">
             <font>
-             <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>

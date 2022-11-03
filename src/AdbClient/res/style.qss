@@ -1,10 +1,15 @@
-QWidget{font: 18px 'Microsoft JhengHei UI'; }
+QWidget
+{
+    font: 18px 'Microsoft JhengHei UI';
+}
 
 QPushButton{ font: 18px 'Microsoft JhengHei UI';
 background-color: rgb(255, 255, 255);
-border-radius:5px;
+border-radius:3px;
 color: rgb(41,41,41);
 border: 1px solid #000000;
+ min-height: 0.8em;
+ max-height: 0.8em;
 padding: 5px;}
 
 QPushButton:hover {
@@ -26,3 +31,31 @@ font: 700 24px "Microsoft JhengHei UI";
 color:gray;
 background-color:gray;
 }
+
+QLineEdit{
+background-color:white;
+}
+
+QComboBox {
+    border: 1px solid gray;
+    border-radius: 3px;
+    padding: 1px 2px 1px 2px;
+    min-width: 4em;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+
+    border-left-width: 1px;
+    border-left-color: darkgray;
+    border-left-style: solid; /* just a single line */
+    border-top-right-radius: 3px; /* same radius as the QComboBox */
+    border-bottom-right-radius: 3px;
+}
+
+
+
+
+

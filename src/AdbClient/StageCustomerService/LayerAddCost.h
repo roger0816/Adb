@@ -19,6 +19,7 @@ public:
     ~LayerAddCost();
     void setCustomer(QVariantMap data);
 
+
 private:
     Ui::LayerAddCost *ui;
 

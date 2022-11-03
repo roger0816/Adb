@@ -19,43 +19,7 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QPushButton
-    {    
-     background-color: rgb(247,247,247); 
-        border-style: outset; 
-  border-radius: 10px; 
-    padding:0px;     
-        border-width: 2px; 
-      border-color: #99b3d3; 
-	font: 75 12pt &quot;Agency FB&quot;;
-color:rgb(77,77,77);
-
-     }
-
-    QPushButton:hover
-    {    
-	font: 75 14pt &quot;Agency FB&quot;;
-      border-color: gray; 
-     border-width: 3px; 
-
-     }
-
-    QPushButton:pressed:checked
-    {    
-		font: 75 16pt &quot;Agency FB&quot;;
-      border-color: black; 
-     border-width: 3px; 
-
-     }
-
-    QPushButton:checked
-    {    
-		font: 75 16pt &quot;Agency FB&quot;;
-      border-color: black; 
-     border-width: 3px; 
-
-
-     }
+   <string notr="true">
 
 </string>
   </property>

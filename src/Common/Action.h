@@ -54,6 +54,7 @@ public:
     QList<UserData> getUser(bool bQuery=false);
     UserData getUser(QString sSid, bool bQuery=false);
 
+    CustomerData getCustomer(QString sSid, bool bQuery=false);
     QList<DataCustomerClass> getCustomerClass(bool bQuery=false);
     DataCustomerClass getCustomerClass(QString sSid, bool bQuery=false);
 
@@ -133,6 +134,8 @@ private:
     QList<UserData> m_listUser;
 
     QList<DataCustomerClass> m_listCustomerClass;
+
+    QList<CustomerData> m_listCustomer;
 
     QList<DataFactory> m_listFactoryClass;
 

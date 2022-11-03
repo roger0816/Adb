@@ -31,8 +31,10 @@ private:
 
 private slots:
     void slotBtnDate(int iId);
-    void on_dateEdit_dateChanged(const QDate &date);
+
     void on_btnUserReport_clicked();
+    void on_dateEdit_dateChanged(const QDate &date);
+    void on_cbType_currentIndexChanged(int index);
 };
 
 #endif // LAYERUSERREPORT_H

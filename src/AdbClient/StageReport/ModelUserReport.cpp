@@ -3,7 +3,10 @@
 ModelUserReport::ModelUserReport(QObject *parent)
     : QAbstractTableModel(parent)
 {
-    m_listHeader<<"編號"<<"名稱"<<"職級"<<"報價數量"<<"下單數量"<<"接單儲值數量"<<"回報數量"<<"核簽數量";
+    m_listHeader[_ORDER_TOTAL]<<"編號"<<"名稱"<<"職級"<<"報價數量"<<"下單數量"<<"接單儲值數量"<<"回報數量"<<"核簽數量";
+    m_listHeader[_TIME_TOTAL]<<"編號"<<"名稱"<<"職級"<<"報價總時"<<"下單總時"<<"接單儲值總時"<<"回報總時"<<"核簽總時";
+    m_listHeader[_TIME_AVE]<<"編號"<<"名稱"<<"職級"<<"報價均時"<<"下單均時"<<"接單儲值均時"<<"回報均時"<<"核簽均時";
+
 
 
     //SELECT * FROM 'OrderData' where OrderDate like "%202210%";
@@ -20,9 +23,9 @@ QVariant ModelUserReport::headerData(int section, Qt::Orientation orientation, i
     if(orientation==Qt::Vertical)
         return QVariant();
 
-    int iIdx = qBound(0,section,m_listHeader.length()-1);
+    int iIdx = qBound(0,section,m_listHeader[m_iType].length()-1);
 
-    return m_listHeader.at(iIdx);
+    return m_listHeader[m_iType].at(iIdx);
 
 }
 
@@ -38,7 +41,7 @@ int ModelUserReport::rowCount(const QModelIndex &) const
 
 int ModelUserReport::columnCount(const QModelIndex &) const
 {
-    return m_listHeader.length();
+    return m_listHeader[m_iType].length();
 
     //    if (parent.isValid())
     //        return 7;
@@ -59,58 +62,67 @@ QVariant ModelUserReport::data(const QModelIndex &index, int role) const
 
 
 
-    QString sText="";
+
     QFont font;
     QColor colorFront(Qt::darkGray);
 
-    int iRow = qBound(0,index.row() ,m_listUser.length()-1);
 
-
-    switch (index.column())
-    {
-    case 0:
-        sText = m_listUser.at(iRow).Cid;
-        break;
-    case 1:
-
-        sText = m_listUser.at(iRow).Name;
-        break;
-    case 2:
-        sText = GLOBAL.userLvToStr(m_listUser.at(iRow).Lv);
-        break;
-    case 3:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[0]);
-        break;
-    case 4:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[1]);
-        break;
-    case 5:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[2]);
-        break;
-    case 6:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[3]);
-        break;
-    case 7:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[4]);
-        break;
-    case 8:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[5]);
-        break;
-    default:
-        break;
-    }
 
 
     if(index.column()>=3 && index.column()<9)
     {
         colorFront =QColor(85,170,255);
 
-      //  font.setUnderline(true);
+        //  font.setUnderline(true);
     }
 
 
     if(role==Qt::DisplayRole)
+    {
+        QString sText="";
+
+
+        int iRow = qBound(0,index.row() ,m_listUser.length()-1);
+
+        switch (index.column())
+        {
+        case 0:
+            sText = m_listUser.at(iRow).Cid;
+            break;
+        case 1:
+            sText = m_listUser.at(iRow).Name;
+            break;
+        case 2:
+            sText = GLOBAL.userLvToStr(m_listUser.at(iRow).Lv);
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+            if(m_iType==_ORDER_TOTAL)
+                sText = QString::number(m_listUser.at(iRow).iTotalStep[index.column()-3]);
+            else if(m_iType==_TIME_TOTAL)
+            {
+                int iSec = m_listUser.at(iRow).iTotalStep[index.column()-3];
+
+                QDateTime date;
+
+                date.setSecsSinceEpoch(iSec);
+
+                sText = date.toString("hh:mm:ss");
+            }
+
+            break;
+
+        default:
+            break;
+        }
+
         re=sText;
+    }
+
 
     if(role==Qt::TextAlignmentRole)
         re=Qt::AlignCenter;
@@ -132,7 +144,7 @@ QVariant ModelUserReport::data(const QModelIndex &index, int role) const
     return re;
 }
 
-void ModelUserReport::updateData(bool bIsMonth, QDateTime date, QString sFilterStr)
+void ModelUserReport::updateData(bool bIsMonth,int iType ,QDateTime date, QString sFilterStr)
 {
     beginResetModel();
 
@@ -141,6 +153,12 @@ void ModelUserReport::updateData(bool bIsMonth, QDateTime date, QString sFilterS
     m_dateTime = date;
 
     m_strFilterStr = sFilterStr;
+
+    m_iType = iType;
+
+
+
+
 
     requestAction();
 
@@ -192,6 +210,8 @@ void ModelUserReport::requestAction()
 
         QStringList listStepUser=order.User;
 
+        QStringList listTime=order.StepTime;
+
         for(int j=0;j<listStepUser.length()&&j<6;j++)
         {
             QString sUserSid = listStepUser.at(j);
@@ -200,10 +220,26 @@ void ModelUserReport::requestAction()
                 continue;
             int iStep =j;
 
-            qDebug()<<"AAAAAAAAAA : "<<sUserSid<<" , add";
 
             m_dUser[sUserSid]->iTotalStep[iStep]+=1;
 
+            if(j==0)
+            {
+                m_dUser[sUserSid]->iTotalTimer[iStep]=0;
+            }
+            else
+            {
+                QString sTmp = listTime.at(j);
+                QString sTmpPre = listTime.at(j-1);
+                if(sTmp=="" || sTmpPre=="")
+                    continue;
+                QDateTime dateTime = QDateTime::fromString(sTmp,"yyyyMMddhhmmss");
+                QDateTime dateTimePre = QDateTime::fromString(sTmpPre,"yyyyMMddhhmmss");
+
+                double d = dateTime.toSecsSinceEpoch()-dateTimePre.toSecsSinceEpoch();
+
+                m_dUser[sUserSid]->iTotalTimer[iStep]+=d;
+            }
 
         }
 
@@ -222,6 +258,61 @@ void ModelUserReport::requestAction()
 
 
 
+}
+
+QString ModelUserReport::countText(const int row,const int col)
+{
+    QString sText;
+
+    int iRow = qBound(0,row ,m_listUser.length()-1);
+
+
+    switch (col)
+    {
+    case 0:
+        sText = m_listUser.at(iRow).Cid;
+        break;
+    case 1:
+
+        sText = m_listUser.at(iRow).Name;
+        break;
+    case 2:
+        sText = GLOBAL.userLvToStr(m_listUser.at(iRow).Lv);
+        break;
+    case 3:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[0]);
+        break;
+    case 4:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[1]);
+        break;
+    case 5:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[2]);
+        break;
+    case 6:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[3]);
+        break;
+    case 7:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[4]);
+        break;
+    case 8:
+        sText = QString::number(m_listUser.at(iRow).iTotalStep[5]);
+        break;
+    default:
+        break;
+    }
+
+
+
+    return sText;
+}
+
+QString ModelUserReport::timeText(int iRow, int iCol)
+{
+    QString sRe;
+
+
+
+    return sRe;
 }
 
 

@@ -25,7 +25,9 @@ SOURCES += \
     StageCustomerService/DialogCustomerCostHistory.cpp \
     StageManagerSetting/LayerItemCount.cpp \
     StageOrder/ItemOrderSelector.cpp \
+    StageReport/LayerGameReport.cpp \
     StageReport/LayerUserReport.cpp \
+    StageReport/ModelGameReport.cpp \
     StageReport/ModelUserReport.cpp \
     component/CLinkTable.cpp \
     component/CSideMenu.cpp \
@@ -82,7 +84,9 @@ HEADERS += \
     StageCustomerService/DialogCustomerCostHistory.h \
     StageManagerSetting/LayerItemCount.h \
     StageOrder/ItemOrderSelector.h \
+    StageReport/LayerGameReport.h \
     StageReport/LayerUserReport.h \
+    StageReport/ModelGameReport.h \
     StageReport/ModelUserReport.h \
     component/CLinkTable.h \
     component/CSideMenu.h \
@@ -138,6 +142,7 @@ FORMS += \
     StageCustomerService/DialogCustomerCostHistory.ui \
     StageManagerSetting/LayerItemCount.ui \
     StageOrder/ItemOrderSelector.ui \
+    StageReport/LayerGameReport.ui \
     StageReport/LayerUserReport.ui \
     component/CSideMenu.ui \
     DialogBulletinEdit.ui \

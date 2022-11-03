@@ -9,16 +9,16 @@ LayerUserReport::LayerUserReport(QWidget *parent) :
 
     ui->stackDate->setCurrentIndex(1);
 
-
+    ui->dateEdit->setDateTime(GLOBAL.dateTimeUtc8());
 
     m_btns.addButton(ui->btnMonth,0);
     m_btns.addButton(ui->btnDay,1);
 
     connect(&m_btns,SIGNAL(idClicked(int)),this,SLOT(slotBtnDate(int)));
 
-    ui->dateEdit->setDateTime(GLOBAL.dateTimeUtc8());
-
     ui->tb->setModel(&m_model);
+
+
 
 }
 
@@ -29,13 +29,15 @@ LayerUserReport::~LayerUserReport()
 
 void LayerUserReport::refresh()
 {
+    if(m_btns.checkedId()<0)
+        return;
+
     bool bIsMonth = ui->btnMonth->isChecked();
-    m_model.updateData(bIsMonth,ui->dateEdit->dateTime(),"");
+    m_model.updateData(bIsMonth,ui->cbType->currentIndex(),ui->dateEdit->dateTime(),"");
 }
 
 void LayerUserReport::slotBtnDate(int iId)
 {
-    qDebug()<<"iId "<<iId;
 
     ui->stackDate->setCurrentIndex(0);
 
@@ -50,12 +52,7 @@ void LayerUserReport::slotBtnDate(int iId)
         ui->dateEdit->setCurrentSection(QDateTimeEdit::DaySection);
     }
 
-
-
-}
-
-void LayerUserReport::on_dateEdit_dateChanged(const QDate &date)
-{
+    refresh();
 
 }
 
@@ -63,5 +60,17 @@ void LayerUserReport::on_dateEdit_dateChanged(const QDate &date)
 void LayerUserReport::on_btnUserReport_clicked()
 {
     refresh();
+}
+
+
+void LayerUserReport::on_dateEdit_dateChanged(const QDate &date)
+{
+     refresh();
+}
+
+
+void LayerUserReport::on_cbType_currentIndexChanged(int index)
+{
+     refresh();
 }
 

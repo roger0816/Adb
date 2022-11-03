@@ -244,7 +244,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
     }
 
-    if(column==8 && data.Step=="4")
+    if(column==8 && data.Step=="4" )
     {
 
         int iRet= UI.showMsg("",QString("請再確認 ( %1 ) \n完成訂單嗎？").arg(data.Id),QStringList()<<"否"<<"是");
@@ -257,8 +257,6 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
             data.PaddingUser="";
 
             data.User[5] = ACTION.m_currentUser.Sid;
-
-            ACTION.replaceOrder(data,sError);
 
             data.Step="5";
 
@@ -363,6 +361,26 @@ void LayerDayReport::on_tb_cellClicked(int , int )
 
 void LayerDayReport::delayRefresh()
 {
+     ui->tb->hideColumn(8);
+     ui->tb->hideColumn(10);
+     ui->tb->hideColumn(11);
+     ui->tb->hideColumn(12);
+     ui->tb->hideColumn(13);
+     ui->tb->hideColumn(14);
+    if(ACTION.m_currentUser.Lv>=USER_LV::_LV3)
+    {
+       ui->tb->showColumn(8);
+    }
+
+    else if(ACTION.m_currentUser.Lv>=USER_LV::_LV4)
+    {
+        ui->tb->showColumn(10);
+        ui->tb->showColumn(11);
+        ui->tb->showColumn(12);
+        ui->tb->showColumn(13);
+        ui->tb->showColumn(14);
+    }
+
     ACTION.primeRate("",true);
     refreshTb();
 }

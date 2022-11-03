@@ -343,7 +343,7 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
 
 
     bool bOk = sql.exec() ;
-    qDebug()<<"sql update cmd : "<<sql.lastQuery();
+
     sError = sql.lastError().text();
 
     return bOk;

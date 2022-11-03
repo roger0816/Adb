@@ -305,13 +305,14 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
 
     }
 
+   qDebug()<<"AAAAAAAAAA : "<<m_listCustomer.length();
+
     foreach(CustomerData vData,m_listCustomer)
     {
         if(vData.Sid == sSid)
         {
-            data = vData;
 
-            break;
+            return vData;
         }
     }
 
@@ -731,9 +732,9 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         if(bOk)
         {
             bRe = true;
-
+            qDebug()<<"XXXXXXXXXXX0 : "<<order.CustomerSid;
             CustomerData customerData = getCustomer(order.CustomerSid);
-
+             qDebug()<<"XXXXXXXXXXX0 : "<<customerData.data();
             customerData.Money=data.Total;
             qDebug()<<"AAAAAAAAAAAAA : "<<customerData.Money;
             bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);

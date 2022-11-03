@@ -341,7 +341,7 @@ void LayerGetOrder2::on_btnFinish_clicked()
     }
 
 
-    qDebug()<<"AAAAAAAAAA0";
+
     QVariantList listData =m_data[m_currentDataKey].toList();
 
     QVariantMap data;
@@ -350,7 +350,7 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
     OrderData order(data);
 
-    qDebug()<<"AAAAAAAAAA1 : "<<ui->lbFinal->text().toDouble();
+
     int iRet;
 
     if(ui->lbFinal->text().toDouble()<0)

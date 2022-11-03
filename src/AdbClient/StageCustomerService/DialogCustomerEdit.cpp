@@ -417,6 +417,9 @@ void DialogCustomerEdit::on_btnOk_clicked()
 
     if(m_sOriginCurrency!=ui->cbCurrency->currentText())
     {
+
+        // todo
+        /*
         int iRet =DMSG.showMsg("","確定要轉換幣別，餘額將以當前成本匯率轉換，是否繼續？",QStringList()<<"否"<<"是");
 
         if(iRet!=1)
@@ -426,10 +429,10 @@ void DialogCustomerEdit::on_btnOk_clicked()
 
         double iOriginRate = m_lastPrimeRate.listValue().at(iIdx).toDouble();
 
-        double money =m_data["Money"].toDouble();
+        double money =CustomerData(m_data).Money.toDouble();
 
         m_data["Money"] = money/iOriginRate;
-
+        */
 
     }
 

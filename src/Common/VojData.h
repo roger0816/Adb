@@ -174,10 +174,10 @@ struct CustomerData :public DataObj
         DataObj::setData(data);
 
         Class = data["Class"].toString();
-
+        Money = data["Money"].toString();
         if(Money=="")
             Money="0";
-        Money = QString::number(data["Money"].toDouble());
+
         Vip = data["Vip"].toString();
         Currency = data["Currency"].toString();
         PayType =data["PayType"].toString();
@@ -195,7 +195,7 @@ struct CustomerData :public DataObj
 
         d["Class"] = Class;
         d["Vip"] = Vip;
-        d["Money"] = Money.toDouble();
+        d["Money"] = Money;
         d["Currency"] = Currency;
         d["PayType"] = PayType;
         d["PayInfo"] =PayInfo;

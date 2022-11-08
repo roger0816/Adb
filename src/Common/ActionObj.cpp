@@ -219,6 +219,7 @@ CData ActionObj::callServer(CData data)
     QByteArray out;
 
     qDebug()<<"call server : "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
+
     qDebug()<<data.enCodeJson().toStdString().c_str();
     RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
 
@@ -270,7 +271,10 @@ CData ActionObj::callServer(CData data)
 
 
     qDebug()<<"server return : "<<re.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
-    qDebug()<<out.toStdString().c_str();
+    if(data.iAciton==ACT::QUERY_PIC)
+        qDebug()<<"pic size : "<<out.length();
+    else
+        qDebug()<<out.toStdString().c_str();
 
     m_bIsLock= false;
 

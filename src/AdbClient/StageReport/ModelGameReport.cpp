@@ -204,14 +204,16 @@ void ModelGameReport::requestAction()
 
     };
 
-    qDebug()<<" get order : "<<m_listOrder.length();
+    qDebug()<<" get order len : "<<m_listOrder.length();
 
 
     for(int i=0;i<m_listOrder.length();i++)
     {
         OrderData order = m_listOrder.at(i);
 
-        if(!checkDate(order.OrderDate))
+        bool bCheck = checkDate(order.OrderDate);
+
+        if(!bCheck)
             continue;
 
         QStringList listOrderItem = order.Item.split(";;");
@@ -220,16 +222,21 @@ void ModelGameReport::requestAction()
             continue;
         QString sItemSid = listOrderItem.first().split(",,").first();
 
-        // int iCount = listOrderItem.first().split(",,").last().toInt(); //算訂單，不計算game item數量
-        int idx = findGameIndex(sItemSid);
+        QString sGameSid = ACTION.findGameSid(sItemSid);
 
-        qDebug()<<"idx : "<<idx;
+        if(sGameSid=="")
+            continue;
+
+        qDebug()<<"Game Sid "<<sGameSid;
+        // int iCount = listOrderItem.first().split(",,").last().toInt(); //算訂單，不計算game item數量
+        int idx = findGameIndex(sGameSid);
+          qDebug()<<"AAAAAAAAAAAA1 "<<sItemSid<<" idx,"<<idx;
         if(idx<0 || idx>= m_listGame.length())
             continue;
 
         int iStep = order.Step.toInt();
 
-          qDebug()<<"AAAA: "<<iStep;
+
         if(iStep==0)
         {
             m_listGame[idx].iSayOrder+=1;

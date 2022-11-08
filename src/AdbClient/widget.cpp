@@ -196,16 +196,28 @@ void Widget::slotLogin()
 
     ACTION.setStartSyanc(true);
 
-    QTimer::singleShot(1100,[=]()
-    {
-        ACTION.reQuerty();
-        qDebug()<<"preload ok";
-        show();
-        qDebug()<<"main ui show";
+    QEventLoop *loop=new QEventLoop(this);
 
-        ui->stackedWidget->setCurrentIndex(0);
-          checkUserLv();
+ //   loop.connect(&timer,&QTimer::timeout,&loop,&QEventLoop::quit);
+
+    QTimer::singleShot(1000,[=]()
+    {
+        loop->quit();
+
+        delete loop;
     });
+
+    loop->exec();
+
+
+    ACTION.reQuerty();
+    qDebug()<<"preload ok";
+    show();
+    qDebug()<<"main ui show";
+
+    ui->stackedWidget->setCurrentIndex(0);
+    checkUserLv();
+
 
 
 }

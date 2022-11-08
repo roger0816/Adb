@@ -9,6 +9,8 @@ DialogBulletinEdit::DialogBulletinEdit(QWidget *parent) :
 
     setWindowTitle("設定系統公告");
 
+    ui->dateEnd->setDateTime(QDateTime::currentDateTimeUtc().addDays(7));
+
     ui->stackedBottom->setCurrentIndex(0);
 
 }

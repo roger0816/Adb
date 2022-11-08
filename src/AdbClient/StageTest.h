@@ -24,6 +24,8 @@ private slots:
 
     void on_btnTestDate_clicked();
 
+    void on_btnTestPic_clicked();
+
 private:
     Ui::StageTest *ui;
 };

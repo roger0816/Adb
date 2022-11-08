@@ -252,9 +252,11 @@ void ModelUserReport::requestAction()
 
             if(sUserSid.trimmed()=="")
                 continue;
+
+            if(!m_dUser.keys().contains(sUserSid))
+                continue;
+
             int iStep =j;
-
-
 
 
             m_dUser[sUserSid]->iTotalStep[iStep]+=1;

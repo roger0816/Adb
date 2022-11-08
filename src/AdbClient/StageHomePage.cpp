@@ -39,20 +39,26 @@ void StageHomePage::showEvent(QShowEvent *)
     QTimer::singleShot(300,this,[=]()
     {
 
-    QVariantMap in;
-    QVariantList listOut;
-    in["Type"]=2;
-    QString sError;
-    ACTION.action(ACT::QUERY_BULLETIN,in,listOut,sError);
-    ui->wPic->slotClear();
-    if(listOut.length()>0)
-    {
-        QString sPicMd5 = listOut.last().toMap()["Content"].toString();
-        QVariant inPic,outPic;
+        QVariantMap in;
+        QVariantList listOut;
+        in["Type"]=2;
+        QString sError;
+        ACTION.action(ACT::QUERY_BULLETIN,in,listOut,sError);
+        ui->wPic->slotClear();
 
-        ui->wPic->setMd5(sPicMd5);
+        qDebug()<<"listPicLen"<<listOut.length();
 
-    }
+        if(listOut.length()>0)
+        {
+            QString sPicMd5 = listOut.last().toMap()["Content"].toString();
+
+            qDebug()<<"picmd5 : "<<sPicMd5;
+
+            QVariant inPic,outPic;
+
+            ui->wPic->setMd5(sPicMd5);
+
+        }
 
     });
 }
@@ -78,8 +84,15 @@ void StageHomePage::slotSavePic()
     data["Title"]="首頁圖更新";
     data["Content"]=ui->wPic->uploadPic();
     QVariantMap tmp;
-    ACTION.action(ACT::ADD_BULLETIN,data,tmp,sError);
+    bool b =ACTION.action(ACT::ADD_BULLETIN,data,tmp,sError);
 
+    if(b)
+    {
+        sError="首頁圖已修改";
+    }
+
+
+    DMSG.showMsg("",sError,"OK");
 
 
 }

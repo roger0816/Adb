@@ -266,15 +266,17 @@ void Action::reQuerty()
     //一進入程式，首先的公告、公告圖、圖片資料做預載
     QString sError;
     QVariantMap in,out;
-    in["Type"]=2;
-    action(ACT::QUERY_BULLETIN,QVariantMap(),sError);
+    in["DESC"]="Sid";
+    action(ACT::QUERY_BULLETIN,in,sError);
 
+    in.clear();
+    in["Type"]=2;
     action(ACT::QUERY_BULLETIN,in,out,sError);
 
     in.clear();
     in["Md5"]=out["Content"].toString();
     action(ACT::QUERY_PIC,in,out,sError);
-       //pre load make cache data
+    //pre load make cache data
 }
 
 QList<UserData> Action::getUser(bool bQuery)
@@ -316,7 +318,6 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
 
     }
 
-    qDebug()<<"AAAAAAAAAA : "<<m_listCustomer.length();
 
     foreach(CustomerData vData,m_listCustomer)
     {
@@ -697,7 +698,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
     else if(order.Step=="4") //回報 - 更新用戶餘額
         bToUpdateMoney=true;
 
-   // QVariantMap out;
+    // QVariantMap out;
     bRe = action(ACT::REPLACE_ORDER,order.data(),sError);
 
     if(!bRe)
@@ -1050,43 +1051,43 @@ void Action::setPrimeMoney(OrderData &order)
     };
 
     qDebug()<<"XXXXXXXXXXXX : "<<order.PrimeRateSid;
-     DataRate rate=primeRate(order.PrimeRateSid,true);
+    DataRate rate=primeRate(order.PrimeRateSid,true);
 
-        CListPair listPay =getAddValueType();
-        int idx = listPay.listFirst().indexOf(order.PayType);
+    CListPair listPay =getAddValueType();
+    int idx = listPay.listFirst().indexOf(order.PayType);
 
-        if(idx<0)
-            return;
+    if(idx<0)
+        return;
 
-        CListPair listItem(order.Item);
+    CListPair listItem(order.Item);
 
-        double prime=0.00;
+    double prime=0.00;
 
-        for(int i=0;i<listItem.length();i++)  //訂單裡的  GameItem
-        {
+    for(int i=0;i<listItem.length();i++)  //訂單裡的  GameItem
+    {
 
-            CPair p = listItem.at(i);
+        CPair p = listItem.at(i);
 
-            QString sItemSid = p.first;
+        QString sItemSid = p.first;
 
-            int itemCount = p.second.toInt();
+        int itemCount = p.second.toInt();
 
-            DataGameItem target = getGameItemFromSid(sItemSid,true);   //用game item sid取得完整料結構
+        DataGameItem target = getGameItemFromSid(sItemSid,true);   //用game item sid取得完整料結構
 
-            CListPair payType(target.AddValueTypeSid);                // 支付方式sid 與 數量
+        CListPair payType(target.AddValueTypeSid);                // 支付方式sid 與 數量
 
-            QString sValue = payType.findValue(order.PayType);
+        QString sValue = payType.findValue(order.PayType);
 
-            double iOneItemPrice = payTypeToNTD(order.PayType,rate)*sValue.toDouble();
+        double iOneItemPrice = payTypeToNTD(order.PayType,rate)*sValue.toDouble();
 
-            prime =prime+(itemCount*iOneItemPrice);
-
-
-
-        }
+        prime =prime+(itemCount*iOneItemPrice);
 
 
-        order.Money[1] = QString::number(ntdToInt(prime));    //換成台幣的成本
+
+    }
+
+
+    order.Money[1] = QString::number(ntdToInt(prime));    //換成台幣的成本
 
 }
 
@@ -1302,7 +1303,7 @@ QString Action::findGameSid(QString sGameItemSid,bool bQuery)
         DataGameItem v =m_listGameItem.at(i);
 
         if(v.Sid==sGameItemSid)
-            return v.Sid;
+            return v.GameSid;
     }
 
     return "";

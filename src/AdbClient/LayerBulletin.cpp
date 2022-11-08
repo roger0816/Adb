@@ -24,7 +24,7 @@ LayerBulletin::~LayerBulletin()
 
 void LayerBulletin::showEvent(QShowEvent *)
 {
-    QTimer::singleShot(50,[this](){ refresh(true); });
+    QTimer::singleShot(300,[this](){ refresh(true); });
 }
 
 void LayerBulletin::refresh(bool bRequery)
@@ -42,23 +42,30 @@ void LayerBulletin::refresh(bool bRequery)
 
         ui->tbSys->setRowCount(0);
 
-        QVariantList in;
-
+        QVariantMap in;
+        in["DESC"] ="Sid";
 
         m_listUser = ACTION.queryUser();
 
         ACTION.action(ACT::QUERY_BULLETIN,in,m_listData,sError);
 
-        for(int i=m_listData.length()-1;i>=0;i--)
+        for(int i=0;i<m_listData.length();i++)
         {
 
             QVariantMap data = m_listData.at(i).toMap();
 
-            if(data["Type"].toString() =="Top")
+
+            QDateTime End=QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss");
+
+            if(End.toSecsSinceEpoch()<=GLOBAL.dateTimeUtc8().toSecsSinceEpoch())
+                continue;
+
+
+            if(data["Type"].toString() =="0")
             {
                 intoTopTb(data);
             }
-            else
+            else if(data["Type"].toString() =="1")
             {
                 intoSysTb(data);
             }

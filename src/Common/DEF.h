@@ -10,7 +10,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 
-#define ADP_VER "v1.01.1031_6"
+#define ADP_VER "v1.01.1031_7"
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;

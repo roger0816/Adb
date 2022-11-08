@@ -47,10 +47,10 @@ void LayerSysSetting::refreshBulletin()
 
     m_listBulletin.clear();
 
-    QVariantList tmp;
+    QVariantMap tmp;
 
     QString sError;
-
+    tmp["DESC"]="Sid";
     ACTION.action(ACT::QUERY_BULLETIN,tmp,m_listBulletin,sError);
 
     ui->tbBulletin->setRowCount(0);
@@ -61,26 +61,28 @@ void LayerSysSetting::refreshBulletin()
     {
 
 
-        ui->tbBulletin->setRowCount(i+1);
-
-
         QVariantMap data = m_listBulletin.at(i).toMap();
 
-        QVariantMap v;
-        v["Sid"] = data["UserSid"];
+        if(data["Type"]==2)
+            continue;
+        int iRow = ui->tbBulletin->rowCount();
+        ui->tbBulletin->setRowCount(iRow+1);
 
-        QVariantList listUser;
-        ACTION.action(ACT::QUERY_USER,v,listUser,sError);
 
-        UserData user(listUser.first().toMap());
+         QString sUserName="";
 
-        ui->tbBulletin->setItem(i,0,UI.tbItem(user.Name));
+        QList<UserData> listUser =ACTION.queryUser(data["UserSid"].toString());
 
-        ui->tbBulletin->setItem(i,1,UI.tbItem(QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss")));
+        if(listUser.length()>0)
+            sUserName=listUser.first().Name;
 
-        ui->tbBulletin->setItem(i,2,UI.tbItem(data["Title"]));
+        ui->tbBulletin->setItem(iRow,0,UI.tbItem(sUserName));
 
-        ui->tbBulletin->setItem(i,3,UI.tbItem(data["Content"]));
+        ui->tbBulletin->setItem(iRow,1,UI.tbItem(QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss")));
+
+        ui->tbBulletin->setItem(iRow,2,UI.tbItem(data["Title"]));
+
+        ui->tbBulletin->setItem(iRow,3,UI.tbItem(data["Content"]));
 
 
     }
@@ -88,7 +90,7 @@ void LayerSysSetting::refreshBulletin()
 
 
 
-void LayerSysSetting::on_tbBulletin_cellDoubleClicked(int row, int column)
+void LayerSysSetting::on_tbBulletin_cellDoubleClicked(int , int )
 {
     on_btnBulletinEdit_clicked();
 }

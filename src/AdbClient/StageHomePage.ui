@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>690</width>
-    <height>368</height>
+    <width>716</width>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -47,13 +47,13 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>200</height>
+              <height>300</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
               <width>1200</width>
-              <height>200</height>
+              <height>300</height>
              </size>
             </property>
             <widget class="QWidget" name="wFn" native="true">
@@ -132,7 +132,7 @@
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
-                 <string>  寬:高=6:1</string>
+                 <string>  高:寬=1:4</string>
                 </property>
                </widget>
               </item>

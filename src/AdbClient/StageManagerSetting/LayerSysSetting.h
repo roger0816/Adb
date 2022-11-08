@@ -21,7 +21,7 @@ public:
 private slots:
     void on_btnBulletinAdd_clicked();
 
-    void on_tbBulletin_cellDoubleClicked(int row, int column);
+    void on_tbBulletin_cellDoubleClicked(int, int);
 
     void on_btnBulletinEdit_clicked();
 

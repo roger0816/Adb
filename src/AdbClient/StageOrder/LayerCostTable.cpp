@@ -124,8 +124,6 @@ void LayerCostTable::on_btnClear_clicked()
 
 void LayerCostTable::on_btnCopy_clicked()
 {
-    UI.copyMsg(ui->txt0->toPlainText().trimmed()+"\n"+
-               ui->txt1->toPlainText().trimmed()+"\n"+
-               ui->txt2->toPlainText().trimmed());
+    UI.copyMsg(ui->txt2->toPlainText().trimmed());
 }
 

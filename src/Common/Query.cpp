@@ -221,10 +221,10 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::QUERY_BULLETIN)
     {
 
-        QVariantMap d;
+        QVariantMap d = data.dData;
 
-        if(data.listData.length()>0)
-            d = data.listData.first().toMap();
+//        if(data.listData.length()>0)
+//            d = data.listData.first().toMap();
 
         bOk = m_sql.queryTb(SQL_TABLE::Bulletin(),d,re.listData,sError);
 

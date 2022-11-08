@@ -11,7 +11,9 @@ StageTest::StageTest(QWidget *parent) :
     ui->setupUi(this);
     // login super user     root :   1234    for test class
 
+       ui->wPicTest->setReadOnly(true);
 
+       ui->wPicTest->setNoButton();
 
 }
 
@@ -45,6 +47,15 @@ void StageTest::on_btnTestDate_clicked()
 
 
 
+
+}
+
+
+void StageTest::on_btnTestPic_clicked()
+{
+    ui->wPicTest->slotClear();
+
+    ui->wPicTest->setMd5(ui->txPicMd5->text());
 
 }
 

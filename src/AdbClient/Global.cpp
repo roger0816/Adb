@@ -198,6 +198,9 @@ QStringList Global::mapping(CListPair listData, QStringList listKey, bool bMappi
         values = listData.listFirst();
     }
 
+    qDebug()<<"list key : "<<listKey<<" ,keys:  "<<keys<<",value "<<values;
+
+
     for(int i=0;i<listKey.length();i++)
     {
         int iIdx = keys.indexOf(listKey.at(i));
@@ -205,7 +208,7 @@ QStringList Global::mapping(CListPair listData, QStringList listKey, bool bMappi
         if(iIdx<0)
             continue;
 
-        listRe.append(values.at(i));
+        listRe.append(values.at(iIdx));
 
     }
 
@@ -291,6 +294,96 @@ QString Global::userLvToStr(int iLv)
         sLv = "會計";
 
     return sLv;
+}
+
+bool Global::checkSearch(QString sFilterStr, QVariantMap dTarget, bool caseNeedDiff)
+{
+    if(sFilterStr.trimmed()=="")
+        return true;
+
+    QStringList listKey = sFilterStr.split("&");
+
+    if(listKey.length()>0 && listKey.last().trimmed()=="")
+        listKey.pop_back();
+
+    qDebug()<<"list key : "<<listKey;
+
+    bool bRe = false;
+
+    QList<int> listOk;
+
+    foreach(QString v, listKey)
+    {
+        int iOk = 0;
+        QString dateTime=QDateTime::fromString("yyyyMMddhhmmss").toString("yyyy/MM/dd hh:mm:ss");
+
+        QString sKey = v.trimmed();
+
+        if(!caseNeedDiff)
+            sKey = sKey.toUpper();
+
+
+
+        //  if(data["Name"].toString().indexOf(m_sSearchKey,Qt::CaseInsensitive)>=0)
+        //奇怪，Qt::CaseInsensitive 不起作用
+
+        QStringList listTargetKey = dTarget.keys();
+
+        for(int i=0;i<listTargetKey.length();i++)
+        {
+            QString sTargetKey = listTargetKey.at(i);
+            QVariant v = dTarget[sTargetKey];
+
+            QString sTarget="";
+
+            if(v.type()==QVariant::Bool)
+            {
+                if(sKey=="是" ||sKey=="對" || sKey=="有" || sKey=="1" || sKey=="TRUE")
+                {
+                    if(v==true)
+                        iOk=1;
+                }
+                else if(sKey=="不是" || sKey=="否" ||  sKey=="無"|| sKey=="沒有" || sKey=="0" || sKey=="FALSE")
+                {
+                    if(v==false)
+                        iOk=1;
+                }
+            }
+
+            else if(v.type()==QVariant::StringList)
+            {
+                foreach(QString st,v.toStringList())
+                {
+                    QString sTmp=st.trimmed();
+                    if(!caseNeedDiff)
+                        sTmp=sTmp.toUpper();
+
+                    if(sTmp.contains(sKey))
+                        iOk=1;
+                }
+
+            }
+            else
+            {
+
+                QString sTmp=v.toString().trimmed();
+                if(!caseNeedDiff)
+                    sTmp=sTmp.toUpper();
+
+                if(sTmp.contains(sKey))
+                    iOk=1;
+            }
+
+        }
+
+
+
+        listOk.append(iOk);
+    }
+
+    bRe = !listOk.contains(0);
+
+    return bRe;
 }
 
 QString Global::strNumber(double number)

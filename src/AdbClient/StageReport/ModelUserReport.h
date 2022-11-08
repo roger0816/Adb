@@ -8,12 +8,11 @@
 
 namespace _ModelUserReport {
 
-enum _TYPE
+enum
 {
     _ORDER_TOTAL=0,
     _TIME_TOTAL,
     _TIME_AVE,
-
     _TYPE_COUNT
 };
 
@@ -23,18 +22,36 @@ struct DataUserReport :public UserData
 
     DataUserReport(QVariantMap data):UserData(data){}
 
-    int iTotalStep[6]={0,0,0,0,0,0};
+    QList<int> iTotalStep={0,0,0,0,0,0};
+
+    QList<double> iTotalTimer={0,0,0,0,0,0};
+
+    QStringList sTotalTimer={"0","0","0","0","0","0"};
+    QStringList sAveTimer={"0","0","0","0","0","0"};
 
 
-    double iTotalTimer[6]={0,0,0,0,0,0};
+    QVariantMap data()
+    {
+        QVariantMap re =UserData::data();
 
+        QStringList sTotalStep;
+        sTotalStep<<QString::number(iTotalStep[0])
+                <<QString::number(iTotalStep[1])
+                <<QString::number(iTotalStep[2])
+                <<QString::number(iTotalStep[3])
+                <<QString::number(iTotalStep[4])
+                <<QString::number(iTotalStep[5]);
+
+        re["sTotalStep"] = sTotalStep;
+        re["sTotalTimer"] =sTotalTimer;
+        re["sAveTimer"] =sAveTimer;
+        return re;
+    }
 
 };
 
 
 }
-
-using namespace _ModelUserReport;
 
 
 class ModelUserReport : public QAbstractTableModel
@@ -57,21 +74,26 @@ public:
 
     void requestAction();
 
-    QStringList m_listHeader[_TYPE_COUNT];
+    QStringList m_listHeader[_ModelUserReport::_TYPE_COUNT];
 
     QDateTime m_dateTime;
 
-    QString m_strFilterStr;
+    QString m_strFilter;
 
     int m_iType=0;
 
     bool m_bIsMonth=true;
 
-    QVariantList m_listData;
+    QList<_ModelUserReport::DataUserReport> m_listData;
     QList<OrderData> m_listOrder;
-    QList<DataUserReport> m_listUser;
+    QList<_ModelUserReport::DataUserReport> m_listUser;
 
-    QMap<QString,DataUserReport*> m_dUser; //只是方便調用，等於m_listUser 以sid為key
+
+    QMap<QString,_ModelUserReport::DataUserReport*> m_dUser; //只是方便調用，等於m_listUser 以sid為key
+
+    QString timeStr(int iSec);
+
+
 
     /*
     // Fetch data dynamically:
@@ -83,9 +105,7 @@ public:
 
 private:
 
-    QString countText(const int row,  const int col);
 
-    QString timeText(int iRow,int iCol);
 };
 
 #endif // MODELUSERREPORT_H

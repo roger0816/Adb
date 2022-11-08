@@ -21,7 +21,7 @@ private:
 
     QButtonGroup m_btns;
 
-private slots:
+public slots:
     void changePage(int iPage);
 
 

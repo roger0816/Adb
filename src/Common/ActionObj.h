@@ -9,7 +9,7 @@
 #include "QueryObj.h"
 #include "VojData.h"
 #include <QTimer>
-
+#include <QEventLoop>
 
 
 
@@ -42,6 +42,8 @@ public:
     CData query(CData data);
 
     QueryObj m_queryObj;
+
+    bool m_bIsLock = false;;
 
 protected:
     CData callServer(CData data);

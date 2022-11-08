@@ -15,6 +15,9 @@ public:
 
     void showEvent(QShowEvent *e) override;
 
+    void setMd5(QString sMd5);
+
+
     QString uploadPic() override;
 private:
 

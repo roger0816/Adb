@@ -3,6 +3,9 @@
 ModelUserReport::ModelUserReport(QObject *parent)
     : QAbstractTableModel(parent)
 {
+    using namespace _ModelUserReport;
+
+
     m_listHeader[_ORDER_TOTAL]<<"編號"<<"名稱"<<"職級"<<"報價數量"<<"下單數量"<<"接單儲值數量"<<"回報數量"<<"核簽數量";
     m_listHeader[_TIME_TOTAL]<<"編號"<<"名稱"<<"職級"<<"報價總時"<<"下單總時"<<"接單儲值總時"<<"回報總時"<<"核簽總時";
     m_listHeader[_TIME_AVE]<<"編號"<<"名稱"<<"職級"<<"報價均時"<<"下單均時"<<"接單儲值均時"<<"回報均時"<<"核簽均時";
@@ -31,7 +34,8 @@ QVariant ModelUserReport::headerData(int section, Qt::Orientation orientation, i
 
 int ModelUserReport::rowCount(const QModelIndex &) const
 {
-    return m_listUser.length();
+
+    return m_listData.length();
 
     //    if (parent.isValid())
     //        return 0;
@@ -57,17 +61,14 @@ QVariant ModelUserReport::data(const QModelIndex &index, int role) const
     if(index.row()<0 || index.column()<0)
         return QVariant();
 
+    using namespace _ModelUserReport;
+
+
     QVariant re;
 
 
-
-
-
     QFont font;
-    QColor colorFront(Qt::darkGray);
-
-
-
+    QColor colorFront(QColor(44,44,44));
 
     if(index.column()>=3 && index.column()<9)
     {
@@ -82,18 +83,18 @@ QVariant ModelUserReport::data(const QModelIndex &index, int role) const
         QString sText="";
 
 
-        int iRow = qBound(0,index.row() ,m_listUser.length()-1);
+        int iRow = qBound(0,index.row() ,m_listData.length()-1);
 
         switch (index.column())
         {
         case 0:
-            sText = m_listUser.at(iRow).Cid;
+            sText = m_listData.at(iRow).Cid;
             break;
         case 1:
-            sText = m_listUser.at(iRow).Name;
+            sText = m_listData.at(iRow).Name;
             break;
         case 2:
-            sText = GLOBAL.userLvToStr(m_listUser.at(iRow).Lv);
+            sText = GLOBAL.userLvToStr(m_listData.at(iRow).Lv);
             break;
         case 3:
         case 4:
@@ -102,16 +103,49 @@ QVariant ModelUserReport::data(const QModelIndex &index, int role) const
         case 7:
         case 8:
             if(m_iType==_ORDER_TOTAL)
-                sText = QString::number(m_listUser.at(iRow).iTotalStep[index.column()-3]);
+                sText = QString::number(m_listData.at(iRow).iTotalStep[index.column()-3]);
             else if(m_iType==_TIME_TOTAL)
             {
-                int iSec = m_listUser.at(iRow).iTotalStep[index.column()-3];
+                int iSec = m_listData.at(iRow).iTotalTimer[index.column()-3];
 
+                int iH,iM,iS;
+
+                iH= iSec/(60*60);
+
+                iM = iSec%(60*60)/60;
+
+                iS = iSec%60;
+
+                sText=QString("%1:%2:%3").arg(iH).arg(iM,2,10,QChar('0')).arg(iS,2,10,QChar('0'));
+
+                /*
                 QDateTime date;
-
                 date.setSecsSinceEpoch(iSec);
-
                 sText = date.toString("hh:mm:ss");
+                */
+            }
+
+            else if(m_iType==_TIME_AVE)
+            {
+                int iSec = m_listData.at(iRow).iTotalTimer[index.column()-3];
+                int iCount = m_listData.at(iRow).iTotalStep[index.column()-3];
+                if(iSec!=0 && iCount !=0)
+                    iSec/=m_listData.at(iRow).iTotalStep[index.column()-3];
+                int iH,iM,iS;
+
+                iH= iSec/(60*60);
+
+                iM = iSec%(60*60)/60;
+
+                iS = iSec%60;
+
+                sText=QString("%1:%2:%3").arg(iH).arg(iM,2,10,QChar('0')).arg(iS,2,10,QChar('0'));
+
+                /*
+                QDateTime date;
+                date.setSecsSinceEpoch(iSec);
+                sText = date.toString("hh:mm:ss");
+                */
             }
 
             break;
@@ -140,7 +174,6 @@ QVariant ModelUserReport::data(const QModelIndex &index, int role) const
     }
 
 
-
     return re;
 }
 
@@ -152,12 +185,9 @@ void ModelUserReport::updateData(bool bIsMonth,int iType ,QDateTime date, QStrin
 
     m_dateTime = date;
 
-    m_strFilterStr = sFilterStr;
+    m_strFilter = sFilterStr;
 
     m_iType = iType;
-
-
-
 
 
     requestAction();
@@ -168,6 +198,9 @@ void ModelUserReport::updateData(bool bIsMonth,int iType ,QDateTime date, QStrin
 
 void ModelUserReport::requestAction()
 {
+    using namespace _ModelUserReport;
+
+
     m_listUser.clear();
 
     QList<UserData> list = ACTION.getUser(true);
@@ -212,6 +245,7 @@ void ModelUserReport::requestAction()
 
         QStringList listTime=order.StepTime;
 
+
         for(int j=0;j<listStepUser.length()&&j<6;j++)
         {
             QString sUserSid = listStepUser.at(j);
@@ -219,6 +253,8 @@ void ModelUserReport::requestAction()
             if(sUserSid.trimmed()=="")
                 continue;
             int iStep =j;
+
+
 
 
             m_dUser[sUserSid]->iTotalStep[iStep]+=1;
@@ -231,14 +267,30 @@ void ModelUserReport::requestAction()
             {
                 QString sTmp = listTime.at(j);
                 QString sTmpPre = listTime.at(j-1);
-                if(sTmp=="" || sTmpPre=="")
+                if(sTmp.trimmed()=="" || sTmpPre.trimmed()=="")
                     continue;
+
                 QDateTime dateTime = QDateTime::fromString(sTmp,"yyyyMMddhhmmss");
+
+
                 QDateTime dateTimePre = QDateTime::fromString(sTmpPre,"yyyyMMddhhmmss");
+
 
                 double d = dateTime.toSecsSinceEpoch()-dateTimePre.toSecsSinceEpoch();
 
                 m_dUser[sUserSid]->iTotalTimer[iStep]+=d;
+
+                m_dUser[sUserSid]->sTotalTimer[iStep] = timeStr(m_dUser[sUserSid]->iTotalTimer[iStep]);
+
+                int iCount = m_dUser[sUserSid]->iTotalStep[iStep];
+
+                int iTime = m_dUser[sUserSid]->iTotalTimer[iStep];
+
+                if(iTime ==0 ||iCount==0)
+                    m_dUser[sUserSid]->sAveTimer[iStep]="0";
+                else
+                    m_dUser[sUserSid]->sAveTimer[iStep] =
+                            timeStr(iTime/iCount);
             }
 
         }
@@ -247,72 +299,51 @@ void ModelUserReport::requestAction()
     }
 
 
+    m_listData.clear();
+
     foreach(DataUserReport v, m_listUser)
     {
-        qDebug()<<"sid : "<<v.Sid<<" , "<<v.iTotalStep[0]<<","<<v.iTotalStep[1]
-               <<","<<v.iTotalStep[2]<<","<<v.iTotalStep[3]<<","<<v.iTotalStep[4]
-              <<","<<v.iTotalStep[5];
+        QVariantMap tmp;
+
+        tmp["Id"] = v.Cid;
+        tmp["Name"] = v.Name;
+        tmp["Lv"] = GLOBAL.userLvToStr(v.Lv);
+
+        if(m_iType==_ORDER_TOTAL)
+            tmp["listData"] = v.sTotalTimer;
+
+        else if(m_iType==_TIME_TOTAL)
+            tmp["listData"] = v.sTotalTimer;
+
+        else if(m_iType==_TIME_AVE)
+            tmp["listData"] = v.sAveTimer;
+
+        if(GLOBAL.checkSearch(m_strFilter,tmp))
+            m_listData.append(v);
     }
-
-
-
 
 
 }
 
-QString ModelUserReport::countText(const int row,const int col)
+
+
+QString ModelUserReport::timeStr(int iSec)
 {
-    QString sText;
-
-    int iRow = qBound(0,row ,m_listUser.length()-1);
+    QString str="";
 
 
-    switch (col)
-    {
-    case 0:
-        sText = m_listUser.at(iRow).Cid;
-        break;
-    case 1:
+    int iH,iM,iS;
 
-        sText = m_listUser.at(iRow).Name;
-        break;
-    case 2:
-        sText = GLOBAL.userLvToStr(m_listUser.at(iRow).Lv);
-        break;
-    case 3:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[0]);
-        break;
-    case 4:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[1]);
-        break;
-    case 5:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[2]);
-        break;
-    case 6:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[3]);
-        break;
-    case 7:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[4]);
-        break;
-    case 8:
-        sText = QString::number(m_listUser.at(iRow).iTotalStep[5]);
-        break;
-    default:
-        break;
-    }
+    iH= iSec/(60*60);
+
+    iM = iSec%(60*60)/60;
+
+    iS = iSec%60;
+
+    str=QString("%1:%2:%3").arg(iH).arg(iM,2,10,QChar('0')).arg(iS,2,10,QChar('0'));
 
 
-
-    return sText;
-}
-
-QString ModelUserReport::timeText(int iRow, int iCol)
-{
-    QString sRe;
-
-
-
-    return sRe;
+    return str;
 }
 
 

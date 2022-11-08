@@ -87,6 +87,8 @@ public:
 
     void setEnableDetailMode(bool b=true);
 
+    void setNoButton();
+
     bool m_bHasPic =false;
 
 protected:
@@ -127,17 +129,19 @@ protected:
    // QString m_sFileName = GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
 private slots:
-    void slotSetPic();
 
 
+    void showDetail();
+
+
+public slots:
+    void slotClear();
     void slotClip();
 
     void slotDownload();
 
-    void showDetail();
+    void slotSetPic();
 
-public slots:
-    void slotClear();
 
 
 signals:

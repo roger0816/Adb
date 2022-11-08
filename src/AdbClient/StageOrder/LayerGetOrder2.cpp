@@ -190,7 +190,7 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
         ui->tbOrder->setItem(i,3,UI.tbItem(customer["Id"]));
         ui->tbOrder->setItem(i,4,UI.tbItem(customer["Name"]));
 
-        QString sGameItemSid= order.Item.split(";").first().split(",").first();
+        QString sGameItemSid= order.Item.split(";;").first().split(",,").first();
         QVariantMap item=gameItem(sGameItemSid);
 
         ui->tbOrder->setItem(i,5,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));

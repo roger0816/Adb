@@ -102,6 +102,11 @@ void ItemPicObj::setEnableDetailMode(bool b)
     m_bEnableDetail =b;
 }
 
+void ItemPicObj::setNoButton()
+{
+    ui->stackedWidget->hide();
+}
+
 
 void ItemPicObj::showEvent(QShowEvent *)
 {
@@ -224,6 +229,8 @@ void ItemPicObj::slotDownload()
 
     emit finishedSaveImage(sFileName,bOk);
 }
+
+
 
 
 

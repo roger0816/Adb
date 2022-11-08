@@ -7,12 +7,11 @@ DialogAddValueTypeEdit::DialogAddValueTypeEdit(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_listItem<<ui->sb0<<ui->sb1<<ui->sb2<<ui->sb3<<ui->sb4
-             <<ui->sb5<<ui->sb6;
+    m_listItem<<ui->sb0<<ui->sb1<<ui->sb3<<ui->sbSub;
 
     ui->btnDel->hide();
 
-    ui->comboBox->addItem("未設定");
+  //  ui->comboBox->addItem("未設定");
 
     for(int i=0;i<m_listItem.length();i++)
     {
@@ -59,54 +58,78 @@ void DialogAddValueTypeEdit::setRate(QStringList sName, QStringList sRate)
 
 }
 
-void DialogAddValueTypeEdit::setData(QStringList list)
+//void DialogAddValueTypeEdit::setData(QStringList list)
+//{
+//    ui->btnDel->show();
+
+//    while(list.length()<m_listItem.length())
+//    {
+//        list.append("0");
+//    }
+
+//    if(list.length()==m_listItem.length())
+//    {
+//        list.append("1");
+//    }
+
+//    if(list.length()==m_listItem.length()+1)
+//    {
+//        list.append("unkonw");
+//    }
+
+//    m_listData = list;
+
+//    for(int i=0;i<m_listData.length() && i<m_listItem.length();i++)
+//    {
+//        m_listItem[i]->setValue(list.at(i).toDouble());
+//    }
+
+//    int iIdx = m_listRateName.indexOf(m_listData.last())+1;
+
+//    ui->comboBox->setCurrentIndex(qBound(0,iIdx,ui->comboBox->count()-1));
+
+//}
+
+void DialogAddValueTypeEdit::setData(QVariantMap data)
 {
     ui->btnDel->show();
 
-    while(list.length()<m_listItem.length())
-    {
-        list.append("0");
-    }
+    DataPayType d(data);
 
-    if(list.length()==m_listItem.length())
-    {
-        list.append("1");
-    }
+    ui->txName->setText(d.Name);
 
-    if(list.length()==m_listItem.length()+1)
-    {
-        list.append("unkonw");
-    }
+    ui->sbSub->setValue(d.SubValue.first().toDouble());
 
-    m_listData = list;
+    ui->sb0->setValue(d.Value[0].toDouble());
+    ui->sb1->setValue(d.Value[1].toDouble());
+    ui->sb2->setValue(d.Value[2].toDouble());
+    ui->sb3->setValue(d.Value[3].toDouble());
 
-    for(int i=0;i<m_listData.length() && i<m_listItem.length();i++)
-    {
-        m_listItem[i]->setValue(list.at(i).toDouble());
-    }
+    ui->txName->setText(d.Name);
 
-    int iIdx = m_listRateName.indexOf(m_listData.last())+1;
+    int iIdx = m_listRateName.indexOf(d.Currency);
 
-    ui->comboBox->setCurrentIndex(qBound(0,iIdx,ui->comboBox->count()-1));
+    ui->comboBox->setCurrentIndex(qBound(0,iIdx,ui->comboBox->count()-1)+1);
 
 }
 
-QStringList DialogAddValueTypeEdit::data()
+
+
+
+QVariantMap DialogAddValueTypeEdit::data()
 {
-    QStringList list;
+   DataPayType data;
 
-    for(int i=0;i<m_listItem.length();i++)
-    {
-        list.append(QString::number(m_listItem.at(i)->value()));
-    }
+   data.Name=ui->txName->text().trimmed();
 
-    list.append(ui->lbTotal->text());
+   data.Value<<ui->sb0->text()<<ui->sb1->text()<<ui->sb2->text()<<ui->sb3->text();
 
-    list.append(ui->comboBox->currentText());
+   data.SubValue<<ui->sbSub->text();
 
-    m_listData = list;
+   data.Currency = ui->comboBox->currentText();
 
-    return m_listData;
+   return data.data();
+
 }
 
 void DialogAddValueTypeEdit::on_btnCancel_clicked()
@@ -117,6 +140,12 @@ void DialogAddValueTypeEdit::on_btnCancel_clicked()
 
 void DialogAddValueTypeEdit::on_btnOk_clicked()
 {
+    if(ui->comboBox->currentText()=="未設定")
+    {
+        UI.showMsg("","請選擇幣別",QStringList()<<"OK");
+        return;
+    }
+
     QString sMsg ="確認新增嗎？";
 
     if(!ui->btnDel->isHidden())
@@ -160,13 +189,10 @@ void DialogAddValueTypeEdit::updateTotal(double)
         return;
 
 
-    double d= 1.000*ui->sb0->value()/ui->sb1->value()*ui->sb2->value()*ui->sb3->value()
-            *ui->sb4->value()*ui->sb5->value()*ui->sb6->value();
+    double d= 1.000*ui->sb0->value()*ui->sb1->value()*ui->sb2->value()*ui->sb3->value()/ui->sbSub->value();
 
 
     double total= d*m_listRate.at(ui->comboBox->currentIndex()-1).toDouble();
-
-
 
     ui->lbTotal->setText(QString::number(total, 'f', 3));
 

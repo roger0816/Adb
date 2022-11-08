@@ -22,6 +22,20 @@ void ItemPic::showEvent(QShowEvent *e)
     ItemPicObj::showEvent(e);
 }
 
+void ItemPic::setMd5(QString sMd5)
+{
+
+    QVariantMap out;
+
+    QString sKey="Md5";
+
+    QVariant sValue = sMd5;
+
+    ACTION.action(ACT::QUERY_PIC,sKey,sValue,out);
+
+    setData(out["Data"].toByteArray());
+}
+
 QString ItemPic::uploadPic()
 {
    QString sRe="";

@@ -24,7 +24,7 @@ LayerBulletin::~LayerBulletin()
 
 void LayerBulletin::showEvent(QShowEvent *)
 {
-    QTimer::singleShot(30,[this](){ refresh(true); });
+    QTimer::singleShot(50,[this](){ refresh(true); });
 }
 
 void LayerBulletin::refresh(bool bRequery)
@@ -44,17 +44,17 @@ void LayerBulletin::refresh(bool bRequery)
 
         QVariantList in;
 
+
         m_listUser = ACTION.queryUser();
 
         ACTION.action(ACT::QUERY_BULLETIN,in,m_listData,sError);
-
 
         for(int i=m_listData.length()-1;i>=0;i--)
         {
 
             QVariantMap data = m_listData.at(i).toMap();
 
-            if(data["Top"].toString() =="1")
+            if(data["Type"].toString() =="Top")
             {
                 intoTopTb(data);
             }
@@ -63,6 +63,8 @@ void LayerBulletin::refresh(bool bRequery)
                 intoSysTb(data);
             }
         }
+
+
 
     }
 }

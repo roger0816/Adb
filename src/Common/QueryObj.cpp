@@ -48,6 +48,7 @@ void QueryObj::setDataBase(bool bMysql, QString sIp, QString sPort)
 
 CData QueryObj::queryData(CData data)
 {
+
     CData re;
 
     if(data.iAciton==1)  //heartbeat (Trigger)

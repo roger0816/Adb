@@ -7,16 +7,18 @@ ActionObj::ActionObj(QObject *parent)
     connect(&RPKCORE.network,SIGNAL(replyFromServer(QString,QByteArray,int))
             ,this,SLOT(serverTrigger(QString,QByteArray,int)));
 
-    m_timer.connect(&m_timer,&QTimer::timeout,this,[=]()
-    {
 
+    auto heartBeat =[=]()
+    {
         CData data;
 
         data.iAciton=1;
 
         RPKCORE.network.connectHost("getTrigger",m_ip,m_port,data.enCodeJson());
+    };
 
-    });
+    m_timer.connect(&m_timer,&QTimer::timeout,heartBeat);
+
 
 
 }
@@ -32,7 +34,10 @@ void ActionObj::setStartSyanc(bool b)
 {
 
     if(b)
+    {
+
         m_timer.start(1000);
+    }
     else
         m_timer.stop();
 
@@ -99,9 +104,9 @@ bool ActionObj::action(int act, QVariantMap data, QVariantMap &out, QString &sEr
 
     re = query(input);
 
-   // out = re.dData;
+    // out = re.dData;
     if(re.listData.length()>0)
-    out = re.listData.first().toMap();
+        out = re.listData.first().toMap();
 
     sError =re.sMsg;
 
@@ -165,6 +170,22 @@ CData ActionObj::query(CData data)
 
 CData ActionObj::callServer(CData data)
 {
+
+    //    if(m_bIsLock)
+    //    {
+    //        QEventLoop *loop=new QEventLoop(this);
+
+    //        loop->connect(this,&ActionObj::lockLoading,[=](bool)
+    //        {
+    //            if(!m_bIsLock)
+    //                loop->quit();
+    //        });
+
+    //        delete loop;
+    //    }
+
+
+
     CData re;
 
     QString sApi = QString::number(data.iAciton);
@@ -179,22 +200,20 @@ CData ActionObj::callServer(CData data)
     bool bIsQuery = isQueryApi(data.iAciton);
 
     bool bNeedFromeServer =isNeedFromServer(data.iAciton,data.dData);
-
-       qDebug()<<"call aip :"+sApi<<",data from server:"<<bNeedFromeServer<<",cacheKey:"<<sCacheKey;
+    qDebug()<<"trigger local:"<<m_dLocalTrigger[sGroup]<<", update:"<<m_dUpdateTrigger[sGroup];
+    qDebug()<<"call aip :"+sApi<<",data from server:"<<bNeedFromeServer<<",cacheKey:"<<sCacheKey<<"\n";
 
     if(!bNeedFromeServer)
     {
-
         re.deCodeJson(m_dKeepData[sCacheKey].toByteArray());
 
         return re;
     }
 
-    qDebug()<<"api : "<<sApi<<"is query api :"<< bIsQuery<<" , need frome server: "<<bNeedFromeServer;
 
+    m_bIsLock= true;
 
-
-    emit lockLoading(true);
+    emit lockLoading(m_bIsLock);
 
 
     QByteArray out;
@@ -252,7 +271,11 @@ CData ActionObj::callServer(CData data)
 
     qDebug()<<"server return : "<<re.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
     qDebug()<<out.toStdString().c_str();
-    emit lockLoading(false);
+
+    m_bIsLock= false;
+
+
+    emit lockLoading(m_bIsLock);
 
     return re;
 }
@@ -280,22 +303,18 @@ bool ActionObj::isNeedFromServer(int iApi, const QVariantMap conditions)
     }
 
 
-    qDebug()<<"local trigger : "<<m_dLocalTrigger[sGroup];
-    qDebug()<<"updater trigger: "<<m_dUpdateTrigger[sGroup];
-
-
     if(m_dLocalTrigger[sGroup]=="0")
     {
         return true;
     }
     QString sCacheKey = apiCacheKey(sApi,conditions);
 
-    qDebug()<<m_dKeepData[sCacheKey];
+    // qDebug()<<m_dKeepData[sCacheKey].toString().toStdString().c_str();
 
     if(!m_dKeepData.keys().contains(sCacheKey)
             || m_dKeepData[sCacheKey].toString()=="")
     {
-        qDebug()<<"no cacheData";
+        qDebug()<<"\napi:"<<iApi<<"no cacheData";
 
         return true;
     }
@@ -363,8 +382,13 @@ void ActionObj::serverTrigger(QString sId, QByteArray data, int )
 
             }
 
+
             m_dUpdateTrigger = d;
 
+            if(m_dLocalTrigger.keys().length()<1)
+            {
+                qDebug()<<m_dUpdateTrigger;
+            }
 
 
 

@@ -83,6 +83,8 @@ public:
     bool setCustomerCost(CustomerCost costData, QString &sError);
 
     bool replaceOrder(OrderData order, QString &sError);
+    void setSellMoney(OrderData &order);
+    void setPrimeMoney(OrderData &order);
 
     QList<OrderData> getOrder(bool bRequest = false);
 
@@ -104,6 +106,7 @@ public:
 
     QList<DataRate> listRate(QString sSid="", bool bRequest=true, bool bExchangeType=false);
 
+
     DataRate costRate(QString sSid="", bool bRequest=true)
     {return listRate(sSid,bRequest,true).last();}
 
@@ -124,9 +127,11 @@ public:
 
     bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
 
-    int checkItemCount(QString sGameItemSid);
+    QPair<int, int> getItemCount(QString sGameItemSid, bool bQuery=true);
 
+    QList<DataItemCount> getItemCount(bool bQuery=false);
 
+    QString findGameSid(QString sGameItemSid, bool bQuery=false);
 
     void clearCacheData(int iApi);
 
@@ -143,6 +148,9 @@ private:
     QList<DataGameList> m_listGameList;
 
     QList<DataGameItem> m_listGameItem;
+
+    QList<DataItemCount> m_listItemCount;
+
 
     QList<CustomerCost> m_listCustomerCost;
 

@@ -67,7 +67,10 @@ public:
 
     QString userLvToStr(int iLv);
 
-     int m_virtualSec=0;
+    int m_virtualSec=0;
+
+    bool checkSearch(QString sFilterStr,QVariantMap dTarget,bool caseNeedDiff=false);
+
 
 private:
     static Global *m_pInstance;

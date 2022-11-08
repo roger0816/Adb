@@ -65,14 +65,14 @@
           <widget class="QWidget" name="widget_5" native="true">
            <layout class="QFormLayout" name="formLayout_2">
             <item row="0" column="0">
-             <widget class="QLabel" name="label_8">
+             <widget class="QLabel" name="label_10">
               <property name="text">
-               <string>刷卡匯率:</string>
+               <string>信用卡回饋:</string>
               </property>
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QDoubleSpinBox" name="sb2">
+             <widget class="QDoubleSpinBox" name="sb0">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -91,14 +91,14 @@
              </widget>
             </item>
             <item row="1" column="0">
-             <widget class="QLabel" name="label_10">
+             <widget class="QLabel" name="label_11">
               <property name="text">
-               <string>信用卡回饋:</string>
+               <string>折扣</string>
               </property>
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QDoubleSpinBox" name="sb3">
+             <widget class="QDoubleSpinBox" name="sb1">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -117,14 +117,14 @@
              </widget>
             </item>
             <item row="2" column="0">
-             <widget class="QLabel" name="label_11">
+             <widget class="QLabel" name="label_12">
               <property name="text">
-               <string>買卡折扣</string>
+               <string>積分回饋:</string>
               </property>
              </widget>
             </item>
             <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="sb4">
+             <widget class="QDoubleSpinBox" name="sb2">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -143,40 +143,14 @@
              </widget>
             </item>
             <item row="3" column="0">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>積分回饋:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="sb5">
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="minimum">
-               <double>0.001000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>10.000000000000000</double>
-              </property>
-              <property name="value">
-               <double>1.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
              <widget class="QLabel" name="label_13">
               <property name="text">
                <string>手續費:</string>
               </property>
              </widget>
             </item>
-            <item row="4" column="1">
-             <widget class="QDoubleSpinBox" name="sb6">
+            <item row="3" column="1">
+             <widget class="QDoubleSpinBox" name="sb3">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -207,58 +181,6 @@
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_6">
-              <property name="text">
-               <string>折扣:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QDoubleSpinBox" name="sb0">
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="minimum">
-               <double>0.001000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>10.000000000000000</double>
-              </property>
-              <property name="value">
-               <double>1.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="text">
-               <string>反利:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QDoubleSpinBox" name="sb1">
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="decimals">
-               <number>3</number>
-              </property>
-              <property name="minimum">
-               <double>0.001000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>10.000000000000000</double>
-              </property>
-              <property name="value">
-               <double>1.000000000000000</double>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="QComboBox" name="comboBox"/>
             </item>
@@ -266,6 +188,32 @@
              <widget class="QLabel" name="lbRate">
               <property name="text">
                <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="text">
+               <string>反利:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QDoubleSpinBox" name="sbSub">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="decimals">
+               <number>3</number>
+              </property>
+              <property name="minimum">
+               <double>0.001000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>10.000000000000000</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
               </property>
              </widget>
             </item>
@@ -350,6 +298,9 @@
                  </property>
                  <property name="maximum">
                   <double>100000.000000000000000</double>
+                 </property>
+                 <property name="value">
+                  <double>1.000000000000000</double>
                  </property>
                 </widget>
                </item>

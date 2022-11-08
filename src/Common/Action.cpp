@@ -129,7 +129,6 @@ QList<UserData> Action::queryUser(QString sId)
     CData dRe = query(data);
 
 
-
     QList<UserData> listRe;
 
     foreach(QVariant v,dRe.listData)
@@ -263,7 +262,19 @@ void Action::reQuerty()
     primeRate("",true);
 
 
-    //  rate("",true);
+
+    //一進入程式，首先的公告、公告圖、圖片資料做預載
+    QString sError;
+    QVariantMap in,out;
+    in["Type"]=2;
+    action(ACT::QUERY_BULLETIN,QVariantMap(),sError);
+
+    action(ACT::QUERY_BULLETIN,in,out,sError);
+
+    in.clear();
+    in["Md5"]=out["Content"].toString();
+    action(ACT::QUERY_PIC,in,out,sError);
+       //pre load make cache data
 }
 
 QList<UserData> Action::getUser(bool bQuery)
@@ -305,7 +316,7 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
 
     }
 
-   qDebug()<<"AAAAAAAAAA : "<<m_listCustomer.length();
+    qDebug()<<"AAAAAAAAAA : "<<m_listCustomer.length();
 
     foreach(CustomerData vData,m_listCustomer)
     {
@@ -663,10 +674,30 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
     bool bToUpdateMoney = false;
 
-    if(order.Step=="4")
+
+    int iStep =qBound(0,order.Step.toInt(),5);
+
+    order.Step=QString::number(iStep);
+
+    if(order.Step=="0")  //報價- 儲存匯率sid
+    {
+        order.ExRateSid=costRate("",true).Sid;
+        order.PrimeRateSid= primeRate("",true).Sid;
+    }
+    else if(order.Step=="1")  //下單- 計算應收
+    {
+        setSellMoney(order);
+
+    }
+    else if(order.Step=="3") //儲值 - 計算成本
+    {
+        setPrimeMoney(order);
+    }
+
+    else if(order.Step=="4") //回報 - 更新用戶餘額
         bToUpdateMoney=true;
 
-    QVariantMap out;
+   // QVariantMap out;
     bRe = action(ACT::REPLACE_ORDER,order.data(),sError);
 
     if(!bRe)
@@ -709,7 +740,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
         data.UserSid = m_currentUser.Sid;
 
-        data.Rate = primeRate("").Sid;
+        data.Rate = order.ExRateSid;
 
         data.CustomerSid=order.CustomerSid;
 
@@ -732,13 +763,13 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         if(bOk)
         {
             bRe = true;
-            qDebug()<<"XXXXXXXXXXX0 : "<<order.CustomerSid;
+
             CustomerData customerData = getCustomer(order.CustomerSid);
-             qDebug()<<"XXXXXXXXXXX0 : "<<customerData.data();
+
             customerData.Money=data.Total;
-            qDebug()<<"AAAAAAAAAAAAA : "<<customerData.Money;
+
             bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);
-            qDebug()<<"AAAAAAAAAAA1 : "<<sError;
+
 
         }
         else
@@ -746,6 +777,10 @@ bool Action::replaceOrder(OrderData order, QString &sError)
             return bRe;
         }
 
+    }
+    else
+    {
+        bRe = true;
     }
 
 
@@ -962,6 +997,99 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
     return re;
 }
 
+void Action::setSellMoney(OrderData &order)
+{
+    auto ntdToInt=[=](double iCost)
+    {
+        QStringList listTmp = QString::number(iCost).split(".");
+
+        int cost = listTmp.first().toInt();
+
+        if(listTmp.length()>1 && listTmp.last().toInt()>0)
+        {
+            cost+=1;
+        }
+
+        return cost;
+    };
+
+    //
+
+    QStringList listMoney;
+
+    DataRate rate=costRate(order.ExRateSid,false);
+
+    //cost
+
+    int idx =rate.listKey().indexOf(getCustomer(order.CustomerSid).Currency);
+
+    if(idx<0)
+        return;
+
+    double iCost = order.Cost.toDouble()*rate.listValue().at(idx).toDouble(); //原幣應收
+    order.Money[0]= QString::number(ntdToInt(iCost));
+
+
+}
+
+void Action::setPrimeMoney(OrderData &order)
+{
+
+    auto ntdToInt=[=](double iCost)
+    {
+        QStringList listTmp = QString::number(iCost).split(".");
+
+        int cost = listTmp.first().toInt();
+
+        if(listTmp.length()>1 && listTmp.last().toInt()>0)
+        {
+            cost+=1;
+        }
+
+        return cost;
+    };
+
+    qDebug()<<"XXXXXXXXXXXX : "<<order.PrimeRateSid;
+     DataRate rate=primeRate(order.PrimeRateSid,true);
+
+        CListPair listPay =getAddValueType();
+        int idx = listPay.listFirst().indexOf(order.PayType);
+
+        if(idx<0)
+            return;
+
+        CListPair listItem(order.Item);
+
+        double prime=0.00;
+
+        for(int i=0;i<listItem.length();i++)  //訂單裡的  GameItem
+        {
+
+            CPair p = listItem.at(i);
+
+            QString sItemSid = p.first;
+
+            int itemCount = p.second.toInt();
+
+            DataGameItem target = getGameItemFromSid(sItemSid,true);   //用game item sid取得完整料結構
+
+            CListPair payType(target.AddValueTypeSid);                // 支付方式sid 與 數量
+
+            QString sValue = payType.findValue(order.PayType);
+
+            double iOneItemPrice = payTypeToNTD(order.PayType,rate)*sValue.toDouble();
+
+            prime =prime+(itemCount*iOneItemPrice);
+
+
+
+        }
+
+
+        order.Money[1] = QString::number(ntdToInt(prime));    //換成台幣的成本
+
+}
+
 QList<DataUserBonus> Action::listBouns(QString sUserSid)
 {
     QList<DataUserBonus> listRe;
@@ -1039,7 +1167,7 @@ double Action::payTypeToNTD(QString payTypeSid, DataRate rate)
     double re=1.00;
 
     QVariantMap input;
-    QVariantList in,rawData;
+    QVariantList rawData;
     QString sError;
 
     input["Sid"] = payTypeSid;
@@ -1048,26 +1176,21 @@ double Action::payTypeToNTD(QString payTypeSid, DataRate rate)
     if(rawData.length()<1)
         return 0;
 
-    QStringList listValue = rawData.first().toMap()["Value"].toString().split(";");
 
 
-    while(listValue.length()<9)
-        listValue.push_front("1");
+    DataPayType data(rawData.first().toMap());
+    qDebug()<<"BBBBBBBBBBBB2: "<<data.Currency;
 
-    double r = rate.listData.findValue(listValue.last()).toDouble();
+    qDebug()<<"list "<<rate.listKey()<<" , "<<rate.listValue();
 
-    re=1.00*r;
+    double r = rate.listData.findValue(data.Currency).toDouble();
 
-    for(int i=0;i<7;i++)
-    {
-        double d = listValue.at(i).toDouble();
+    qDebug()<<"BBBBBBBBBBBBB3 : "<<r;
 
-        if(i==2)
-            re/=d;
-        else
-            re*=d;
 
-    }
+    re=r*data.Value[0].toDouble()*data.Value[1].toDouble()
+            *data.Value[2].toDouble()*data.Value[3].toDouble()
+            /data.SubValue.first().toDouble();
 
 
     return re;
@@ -1123,24 +1246,67 @@ bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrder
     return bRe;
 }
 
-int Action::checkItemCount(QString sGameItemSid)
+QPair<int,int> Action::getItemCount(QString sGameItemSid,bool bQuery)
 {
 
-    QVariantMap in;
-    in["ASC"]="Sid";
-    in["GameItemSid"]=sGameItemSid;
-    QVariantList listOut;
+    getItemCount(bQuery);
 
+    QPair<int ,int > re={0,0};
+
+    if(m_listItemCount.length()<=0)
+        return re;
+
+    foreach(DataItemCount v ,m_listItemCount)
+    {
+        if(v.GameItemSid == sGameItemSid)
+        {
+            re.first=v.TotalSell;
+
+            re.second=v.TotalCount;
+        }
+    }
+
+    return re;
+}
+
+QList<DataItemCount> Action::getItemCount(bool bQuery)
+{
+    QVariantMap tmp;
+    QVariantList listTmp;
     QString sError;
 
-    action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
+    if(bQuery || m_listItemCount.length()<1)
+    {
+        action(ACT::QUERY_ITEM_COUNT,tmp,listTmp,sError);
 
-    if(listOut.length()<=0)
-        return false;
+        m_listItemCount.clear();
 
-    DataItemCount item(listOut.last().toMap());
+        foreach(QVariant v,listTmp)
+        {
+            m_listItemCount.append(DataItemCount(v.toMap()));
+        }
+    }
 
-    return item.TotalCount-item.TotalSell;
+
+    return m_listItemCount;
+}
+
+QString Action::findGameSid(QString sGameItemSid,bool bQuery)
+{
+    //GameCount、orderData 沒寫入game sid
+    getGameItem(bQuery);
+
+
+    for(int i=0;i<m_listGameItem.length();i++)
+    {
+        DataGameItem v =m_listGameItem.at(i);
+
+        if(v.Sid==sGameItemSid)
+            return v.Sid;
+    }
+
+    return "";
+
 }
 
 void Action::clearCacheData(int iApi)

@@ -236,7 +236,13 @@ bool LayerSearchCustomer::checkSearch(CustomerData data)
     foreach(QString v, listKey)
     {
         int iOk = 0;
-        QString dateTime=QDateTime::fromString("yyyyMMddhhmmss").toString("yyyy/MM/dd hh:mm:ss");
+        QString dateTime=QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss").toString("yyyy/MM/dd hh:mm:ss");
+
+        QString Vip="一般";
+        if(data.Vip=="1")
+            Vip="VIP";
+
+        QString sGroup=ACTION.getCustomerClass(data.Class).Name;
 
         QString sKey = v.toUpper().trimmed();
         //  if(data["Name"].toString().indexOf(m_sSearchKey,Qt::CaseInsensitive)>=0)
@@ -251,6 +257,10 @@ bool LayerSearchCustomer::checkSearch(CustomerData data)
             iOk =1;
         else if(dateTime.toUpper().contains(sKey))
             iOk =1;
+        else if(Vip.toUpper().contains(sKey))
+            iOk =1;
+        else if(sGroup.toUpper().contains(sKey))
+            iOk = 1;
 
         listOk.append(iOk);
     }

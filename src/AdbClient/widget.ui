@@ -128,7 +128,7 @@ background-color:gray;
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>6</number>
+            <number>7</number>
            </property>
            <widget class="StageHomePage" name="pageHome"/>
            <widget class="StageCustomerService" name="pageService">
@@ -157,6 +157,7 @@ background-color:gray;
             </property>
            </widget>
            <widget class="StageTest" name="page"/>
+           <widget class="QWidget" name="pagePreLoad"/>
           </widget>
          </item>
         </layout>

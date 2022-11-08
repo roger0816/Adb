@@ -35,7 +35,9 @@ void DialogBulletinEdit::setData(QVariantMap data, QString sName)
 {
     m_data = data;
 
-    ui->cbTop->setChecked(m_data["Top"].toBool());
+    bool bIsTop = m_data["Type"].toInt()==0;
+
+    ui->cbTop->setChecked(bIsTop);
 
     ui->txTitle->setText(m_data["Title"].toString());
 
@@ -57,7 +59,12 @@ void DialogBulletinEdit::setData(QVariantMap data, QString sName)
 
 QVariantMap DialogBulletinEdit::data()
 {
-    m_data["Top"] = ui->cbTop->isChecked();
+    int iType=1;
+
+    if(ui->cbTop->isChecked())
+        iType=0;
+
+    m_data["Type"] = iType;
     m_data["Title"] = ui->txTitle->text().trimmed();
     m_data["Content"] = ui->txContent->toPlainText();
     // m_data["StartTime"] = ui->dateStart->dateTime().toString("yyyyMMddhhmmss");

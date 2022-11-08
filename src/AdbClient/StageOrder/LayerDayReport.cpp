@@ -151,7 +151,15 @@ void LayerDayReport::refreshTb()
             if(data.Step.toInt()>=1)
             {
 
-                checkMoney(iRow,data,customer);
+                int iNtdCost = data.Money.first().toInt();
+
+                int iNtdPrime = data.Money[1].toInt();
+
+                ui->tb->setItem(iRow,11,UI.tbItem(iNtdCost));
+                ui->tb->setItem(iRow,13,UI.tbItem(iNtdPrime));
+                ui->tb->setItem(iRow,14,UI.tbItem(iNtdCost-iNtdPrime));
+
+                // checkMoney(iRow,data,customer);
 
             }
 
@@ -361,22 +369,25 @@ void LayerDayReport::on_tb_cellClicked(int , int )
 
 void LayerDayReport::delayRefresh()
 {
-     ui->tb->hideColumn(8);
-     ui->tb->hideColumn(10);
-     ui->tb->hideColumn(11);
-     ui->tb->hideColumn(12);
-     ui->tb->hideColumn(13);
-     ui->tb->hideColumn(14);
+    ui->tb->hideColumn(8);
+    ui->tb->hideColumn(10);
+    ui->tb->hideColumn(11);
+    ui->tb->hideColumn(12);
+    ui->tb->hideColumn(13);
+    ui->tb->hideColumn(14);
+
+    qDebug()<<"lv : "<<ACTION.m_currentUser.Lv;
+
     if(ACTION.m_currentUser.Lv>=USER_LV::_LV3)
     {
-       ui->tb->showColumn(8);
+        ui->tb->showColumn(8);
     }
 
-    else if(ACTION.m_currentUser.Lv>=USER_LV::_LV4)
+    if(ACTION.m_currentUser.Lv>=USER_LV::_LV4)
     {
         ui->tb->showColumn(10);
         ui->tb->showColumn(11);
-        ui->tb->showColumn(12);
+        //   ui->tb->showColumn(12);
         ui->tb->showColumn(13);
         ui->tb->showColumn(14);
     }
@@ -388,7 +399,7 @@ void LayerDayReport::delayRefresh()
 void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer)
 {
 
-    DataRate rate=ACTION.costRate(order.ExRateSid,false);
+    DataRate rate=ACTION.costRate(order.ExRateSid,true);
 
     //cost
 
@@ -399,7 +410,17 @@ void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer
 
     double iCost = order.Cost.toDouble()*rate.listValue().at(idx).toDouble();
 
-    ui->tb->setItem(iRow,11,UI.tbItem(QString::number(iCost,'f',2),GlobalUi::_TOOLTIP));
+    QStringList listTmp = QString::number(iCost).split(".");
+
+    int cost = listTmp.first().toInt();
+
+    if(listTmp.length()>1 && listTmp.last().toInt()>0)
+    {
+        cost+=1;
+    }
+
+
+    ui->tb->setItem(iRow,11,UI.tbItem(QString::number(cost),GlobalUi::_TOOLTIP));
 
     //primte
 

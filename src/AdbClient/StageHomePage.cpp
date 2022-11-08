@@ -8,9 +8,89 @@ StageHomePage::StageHomePage(QWidget *parent) :
     ui->setupUi(this);
 
     ui->tabWidget->setCurrentIndex(0);
+
+    ui->wPic->setReadOnly(true);
+
+    ui->wPic->setNoButton();
+
+    ui->wFn->hide();
+
+    connect(ui->btn0,&QPushButton::clicked,ui->wPic,&ItemPic::slotSetPic);
+    connect(ui->btn1,&QPushButton::clicked,ui->wPic,&ItemPic::slotClear);
+    connect(ui->btn2,&QPushButton::clicked,ui->wPic,&ItemPic::slotClip);
+
+    connect(ui->btnSend,&QPushButton::clicked,this,&StageHomePage::slotSavePic);
+
 }
 
 StageHomePage::~StageHomePage()
 {
     delete ui;
 }
+
+
+void StageHomePage::showEvent(QShowEvent *)
+{
+    int iTimer= 300;
+
+//    if(m_bFirstRun)
+//    {
+//        iTimer=500;
+//        m_bFirstRun=false;
+//    }
+
+
+    QTimer::singleShot(iTimer,this,[=]()
+    {
+
+    QVariantMap in;
+    QVariantList listOut;
+    in["Type"]=2;
+    QString sError;
+    ACTION.action(ACT::QUERY_BULLETIN,in,listOut,sError);
+    ui->wPic->slotClear();
+    if(listOut.length()>0)
+    {
+        QString sPicMd5 = listOut.last().toMap()["Content"].toString();
+        QVariant inPic,outPic;
+
+        ui->wPic->setMd5(sPicMd5);
+
+    }
+
+    });
+}
+
+void StageHomePage::on_btnFn_clicked()
+{
+
+    ui->wFn->setVisible(ui->btnFn->isChecked());
+
+}
+
+
+void StageHomePage::slotSavePic()
+{
+    QVariantMap in,data;
+    in["Type"]=2;
+    QString sError;
+    ACTION.action(ACT::QUERY_BULLETIN,in,data,sError);
+
+
+    data["UserSid"]=ACTION.m_currentUser.Sid;
+    data["Type"]=2;
+    data["Title"]="首頁圖更新";
+    data["Content"]=ui->wPic->uploadPic();
+    QVariantMap tmp;
+    ACTION.action(ACT::ADD_BULLETIN,data,tmp,sError);
+
+
+
+}
+
+
+void StageHomePage::on_tabWidget_currentChanged(int index)
+{
+    ui->wPic->setVisible(index==0);
+}
+

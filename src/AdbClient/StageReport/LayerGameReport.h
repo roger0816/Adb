@@ -32,7 +32,6 @@ private:
 private slots:
     void slotBtnDate(int iId);
 
-    void slotGameReport();
 
 };
 

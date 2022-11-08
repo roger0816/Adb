@@ -194,8 +194,10 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
             sSub+="  WHERE ";
         else
             sSub+=" AND ";
-
-        sSub+= sKey+" =? ";
+        if(sKey.split(" ").length()<=1)
+            sSub+= sKey+" =? ";
+        else
+            sSub+= sKey+" ?";   //處理自帶 >= <= 或like
         iCount++;
     }
 
@@ -460,7 +462,7 @@ void CSqlClass::createTableSqlite()
     sql.exec("CREATE TABLE 'Bulletin' ( \
              'Sid'	INTEGER,            \
              'UserSid'	INTEGER,        \
-             'Top'	INTEGER,        \
+             'Type'	INTEGER,        \
              'UpdateTime'	TEXT,       \
              'EndTime'	TEXT,       \
              'Title'	TEXT,           \
@@ -614,8 +616,10 @@ void CSqlClass::createTableSqlite()
              'Sid'	INTEGER,                    \
              'Name'	TEXT,                       \
              'Id'	TEXT,                       \
+            'Currency'	TEXT,                       \
              'UpdateTime'	TEXT,               \
              'Value'	TEXT,                   \
+             'SubValue'	TEXT,                   \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
              );");
 

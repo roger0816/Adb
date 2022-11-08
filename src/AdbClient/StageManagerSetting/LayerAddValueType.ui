@@ -41,7 +41,7 @@
          <enum>QAbstractItemView::SelectRows</enum>
         </property>
         <attribute name="horizontalHeaderDefaultSectionSize">
-         <number>100</number>
+         <number>90</number>
         </attribute>
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
@@ -58,12 +58,12 @@
         </column>
         <column>
          <property name="text">
-          <string>成本(台幣)</string>
+          <string>匯率</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>折扣</string>
+          <string>成本(台幣)</string>
          </property>
         </column>
         <column>
@@ -73,17 +73,12 @@
         </column>
         <column>
          <property name="text">
-          <string>刷卡匯率</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>信用卡回饋</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>買卡折扣</string>
+          <string>折扣</string>
          </property>
         </column>
         <column>

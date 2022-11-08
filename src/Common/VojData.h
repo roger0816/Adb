@@ -909,7 +909,52 @@ struct DataItemCount :public DataObj
 
 
 
+struct DataPayType :public DataObj
+{
+    DataPayType(){}
 
+    DataPayType(QVariantMap data)
+    {
+        setData(data);
+
+        Value = data["Value"].toString().split(",");
+
+        while(Value.length()<4)
+            Value.append("");
+
+        SubValue =data["SubValue"].toString().split(",");
+
+        Currency =data["Currency"].toString();
+
+    }
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re =DataObj::data();
+
+        while(Value.length()<4)
+            Value.append("");
+
+        re["Value"] =Value.join(",");
+
+        re["SubValue"] =SubValue.join(",");
+
+        re["Currency"] =Currency;
+
+        return re;
+    }
+
+    QStringList Value={"1","1","1","1"};
+
+    QString Currency;
+
+    QStringList SubValue={"1"};
+};
 
 
 

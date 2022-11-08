@@ -10,7 +10,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 
-#define ADP_VER "v1.01.1031_2"
+#define ADP_VER "v1.01.1031_6"
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;
@@ -128,7 +128,7 @@ enum _KEY
     QUERY_PRIMERATE=2531,
 
     UPLOAD_PIC=2601,
-    QUERY_PIC=2603,
+    QUERY_PIC=2631,
 
     ADD_ITEM_COUNT=2701,
     EDIT_ITEM_COUNT,

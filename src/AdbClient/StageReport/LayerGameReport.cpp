@@ -6,17 +6,33 @@ LayerGameReport::LayerGameReport(QWidget *parent) :
     ui(new Ui::LayerGameReport)
 {
     ui->setupUi(this);
-    m_btns.addButton(ui->btnMonth,0);
-    m_btns.addButton(ui->btnDay,1);
 
-    connect(&m_btns,SIGNAL(idClicked(int)),this,SLOT(slotBtnDate(int)));
+    ui->wTypeArea->hide();
+
+    ui->stackDate->setCurrentIndex(1);
 
     ui->dateEdit->setDateTime(GLOBAL.dateTimeUtc8());
 
-
-    connect(ui->btnGameReport,&QPushButton::click,this,&LayerGameReport::slotGameReport);
+    m_btns.addButton(ui->btnMonth,0);
+    m_btns.addButton(ui->btnDay,1);
 
     ui->tb->setModel(&m_model);
+
+
+    connect(&m_btns,SIGNAL(idClicked(int)),this,SLOT(slotBtnDate(int)));
+
+    connect(ui->btnClear,&QPushButton::clicked,this,[=](){
+        ui->lineEdit->clear();
+    });
+
+
+    connect(ui->cbType,QOverload<int>::of(&QComboBox::currentIndexChanged),[=](){refresh();});
+
+    connect(ui->dateEdit,QOverload<const QDate&>::of(&QDateTimeEdit::dateChanged),[=](){refresh();});
+
+    connect(ui->lineEdit,&QLineEdit::textChanged,[=](){refresh();});
+
+
 
 }
 
@@ -27,6 +43,11 @@ LayerGameReport::~LayerGameReport()
 
 void LayerGameReport::refresh()
 {
+    if(m_btns.checkedId()<0)
+        return;
+
+    bool bIsMonth = ui->btnMonth->isChecked();
+    m_model.updateData(bIsMonth,ui->cbType->currentIndex(),ui->dateEdit->dateTime(),ui->lineEdit->text().trimmed());
 
 }
 
@@ -45,11 +66,7 @@ void LayerGameReport::slotBtnDate(int iId)
         ui->dateEdit->setCurrentSection(QDateTimeEdit::DaySection);
     }
 
-
-}
-
-
-void LayerGameReport::slotGameReport()
-{
     refresh();
 }
+
+

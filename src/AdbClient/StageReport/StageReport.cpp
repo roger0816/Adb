@@ -15,9 +15,7 @@ StageReport::StageReport(QWidget *parent) :
 
     m_btns.addButton(ui->btn3,3);
 
-    m_btns.addButton(ui->btn4,4);
-
-
+    ui->btn3->hide();
 
     connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
 
@@ -25,6 +23,8 @@ StageReport::StageReport(QWidget *parent) :
     ui->stackedWidget->setCurrentIndex(0);
 
     ui->page0->setEditMode(true);
+
+
 
 }
 

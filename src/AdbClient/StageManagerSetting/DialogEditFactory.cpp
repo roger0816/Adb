@@ -27,6 +27,8 @@ void DialogEditFactory::setData(QVariantMap data)
 
     QStringList listPaySid = GLOBAL.toList(data["PayTypeSid"].toString());
 
+
+
     CListPair listPaydata =ACTION.getAddValueType(true);
 
     m_listCbData = listPaydata.listSecond();

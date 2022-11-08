@@ -156,7 +156,7 @@ border-width: 0px;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>人員績效表</string>
+            <string>人員績效</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -175,7 +175,7 @@ border-width: 0px;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>訂單分析表</string>
+            <string>商品分析</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -194,33 +194,7 @@ border-width: 0px;
             </sizepolicy>
            </property>
            <property name="text">
-            <string>銷售統計表</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="flat">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="Line" name="line_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="btn4">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>銷售分析圖</string>
+            <string>銷售統計</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -249,11 +223,11 @@ border-width: 0px;
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="LayerSchedule" name="page0"/>
         <widget class="LayerUserReport" name="page1"/>
-        <widget class="QWidget" name="page2"/>
+        <widget class="LayerGameReport" name="page2"/>
         <widget class="QWidget" name="page3"/>
         <widget class="QWidget" name="page4"/>
        </widget>
@@ -274,6 +248,12 @@ border-width: 0px;
    <class>LayerUserReport</class>
    <extends>QWidget</extends>
    <header>LayerUserReport.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerGameReport</class>
+   <extends>QWidget</extends>
+   <header>LayerGameReport.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

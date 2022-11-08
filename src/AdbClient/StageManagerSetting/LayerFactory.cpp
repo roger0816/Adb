@@ -29,6 +29,8 @@ void LayerFactory::on_btnFactoryEdit_clicked()
 
     QVariantMap data = m_listFactory.at(iRow).toMap();
 
+
+
     DialogEditFactory factory;
 
     factory.setData(data);
@@ -120,7 +122,16 @@ void LayerFactory::refresh()
 
         QStringList listSid = GLOBAL.toList(m_listFactory.at(i).toMap()["PayTypeSid"].toString());
 
+
         QStringList listPayType = GLOBAL.mapping(listPay,listSid);
+
+        if(i==3)
+        {
+            qDebug()<<"AAAAAAAAAAAAAAAA : "<<listSid;
+
+             qDebug()<<"AAAAAAAAAAAAAAAA : "<<listPay;
+            qDebug()<<"AAAAAAAAAAAAAAAA : "<<listPayType;
+        }
 
         ui->tbFactory->setItem(i,2,UI.tbItem(listPayType.join(","),GlobalUi::_TOOLTIP));
 

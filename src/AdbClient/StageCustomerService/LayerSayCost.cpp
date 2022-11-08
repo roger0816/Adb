@@ -188,11 +188,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     m_primeRate = ACTION.primeRate(m_order.PrimeRateSid,true);
 
 
-    if(m_order.Sid=="")
-    {
-        m_order.ExRateSid = m_costRate.Sid;
-        m_order.PrimeRateSid = m_primeRate.Sid;
-    }
+
 }
 
 void LayerSayCost::setReadOnly()
@@ -271,7 +267,10 @@ void LayerSayCost::refreshInfo()
 
         QSpinBox *sp = new QSpinBox(this);
 
-        int iTotalItem = ACTION.checkItemCount(DataGameItem(data).Sid);
+        QPair<int ,int > tmp =  ACTION.getItemCount(DataGameItem(data).Sid);
+;
+
+        int iTotalItem = tmp.second-tmp.first;
 
         sp->setRange(1,iTotalItem);
 
@@ -602,7 +601,8 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
         else
         {
 
-            int iCount  =ACTION.checkItemCount(item.Sid);
+            QPair<int,int> tmp = ACTION.getItemCount(item.Sid);
+            int iCount  =tmp.second-tmp.first;
 
             if(iCount>0)
                 ui->tbGameItem->setItem(iRow,0,UI.tbItem("加入",GlobalUi::_BUTTON));
@@ -886,8 +886,9 @@ void LayerSayCost::on_btnSayOk_clicked()
         m_order.Owner="";
         // m_order.Sid="";
         m_order.Note0[0] = ui->txNote1->toPlainText();
-        m_order.User[0] = ACTION.m_currentUser.Sid;
+
         m_order.Bouns = QString::number(m_iBouns,'f',2);
+        m_order.User[0] = ACTION.m_currentUser.Sid;
         m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
         m_order.Step="0";
     }

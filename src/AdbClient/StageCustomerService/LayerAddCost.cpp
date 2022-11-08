@@ -22,7 +22,10 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     ui->sb->setValue(0);
 
+    ui->wPic0->slotClear();
 
+
+    ui->wPic1->slotClear();
 
     m_rate = ACTION.primeRate("",true);
 

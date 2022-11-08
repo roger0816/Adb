@@ -8,6 +8,7 @@ HEADERS += \
     $$PWD/CSqlClass.h \
     $$PWD/Common.h \
     $$PWD/DEF.h \
+    $$PWD/DataProviderAdp.h \
     $$PWD/Query.h \
     $$PWD/QueryObj.h \
     $$PWD/VojData.h
@@ -16,6 +17,7 @@ SOURCES += \
     $$PWD/Action.cpp \
     $$PWD/ActionObj.cpp \
     $$PWD/CSqlClass.cpp \
+    $$PWD/DataProviderAdp.cpp \
     $$PWD/Query.cpp \
     $$PWD/QueryObj.cpp \
     $$PWD/common.cpp

@@ -14,9 +14,21 @@ LayerUserReport::LayerUserReport(QWidget *parent) :
     m_btns.addButton(ui->btnMonth,0);
     m_btns.addButton(ui->btnDay,1);
 
+    ui->tb->setModel(&m_model);
+
+
     connect(&m_btns,SIGNAL(idClicked(int)),this,SLOT(slotBtnDate(int)));
 
-    ui->tb->setModel(&m_model);
+    connect(ui->btnClear,&QPushButton::clicked,this,[=](){
+        ui->lineEdit->clear();
+    });
+
+
+    connect(ui->cbType,QOverload<int>::of(&QComboBox::currentIndexChanged),[=](){refresh();});
+
+    connect(ui->dateEdit,QOverload<const QDate&>::of(&QDateTimeEdit::dateChanged),[=](){refresh();});
+
+    connect(ui->lineEdit,&QLineEdit::textChanged,[=](){refresh();});
 
 
 
@@ -33,7 +45,7 @@ void LayerUserReport::refresh()
         return;
 
     bool bIsMonth = ui->btnMonth->isChecked();
-    m_model.updateData(bIsMonth,ui->cbType->currentIndex(),ui->dateEdit->dateTime(),"");
+    m_model.updateData(bIsMonth,ui->cbType->currentIndex(),ui->dateEdit->dateTime(),ui->lineEdit->text().trimmed());
 }
 
 void LayerUserReport::slotBtnDate(int iId)
@@ -57,20 +69,9 @@ void LayerUserReport::slotBtnDate(int iId)
 }
 
 
-void LayerUserReport::on_btnUserReport_clicked()
-{
-    refresh();
-}
 
 
-void LayerUserReport::on_dateEdit_dateChanged(const QDate &date)
-{
-     refresh();
-}
 
 
-void LayerUserReport::on_cbType_currentIndexChanged(int index)
-{
-     refresh();
-}
+
 

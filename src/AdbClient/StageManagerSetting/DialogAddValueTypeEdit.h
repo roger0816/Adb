@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QDoubleSpinBox>
 #include "GlobalUi.h"
+#include "Global.h"
 #include <QPair>
 namespace Ui {
 class DialogAddValueTypeEdit;
@@ -23,9 +24,13 @@ public:
 
     void setRate(QStringList sName,QStringList sRate);
 
-    void setData(QStringList list);
+   // void setData(QStringList list);
 
-    QStringList data();
+    void setData(QVariantMap data);
+
+  //  QStringList data();
+
+    QVariantMap data();
 
 private slots:
     void on_btnCancel_clicked();
@@ -47,11 +52,11 @@ private:
 
     QList<QDoubleSpinBox*> m_listItem;
 
-    QStringList m_listData;
 
     QStringList m_listRateName;
 
     QStringList m_listRate;
+
 
     double m_iTotal;
 

@@ -11,6 +11,9 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
+
+
+
     QFile file(":/style.qss");
 
     if(file.open(QIODevice::ReadOnly))
@@ -33,6 +36,8 @@ Widget::Widget(QWidget *parent)
     m_btns.addButton(ui->btnAccount,5);
     m_btns.addButton(ui->btnTest,6);
 
+
+
     for(int i=0;i<m_btns.buttons().length();i++)
     {
         m_btns.button(i)->setEnabled(false);
@@ -42,7 +47,7 @@ Widget::Widget(QWidget *parent)
     connect(&m_btns,SIGNAL(buttonClicked(int)),this,SLOT(slotPage(int)));
 
 
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentWidget(ui->pagePreLoad);
 
     UI.m_loading = new ItemMiniLoadbar(this);
 
@@ -61,6 +66,13 @@ void Widget::slotPage(int iIdx)
 {
 
     ui->stackedWidget->setCurrentIndex(iIdx);
+
+    if(ui->stackedWidget->currentWidget()==ui->pageService)
+    {
+        ui->pageService->changePage(0);
+    }
+
+
 }
 
 
@@ -179,12 +191,22 @@ void Widget::on_btnLogout_clicked()
 
 void Widget::slotLogin()
 {
-    ACTION.reQuerty();
+    qDebug()<<"login ";
+
 
     ACTION.setStartSyanc(true);
 
-    checkUserLv();
+    QTimer::singleShot(1100,[=]()
+    {
+        ACTION.reQuerty();
+        qDebug()<<"preload ok";
+        show();
+        qDebug()<<"main ui show";
 
-    show();
+        ui->stackedWidget->setCurrentIndex(0);
+          checkUserLv();
+    });
+
+
 }
 

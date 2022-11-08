@@ -38,6 +38,7 @@ SOURCES += \
     DialogLogin.cpp \
     DialogMsg.cpp \
     Global.cpp \
+    DataProviderAdp.cpp \
     GlobalUi.cpp \
     component/DialogObj.cpp \
     component/ItemClock.cpp \
@@ -97,6 +98,7 @@ HEADERS += \
     DialogLogin.h \
     DialogMsg.h \
     Global.h \
+    DataProviderAdp.h \
     GlobalUi.h \
     component/DialogObj.h \
     component/ItemClock.h \

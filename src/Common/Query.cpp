@@ -197,7 +197,7 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::ADD_BULLETIN)
     {
 
-        bOk = m_sql.insertTb(SQL_TABLE::Bulletin(),data.dData,sError);
+        bOk = m_sql.insertTb(SQL_TABLE::Bulletin(),data.dData,sError,true);
         sOkMsg = "公告新增完成";
     }
 

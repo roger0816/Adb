@@ -39,6 +39,8 @@ void LayerCustomer::on_btnAdd_clicked()
 
     int iRet = dialog.exec();
 
+
+
     if(iRet==1)
     {
         QVariantMap data = dialog.data();
@@ -63,6 +65,9 @@ void LayerCustomer::on_btnAdd_clicked()
 
 void LayerCustomer::refresh()
 {
+    ui->btnEdit->setEnabled(false);
+
+
     ACTION.reQuerty();
 
     QString sError;
@@ -133,7 +138,7 @@ void LayerCustomer::on_btnEdit_clicked()
     DialogCustomerEdit dialog;
 
     QString sError;
-   #if 0
+#if 0
     QVariantList in,outClass,outGame,outGameInfo;
 
 
@@ -145,11 +150,12 @@ void LayerCustomer::on_btnEdit_clicked()
 
     dialog.setData(outClass,outGame,outGameInfo,m_listData.at(ui->tb->currentRow()).toMap());
 #else
-     dialog.setData(CustomerData(m_listData.at(ui->tb->currentRow()).toMap()).Sid);
+    dialog.setData(CustomerData(m_listData.at(ui->tb->currentRow()).toMap()).Sid);
 
 #endif
 
     int iRet = dialog.exec();
+
 
     if(iRet==1)
     {
@@ -201,6 +207,8 @@ void LayerCustomer::on_tb_cellClicked(int row, int column)
         dialog.setCustomer(CustomerData(v));
 
         dialog.exec();
+
+
     }
 }
 

@@ -21,6 +21,7 @@ StageHomePage::StageHomePage(QWidget *parent) :
 
     connect(ui->btnSend,&QPushButton::clicked,this,&StageHomePage::slotSavePic);
 
+
 }
 
 StageHomePage::~StageHomePage()
@@ -31,16 +32,11 @@ StageHomePage::~StageHomePage()
 
 void StageHomePage::showEvent(QShowEvent *)
 {
-    int iTimer= 300;
 
-//    if(m_bFirstRun)
-//    {
-//        iTimer=500;
-//        m_bFirstRun=false;
-//    }
+    ui->btnFn->setVisible(ACTION.m_currentUser.Lv>=USER_LV::_LV3);
 
 
-    QTimer::singleShot(iTimer,this,[=]()
+    QTimer::singleShot(300,this,[=]()
     {
 
     QVariantMap in;

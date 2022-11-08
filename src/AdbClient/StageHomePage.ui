@@ -132,7 +132,7 @@
               <item>
                <widget class="QLabel" name="label">
                 <property name="text">
-                 <string>  寬:高=10:1</string>
+                 <string>  寬:高=6:1</string>
                 </property>
                </widget>
               </item>

@@ -32,7 +32,7 @@
    <item row="0" column="0">
     <widget class="QWidget" name="wBg" native="true">
      <property name="styleSheet">
-      <string notr="true">font: 300 22px &quot;Microsoft JhengHei UI&quot;;</string>
+      <string notr="true"/>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
@@ -101,7 +101,6 @@
            </property>
            <property name="font">
             <font>
-             <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -117,7 +116,6 @@
              <widget class="QWidget" name="widget_4" native="true">
               <property name="font">
                <font>
-                <pointsize>-1</pointsize>
                 <italic>false</italic>
                 <bold>false</bold>
                </font>
@@ -247,7 +245,6 @@
           <widget class="QGroupBox" name="groupBox_2">
            <property name="font">
             <font>
-             <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>
@@ -483,7 +480,7 @@
                         </size>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">font: 300 20px &quot;Microsoft JhengHei UI&quot;;</string>
+                        <string notr="true"/>
                        </property>
                        <property name="text">
                         <string>新增</string>
@@ -515,13 +512,12 @@
         </property>
         <property name="font">
          <font>
-          <pointsize>-1</pointsize>
           <italic>false</italic>
           <bold>false</bold>
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">font: 300 28px &quot;Microsoft JhengHei UI&quot;;</string>
+         <string notr="true"/>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <property name="spacing">
@@ -543,7 +539,6 @@
           <widget class="QPushButton" name="btnDel">
            <property name="font">
             <font>
-             <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>
             </font>

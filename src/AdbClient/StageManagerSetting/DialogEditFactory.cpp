@@ -48,7 +48,7 @@ void DialogEditFactory::setData(QVariantMap data)
 
     if(data["Sid"]=="")
     {
-        ui->lbTitle->setText("新增廠商");
+        ui->lbTitle->setText("新增訂單負責人");
     }
 
 }

@@ -32,7 +32,9 @@
    <item row="0" column="0">
     <widget class="QWidget" name="wBg" native="true">
      <property name="styleSheet">
-      <string notr="true">font: 20px &quot;Microsoft JhengHei UI&quot;;</string>
+      <string notr="true">/*
+font: 20px &quot;Microsoft JhengHei UI&quot;;
+*/</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <property name="leftMargin">
@@ -52,124 +54,7 @@
         <property name="currentIndex">
          <number>0</number>
         </property>
-        <widget class="QWidget" name="page0">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <property name="leftMargin">
-           <number>20</number>
-          </property>
-          <property name="topMargin">
-           <number>20</number>
-          </property>
-          <property name="rightMargin">
-           <number>20</number>
-          </property>
-          <property name="bottomMargin">
-           <number>20</number>
-          </property>
-          <property name="spacing">
-           <number>10</number>
-          </property>
-          <item row="1" column="0">
-           <widget class="QTableWidget" name="tb">
-            <property name="editTriggers">
-             <set>QAbstractItemView::NoEditTriggers</set>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-            <attribute name="horizontalHeaderDefaultSectionSize">
-             <number>140</number>
-            </attribute>
-            <attribute name="horizontalHeaderStretchLastSection">
-             <bool>true</bool>
-            </attribute>
-            <attribute name="verticalHeaderVisible">
-             <bool>false</bool>
-            </attribute>
-            <column>
-             <property name="text">
-              <string>訂單</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>編號</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>客群</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>名稱</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>等級</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>幣別</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>帳戶資訊</string>
-             </property>
-            </column>
-            <column>
-             <property name="text">
-              <string>建檔日期</string>
-             </property>
-            </column>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QGroupBox" name="groupBox">
-            <layout class="QHBoxLayout" name="horizontalLayout">
-             <item>
-              <widget class="QLineEdit" name="txSearch">
-               <property name="placeholderText">
-                <string>多條件符號&amp;</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnClear">
-               <property name="text">
-                <string>清除</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QPushButton" name="btnCheck">
-               <property name="text">
-                <string>查詢</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <spacer name="horizontalSpacer">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>40</width>
-                 <height>20</height>
-                </size>
-               </property>
-              </spacer>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
+        <widget class="LayerCustomer" name="page0"/>
         <widget class="QWidget" name="page1">
          <layout class="QGridLayout" name="gridLayout_4">
           <property name="leftMargin">
@@ -218,7 +103,6 @@ border: 1px solid #000000; }</string>
               <widget class="QWidget" name="widget_4" native="true">
                <property name="font">
                 <font>
-                 <pointsize>-1</pointsize>
                  <italic>false</italic>
                  <bold>false</bold>
                 </font>
@@ -422,7 +306,6 @@ background-color:gray;
               <widget class="QWidget" name="gbox0" native="true">
                <property name="font">
                 <font>
-                 <pointsize>-1</pointsize>
                  <italic>false</italic>
                  <bold>false</bold>
                 </font>
@@ -873,6 +756,12 @@ background-color:#3c78b4;
    <class>LayerAddCost</class>
    <extends>QWidget</extends>
    <header>LayerAddCost.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerCustomer</class>
+   <extends>QWidget</extends>
+   <header>LayerCustomer.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

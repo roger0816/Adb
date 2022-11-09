@@ -296,6 +296,46 @@ QString Global::userLvToStr(int iLv)
     return sLv;
 }
 
+//double Global::subFloat(double v, int f)
+//{
+//    double re;
+
+//    re = QString::number(v,'f',f).toDouble();
+
+//    return re;
+
+
+//    QStringList list = QString::number(v).split(".");
+
+//    if(list.length()<2)
+//    {
+//        return list.first().toInt();
+//    }
+
+//    QString s0=list.first();
+//    QString s1 = list.last();
+
+//    if(s1.toInt()==0 || s1.length()<=f)
+//    {
+//        return v;
+//    }
+
+
+//    if(f==0)
+//    {
+//        int iTmp=s0.toInt()+1;
+//        return iTmp;
+//    }
+//    else
+//    {
+//            //to do
+//    }
+
+
+
+//    return re;
+//}
+
 bool Global::checkSearch(QString sFilterStr, QVariantMap dTarget, bool caseNeedDiff)
 {
     if(sFilterStr.trimmed()=="")

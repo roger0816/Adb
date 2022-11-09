@@ -154,7 +154,7 @@
             <item>
              <widget class="QCheckBox" name="cbStep4">
               <property name="text">
-               <string>4主管確認</string>
+               <string>4待主管確認</string>
               </property>
               <property name="checked">
                <bool>true</bool>

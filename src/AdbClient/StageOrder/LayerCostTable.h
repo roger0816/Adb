@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "Global.h"
 #include "GlobalUi.h"
-
+#include <QDoubleSpinBox>
 
 namespace Ui {
 class LayerCostTable;
@@ -18,11 +18,13 @@ public:
     explicit LayerCostTable(QWidget *parent = nullptr);
     ~LayerCostTable();
 
-    GameList m_gameList;
+
+    QList<DataGameList> m_listGame;
+
+    QList<DataGameItem> m_currentItems;
 
     void showEvent(QShowEvent * ) override;
 
-    bool check(GameList::GameData data);
 
 private slots:
     void on_tbGame_cellPressed(int row, int);
@@ -35,8 +37,16 @@ private slots:
 
     void refreshGameList();
 
+    void slotTabCurrentChanged(int index);
+
+    void on_btnSaveText_clicked();
+
+    void on_txEdit_textChanged();
+
 private:
     Ui::LayerCostTable *ui;
+
+    QString trText();
 };
 
 #endif // LAYERCOSTTABLE_H

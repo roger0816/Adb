@@ -23,11 +23,7 @@ public:
     void init();
 
 private slots:
-    void on_btnCheck_clicked();
 
-    void on_btnClear_clicked();
-
-    void on_tb_cellClicked(int row, int column);
 
     void on_btnBack_clicked();
 
@@ -46,13 +42,9 @@ private:
 
     QVariantList m_listData;
 
-    bool checkSearch(CustomerData data);
 
-    QString m_sSearchKey="";
 
     int m_iIdx=-1;
-
-    void keyPressEvent(QKeyEvent *e) override;
 
     QString getLastGame(QString sCustomerId);
 

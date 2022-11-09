@@ -7,10 +7,6 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->tb->setColumnWidth(0,60);
-
-
-    ui->tb->setColumnWidth(7,60);
 
     //ui->stackedWidget->setCurrentIndex(0);
 
@@ -21,8 +17,14 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
 
     ui->pageOrder->m_bOrderMode=true;
 
+    connect(ui->page0,&LayerCustomer::into,[=](int iIdx)
+    {
+        m_iIdx = iIdx;
 
-    changePage(0);
+        changePage(1);
+    });
+
+  //  changePage(0);
 }
 
 LayerSearchCustomer::~LayerSearchCustomer()
@@ -33,67 +35,17 @@ LayerSearchCustomer::~LayerSearchCustomer()
 void LayerSearchCustomer::init()
 {
 
-    ui->stackedWidget->setCurrentWidget(ui->page0);
+    changePage(0);
 
-    QTimer::singleShot(50,[this](){ refresh(true); });
+    //ui->stackedWidget->setCurrentWidget(ui->page0);
+
+   // QTimer::singleShot(50,[this](){ refresh(true); });
 }
 
 void LayerSearchCustomer::refresh(bool bReQuery)
 {
     qDebug()<<"refresh serachCustomer";
 
-
-    QVariantList in;
-
-    QString sError;
-    if(bReQuery)
-        ACTION.action(ACT::QUERY_CUSTOMER,in,m_listData,sError);
-
-    qDebug()<<"CUSTOMER len : "<<m_listData.length();
-
-    ui->tb->setRowCount(0);
-
-    for(int i=0;i<m_listData.length();i++)
-    {
-        QVariantMap v = m_listData.at(i).toMap();
-
-        CustomerData data(v);
-
-        bool bCheck = checkSearch(data);
-
-        if(!bCheck)
-            continue;
-
-        int iIdx = ui->tb->rowCount();
-
-        ui->tb->setRowCount(iIdx+1);
-
-
-        ui->tb->setItem(iIdx,0,UI.tbItem("進入",GlobalUi::_BUTTON));
-
-        ui->tb->setItem(iIdx,1,UI.tbItem(data.Id));
-        qDebug()<<"data class : "<<data.Class;
-        QString sClassName = ACTION.getCustomerClass(data.Class).Name;
-        qDebug()<<"class 2 "<<sClassName;
-        ui->tb->setItem(iIdx,2,UI.tbItem(sClassName));
-
-        ui->tb->setItem(iIdx,3,UI.tbItem(data.Name));
-
-        QString sLv = GLOBAL.displayCustomerLv(data.Vip);
-
-        ui->tb->setItem(iIdx,4,UI.tbItem(sLv));
-
-        ui->tb->setItem(iIdx,5,UI.tbItem(data.Currency));
-
-        ui->tb->setItem(iIdx,6,UI.tbItem(data.PayInfo));
-
-        QDateTime date=QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss");
-
-        ui->tb->setItem(iIdx,7,UI.tbItem(date.date()));
-
-        //   ui->tb->setItem(iIdx,8,UI.tbItem("查詢",GlobalUi::_BUTTON));
-
-    }
 
 
 }
@@ -102,6 +54,7 @@ void LayerSearchCustomer::changePage(int iPage)
 {
     if(iPage<0 || m_iIdx<0 || iPage>=ui->stackedWidget->count())
         return;
+
 
 
     QVariantList tmp;
@@ -221,107 +174,34 @@ void LayerSearchCustomer::showEvent(QShowEvent *)
     QTimer::singleShot(50,[this](){ refresh(false); });
 }
 
-bool LayerSearchCustomer::checkSearch(CustomerData data)
-{
-    if(m_sSearchKey.trimmed()=="")
-        return true;
-
-    QStringList listKey = m_sSearchKey.split("&");
-
-
-    bool bRe = false;
-
-    QList<int> listOk;
-
-    foreach(QString v, listKey)
-    {
-        int iOk = 0;
-        QString dateTime=QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss").toString("yyyy/MM/dd hh:mm:ss");
-
-        QString Vip="一般";
-        if(data.Vip=="1")
-            Vip="VIP";
-
-        QString sGroup=ACTION.getCustomerClass(data.Class).Name;
-
-        QString sKey = v.toUpper().trimmed();
-        //  if(data["Name"].toString().indexOf(m_sSearchKey,Qt::CaseInsensitive)>=0)
-        //奇怪，Qt::CaseInsensitive 不起作用
-        if(data.Name.toUpper().contains(sKey))
-            iOk = 1;
-        else if(data.Id.toUpper().contains(sKey))
-            iOk =1;
-        else if(data.Currency.toUpper().contains(sKey))
-            iOk =1;
-        else if(data.PayInfo.toUpper().contains(sKey))
-            iOk =1;
-        else if(dateTime.toUpper().contains(sKey))
-            iOk =1;
-        else if(Vip.toUpper().contains(sKey))
-            iOk =1;
-        else if(sGroup.toUpper().contains(sKey))
-            iOk = 1;
-
-        listOk.append(iOk);
-    }
-
-    bRe = !listOk.contains(0);
-
-    return bRe;
-}
-
-void LayerSearchCustomer::keyPressEvent(QKeyEvent *e)
-{
-    if(e->key()==Qt::Key_Enter || e->key()==Qt::Key_Return)
-    {
-        on_btnCheck_clicked();
-    }
-}
 
 void LayerSearchCustomer::slotBack(int iPage)
 {
     changePage(iPage);
 }
 
-void LayerSearchCustomer::on_btnCheck_clicked()
-{
-    m_sSearchKey = ui->txSearch->text();
+//void LayerSearchCustomer::on_tb_cellClicked(int row, int column)
+//{
+//    if(row<0 || row>=m_listData.length())
+//        return;
 
-    refresh();
-}
+//    if(column==0)
+//    {
+//        m_iIdx = row;
 
+//        changePage(1);
+//    }
+//    else if(column==6)
+//    {
+//        QVariantMap v = m_listData.at(row).toMap();
 
-void LayerSearchCustomer::on_btnClear_clicked()
-{
-    ui->txSearch->setText("");
-    m_sSearchKey = ui->txSearch->text();
+//        DialogCustomerCostHistory dialog;
 
-    refresh(false);
-}
+//        dialog.setCustomer(CustomerData(v));
 
-
-void LayerSearchCustomer::on_tb_cellClicked(int row, int column)
-{
-    if(row<0 || row>=m_listData.length())
-        return;
-
-    if(column==0)
-    {
-        m_iIdx = row;
-
-        changePage(1);
-    }
-    else if(column==6)
-    {
-        QVariantMap v = m_listData.at(row).toMap();
-
-        DialogCustomerCostHistory dialog;
-
-        dialog.setCustomer(CustomerData(v));
-
-        dialog.exec();
-    }
-}
+//        dialog.exec();
+//    }
+//}
 
 
 void LayerSearchCustomer::on_btnBack_clicked()

@@ -571,6 +571,8 @@ struct DataGameList :public DataObj
 
     double GameRate;
 
+    QString SellNote; //價目表
+
     void setData(QVariantMap data)
     {
         DataObj::setData(data);
@@ -578,6 +580,8 @@ struct DataGameList :public DataObj
         Enable = data["Enable"].toBool();
 
         GameRate=data["GameRate"].toDouble();
+
+        SellNote = data["SellNote"].toString();
 
     }
 
@@ -588,6 +592,8 @@ struct DataGameList :public DataObj
         re["Enable"] = Enable;
 
         re["GameRate"] = QString::number(GameRate);
+
+        re["SellNote"] = SellNote;
 
         return re;
     }
@@ -760,6 +766,7 @@ struct DataRate :public DataObj
 };
 
 
+// old ,waitting delete it
 struct GameList
 {
 

@@ -149,10 +149,8 @@ void ModelGameReport::updateData(bool bIsMonth, int iType, QDateTime date, QStri
 
     m_bIsMonth = bIsMonth;
 
-    qDebug()<<"XXXXXXX : "<<m_bIsMonth<<" , "<<date<<" , "<<sFilterStr;
 
     m_dateTime = date;
-
 
 
     m_strFilter = sFilterStr;

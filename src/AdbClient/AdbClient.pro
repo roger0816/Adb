@@ -78,6 +78,7 @@ SOURCES += \
     StageReport/LayerSchedule.cpp \
     StageReport/StageReport.cpp \
     StageTest.cpp \
+    component/LayerTouchCheck.cpp \
     main.cpp \
     widget.cpp
 
@@ -138,6 +139,7 @@ HEADERS += \
     StageReport/LayerSchedule.h \
     StageReport/StageReport.h \
     StageTest.h \
+    component/LayerTouchCheck.h \
     widget.h
 
 FORMS += \

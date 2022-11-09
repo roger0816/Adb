@@ -7,6 +7,8 @@ StageCustomerService::StageCustomerService(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->page1->setEditType();
+
     m_btns.addButton(ui->btn0,0);
 
     m_btns.addButton(ui->btn1,1);

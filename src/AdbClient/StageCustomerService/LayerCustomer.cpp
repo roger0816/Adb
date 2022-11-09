@@ -7,7 +7,14 @@ LayerCustomer::LayerCustomer(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->tb->setColumnWidth(0,60);
+
     ui->tb->hideColumn(7);
+
+    ui->wEditArea->hide();
+
+    connect(ui->btnClear,&QPushButton::clicked,this,&LayerCustomer::slotClearSearch);
+
 }
 
 LayerCustomer::~LayerCustomer()
@@ -20,6 +27,13 @@ void LayerCustomer::init()
     ui->btnEdit->setEnabled(false);
 
     QTimer::singleShot(50,this,SLOT(refresh()));
+}
+
+void LayerCustomer::setEditType()
+{
+    ui->tb->hideColumn(0);
+
+    ui->wEditArea->setVisible(true);
 }
 
 void LayerCustomer::on_btnAdd_clicked()
@@ -85,26 +99,35 @@ void LayerCustomer::refresh()
 
         CustomerData data(v);
 
-        ui->tb->setRowCount(i+1);
+        bool bCheck = checkSearch(data);
 
-        ui->tb->setItem(i,0,UI.tbItem(data.Id));
+        if(!bCheck)
+            continue;
+
+        int iRow = ui->tb->rowCount();
+
+        ui->tb->setRowCount(iRow+1);
+
+        ui->tb->setItem(iRow,0,UI.tbItem("進入",GlobalUi::_BUTTON));
+
+
+        ui->tb->setItem(iRow,1,UI.tbItem(data.Id));
 
         QString sClassSid = ACTION.getCustomerClass(data.Class).Name;
 
-        ui->tb->setItem(i,1,UI.tbItem(sClassSid));
-        ui->tb->setItem(i,2,UI.tbItem(data.Name));
+        ui->tb->setItem(iRow,2,UI.tbItem(sClassSid));
+        ui->tb->setItem(iRow,3,UI.tbItem(data.Name));
 
         QString sLv="一般";
 
         if(data.Vip=="1")
             sLv="VIP";
 
-        ui->tb->setItem(i,3,UI.tbItem(sLv));
+        ui->tb->setItem(iRow,4,UI.tbItem(sLv));
 
-        ui->tb->setItem(i,4,UI.tbItem(data.Currency));
-        ui->tb->setItem(i,5,UI.tbItem(data.Money));
+        ui->tb->setItem(iRow,5,UI.tbItem(data.Currency));
+        ui->tb->setItem(iRow,6,UI.tbItem(data.Money,GlobalUi::_BUTTON));
 
-        ui->tb->setItem(i,6,UI.tbItem("查詢",GlobalUi::_BUTTON));
 
         QVariantMap in;
 
@@ -120,16 +143,75 @@ void LayerCustomer::refresh()
 
         QString sUserName = ACTION.getUser(data.UserSid).Name;
 
-        ui->tb->setItem(i,8,UI.tbItem(updatetime));
-        ui->tb->setItem(i,9,UI.tbItem(sUserName));
-        ui->tb->setItem(i,10,UI.tbItem(data.Note1));
+        ui->tb->setItem(iRow,7,UI.tbItem(updatetime));
+        ui->tb->setItem(iRow,8,UI.tbItem(sUserName));
+        ui->tb->setItem(iRow,9,UI.tbItem(data.Note1));
 
     }
 }
 
 void LayerCustomer::showEvent(QShowEvent *)
 {
+    init();
+}
 
+bool LayerCustomer::checkSearch(CustomerData data)
+{
+    QString searchKey = ui->txSearch->text();
+
+    if(searchKey.trimmed()=="")
+        return true;
+
+    QStringList listKey = searchKey.split("&");
+
+
+    bool bRe = false;
+
+    QList<int> listOk;
+
+    foreach(QString v, listKey)
+    {
+        int iOk = 0;
+        QString dateTime=QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss").toString("yyyy/MM/dd hh:mm:ss");
+
+        QString Vip="一般";
+        if(data.Vip=="1")
+            Vip="VIP";
+
+        QString sGroup=ACTION.getCustomerClass(data.Class).Name;
+
+        QString sKey = v.toUpper().trimmed();
+        //  if(data["Name"].toString().indexOf(m_sSearchKey,Qt::CaseInsensitive)>=0)
+        //奇怪，Qt::CaseInsensitive 不起作用
+        if(data.Name.toUpper().contains(sKey))
+            iOk = 1;
+        else if(data.Id.toUpper().contains(sKey))
+            iOk =1;
+        else if(data.Currency.toUpper().contains(sKey))
+            iOk =1;
+        else if(data.PayInfo.toUpper().contains(sKey))
+            iOk =1;
+        else if(dateTime.toUpper().contains(sKey))
+            iOk =1;
+        else if(Vip.toUpper().contains(sKey))
+            iOk =1;
+        else if(sGroup.toUpper().contains(sKey))
+            iOk = 1;
+
+        listOk.append(iOk);
+    }
+
+    bRe = !listOk.contains(0);
+
+    return bRe;
+}
+
+void LayerCustomer::keyPressEvent(QKeyEvent *e)
+{
+    if(e->key()==Qt::Key_Enter || e->key()==Qt::Key_Return)
+    {
+      //  on_btnCheck_clicked();
+    }
 }
 
 
@@ -198,7 +280,14 @@ void LayerCustomer::on_tb_cellClicked(int row, int column)
 
     ui->btnEdit->setEnabled(true);
 
-    if(column==6)
+
+
+    if(column==0)
+    {
+        emit into(row);
+    }
+
+    else if(column==6)
     {
         QVariantMap v = m_listData.at(row).toMap();
 
@@ -210,5 +299,24 @@ void LayerCustomer::on_tb_cellClicked(int row, int column)
 
 
     }
+}
+
+
+//void LayerCustomer::on_btnCheck_clicked()
+//{
+//    refresh();
+//}
+
+void LayerCustomer::slotClearSearch()
+{
+    ui->txSearch->clear();
+
+    refresh();
+}
+
+
+void LayerCustomer::on_txSearch_textChanged(const QString &arg1)
+{
+      refresh();
 }
 

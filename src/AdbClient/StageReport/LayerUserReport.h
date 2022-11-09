@@ -18,7 +18,6 @@ public:
     explicit LayerUserReport(QWidget *parent = nullptr);
     ~LayerUserReport();
 
-    void refresh();
 
 private:
     Ui::LayerUserReport *ui;
@@ -27,11 +26,13 @@ private:
 
     QButtonGroup m_btns;
 
+    void showEvent(QShowEvent *) override;
 
 
 private slots:
     void slotBtnDate(int iId);
 
+    void refresh();
 
 
 };

@@ -15,6 +15,8 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     setWindowTitle(" ");
 
+    m_loading->setLoading(false);
+
 //    setTabOrder(ui->txUser,ui->txPass);
 
 //    setTabOrder(ui->txPass,ui->btnLogin);
@@ -84,7 +86,6 @@ void DialogLogin::setVer(QString sVer)
 
 void DialogLogin::on_btnLogin_clicked()
 {
-
     ui->lbMsg->clear();
 
     QString sErrorMsg;

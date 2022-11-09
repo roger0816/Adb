@@ -7,6 +7,7 @@
 #include "Global.h"
 #include <QCloseEvent>
 #include <QBitmap>
+#include "ItemMiniLoadbar.h"
 
 namespace Ui {
 class DialogLogin;
@@ -43,6 +44,8 @@ signals:
 private:
     Ui::DialogLogin *ui;
 private:
+
+    ItemMiniLoadbar *m_loading=new ItemMiniLoadbar(this);
 
 };
 

@@ -6,7 +6,7 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include "ModelGameReport.h"
-
+#include <QShowEvent>
 
 namespace Ui {
 class LayerGameReport;
@@ -20,7 +20,9 @@ public:
     explicit LayerGameReport(QWidget *parent = nullptr);
     ~LayerGameReport();
 
-    void refresh();
+
+
+    void showEvent(QShowEvent *) override;
 
 private:
     Ui::LayerGameReport *ui;
@@ -31,7 +33,7 @@ private:
 
 private slots:
     void slotBtnDate(int iId);
-
+    void refresh();
 
 };
 

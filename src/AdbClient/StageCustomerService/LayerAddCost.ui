@@ -738,7 +738,7 @@ background-color:#3c78b4;
 }</string>
                     </property>
                     <property name="text">
-                     <string>復制內容</string>
+                     <string>復製內容</string>
                     </property>
                    </widget>
                   </item>

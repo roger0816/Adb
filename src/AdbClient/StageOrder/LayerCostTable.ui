@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>875</width>
-    <height>522</height>
+    <width>957</width>
+    <height>528</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,14 +99,14 @@
        </widget>
       </item>
       <item>
-       <widget class="QWidget" name="widget_2" native="true">
+       <widget class="QWidget" name="wBody" native="true">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,0,0" columnstretch="1,1">
+        <layout class="QGridLayout" name="gridLayout_3" rowstretch="1,0,0" columnstretch="1,1,0">
          <property name="leftMargin">
           <number>0</number>
          </property>
@@ -122,46 +122,7 @@
          <property name="spacing">
           <number>0</number>
          </property>
-         <item row="0" column="1" rowspan="3">
-          <widget class="QWidget" name="widget_5" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>200</width>
-             <height>200</height>
-            </size>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>輸入:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="txt1">
-              <property name="minimumSize">
-               <size>
-                <width>200</width>
-                <height>0</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>顯示:</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QTextEdit" name="txt2"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="0" column="0" rowspan="3">
+         <item row="0" column="0" rowspan="3" colspan="2">
           <widget class="QWidget" name="widget_4" native="true">
            <property name="minimumSize">
             <size>
@@ -169,7 +130,62 @@
              <height>200</height>
             </size>
            </property>
-           <layout class="QGridLayout" name="gridLayout_4">
+           <layout class="QGridLayout" name="gridLayout_4" columnstretch="1,2">
+            <item row="0" column="1">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>商品: </string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QTableWidget" name="tbGameItem">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
+              <attribute name="horizontalHeaderDefaultSectionSize">
+               <number>115</number>
+              </attribute>
+              <column>
+               <property name="text">
+                <string>商品名稱</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>新台幣</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>美金</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>港幣</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>人民幣</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>林吉特</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>新加坡元</string>
+               </property>
+              </column>
+             </widget>
+            </item>
             <item row="0" column="0">
              <widget class="QLabel" name="label_4">
               <property name="text">
@@ -177,15 +193,144 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>商品:</string>
+            <item row="2" column="1">
+             <widget class="QWidget" name="widget_5" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>200</width>
+                <height>200</height>
+               </size>
               </property>
+              <layout class="QGridLayout" name="gridLayout_5" columnstretch="1">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item row="0" column="0" rowspan="2">
+                <widget class="QTabWidget" name="tabWidget">
+                 <property name="currentIndex">
+                  <number>2</number>
+                 </property>
+                 <widget class="QWidget" name="page0">
+                  <attribute name="title">
+                   <string>價目表</string>
+                  </attribute>
+                  <layout class="QGridLayout" name="gridLayout_8">
+                   <item row="1" column="1">
+                    <widget class="QPushButton" name="btnCopy">
+                     <property name="minimumSize">
+                      <size>
+                       <width>100</width>
+                       <height>33</height>
+                      </size>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>100</width>
+                       <height>33</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>複製文字</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <spacer name="verticalSpacer_2">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="0" column="0" rowspan="2">
+                    <widget class="QPlainTextEdit" name="txt"/>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="page1">
+                  <attribute name="title">
+                   <string>編輯</string>
+                  </attribute>
+                  <layout class="QGridLayout" name="gridLayout_6">
+                   <item row="1" column="1">
+                    <widget class="QPushButton" name="btnSaveText">
+                     <property name="text">
+                      <string>儲存</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <spacer name="verticalSpacer">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="0" column="0" rowspan="2">
+                    <widget class="QTextEdit" name="txEdit">
+                     <property name="placeholderText">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                 <widget class="QWidget" name="page2">
+                  <attribute name="title">
+                   <string>說明</string>
+                  </attribute>
+                  <layout class="QGridLayout" name="gridLayout_7">
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_2">
+                     <property name="text">
+                      <string>%表示聯動資料代號，
+ 例如:
+  %Item1  為商品1的名稱  
+  %USD1 為商品1的美金售價 
+ 其它
+ %User 為複製文字的人 
+ %Time 複製時的時間      </string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
-            <item row="1" column="0">
+            <item row="1" column="0" rowspan="2">
              <widget class="QTableWidget" name="tbGame">
+              <property name="maximumSize">
+               <size>
+                <width>240</width>
+                <height>16777215</height>
+               </size>
+              </property>
               <property name="editTriggers">
                <set>QAbstractItemView::NoEditTriggers</set>
               </property>
@@ -210,95 +355,7 @@
               </column>
              </widget>
             </item>
-            <item row="1" column="1">
-             <widget class="QTableWidget" name="tableWidget">
-              <property name="focusPolicy">
-               <enum>Qt::NoFocus</enum>
-              </property>
-              <property name="editTriggers">
-               <set>QAbstractItemView::NoEditTriggers</set>
-              </property>
-              <column>
-               <property name="text">
-                <string>名稱</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>售價</string>
-               </property>
-              </column>
-             </widget>
-            </item>
            </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="widget_3" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>60</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>60</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">
-QPushButton{
-font: 20px &quot;Microsoft JhengHei UI&quot;;
-
-
-}
-
-
-
-QPushButton{background-color: rgb(255, 255, 255);
-border-radius:10px;
-color: rgb(41,41,41);
-border: 1px solid #000000; }
-
-
-QPushButton:hover 
-{ 
-background-color: #55aaff; 
-border-style: outset; 
-border-width: 2px; 
-font: 700 18px &quot;Microsoft JhengHei UI&quot;; 
-}
-QPushButton:pressed { 
-border-style: outset; 
-border-width: 0px; 
-font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
-color:rgb(241,241,241);
-background-color:#3c78b4;
-}</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="0">
-          <widget class="QPushButton" name="btnCopy">
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>33</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>33</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>複製文字</string>
-           </property>
           </widget>
          </item>
         </layout>

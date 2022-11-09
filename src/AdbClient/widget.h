@@ -9,8 +9,9 @@
 #include <QButtonGroup>
 #include "DEF.h"
 #include "GlobalUi.h"
-
+#include "LayerTouchCheck.h"
 #include <QResizeEvent>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -41,8 +42,9 @@ private:
 
     void resizeEvent(QResizeEvent *) override;
 
-
+    LayerTouchCheck *m_touchCheck;
     void checkUserLv();
+
 
 };
 #endif // WIDGET_H

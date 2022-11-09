@@ -434,6 +434,7 @@ void CSqlClass::createTableSqlite()
              'Enable'	INTEGER NOT NULL, \
              'GameRate' TEXT,\
              'UpdateTime'	TEXT, \
+             'SellNote'	TEXT, \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
 

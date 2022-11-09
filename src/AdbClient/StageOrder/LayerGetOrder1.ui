@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>774</width>
+    <width>784</width>
     <height>521</height>
    </rect>
   </property>
@@ -234,7 +234,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>訂單沿誤</string>
+                <string>訂單延誤</string>
                </property>
                <property name="checkable">
                 <bool>true</bool>

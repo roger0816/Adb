@@ -31,20 +31,44 @@
    </property>
    <item row="0" column="0">
     <widget class="QWidget" name="wBg" native="true">
-     <layout class="QGridLayout" name="gridLayout_2">
-      <property name="leftMargin">
-       <number>20</number>
-      </property>
-      <property name="topMargin">
-       <number>20</number>
-      </property>
-      <property name="rightMargin">
-       <number>20</number>
-      </property>
-      <property name="bottomMargin">
-       <number>20</number>
-      </property>
-      <item row="0" column="0">
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QGroupBox" name="groupBox">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="txSearch">
+           <property name="placeholderText">
+            <string>多條件符號&amp;</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnClear">
+           <property name="text">
+            <string>清除</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QTableWidget" name="tb">
         <property name="font">
          <font>
@@ -66,6 +90,11 @@
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
         </attribute>
+        <column>
+         <property name="text">
+          <string>訂單</string>
+         </property>
+        </column>
         <column>
          <property name="text">
           <string>編號</string>
@@ -98,16 +127,6 @@
         </column>
         <column>
          <property name="text">
-          <string>消費紀錄</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>常用遊戲</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>建立時間</string>
          </property>
         </column>
@@ -123,8 +142,8 @@
         </column>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QWidget" name="widget" native="true">
+      <item>
+       <widget class="QWidget" name="wEditArea" native="true">
         <property name="minimumSize">
          <size>
           <width>0</width>

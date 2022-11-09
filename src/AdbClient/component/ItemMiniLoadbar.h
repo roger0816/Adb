@@ -40,7 +40,7 @@ private:
 
     QList<bool> m_list;
 
-    int m_iTimerMsec = 50;
+    int m_iTimerMsec = 100;
 
 private slots:
 

@@ -51,6 +51,11 @@ void LayerGameReport::refresh()
 
 }
 
+void LayerGameReport::showEvent(QShowEvent *)
+{
+     QTimer::singleShot(100,this, SLOT(refresh()));
+}
+
 void LayerGameReport::slotBtnDate(int iId)
 {
     ui->stackDate->setCurrentIndex(0);

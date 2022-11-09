@@ -16,6 +16,7 @@ LayerUserReport::LayerUserReport(QWidget *parent) :
 
     ui->tb->setModel(&m_model);
 
+    ui->tb->hideColumn(6);
 
     connect(&m_btns,SIGNAL(idClicked(int)),this,SLOT(slotBtnDate(int)));
 
@@ -46,6 +47,11 @@ void LayerUserReport::refresh()
 
     bool bIsMonth = ui->btnMonth->isChecked();
     m_model.updateData(bIsMonth,ui->cbType->currentIndex(),ui->dateEdit->dateTime(),ui->lineEdit->text().trimmed());
+}
+
+void LayerUserReport::showEvent(QShowEvent *)
+{
+    QTimer::singleShot(100,this,SLOT(refresh()));
 }
 
 void LayerUserReport::slotBtnDate(int iId)

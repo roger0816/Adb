@@ -53,6 +53,11 @@ Widget::Widget(QWidget *parent)
 
 
     UI.m_loading->hide();
+
+
+    m_touchCheck = new LayerTouchCheck(this);
+
+    m_touchCheck->hide();
 }
 
 Widget::~Widget()
@@ -69,7 +74,7 @@ void Widget::slotPage(int iIdx)
 
     if(ui->stackedWidget->currentWidget()==ui->pageService)
     {
-        ui->pageService->changePage(0);
+//        ui->pageService->changePage(0);
     }
 
 
@@ -123,6 +128,8 @@ void Widget::showEvent(QShowEvent *)
 void Widget::resizeEvent(QResizeEvent *)
 {
     UI.m_loading->resize(this->size());
+
+    m_touchCheck->resize(size());
 }
 
 void Widget::checkUserLv()

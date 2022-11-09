@@ -46,7 +46,7 @@ void ItemMiniLoadbar::setLoading(bool bIsLoading)
     m_bIsRun = bIsLoading;
 
     if(!m_bIsRun)
-        QTimer::singleShot(3000,this,SLOT(slotChangeEnaled()));
+        QTimer::singleShot(500,this,SLOT(slotChangeEnaled()));
     else
         slotChangeEnaled();
 
@@ -56,14 +56,18 @@ void ItemMiniLoadbar::timerEvent(QTimerEvent *)
 {
 
     //連續二次沒run 才中止，防止loading 不連續感
-    bool bRun = m_bIsRun;
 
-    if(m_list.last())
-        bRun= true;
 
     m_list.append(m_bIsRun);
     while(m_list.length()>3)
         m_list.pop_front();
+
+    bool bRun = m_bIsRun;
+
+
+    if(m_list.length()==1)
+        bRun = m_bIsRun;
+
 
 
     if(!bRun)

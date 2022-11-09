@@ -23,7 +23,6 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-
     RUN_MODE mode = _RELEASE;
 
     if(argc>=2)

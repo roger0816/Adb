@@ -36,7 +36,7 @@ void StageHomePage::showEvent(QShowEvent *)
     ui->btnFn->setVisible(ACTION.m_currentUser.Lv>=USER_LV::_LV3);
 
 
-    QTimer::singleShot(300,this,[=]()
+    QTimer::singleShot(100,this,[=]()
     {
 
         QVariantMap in;
@@ -52,7 +52,6 @@ void StageHomePage::showEvent(QShowEvent *)
         {
             QString sPicMd5 = listOut.last().toMap()["Content"].toString();
 
-            qDebug()<<"picmd5 : "<<sPicMd5;
 
             QVariant inPic,outPic;
 

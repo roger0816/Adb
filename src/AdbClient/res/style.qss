@@ -9,7 +9,6 @@ border-radius:3px;
 color: rgb(41,41,41);
 border: 1px solid #000000;
  min-height: 0.8em;
- max-height: 0.8em;
 padding: 5px;}
 
 QPushButton:hover {

@@ -38,6 +38,7 @@ public:
     enum _tbItemType{_AUTO=0,_BUTTON,_TXT,_BOOL,_DOUBLE,_TOOLTIP,_DATE,_DATETIME};
     QTableWidgetItem * tbItem(QVariant var,int iType=0,int iPixSize=PX_SIZE);
 
+
     QFont font(int iPixSize=20);
 
     void copyMsg(QString sMsg);

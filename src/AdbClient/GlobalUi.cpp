@@ -129,6 +129,10 @@ QTableWidgetItem *GlobalUi::tbItem(QVariant var, int iType, int iPixSize)
     item->setText(st);
 
 
+    if(iPixSize!=PX_SIZE)
+        f.setPixelSize(iPixSize);
+
+
     item->setFont(f);
 
 
@@ -161,7 +165,7 @@ void GlobalUi::copyMsg(QString sMsg)
 
 void GlobalUi::toolTip(QString st)
 {
-  QToolTip::showText(QCursor::pos(),st);
+  QToolTip::showText(QCursor::pos(),st,nullptr,QRect(), 5000);
 }
 
 void GlobalUi::slotLockLoading(bool b)

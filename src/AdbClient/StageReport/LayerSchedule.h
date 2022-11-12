@@ -99,6 +99,8 @@ public:
 
     void setEditMode(bool b);
 
+    void setOpenEditStatus(bool b);
+
 private:
     void showEvent(QShowEvent*) override;
 
@@ -113,6 +115,8 @@ private:
 
 private slots:
     void on_btnSave_clicked();
+
+       void on_btnSchedulCheck_clicked();
 
     void on_btnName_clicked();
 
@@ -138,11 +142,8 @@ private slots:
 
     void on_tb0_cellClicked(int row, int column);
 
-    void on_btnClearCost_clicked();
+    void on_btnScheduleClear_clicked();
 
-    void on_btnClearUserSid_clicked();
-
-    void on_btnClearStatus_clicked();
 
 public slots:
 
@@ -175,6 +176,8 @@ private:
      bool m_bEditMode= false;
 
      void checkUserList();
+
+     void checkTotal();
 
      void sendUserCheck(int iRow,int iCol);
 };

@@ -18,6 +18,8 @@ public:
 
     QString data();
 
+    QString getCost(QString sTitle,QString sColor);
+
     void setData(QString sData);
 
     void setEditMode(bool b);

@@ -78,6 +78,8 @@ private:
     QString checkId(int cbIdx);
 
 
+    QString strAdd1(QString st);
+
     void refresh();
 
     QString gameToName(QString sSid);

@@ -246,7 +246,7 @@ void LayerPrimeCostRate::on_tb1_itemEntered(QTableWidgetItem *item)
     }
     else
     {
-        QToolTip::hideText();
+       // QToolTip::hideText();
     }
 
 }

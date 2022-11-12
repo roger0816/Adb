@@ -19,7 +19,10 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
 
 
 
-    ui->tbUserList->setColumnCount(1);
+    // ui->tbUserList->setColumnCount(1);
+
+    ui->tbUserList->hideColumn(0);
+    ui->tbUserList->setColumnWidth(2,60);
 
     m_group.addButton(ui->btnCost,0);
 
@@ -54,9 +57,9 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
         QStringList userString;
 
         foreach(index, indexes) {
-           m_data[index.row()][index.column()].sStatus = sText;
+            m_data[index.row()][index.column()].sStatus = sText;
             m_data[index.row()][index.column()].sStatusColor = sColor;
-           m_data[index.row()][index.column()].sCheck="0";
+            m_data[index.row()][index.column()].sCheck="0";
         }
 
 
@@ -79,7 +82,11 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
     });
 
 
+
+    ui->btnSchedulCheck->setDisabled(true);
+
     setEditMode(false);
+
 
 }
 
@@ -96,23 +103,35 @@ void LayerSchedule::setEditMode(bool b)
 
     ui->wKind->setVisible(m_bEditMode);
 
+    ui->btnSave->hide();
+
+    ui->btnSchedulCheck->hide();
 
     ui->itemStatus->setEditMode(m_bEditMode);
     if(!m_bEditMode)
     {
         ui->stackRight->setCurrentWidget(ui->rPageStatus);
-        ui->btnSave->setText("班表確認");
-        ui->btnSave->setDisabled(true);
+
+        ui->btnSchedulCheck->show();
+
     }
     else
     {
         int iIdx = m_group.checkedId();
 
         ui->stackRight->setCurrentIndex(iIdx);
-        ui->btnSave->setText("儲存本月修改");
-        ui->btnSave->setDisabled(false);
+
+        ui->btnSave->show();
 
     }
+
+}
+
+void LayerSchedule::setOpenEditStatus(bool b)
+{
+
+    ui->itemStatus->setEditMode(b);
+    ui->btnSave->setVisible(b);
 
 }
 
@@ -127,9 +146,6 @@ void LayerSchedule::showEvent(QShowEvent *)
 void LayerSchedule::refresh()
 {
     //color: rgb(0, 85, 255);
-
-    checkUserList();
-
 
 
     int iDays =  QDate::fromString(m_sYear+m_sMonth,"yyyyMM").daysInMonth();
@@ -212,7 +228,7 @@ void LayerSchedule::refresh()
 
                     l->setVisable(false,true,true);
 
-                    if(ACTION.m_currentUser.Name==data.sUserSid)
+                    if(ACTION.m_currentUser.Sid==data.sUserSid)
                     {
                         l->setVisable(true,true,true);
                         l->setBorder(data.sCheck=="0");
@@ -221,7 +237,9 @@ void LayerSchedule::refresh()
 
                 }
 
-                l->setText(data.sCost,data.sUserSid,data.sStatus);
+                QString sUserName= ACTION.getUser(data.sUserSid,false).Name;
+
+                l->setText(data.sCost,sUserName,data.sStatus);
 
                 l->setText(2,data.sStatus,data.sStatusColor);
 
@@ -233,8 +251,10 @@ void LayerSchedule::refresh()
 
     ui->tb0->setVerticalHeaderLabels(listV);
 
+    checkUserList();
 
 
+    checkTotal();
 }
 
 void LayerSchedule::keyPressEvent(QKeyEvent *e)
@@ -277,6 +297,21 @@ void LayerSchedule::keyPressEvent(QKeyEvent *e)
 
 
         }
+
+        else if (e->key()==Qt::Key_PageDown)
+        {
+            int iIdx =m_group.checkedId();
+
+            if(iIdx==0)
+                iIdx=1;
+            else
+                iIdx=0;
+
+            m_group.button(iIdx)->click();
+
+
+
+        }
     }
 }
 
@@ -306,20 +341,26 @@ void LayerSchedule::on_btnSave_clicked()
 
     qDebug()<<"btn save clicked ";
 
-    if(m_bEditMode)
-    {
-        int ret = DMSG.showMsg("","是否儲存？",QStringList()<<"否"<<"是");
 
-        if(ret==1)
-            write();
-    }
-    else
-    {
-        int ret =DMSG.showMsg("","是否送出班表確認",QStringList()<<"OK");
-        if(ret==1)
-            sendUserCheck(ui->tb0->currentRow(),ui->tb0->currentColumn());
-    }
+    int ret = DMSG.showMsg("","是否儲存？",QStringList()<<"否"<<"是");
+
+    if(ret==1)
+        write();
+
+    DMSG.showMsg("","儲存完成",QStringList()<<"OK");
+
+
 }
+
+void LayerSchedule::on_btnSchedulCheck_clicked()
+{
+    int ret =DMSG.showMsg("","是否送出班表確認",QStringList()<<"OK");
+    if(ret==1)
+        sendUserCheck(ui->tb0->currentRow(),ui->tb0->currentColumn());
+
+    DMSG.showMsg("","班表確認完成",QStringList()<<"OK");
+}
+
 
 
 void LayerSchedule::on_btnName_clicked()
@@ -554,10 +595,91 @@ void LayerSchedule::checkUserList()
         ui->tbUserList->setRowCount(iRow+1);
 
         QString sName = list.at(i).Name;
+        ui->tbUserList->setItem(iRow,0,UI.tbItem( list.at(i).Sid));
+        ui->tbUserList->setItem(iRow,1,UI.tbItem(sName));
 
-        ui->tbUserList->setItem(iRow,0,UI.tbItem(sName));
+
+    }
+}
+
+void LayerSchedule::checkTotal()
+{
+    if(ui->tb0->rowCount()<0 || ui->tb0->columnCount()<0)
+        return;
+
+    QVariantMap dTotal;
+    QVariantMap dUserCheck;
+
+    for(int iRow=0;iRow<ui->tb0->rowCount() && iRow<128;iRow++)
+    {
+        for(int iCol=0;iCol<ui->tb0->columnCount()&&iCol<7;iCol++)
+        {
+            QString sUserSid = m_data[iRow][iCol].sUserSid;
+            QString sCost = m_data[iRow][iCol].sCost;
+
+            if(sUserSid.trimmed()=="")
+                continue;
+
+            //user check
 
 
+            if(!dUserCheck.keys().contains(m_data[iRow][iCol].sUserSid))
+                dUserCheck[sUserSid]="1";
+
+            if(m_data[iRow][iCol].sCheck=="0")
+                dUserCheck[sUserSid]="0";
+
+
+
+            //money
+
+            if(sCost.trimmed()=="")
+                continue;
+
+            if(!dTotal.keys().contains(m_data[iRow][iCol].sUserSid))
+                dTotal[sUserSid]=0;
+
+
+            int iTotalCost = dTotal[sUserSid].toInt();
+            int iCurrentCost = sCost.toInt();
+
+            if(m_data[iRow][iCol].sStatus.trimmed()!="")
+            {
+                QStringList statuRate=ui->itemStatus->getCost(m_data[iRow][iCol].sStatus,m_data[iRow][iCol].sStatusColor).split("+");
+
+                if(statuRate.length()>1)
+                {
+                    double dTmp = iCurrentCost*statuRate.first().toDouble()+statuRate.last().toInt();
+
+                    iCurrentCost=dTmp;
+
+                }
+
+            }
+
+            dTotal[sUserSid]=iTotalCost+iCurrentCost;
+
+
+        }
+
+    }
+
+
+    for(int i=0;i<ui->tbUserList->rowCount();i++)
+    {
+        QString sUserSid = ui->tbUserList->item(i,0)->text();
+
+        QTableWidgetItem *item = UI.tbItem(ui->tbUserList->item(i,1)->text());
+
+
+        item->setForeground(Qt::black);
+
+        if(dUserCheck[sUserSid]=="1")
+            item->setForeground(QColor(85,170,255));
+
+        ui->tbUserList->setItem(i,1,item);
+
+        ui->tbUserList->setItem(i,2,UI.tbItem(dTotal[sUserSid],GlobalUi::_AUTO,14));
     }
 }
 
@@ -581,8 +703,10 @@ void LayerSchedule::on_tbUserList_itemClicked(QTableWidgetItem *item)
     if(ui->tb0->currentColumn()<0 || ui->tb0->currentColumn()>= ui->tb0->columnCount())
         return;
 
+    if(item->column()!=1)
+        return;
 
-    QString st = item->text();
+    QString st = ui->tbUserList->item(item->row(),0)->text();
 
     QItemSelectionModel *selectionModel = ui->tb0->selectionModel();
 
@@ -592,9 +716,12 @@ void LayerSchedule::on_tbUserList_itemClicked(QTableWidgetItem *item)
 
     QStringList userString;
 
-    foreach(index, indexes) {
-       m_data[index.row()][index.column()].sUserSid = st;
-       m_data[index.row()][index.column()].sCheck="0";
+    foreach(index, indexes)
+    {
+        QString sOriginUserSid =   m_data[index.row()][index.column()].sUserSid;
+        m_data[index.row()][index.column()].sUserSid = st;
+        if(sOriginUserSid!=st)
+            m_data[index.row()][index.column()].sCheck="0";
     }
 
     refresh();
@@ -644,8 +771,8 @@ void LayerSchedule::btnsClicked()
     QStringList userString;
 
     foreach(index, indexes) {
-       m_data[index.row()][index.column()].sCost = btn->text();
-       m_data[index.row()][index.column()].sCheck="0";
+        m_data[index.row()][index.column()].sCost = btn->text();
+        m_data[index.row()][index.column()].sCheck="0";
     }
 
     refresh();
@@ -671,6 +798,13 @@ void LayerSchedule::btnsClicked()
 
 void LayerSchedule::delayRefresh()
 {
+
+    if(!m_bEditMode)
+    {
+        setOpenEditStatus(ACTION.m_currentUser.Lv>=USER_LV::_LV3);
+
+    }
+
 
     m_sYear = GLOBAL.dateTimeUtc8().toString("yyyy");
     m_sMonth = GLOBAL.dateTimeUtc8().toString("MM");
@@ -775,66 +909,43 @@ void LayerSchedule::on_tb0_cellClicked(int row, int column)
     {
         if(row<0 || column<0)
         {
-            ui->btnSave->setDisabled(true);
+            //ui->btnSave->setDisabled(true);
+            ui->btnSchedulCheck->setDisabled(true);
             return ;
         }
 
-        if(m_data[row][column].sUserSid== ACTION.m_currentUser.Name)
+        if(m_data[row][column].sUserSid== ACTION.m_currentUser.Sid)
         {
-            ui->btnSave->setDisabled(false);
+            ui->btnSchedulCheck->setDisabled(false);
         }
         else
         {
-            ui->btnSave->setDisabled(true);
+            ui->btnSchedulCheck->setDisabled(true);
         }
 
     }
 }
 
 
-void LayerSchedule::on_btnClearCost_clicked()
+
+
+void LayerSchedule::on_btnScheduleClear_clicked()
 {
+
+    int iRet = DMSG.showMsg("","清除後按下'儲存本月修改'，才會生效，\n確定要清除目前頁面資料嗎？",QStringList()<<"否"<<"是");
+
+    if(iRet!=1)
+        return;
+
     for(int iRow=0;iRow<128;iRow++)
     {
         for(int iCol=0;iCol<7;iCol++)
         {
             m_data[iRow][iCol].sCost = "";
-            m_data[iRow][iCol].sCheck="0";
-        }
 
-    }
-
-    refresh();
-
-}
-
-
-
-
-void LayerSchedule::on_btnClearUserSid_clicked()
-{
-    for(int iRow=0;iRow<128;iRow++)
-    {
-        for(int iCol=0;iCol<7;iCol++)
-        {
-            m_data[iRow][iCol].sUserSid = "";
-            m_data[iRow][iCol].sCheck="0";
-        }
-
-    }
-
-    refresh();
-
-}
-
-
-void LayerSchedule::on_btnClearStatus_clicked()
-{
-    for(int iRow=0;iRow<128;iRow++)
-    {
-        for(int iCol=0;iCol<7;iCol++)
-        {
             m_data[iRow][iCol].sStatus = "";
+
+            m_data[iRow][iCol].sUserSid = "";
             m_data[iRow][iCol].sCheck="0";
         }
 

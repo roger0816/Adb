@@ -1036,7 +1036,7 @@ QVariantList CSqlClass::readExchange(int iSid)
 
 bool CSqlClass::lsatCustomerId(QString sClassSid, QString sClassId, QString &out, QString &sError)
 {
-    out = sClassId+"-A000";
+    out = sClassId+"-EA00";
 
     QSqlQuery query(m_db);
 

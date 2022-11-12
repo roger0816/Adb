@@ -255,13 +255,30 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
     {
         if(1==UI.showMsg("",QString("請確認是否鎖定處理訂單 :%1？").arg(order.Id),QStringList()<<"否"<<"是"))
         {
-            QString sError;
-            order.PaddingUser=ACTION.m_currentUser.Sid;
-            order.Step="3";
+            bool bCheck= false;
 
-            ACTION.replaceOrder(order,sError);
-            //  UI.showMsg("",sError,"OK");
+            OrderData reGet = ACTION.getOrder(order.Sid,true);
 
+            if(reGet.Sid!=order.Sid)
+                DMSG.showMsg("","錯誤，找不到該訂單","OK");
+            else
+            {
+                if(reGet.PaddingUser=="")
+                    bCheck=true;
+                else
+                    DMSG.showMsg("","該訂單已被'"+ACTION.getUser(reGet.PaddingUser).Name+"'鎖定","OK");
+
+            }
+
+            if(bCheck)
+            {
+                QString sError;
+                order.PaddingUser=ACTION.m_currentUser.Sid;
+                order.Step="3";
+
+                ACTION.replaceOrder(order,sError);
+                //  UI.showMsg("",sError,"OK");
+            }
             refreshUser();
         }
 
@@ -386,7 +403,7 @@ void LayerGetOrder2::on_btnFinish_clicked()
         if(bOk)
 
 
-        UI.showMsg("","回報完成",QStringList()<<"OK");
+            UI.showMsg("","回報完成",QStringList()<<"OK");
         refreshUser();
 
         return;

@@ -158,7 +158,7 @@ void LayerFactory::on_tbFactory_itemEntered(QTableWidgetItem *item)
     }
     else
     {
-        QToolTip::hideText();
+       // QToolTip::hideText();
     }
 
 }

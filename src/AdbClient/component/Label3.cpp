@@ -37,7 +37,7 @@ void Label3::paintEvent(QPaintEvent *)
             p.setPen(color);
 
             QFont f("Arial");
-            f.setPixelSize(14);
+            f.setPixelSize(12);
 
             p.setFont(f);
 
@@ -52,7 +52,7 @@ void Label3::paintEvent(QPaintEvent *)
             else
             {
 
-                f.setPixelSize(16);
+                f.setPixelSize(14);
 
                 p.setFont(f);
 
@@ -76,13 +76,13 @@ void Label3::paintEvent(QPaintEvent *)
 
             QFont f("Arial");
 
-            f.setPixelSize(14);
+            f.setPixelSize(16);
 
             if(!m_bFlag)
             {
-                f.setBold(true);
+//                f.setBold(true);
 
-                f.setPointSize(16);
+//                f.setPointSize(16);
             }
 
 

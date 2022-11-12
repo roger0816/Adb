@@ -113,7 +113,7 @@ void LayerGetOrder1::refreshUser(bool bRe)
         }
     }
 
-     on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
+    on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
 }
 
 QVariantMap LayerGetOrder1::gameItem(QString sSid)
@@ -144,7 +144,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         return;
 
 
-   // QTableWidgetItem *item =ui->tbUser->item(row,column);
+    // QTableWidgetItem *item =ui->tbUser->item(row,column);
     ui->tbUser->setCurrentCell(row,column);
 
 
@@ -261,15 +261,33 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
     {
         if(1==UI.showMsg("",QString("請確認是否鎖定處理編號:%1？").arg(order.Id),QStringList()<<"否"<<"是"))
         {
-            QString sError;
-            order.PaddingUser=ACTION.m_currentUser.Sid;
-            order.Step="2";
-            order.User[2] = ACTION.m_currentUser.Sid;
-            order.StepTime[2]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
+            bool bCheck= false;
+
+            OrderData reGet = ACTION.getOrder(order.Sid,true);
+
+            if(reGet.Sid!=order.Sid)
+                DMSG.showMsg("","錯誤，找不到該訂單","OK");
+            else
+            {
+                if(reGet.PaddingUser=="")
+                    bCheck=true;
+                else
+                    DMSG.showMsg("","該訂單已被'"+ACTION.getUser(reGet.PaddingUser).Name+"'鎖定","OK");
+
+            }
+
+            if(bCheck)
+            {
+                QString sError;
+                order.PaddingUser=ACTION.m_currentUser.Sid;
+                order.Step="2";
+                order.User[2] = ACTION.m_currentUser.Sid;
+                order.StepTime[2]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
 
-            ACTION.replaceOrder(order,sError);
-           // UI.showMsg("",sError,"OK");
+                ACTION.replaceOrder(order,sError);
+                // UI.showMsg("",sError,"OK");
+            }
 
             refreshUser();
 

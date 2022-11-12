@@ -225,7 +225,41 @@ QString DialogCustomerEdit::checkId(int cbIdx)
     ACTION.action(ACT::LAST_CUSTOMER_ID,in,out,sError);
 
     QString sLastId  = out["Id"].toString();
+       qDebug()<<"SSSSSSSSSS000: "<<sLastId;
+    QString sTargetWord="EA";
+    QString sTargetNum="01";
 
+
+    if(sLastId.length()>=4)
+    {
+
+
+        QString sTmp = sLastId.mid(sLastId.length()-4,4);
+
+
+        QString sWord = sTmp.mid(0,2);
+
+        QString sNum=sTmp.mid(2,2);
+
+        if(sNum=="99")
+        {
+            sTargetNum="01";
+
+            sTargetWord = strAdd1(sWord);
+
+        }
+        else
+        {
+            sTargetWord = sWord;
+            sTargetNum=QString("%1").arg(sNum.toInt()+1,2,10,QLatin1Char('0'));
+        }
+    }
+    sId = sClassId.toUpper()+"-"+sTargetWord.toUpper()+sTargetNum;
+
+
+    qDebug()<<"SSSSSSSSSSSSS : "<<sId;
+    return sId;
+    /*
     if(sLastId.length()>=4)
     {
         QString sTmp = sLastId.mid(sLastId.length()-4,4);
@@ -250,8 +284,51 @@ QString DialogCustomerEdit::checkId(int cbIdx)
         }
 
     }
+       return sId;
+    */
 
-    return sId;
+
+}
+
+QString DialogCustomerEdit::strAdd1(QString st)
+{
+
+    if(st.length()!=2)
+        return st;
+
+    QString sRe0,sRe1;
+
+
+    QString sFirst=st.at(0);
+    QString sSecond =st.at(1);
+    if(sSecond.toUpper()=="Z")
+    {
+        sRe1="A";
+
+        int iTmp = (int)sFirst.toUtf8().at(0)+1;
+
+        QByteArray d;
+        d.append(iTmp);
+
+        sRe0=QString(d);
+
+
+    }
+    else
+    {
+        sRe0=sFirst;
+
+        int iTmp = (int)sSecond.toUtf8().at(0)+1;
+
+        QByteArray d;
+        d.append(iTmp);
+
+        sRe1=QString(d);
+
+    }
+
+
+    return sRe0+sRe1;
 }
 
 void DialogCustomerEdit::refresh()

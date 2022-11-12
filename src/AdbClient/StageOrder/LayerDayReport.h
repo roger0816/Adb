@@ -45,6 +45,8 @@ private slots:
 
     void on_dateEdit_userDateChanged(const QDate &date);
 
+    void on_tb_cellEntered(int row, int column);
+
 private:
     Ui::LayerDayReport *ui;
 
@@ -54,7 +56,6 @@ private:
 
     LayerSayCost *m_detialOrder = nullptr;
 
-    void checkMoney(int iRow, OrderData order, CustomerData customer);
 
     bool m_bLockDate = false;
 };

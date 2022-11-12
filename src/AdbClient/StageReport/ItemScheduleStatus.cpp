@@ -46,6 +46,26 @@ QString ItemScheduleStatus::data()
 
 }
 
+QString ItemScheduleStatus::getCost(QString sTitle, QString sColor)
+{
+    QString sRe="";
+
+    foreach(QVariant v,m_data)
+    {
+        QVariantMap data=v.toMap();
+
+        if(data["title"].toString()==sTitle
+                &&data["color"].toString() == sColor)
+        {
+            sRe = data["cost"].toString();
+            break;
+        }
+    }
+
+
+    return sRe;
+}
+
 void ItemScheduleStatus::setData(QString sData)
 {
     QStringList listData = sData.split(",,");

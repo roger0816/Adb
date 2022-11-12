@@ -388,7 +388,7 @@
        <height>16777215</height>
       </size>
      </property>
-     <layout class="QVBoxLayout" name="verticalLayout_4">
+     <layout class="QGridLayout" name="gridLayout_7">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -401,7 +401,7 @@
       <property name="bottomMargin">
        <number>20</number>
       </property>
-      <item>
+      <item row="0" column="0" colspan="2">
        <widget class="QWidget" name="wFn" native="true">
         <property name="minimumSize">
          <size>
@@ -428,54 +428,17 @@
          <property name="spacing">
           <number>0</number>
          </property>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="btnClearCost">
-           <property name="minimumSize">
-            <size>
-             <width>60</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>$全清</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QPushButton" name="btnClearUserSid">
-           <property name="minimumSize">
-            <size>
-             <width>60</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>100</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>人全清</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="4">
+         <item row="0" column="0" colspan="3">
           <widget class="QLabel" name="lbFn">
            <property name="text">
             <string>單項清除:  Backspace鍵 
-單格全清:  Esc鍵</string>
+單格全清:  Esc鍵
+換頁: PageDown鍵</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="2">
-          <widget class="QPushButton" name="btnClearStatus">
+         <item row="0" column="3">
+          <widget class="QPushButton" name="btnScheduleClear">
            <property name="minimumSize">
             <size>
              <width>60</width>
@@ -489,14 +452,40 @@
             </size>
            </property>
            <property name="text">
-            <string>狀態全清</string>
+            <string>清除本月</string>
            </property>
           </widget>
          </item>
         </layout>
        </widget>
       </item>
-      <item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="btnSave">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>儲存本月修改</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="btnSchedulCheck">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>班表確認</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
        <widget class="QStackedWidget" name="stackRight">
         <property name="minimumSize">
          <size>
@@ -514,7 +503,7 @@
          <enum>Qt::NoFocus</enum>
         </property>
         <property name="currentIndex">
-         <number>2</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="rPageCost">
          <layout class="QGridLayout" name="gridLayout_6">
@@ -723,6 +712,9 @@
             <attribute name="horizontalHeaderVisible">
              <bool>false</bool>
             </attribute>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>115</number>
+            </attribute>
             <attribute name="horizontalHeaderStretchLastSection">
              <bool>true</bool>
             </attribute>
@@ -731,7 +723,17 @@
             </attribute>
             <column>
              <property name="text">
-              <string/>
+              <string>Sid</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Name</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Cost</string>
              </property>
             </column>
            </widget>
@@ -763,19 +765,6 @@
           </item>
          </layout>
         </widget>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btnSave">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>儲存</string>
-        </property>
        </widget>
       </item>
      </layout>

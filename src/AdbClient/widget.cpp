@@ -12,8 +12,6 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
 
-
-
     QFile file(":/style.qss");
 
     if(file.open(QIODevice::ReadOnly))

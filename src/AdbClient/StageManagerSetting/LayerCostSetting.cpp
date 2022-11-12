@@ -541,7 +541,7 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
     }
     else
     {
-          QToolTip::hideText();
+        //  QToolTip::hideText();
     }
 
 

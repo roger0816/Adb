@@ -7,6 +7,8 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->tb->setMouseTracking(true);
+
     m_detialOrder = new LayerSayCost;
     m_detialOrder->m_bOrderMode = true;
     m_detialOrder->setReadOnly();
@@ -92,7 +94,7 @@ void LayerDayReport::refreshTb()
             }
 
 
-            ui->tb->setItem(iRow,3,UI.tbItem(sUser));
+            ui->tb->setItem(iRow,3,UI.tbItem(sUser,GlobalUi::_TOOLTIP));
             ui->tb->setItem(iRow,4,UI.tbItem(customer.Id));
             ui->tb->setItem(iRow,5,UI.tbItem("詳細",GlobalUi::_BUTTON));
 
@@ -146,21 +148,25 @@ void LayerDayReport::refreshTb()
             ui->tb->setItem(iRow,9,UI.tbItem(customer.Currency));
             ui->tb->setItem(iRow,10,UI.tbItem(data.Cost));
 
+            int iNtdCost = data.Money.first().toInt();
 
+            int iNtdPrime = data.Money[1].toInt();
+
+            ui->tb->setItem(iRow,11,UI.tbItem(""));
+            ui->tb->setItem(iRow,13,UI.tbItem(""));
+            ui->tb->setItem(iRow,14,UI.tbItem(""));
 
             if(data.Step.toInt()>=1)
             {
 
-                int iNtdCost = data.Money.first().toInt();
-
-                int iNtdPrime = data.Money[1].toInt();
-
                 ui->tb->setItem(iRow,11,UI.tbItem(iNtdCost));
+
+            }
+
+            if(data.Step.toInt()>=3)
+            {
                 ui->tb->setItem(iRow,13,UI.tbItem(iNtdPrime));
                 ui->tb->setItem(iRow,14,UI.tbItem(iNtdCost-iNtdPrime));
-
-                // checkMoney(iRow,data,customer);
-
             }
 
             /*
@@ -396,85 +402,6 @@ void LayerDayReport::delayRefresh()
     refreshTb();
 }
 
-void LayerDayReport::checkMoney(int iRow, OrderData order, CustomerData customer)
-{
-
-    DataRate rate=ACTION.costRate(order.ExRateSid,true);
-
-    //cost
-
-    int idx =rate.listKey().indexOf(customer.Currency);
-
-    if(idx<0)
-        return;
-
-    double iCost = order.Cost.toDouble()*rate.listValue().at(idx).toDouble();
-
-    QStringList listTmp = QString::number(iCost).split(".");
-
-    int cost = listTmp.first().toInt();
-
-    if(listTmp.length()>1 && listTmp.last().toInt()>0)
-    {
-        cost+=1;
-    }
-
-
-    ui->tb->setItem(iRow,11,UI.tbItem(QString::number(cost),GlobalUi::_TOOLTIP));
-
-    //primte
-
-    // ACTION.getGameItem()
-
-
-    CListPair listPay =ACTION.getAddValueType();
-    idx = listPay.listFirst().indexOf(order.PayType);
-
-    if(idx<0)
-        return;
-
-    CListPair listItem(order.Item);
-
-    qDebug()<< "  listItem : "<<listItem.toString();
-    //item is  "game item sid " & " item count"
-    double prime=0.00;
-
-    for(int i=0;i<listItem.length();i++)
-    {
-        CPair p = listItem.at(i);
-
-        QString sItemSid = p.first;
-
-        int itemCount = p.second.toInt();
-
-        qDebug()<<"item sid : "<<sItemSid;
-
-        DataGameItem target = ACTION.getGameItemFromSid(sItemSid,true);
-
-        CListPair payType(target.AddValueTypeSid);
-
-        QString sValue = payType.findValue(order.PayType);
-
-        double iOneItemPrice = ACTION.payTypeToNTD(order.PayType,rate)*sValue.toDouble();
-
-        prime =prime+(itemCount*iOneItemPrice);
-
-    }
-
-
-
-    ui->tb->setItem(iRow,13,UI.tbItem(QString::number(prime,'f',2),GlobalUi::_TOOLTIP));
-
-    ui->tb->setItem(iRow,14,UI.tbItem(QString::number(iCost-prime,'f',2),GlobalUi::_TOOLTIP));
-
-
-    //  int iTmp = listPay.listFirst().indexOf(data.AddValueType);
-
-
-    // int idxRate = rate.listKey().indexOf(order.AddValueType);
-
-
-}
 
 
 
@@ -485,5 +412,48 @@ void LayerDayReport::on_dateEdit_userDateChanged(const QDate &date)
         return ;
 
     QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(delayRefresh()));
+}
+
+
+void LayerDayReport::on_tb_cellEntered(int row, int column)
+{
+
+    qDebug()<<"AAAAAAAAAAA";
+
+    if(row<0 || row>=m_listInto.length())
+        return;
+    OrderData data = m_listInto.at(row);
+    if(column==3)
+    {
+        QString st="訂單編號:"+data.Id+"\n"
+                   "報價: %1\n"
+                   "下單: %2\n"
+                   "處理: %3\n"
+                   "回報: %4\n"
+                   "簽核: %5\n";
+
+
+        QStringList listName;
+
+        foreach(QString sUserSid,data.User)
+        {
+            listName.append(ACTION.getUser(sUserSid).Name);
+        }
+
+        while(listName.length()<6)
+        {
+            listName.append(" ");
+        }
+
+
+
+        UI.toolTip(st.arg(listName.at(0),listName.at(1),listName.at(2),listName.at(4),listName.at(5)));
+
+
+    }
+    else
+    {
+         // QToolTip::hideText();
+    }
 }
 

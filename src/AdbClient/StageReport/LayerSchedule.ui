@@ -459,7 +459,7 @@
         </layout>
        </widget>
       </item>
-      <item row="2" column="0">
+      <item row="3" column="0">
        <widget class="QPushButton" name="btnSave">
         <property name="minimumSize">
          <size>
@@ -469,19 +469,6 @@
         </property>
         <property name="text">
          <string>儲存本月修改</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="btnSchedulCheck">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>30</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>班表確認</string>
         </property>
        </widget>
       </item>
@@ -765,6 +752,19 @@
           </item>
          </layout>
         </widget>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="btnSchedulCheck">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>班表確認</string>
+        </property>
        </widget>
       </item>
      </layout>

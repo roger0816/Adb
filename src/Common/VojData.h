@@ -924,6 +924,8 @@ struct DataPayType :public DataObj
     {
         setData(data);
 
+        Value.clear();
+
         Value = data["Value"].toString().split(",");
 
         while(Value.length()<4)

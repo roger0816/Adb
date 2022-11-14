@@ -345,10 +345,11 @@ void LayerSchedule::on_btnSave_clicked()
     int ret = DMSG.showMsg("","是否儲存？",QStringList()<<"否"<<"是");
 
     if(ret==1)
+    {
         write();
 
-    DMSG.showMsg("","儲存完成",QStringList()<<"OK");
-
+        DMSG.showMsg("","儲存完成",QStringList()<<"OK");
+    }
 
 }
 

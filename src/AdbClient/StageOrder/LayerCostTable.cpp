@@ -120,7 +120,9 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
     }
 
 
+    ui->txt->clear();
 
+    ui->txt->appendPlainText(trText());
 
 
 
@@ -257,4 +259,6 @@ void LayerCostTable::on_txEdit_textChanged()
 
     ui->txt->appendPlainText(trText());
 }
+
+
 

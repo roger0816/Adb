@@ -530,6 +530,13 @@ CData Query::implementRecall(CData data)
         sOkMsg = "修改完成";
     }
 
+    else if(data.iAciton==ACT::DEL_PAY_TYPE)
+    {
+
+        bOk = m_sql.delFromTb(SQL_TABLE::PayType(),data.dData,sError);
+        sOkMsg = "刪除完成";
+    }
+
 
     else if(data.iAciton==ACT::ADD_GROUP)
     {

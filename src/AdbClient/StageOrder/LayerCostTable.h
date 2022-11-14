@@ -43,6 +43,7 @@ private slots:
 
     void on_txEdit_textChanged();
 
+
 private:
     Ui::LayerCostTable *ui;
 

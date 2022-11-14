@@ -34,6 +34,8 @@ DialogGameEdit::~DialogGameEdit()
 
 void DialogGameEdit::setData(QString sSid, bool bEnable, QString sId, QString sName, double iGameRate)
 {
+    m_bIsAddType = false;
+
     m_sSid = sSid;
 
     ui->btnDel->show();
@@ -90,7 +92,7 @@ void DialogGameEdit::on_btnOk_clicked()
         }
     }
 
-    if(bHasOne)
+    if(bHasOne && m_bIsAddType)
     {
         ui->lbMsg->setText("代號或名稱，不能重復。");
         return;

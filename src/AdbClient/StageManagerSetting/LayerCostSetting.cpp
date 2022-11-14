@@ -28,14 +28,12 @@ LayerCostSetting::~LayerCostSetting()
 
 void LayerCostSetting::on_btnGameAdd_clicked()
 {
-    DialogGameEdit dialog;
+    DialogGameEdit dialog;    
 
     if(dialog.exec()==1)
     {
 
         GameList d;
-
-
 
         QVariantMap data;
 

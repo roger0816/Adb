@@ -122,7 +122,11 @@ QVariantMap DialogAddValueTypeEdit::data()
 
    data.Name=ui->txName->text().trimmed();
 
+   data.Value.clear();
+
    data.Value<<ui->sb0->text()<<ui->sb1->text()<<ui->sb2->text()<<ui->sb3->text();
+
+   data.SubValue.clear();
 
    data.SubValue<<ui->sbSub->text();
 
@@ -161,7 +165,7 @@ void DialogAddValueTypeEdit::on_btnOk_clicked()
 void DialogAddValueTypeEdit::on_btnDel_clicked()
 {
    if(1==UI.showMsg("","確認刪除嗎？",QStringList()<<"否"<<"是"))
-    done(3);
+       done(3);
 }
 
 

@@ -771,7 +771,7 @@ bool Query::checkAppVersion(QString sVersion)
 
     if(listTmp.at(1).toInt()>=1)
     {
-        if(listTmp.at(2).split("_").first().toInt()>=1115)
+        if(listTmp.at(2).split("_").first().toInt()>1115)
             bRe =true;
     }
 

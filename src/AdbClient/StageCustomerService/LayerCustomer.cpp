@@ -91,7 +91,11 @@ void LayerCustomer::refresh()
     ACTION.action(ACT::QUERY_CUSTOMER,in,m_listData,sError);
 
 
+    m_dIdxMapping.clear();
+
     ui->tb->setRowCount(0);
+
+
 
     for(int i=0;i<m_listData.length();i++)
     {
@@ -147,7 +151,12 @@ void LayerCustomer::refresh()
         ui->tb->setItem(iRow,8,UI.tbItem(sUserName));
         ui->tb->setItem(iRow,9,UI.tbItem(data.Note1));
 
+
+        m_dIdxMapping[iRow]=i;
     }
+
+
+
 }
 
 void LayerCustomer::showEvent(QShowEvent *)
@@ -232,7 +241,13 @@ void LayerCustomer::on_btnEdit_clicked()
 
     dialog.setData(outClass,outGame,outGameInfo,m_listData.at(ui->tb->currentRow()).toMap());
 #else
-    dialog.setData(CustomerData(m_listData.at(ui->tb->currentRow()).toMap()).Sid);
+
+    int iTmp = m_dIdxMapping.value(ui->tb->currentRow());
+    int iIdx= qBound(0,iTmp,m_listData.length()-1);
+
+    CustomerData data(m_listData.at(iIdx).toMap());
+
+    dialog.setData(data.Sid);
 
 #endif
 
@@ -275,25 +290,29 @@ void LayerCustomer::on_btnEdit_clicked()
 
 void LayerCustomer::on_tb_cellClicked(int row, int column)
 {
-    if(row<0 || row>=m_listData.length())
+    int iTmp = m_dIdxMapping.value(row);
+
+    if(row<0 || iTmp>=m_listData.length())
         return ;
 
     ui->btnEdit->setEnabled(true);
 
 
+    CustomerData data(m_listData.at(iTmp).toMap());
+
 
     if(column==0)
     {
-        emit into(row);
+
+        emit into(iTmp);
     }
 
     else if(column==6)
     {
-        QVariantMap v = m_listData.at(row).toMap();
 
         DialogCustomerCostHistory dialog;
 
-        dialog.setCustomer(CustomerData(v));
+        dialog.setCustomer(data);
 
         dialog.exec();
 
@@ -317,6 +336,23 @@ void LayerCustomer::slotClearSearch()
 
 void LayerCustomer::on_txSearch_textChanged(const QString &arg1)
 {
-      refresh();
+    refresh();
+}
+
+CustomerData LayerCustomer::checkSelect(QString sSid)
+{
+    CustomerData re;
+
+    foreach(QVariant v,m_listData)
+    {
+        CustomerData data(v.toMap());
+
+        if(sSid==data.Sid)
+            re = data;
+    }
+
+
+
+    return re;
 }
 

@@ -43,6 +43,10 @@ private:
 
     QVariantList m_listData;
 
+    QMap<int ,int> m_dIdxMapping; //filter 後index會錯位，另外記index
+
+    CustomerData checkSelect(QString sSid);
+
     void showEvent(QShowEvent *) override;
 
     bool checkSearch(CustomerData data);

@@ -201,6 +201,25 @@ border-width: 0px;
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="btn4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>每日入帳</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
+           </property>
+           <property name="flat">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -219,12 +238,13 @@ border-width: 0px;
       <item row="0" column="1">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>4</number>
         </property>
         <widget class="LayerCostTable" name="page"/>
         <widget class="LayerGetOrder1" name="page_2"/>
         <widget class="LayerGetOrder2" name="page_3"/>
         <widget class="LayerDayReport" name="page_4"/>
+        <widget class="LayerDayDebit" name="page_5"/>
        </widget>
       </item>
      </layout>
@@ -255,6 +275,12 @@ border-width: 0px;
    <class>LayerGetOrder2</class>
    <extends>QWidget</extends>
    <header>LayerGetOrder2.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerDayDebit</class>
+   <extends>QWidget</extends>
+   <header>LayerDayDebit.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

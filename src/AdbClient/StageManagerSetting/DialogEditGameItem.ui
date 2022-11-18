@@ -78,10 +78,10 @@
             <number>0</number>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -98,10 +98,10 @@
             <set>Qt::AlignCenter</set>
            </property>
            <property name="minimum">
-            <double>-999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -287,10 +287,10 @@
             <number>0</number>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -316,10 +316,10 @@
             <number>0</number>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -338,10 +338,10 @@
             <number>1</number>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -360,10 +360,10 @@
             <number>0</number>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -413,10 +413,10 @@
             <enum>QAbstractSpinBox::NoButtons</enum>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
           </widget>
          </item>
@@ -435,10 +435,10 @@
             <number>0</number>
            </property>
            <property name="minimum">
-            <double>-9999.000000000000000</double>
+            <double>-99999.000000000000000</double>
            </property>
            <property name="maximum">
-            <double>9999.000000000000000</double>
+            <double>99999.000000000000000</double>
            </property>
            <property name="stepType">
             <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>

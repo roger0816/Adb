@@ -102,7 +102,7 @@ void LayerGetOrder2::refreshUser(bool bRe)
 
         col++;
 
-        if(col>=3)
+        if(col>=5)
         {
             col=0;
 
@@ -132,14 +132,24 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
 {
 
     if(row<0 || row>=ui->tbUser->rowCount())
+    {
+        ui->tbOrder->setRowCount(0);
         return;
+    }
+
 
     if(column<0 || column>=ui->tbUser->columnCount())
+    {
+        ui->tbOrder->setRowCount(0);
         return;
-
+    }
     if(ui->tbUser->item(row,column)->text()
             .split("(").last().split(")").first().toInt()<1)
+    {
+        ui->tbOrder->setRowCount(0);
         return;
+    }
+
 
     ui->tbUser->setCurrentCell(row,column);
 

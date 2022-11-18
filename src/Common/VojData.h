@@ -225,9 +225,11 @@ struct CustomerCost
     {
         Sid = data["Sid"].toString();
         CustomerSid = data["CustomerSid"].toString();
-        Currency = data["Currency"].toString();
         OrderId = data["OrderId"].toString();
+        Currency = data["Currency"].toString();
         ChangeValue = data["ChangeValue"].toString();
+        OriginCurrency = data["OriginCurrency"].toString();
+        OriginValue = data["OriginValue"].toString();
         DebitSid = data["DebitSid"].toString();
         DebitNote = data["DebitNote"].toString();
         Rate = data["Rate"].toString();
@@ -255,12 +257,15 @@ struct CustomerCost
         re["CustomerSid"]=CustomerSid;
         re["OrderId"]=OrderId;
         re["Currency"]=Currency;
+        re["ChangeValue"]=ChangeValue;
+        re["OriginCurrency"]=OriginCurrency;
+        re["OriginValue"]=OriginValue;
         re["DebitSid"]=DebitSid;
         re["DebitNote"]=DebitNote;
         re["Rate"]=Rate;
         re["AddRate"]=AddRate;
         re["IsAddCost"] = IsAddCost;
-        re["ChangeValue"]=ChangeValue;
+
         re["Total"]=Total;
         re["UserSid"]=UserSid;
         re["OrderTime"]=OrderTime;
@@ -275,7 +280,7 @@ struct CustomerCost
 
 
 
-    QString Sid;
+    QString Sid="";
     QString CustomerSid;
     QString OrderId;
     QString Rate;
@@ -283,8 +288,10 @@ struct CustomerCost
     bool IsAddCost=true;
     QString DebitSid;
     QString DebitNote;
-    QString Currency;
-    QString ChangeValue ="0";
+    QString OriginCurrency;       //加值幣別
+    QString OriginValue ="0";     //原始數字
+    QString Currency;             //轉換客戶幣別
+    QString ChangeValue ="0";     //換匯後金額
     QString Total ="0";
     QString UserSid;
     QString OrderTime;
@@ -299,8 +306,66 @@ struct CustomerCost
 
 struct DataCustomerClass :public DataObj
 {
+    DataCustomerClass(){}
+    DataCustomerClass(QVariantMap v){setData(v);}
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+        Sort=data["Sort"].toInt();
+        Type=data["Type"].toString();
+        Note1=data["Note1"].toString();
+        Note2=data["Note2"].toString();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap d = DataObj::data();
+
+        d["Sort"]=Sort;
+        d["Type"]=Type;
+        d["Note1"]=Note1;
+        d["Note2"]=Note2;
+
+        return d;
+    }
+    int Sort=0;
+    QString Type;
+    QString Note1;
+    QString Note2;
+};
+
+struct DebitClass :public DataObj
+{
+    DebitClass(QVariantMap v){setData(v);}
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+        Sort=data["Sort"].toInt();
+
+        Currency=data["Currency"].toString();
+        Note1=data["Note1"].toString();
+        Note2=data["Note2"].toString();
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap d = DataObj::data();
+        d["Sort"]=Sort;
+        d["Currency"]=Currency;
+        d["Note1"]=Note1;
+        d["Note2"]=Note2;
+
+        return d;
+    }
+    int Sort=0;
+    QString Currency;
+    QString Note1;
+    QString Note2;
 
 };
+
 
 
 

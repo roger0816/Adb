@@ -33,6 +33,8 @@ private slots:
 
     void on_btnDelay_clicked();
 
+    void slotCancel();
+
 private:
     Ui::LayerGetOrder1 *ui;
 

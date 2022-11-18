@@ -3,7 +3,7 @@
 
 #include "QueryObj.h"
 #include "DEF.h"
-
+#include <QCryptographicHash>
 
 
 
@@ -18,6 +18,7 @@ public:
 
     CData implementRecall(CData data) override;
 
+    bool checkAppVersion(QString sVersion);
 
 signals:
 

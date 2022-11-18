@@ -42,7 +42,7 @@ DialogCustomerCostHistory::DialogCustomerCostHistory(QWidget *parent) :
     lay->addWidget(m_itemPic);
     m_dialogPic->setLayout(lay);
 
-
+    ui->tableWidget->hideColumn(3);
 
 
 
@@ -64,7 +64,10 @@ void DialogCustomerCostHistory::setCustomer(CustomerData data)
     m_cus = data;
 
     ui->lbId->setText(m_cus.Id);
-    ui->lbClass->setText(m_cus.Class);
+
+    QString sTmp  = ACTION.getCustomerClass(m_cus.Class).Name;
+
+    ui->lbClass->setText(sTmp);
     ui->lbName->setText(m_cus.Name);
     ui->lbCurrency->setText(m_cus.Currency);
     ui->lbMoney->setText(m_cus.Money);
@@ -111,7 +114,7 @@ void DialogCustomerCostHistory::refresh(int)
         {
             CustomerCost d(v);
 
-            ui->tableWidget->setItem(i,0,UI.tbItem(d.Sid));
+            ui->tableWidget->setItem(i,0,UI.tbItem(d.OrderId));
             ui->tableWidget->setItem(i,1,UI.tbItem("加值"));
             ui->tableWidget->setItem(i,2,UI.tbItem(d.ChangeValue));
 

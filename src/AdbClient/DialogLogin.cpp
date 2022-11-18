@@ -124,7 +124,7 @@ void DialogLogin::on_btnLogin_clicked()
     else if(iRe==0)
     {
 
-        ui->lbMsg->setText("帳密錯誤!");
+        ui->lbMsg->setText(sErrorMsg);
     }
     else
     {

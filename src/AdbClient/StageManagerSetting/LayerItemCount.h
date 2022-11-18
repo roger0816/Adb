@@ -36,6 +36,8 @@ private:
 
    QList<DataGameItem> m_listGameItem;
 
+   int m_iCbGame=0;
+
 
 
     QVariantList m_listData;

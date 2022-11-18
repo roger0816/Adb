@@ -6,6 +6,8 @@ LayerCustomerSetting::LayerCustomerSetting(QWidget *parent) :
     ui(new Ui::LayerCustomerSetting)
 {
     ui->setupUi(this);
+
+    ui->tbDebit->setColumnWidth(0,70);
 }
 
 LayerCustomerSetting::~LayerCustomerSetting()
@@ -21,6 +23,10 @@ void LayerCustomerSetting::showEvent(QShowEvent *)
 
 void LayerCustomerSetting::refresh()
 {
+
+
+    m_primeRate= ACTION.primeRate("");
+
 
     QVariantMap tmp;
 
@@ -46,7 +52,26 @@ void LayerCustomerSetting::refresh()
 
     }
 
-    //
+
+    m_listDebit.clear();
+    ACTION.action(ACT::QUERY_DEBIT_CLASS,QVariantMap(),m_listDebit,sError);
+    ui->tbDebit->setRowCount(0);
+
+
+    for(int i=0;i<m_listDebit.length();i++)
+    {
+        ui->tbDebit->setRowCount(i+1);
+
+        DebitClass data(m_listDebit.at(i).toMap());
+
+        ui->tbDebit->setItem(i,0,UI.tbItem(data.Sort));
+           ui->tbDebit->setItem(i,1,UI.tbItem(data.Currency));
+        ui->tbDebit->setItem(i,2,UI.tbItem(data.Name));
+
+    }
+
+
+  /*
 
     m_listDebit.clear();
 
@@ -66,6 +91,8 @@ void LayerCustomerSetting::refresh()
         ui->tbDebit->setItem(i,1,UI.tbItem(m_listDebit.at(i).toMap()["Name"]));
 
     }
+
+    */
 
 
 
@@ -170,11 +197,13 @@ void LayerCustomerSetting::on_btnDebitAdd_clicked()
 {
     DialogInput dialog;
 
+    dialog.hideDelete();
+
     dialog.setTitle("支付管道");
 
     QVariantMap id;
 
-    id["Id"] =QString::number(m_listDebit.length()+1);
+    id["Sort"] =QString::number(m_listDebit.length()+1).toUInt();
 
     dialog.addInput("排序",id);
 
@@ -184,6 +213,10 @@ void LayerCustomerSetting::on_btnDebitAdd_clicked()
 
     dialog.addInput("名稱",name);
 
+     QVariantMap currency;
+    currency["Currency"] = m_primeRate.listKey();
+    dialog.addComboBox("幣別",currency);
+
     int ret  =  dialog.exec();
 
     QString sError;
@@ -191,8 +224,8 @@ void LayerCustomerSetting::on_btnDebitAdd_clicked()
     if(ret==1)
     {
         QVariantMap input = dialog.data();
-        // input["Type"]="Debit";
-        ACTION.action(ACT::ADD_CUSTOM_DEBIT,input,sError);
+
+        ACTION.action(ACT::ADD_DEBIT_CLASS,input,sError);
 
         UI.showMsg("",sError,"OK");
 
@@ -220,12 +253,17 @@ void LayerCustomerSetting::on_btnDebitEdit_clicked()
 
     QVariantMap d0,d1;
 
-    d0["Id"] = data["Id"];
+    d0["Sort"] = data["Sort"].toUInt();
     dialog.addInput("排序",d0);
 
     d1["Name"] =data["Name"];
 
     dialog.addInput("名稱",d1);
+
+    QVariantMap currency;
+   currency["Currency"] = m_primeRate.listKey();
+
+   dialog.addComboBox("幣別",currency);
 
     int iRet = dialog.exec();
 
@@ -234,7 +272,7 @@ void LayerCustomerSetting::on_btnDebitEdit_clicked()
         QVariantMap input = dialog.data();
         input["Sid"] = data["Sid"];
         //  input["Type"]="Debit";
-        ACTION.action(ACT::EDIT_CUSTOM_DEBIT,input,sError);
+        ACTION.action(ACT::EDIT_DEBIT_CLASS,input,sError);
 
         UI.showMsg("",sError,"OK");
 
@@ -244,8 +282,7 @@ void LayerCustomerSetting::on_btnDebitEdit_clicked()
     {
         QVariantMap input;
         input["Sid"] = data["Sid"];
-        // input["Type"]="Debit";
-        ACTION.action(ACT::DEL_CUSTOM_DEBIT,input,sError);
+        ACTION.action(ACT::DEL_DEBIT_CLASS,input,sError);
 
         UI.showMsg("",sError,"OK");
 

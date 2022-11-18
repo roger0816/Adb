@@ -44,6 +44,8 @@ private:
          QVariantList m_listCustomer;
 
          QVariantList m_listDebit;
+
+         DataRate m_primeRate;
 };
 
 #endif // LAYERCUSTOMERSETTING_H

@@ -73,7 +73,7 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     ui->lbTime->setText(time.toString("yyyy/MM/dd hh:mm"));
 
-        checkTotal();
+    checkTotal();
 }
 
 
@@ -145,10 +145,12 @@ QString LayerAddCost::getNewOrderId()
     QStringList list = sLast.split("-");
     int iIdx = list.last().toInt()+1;
 
-    sRe = list.first()+"-"+QString::number(iIdx);
+    sRe = list.first()+"-"+QString("%1").arg(iIdx,4,10,QLatin1Char('0'));  // QString::number(iIdx);
 
     return sRe;
 }
+
+
 
 void LayerAddCost::refresh()
 {
@@ -156,15 +158,40 @@ void LayerAddCost::refresh()
     QVariantMap tmp;
     tmp["ASC"]="Id";
     QVariantList listOut;
-    ACTION.action(ACT::QUERY_CUSTOM_DEBIT,tmp,listOut,sError);
+    ACTION.action(ACT::QUERY_DEBIT_CLASS,tmp,listOut,sError);
 
-    m_listDebit = listOut;
+    m_listRowDebit = listOut;
 
-    QStringList list =GLOBAL.listMapToList(m_listDebit,"Name");
+    setDebitCb();
 
+}
+
+void LayerAddCost::setDebitCb()
+{
     ui->cbDebit->clear();
 
-    ui->cbDebit->addItems(list);
+    m_listDebit.clear();
+
+    if(ui->cbCurrency->currentIndex()<0 || ui->cbCurrency->currentText().trimmed()=="")
+        return;
+
+    QStringList list;
+
+    foreach(QVariant v,m_listRowDebit)
+    {
+        DebitClass data(v.toMap());
+
+        if(data.Currency==ui->cbCurrency->currentText())
+        {
+            m_listDebit.append(v);
+        }
+    }
+
+
+    list=GLOBAL.listMapToList(m_listDebit,"Name");
+
+    if(list.length()>0)
+        ui->cbDebit->addItems(list);
 }
 
 void LayerAddCost::on_btnAddCostBack_clicked()
@@ -200,6 +227,7 @@ void LayerAddCost::on_cbCurrency_currentIndexChanged(int index)
 
     ui->lbRate->setText("匯率: "+m_rate.listData.at(idx).second);
 
+    setDebitCb();
     checkTotal();
 
     m_bLock=false;
@@ -246,9 +274,10 @@ void LayerAddCost::on_btnOk_clicked()
     m_lastCostData.DebitNote=ui->txDebitNote->text();
 
     m_lastCostData.AddRate = ui->sbAdd->text();
-    //m_lastCostData.Rate = ACTION.rate().Sid;
 
-    // m_lastCostData.Rate = ACTION.rate("",true,true).last().Sid;
+    m_lastCostData.OriginCurrency=ui->cbCurrency->currentText();
+
+    m_lastCostData.OriginValue=ui->sb->text();
 
     m_lastCostData.Rate = ACTION.primeRate("",true).Sid;
 
@@ -259,7 +288,7 @@ void LayerAddCost::on_btnOk_clicked()
     int iRet = UI.showMsg("提醒!",sMsg,QStringList()<<"否"<<"是");
     if(iRet==1)
     {
-         QString sError;
+        QString sError;
 
         if(ui->wPic0->m_bHasPic)
         {
@@ -332,6 +361,7 @@ void LayerAddCost::on_sbAdd_valueChanged(double )
 {
     checkTotal();
 }
+
 
 
 

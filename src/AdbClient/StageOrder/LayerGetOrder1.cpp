@@ -7,6 +7,8 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    connect(ui->btnCancel,&QPushButton::clicked,this,&LayerGetOrder1::slotCancel);
+
     m_layerCost = new LayerSayCost;
 
     m_layerCost->m_bOrderMode = true;
@@ -105,7 +107,7 @@ void LayerGetOrder1::refreshUser(bool bRe)
 
         col++;
 
-        if(col>=3)
+        if(col>=5)
         {
             col=0;
 
@@ -134,15 +136,25 @@ QVariantMap LayerGetOrder1::gameItem(QString sSid)
 void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 {
     if(row<0 || row>=ui->tbUser->rowCount())
+    {
+        ui->tbOrder->setRowCount(0);
+        ui->wBottom->setCurrentIndex(0);
         return;
-
+    }
     if(column<0 || column>=ui->tbUser->columnCount())
-        return;
+    {
+        ui->tbOrder->setRowCount(0);
+        ui->wBottom->setCurrentIndex(0);
 
+        return;
+    }
     if(ui->tbUser->item(row,column)->text()
             .split("(").last().split(")").first().toInt()<1)
+    {
+        ui->tbOrder->setRowCount(0);
+        ui->wBottom->setCurrentIndex(0);
         return;
-
+    }
 
     // QTableWidgetItem *item =ui->tbUser->item(row,column);
     ui->tbUser->setCurrentCell(row,column);
@@ -202,6 +214,10 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         QVariantMap item=gameItem(sGameItemSid);
 
         ui->tbOrder->setItem(i,5,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
+        QString sTmpNote= order.Note0.at(2);
+
+        ui->tbOrder->setItem(i,8,UI.tbItem(sTmpNote.replace("\n","")));
+
 
 
         if(order.Step=="1")
@@ -322,7 +338,14 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
         ui->cbAddValueType->clear();
         ui->cbAddValueType->addItems(listCb);
 
+        QString sNote0;
+        if(order.Note0.length()>2)
+            sNote0=order.Note0.at(2);
 
+
+        ui->btnDelay->setChecked(sNote0.contains("[訂單延誤]"));
+
+        ui->txNote->setText(sNote0.replace("[訂單延誤]\n",""));
 
         ui->wBottom->setCurrentIndex(1);
 
@@ -454,5 +477,63 @@ void LayerGetOrder1::refresh()
 void LayerGetOrder1::on_btnDelay_clicked()
 {
     ui->lbDelay->setVisible(ui->btnDelay->isChecked());
+
+    QVariantList listData =m_data[m_currentDataKey].toList();
+
+    QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
+
+    OrderData order(data);
+
+
+    QString sError;
+
+
+    QString sNote= ui->txNote->toPlainText();
+
+
+    if(ui->lbDelay->isVisible())
+    {
+        sNote="["+ui->lbDelay->text()+"]\n"+sNote;
+    }
+
+
+    order.Note0[2]=sNote;
+
+    ACTION.replaceOrder(order,sError);
+
+
+    refreshUser();
+
+
+
+
+
+
+}
+
+
+void LayerGetOrder1::slotCancel()
+{
+    QVariantList listData =m_data[m_currentDataKey].toList();
+
+    QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
+
+    OrderData order(data);
+
+    order.Step="-1";
+
+    order.StepTime[1]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
+
+
+    order.Pic0 = ui->wPic0->uploadPic();
+    QString sError;
+    bool bOk =ACTION.replaceOrder(order,sError);
+    if(bOk)
+        sError="訂單已取消";
+    UI.showMsg("",sError,"OK");
+
+    refreshUser();
+
+
 }
 

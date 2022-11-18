@@ -474,18 +474,32 @@ void CSqlClass::createTableSqlite()
 
 
     sql.clear();
-
-
     sql.exec("CREATE TABLE 'CustomerClass' (      \
              'Sid'	INTEGER,                    \
+             'Sort'	INTEGER,                    \
              'Id'	TEXT NOT NULL,              \
              'Name'	TEXT NOT NULL,              \
+             'Type'	TEXT,              \
              'UpdateTime'	TEXT,               \
+            'Note1'	TEXT,              \
+            'Note2'	TEXT,              \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
              );");
 
     sql.clear();
+    sql.exec("CREATE TABLE 'DebitClass' (      \
+             'Sid'	INTEGER,                    \
+             'Sort'	INTEGER,                    \
+             'Id'	TEXT NOT NULL,              \
+             'Name'	TEXT NOT NULL,              \
+             'Currency'	TEXT,              \
+             'UpdateTime'	TEXT,               \
+            'Note1'	TEXT,              \
+            'Note2'	TEXT,              \
+             PRIMARY KEY('Sid' AUTOINCREMENT)   \
+             );");
 
+    sql.clear();
 
     sql.exec("CREATE TABLE 'GroupData' (  \
              'Sid'	INTEGER,    \
@@ -557,6 +571,8 @@ void CSqlClass::createTableSqlite()
              'CustomerSid'	TEXT,                       \
              'OrderId'	TEXT,                        \
              'Currency'	TEXT,                               \
+             'OriginCurrency'	TEXT,                               \
+             'OriginValue'	TEXT,                        \
              'Rate'	TEXT,                   \
              'AddRate'	TEXT,                   \
              'DebitSid'	TEXT,                               \

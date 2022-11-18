@@ -228,12 +228,14 @@ void ModelGameReport::requestAction()
         qDebug()<<"Game Sid "<<sGameSid;
         // int iCount = listOrderItem.first().split(",,").last().toInt(); //算訂單，不計算game item數量
         int idx = findGameIndex(sGameSid);
-          qDebug()<<"AAAAAAAAAAAA1 "<<sItemSid<<" idx,"<<idx;
+
         if(idx<0 || idx>= m_listGame.length())
             continue;
 
         int iStep = order.Step.toInt();
 
+        if(iStep>0)
+            continue;
 
         if(iStep==0)
         {

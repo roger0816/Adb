@@ -25,6 +25,7 @@ SOURCES += \
     StageCustomerService/DialogCustomerCostHistory.cpp \
     StageManagerSetting/LayerItemCount.cpp \
     StageOrder/ItemOrderSelector.cpp \
+    StageOrder/LayerDayDebit.cpp \
     StageReport/LayerGameReport.cpp \
     StageReport/LayerUserReport.cpp \
     StageReport/ModelGameReport.cpp \
@@ -86,6 +87,7 @@ HEADERS += \
     StageCustomerService/DialogCustomerCostHistory.h \
     StageManagerSetting/LayerItemCount.h \
     StageOrder/ItemOrderSelector.h \
+    StageOrder/LayerDayDebit.h \
     StageReport/LayerGameReport.h \
     StageReport/LayerUserReport.h \
     StageReport/ModelGameReport.h \
@@ -146,6 +148,7 @@ FORMS += \
     StageCustomerService/DialogCustomerCostHistory.ui \
     StageManagerSetting/LayerItemCount.ui \
     StageOrder/ItemOrderSelector.ui \
+    StageOrder/LayerDayDebit.ui \
     StageReport/LayerGameReport.ui \
     StageReport/LayerUserReport.ui \
     component/CSideMenu.ui \

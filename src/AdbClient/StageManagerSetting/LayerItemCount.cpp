@@ -9,6 +9,8 @@ LayerItemCount::LayerItemCount(QWidget *parent) :
 
     ui->cbGame->setProperty("lock",false);
 
+    ui->tb->setColumnWidth(0,250);
+
 }
 
 LayerItemCount::~LayerItemCount()
@@ -130,6 +132,8 @@ void LayerItemCount::refresh()
 
     ui->cbGame->setProperty("lock",false);
 
+    ui->cbGame->setCurrentIndex(m_iCbGame);
+
     int iIdx = ui->cbGame->currentIndex();
 
     if(iIdx<0 || iIdx>= m_listGame.length())
@@ -152,6 +156,8 @@ void LayerItemCount::on_cbGame_currentIndexChanged(int index)
 
     if(index<0 || index>=m_listGame.length() || ui->cbGame->property("lock").toBool())
         return;
+
+    m_iCbGame = index;
 
     updateTb();
 
@@ -182,7 +188,7 @@ void LayerItemCount::on_tb_cellClicked(int row, int column)
         if(iRet==1)
         {
 
-            if(input.data()["Count"].toInt()<=0 || input.data()["Count"].toInt()>10000)
+            if(input.data()["Count"].toInt()<=0 || input.data()["Count"].toInt()>1000000)
             {
                 DMSG.showMsg("","請輸入有效數量","OK");
                 return;

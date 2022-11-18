@@ -65,18 +65,21 @@ void LayerDayReport::refreshTb()
         OrderData data = m_listOrder.at(i);
         if(checkFilter(data))
         {
+            QVariantMap d;
+            d["Sid"] = data.CustomerSid;
+            QVariantList listCustomer;
+            ACTION.action(ACT::QUERY_CUSTOMER,d,listCustomer,sError);
+            if(listCustomer.length()<1)
+                continue;
 
-            m_listInto.append(data);
             int iRow = ui->tb->rowCount();
             ui->tb->setRowCount(iRow+1);
 
             ui->tb->setItem(iRow,0,UI.tbItem(data.Id));
             UserData owner =ACTION.getUser(data.Owner);
 
-            QVariantMap d;
-            d["Sid"] = data.CustomerSid;
-            QVariantList listCustomer;
-            ACTION.action(ACT::QUERY_CUSTOMER,d,listCustomer,sError);
+
+
             CustomerData customer(listCustomer.first().toMap());
             QString sDate=data.OrderDate+data.OrderTime;
             ui->tb->setItem(iRow,1,UI.tbItem(data.Name));
@@ -168,6 +171,8 @@ void LayerDayReport::refreshTb()
                 ui->tb->setItem(iRow,13,UI.tbItem(iNtdPrime));
                 ui->tb->setItem(iRow,14,UI.tbItem(iNtdCost-iNtdPrime));
             }
+
+              m_listInto.append(data);
 
             /*
                 QList<DataFactory> fac=ACTION.getFactoryClass("",true);

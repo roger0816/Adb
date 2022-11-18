@@ -24,15 +24,38 @@ CData Query::implementRecall(CData data)
     {
         int iRe=-1;
 
-        if(data.listData.length()>=2)
+
+        if(!checkAppVersion(data.sMsg))
         {
-            bOk = m_sql.checkLogin(data.listData.first().toString(),data.listData.last().toString(),re.dData,sError);
-
-            re.listData.append(iRe);
-
+            bOk=false;
+            sError="版本無法使用，請更新版本";
         }
 
-        sOkMsg ="登入成功";
+        else
+        {
+
+            if(data.listData.length()>=2)
+            {
+                bOk = m_sql.checkLogin(data.listData.first().toString(),data.listData.last().toString(),re.dData,sError);
+
+                re.listData.append(iRe);
+
+            }
+            if(bOk)
+            {
+                sOkMsg ="登入成功";
+
+                QString str=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+
+                QByteArray s=QCryptographicHash::hash(str.toLatin1(),QCryptographicHash::Md5);
+
+                QString sSession(s.toHex());
+
+                re.dData["Session"]=sSession;
+            }
+            else
+                sError="帳密錯誤";
+        }
 
     }
     else if(data.iAciton==ACT::ADD_USER)
@@ -223,8 +246,8 @@ CData Query::implementRecall(CData data)
 
         QVariantMap d = data.dData;
 
-//        if(data.listData.length()>0)
-//            d = data.listData.first().toMap();
+        //        if(data.listData.length()>0)
+        //            d = data.listData.first().toMap();
 
         bOk = m_sql.queryTb(SQL_TABLE::Bulletin(),d,re.listData,sError);
 
@@ -293,6 +316,39 @@ CData Query::implementRecall(CData data)
         bOk = m_sql.queryTb(SQL_TABLE::CustomerClass(),d,re.listData,sError);
 
     }
+    //
+    else if(data.iAciton==ACT::ADD_DEBIT_CLASS)
+    {
+        bOk = m_sql.insertTb(SQL_TABLE::DebitClass(),data.dData,sError);
+        sOkMsg = "入帳管道新增完成";
+    }
+    else if(data.iAciton==ACT::EDIT_DEBIT_CLASS)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.updateTb(SQL_TABLE::DebitClass(),d,data.dData,sError);
+        sOkMsg = "入帳管道修改完成";
+    }
+
+    else if(data.iAciton==ACT::DEL_DEBIT_CLASS)
+    {
+        QVariantMap d;
+        d["Sid"] = data.dData["Sid"];
+        bOk = m_sql.delFromTb(SQL_TABLE::DebitClass(),d,sError);
+
+        sOkMsg ="入帳管道刪除完成";
+    }
+
+    else if(data.iAciton==ACT::QUERY_DEBIT_CLASS)
+    {
+
+        QVariantMap d = data.dData;
+        d["ASC"]="Sort";
+
+        bOk = m_sql.queryTb(SQL_TABLE::DebitClass(),d,re.listData,sError);
+
+    }
+
 
 
 
@@ -482,7 +538,7 @@ CData Query::implementRecall(CData data)
     {
         QString sReId="";
 
-      //  QString sDate = data.dData["OrderTime"].toString();
+        //  QString sDate = data.dData["OrderTime"].toString();
         QString sDate =QDate::currentDate().toString("yyyyMMdd");
         bOk  =m_sql.lastCustomerAddCostId(sDate,sReId,sError);
 
@@ -700,4 +756,25 @@ CData Query::implementRecall(CData data)
     re.iState = ACT_RECALL;
 
     return re;
+}
+
+bool Query::checkAppVersion(QString sVersion)
+{
+    bool bRe = false;
+
+    QStringList listTmp = sVersion.split(".");
+
+    if(listTmp.length()<3)
+        return false;
+
+    //ex :   v1.01.1115_2
+
+    if(listTmp.at(1).toInt()>=1)
+    {
+        if(listTmp.at(2).split("_").first().toInt()>=1115)
+            bRe =true;
+    }
+
+
+    return bRe;
 }

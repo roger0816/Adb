@@ -628,14 +628,20 @@ void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
     {
         QVariantMap tmp = m_listGameInfo.at(i).toMap();
 
-        QString sName= tmp["ServerName"].toString();
+        CustomerGameInfo data(tmp);
+
+        QString sName= data.ServerName;
 
 
-        if(tmp["GameSid"].toString() == m_sCurrentGameSid &&
-                tmp["LoginAccount"].toString() == ui->cbAccount->currentText() &&
+        if(data.GameSid == m_sCurrentGameSid &&
+                data.LoginAccount== ui->cbAccount->currentText() &&
                 server.indexOf(sName)<0)
         {
             server.append(sName);
+
+            ui->lbGamePassword->setText(data.LoginPassword);
+
+
         }
 
 
@@ -812,13 +818,15 @@ void LayerSayCost::on_btnCopy_clicked()
 
     sMsg+=ui->label_1->text()+" %1\n"+ui->label_2->text()+"   %2\n"+
             ui->label_3->text()+" %3\n"+ui->label_4->text()+" %4\n"+
-            ui->label_5->text()+" %5\n"+ui->label_6->text()+" %6\n"+ui->label_7->text()+" %7\n";
+            ui->label_5->text()+" %5\n"+ui->label_10->text()+" %6\n"+
+            ui->label_6->text()+" %7\n"+ui->label_7->text()+" %8\n";
 
     sMsg =sMsg.arg(ui->lbTime->text())
             .arg(ui->lbCurrency->text())
             .arg(ui->lbGameName->text())
             .arg(ui->lbLoginType->text())
             .arg(ui->lbGameAccount->text())
+            .arg(ui->lbGamePassword->text())
             .arg(ui->lbServer->text())
             .arg(ui->lbChr->text());
 

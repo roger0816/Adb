@@ -10,7 +10,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 
-#define ADP_VER "v1.01.1113"
+#define ADP_VER "v1.02.1118"
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;
@@ -23,6 +23,7 @@ struct SQL_TABLE
     static QString GameItem(){return "GameItem";}
     static QString Bulletin(){return "Bulletin";}
     static QString CustomerClass(){return "CustomerClass";}
+    static QString DebitClass(){return "DebitClass";}
     static QString GroupData(){return "GroupData";}
     static QString FactoryClass(){return "FactoryClass";}
     static QString UserData(){return "UserData";}
@@ -85,6 +86,7 @@ enum _KEY
     ADD_CUSTOM_CLASS = 1701,
     EDIT_CUSTOM_CLASS,
     DEL_CUSTOM_CLASS,
+    //CUSTOM_DEBIT 待移除, 改用DEBIT_CLASS
     ADD_CUSTOM_DEBIT = 1711,
     EDIT_CUSTOM_DEBIT,
     DEL_CUSTOM_DEBIT,
@@ -133,7 +135,12 @@ enum _KEY
     ADD_ITEM_COUNT=2701,
     EDIT_ITEM_COUNT,
     DEL_ITEM_COUNT,
-    QUERY_ITEM_COUNT=2731
+    QUERY_ITEM_COUNT=2731,
+
+    ADD_DEBIT_CLASS = 2811,
+    EDIT_DEBIT_CLASS,
+    DEL_DEBIT_CLASS,
+    QUERY_DEBIT_CLASS=2831
 
 
 };

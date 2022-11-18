@@ -27,7 +27,9 @@ private:
 
     CustomerCost m_lastCostData;
 
-    QVariantList m_listDebit;
+    QVariantList m_listDebit;    //支付管道:篩選後填入comboBox的資料
+
+    QVariantList m_listRowDebit; //支付管道:原始資料
 
     void checkTotal();
 
@@ -41,12 +43,15 @@ private:
 
     QString getNewOrderId();
 
+
 signals:
     void back(int iPage=0);
 
 public slots:
 
     void refresh();
+
+    void setDebitCb();
 
     void on_btnAddCostBack_clicked();
 
@@ -58,6 +63,7 @@ private slots:
     void on_btnOk_clicked();
 
     void on_sbAdd_valueChanged(double);
+
 
 };
 

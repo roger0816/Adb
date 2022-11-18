@@ -36,6 +36,8 @@ int Action::checkLogin(QString sUser, QString sPass, QString &sError)
 
     data.listData<<sUser<<sPass;
 
+    data.sMsg=ADP_VER;
+
 
     CData dRe = query(data);
 
@@ -346,9 +348,7 @@ QList<DataCustomerClass> Action::getCustomerClass(bool bQuery)
 
         foreach(QVariant v,listClass)
         {
-            DataCustomerClass tmp;
-
-            tmp.setData(v.toMap());
+            DataCustomerClass tmp(v.toMap());
 
             m_listCustomerClass.append(tmp);
         }
@@ -697,6 +697,10 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
     else if(order.Step=="4") //回報 - 更新用戶餘額
         bToUpdateMoney=true;
+    else if(order.Step=="-1")
+    {
+
+    }
 
     // QVariantMap out;
     bRe = action(ACT::REPLACE_ORDER,order.data(),sError);

@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QDebug>
 #include <QLabel>
+#include <QComboBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
@@ -15,21 +16,29 @@ namespace Ui {
 class DialogInput;
 }
 
+
+
+
 class DialogInputItem : public QWidget
 {
     Q_OBJECT
 public:
     explicit DialogInputItem(QWidget *parent = nullptr);
-
-    void setData(QString title,QVariantMap data);
-    QVariantMap data();
+    void initInput();
+    void setInputData(QString title,QVariantMap data);
+    void initComboBox();
+    void setComboData(QString title,QVariantMap data);
+    virtual QVariantMap data();
 private:
     QLabel *lb;
 
-    QLineEdit *txt;
+    QComboBox *cb=nullptr;
+
+    QLineEdit *txt=nullptr;
 
     QVariantMap m_data;
 };
+
 
 class DialogInput : public QDialog
 {
@@ -40,6 +49,8 @@ public:
     ~DialogInput();
 
     void setTitle(QString sTitle);
+
+    void addComboBox(QString sLb, QVariantMap input);
 
     void addInput(QString sLb, QVariantMap input);
 

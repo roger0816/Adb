@@ -51,16 +51,18 @@ private:
     void showEvent(QShowEvent *) override;
 
 
-    void refreshGameList();
 
     void refreshItemList();
 
-
+    bool checkSearch(QVariantMap data);
 
     QVariantList m_listTipData;
 
+    QVariantList m_gameData;
 
-    GameList m_gameList;
+    QVariantList m_gameDisplayData;
+
+
 
     QVariantList m_listItem;
 
@@ -68,8 +70,11 @@ private:
 
 private slots:
 
+    void refreshGameList();
+
      void refresh();
 
+     void on_txSearch_textChanged(const QString &);
 };
 
 #endif // LAYERCOSTSETTING_H

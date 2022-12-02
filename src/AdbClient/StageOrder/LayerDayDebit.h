@@ -4,7 +4,7 @@
 #include <QWidget>
 #include "GlobalUi.h"
 #include "Global.h"
-
+#include "ItemPic.h"
 namespace Ui {
 class LayerDayDebit;
 }
@@ -27,8 +27,13 @@ private:
 
     QVariantList m_listCustomerCost;
 
+    QVariantList m_listDisplayCustomerCost;
+
+
     bool checkData(CustomerCost data);
 
+    QDialog *m_dialogPic = new QDialog();
+    ItemPic *m_itemPic  = new ItemPic(m_dialogPic);
 
 private slots:
     void refresh();
@@ -39,6 +44,7 @@ private slots:
     void on_dateEdit_userDateChanged(const QDate &date);
     void on_timeStart_userTimeChanged(const QTime &time);
     void on_timeEnd_userTimeChanged(const QTime &time);
+    void on_tb_cellPressed(int row, int column);
 };
 
 #endif // LAYERDAYDEBIT_H

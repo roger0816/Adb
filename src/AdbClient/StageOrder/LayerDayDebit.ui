@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>835</width>
+    <width>1153</width>
     <height>547</height>
    </rect>
   </property>
@@ -273,7 +273,7 @@
         </column>
         <column>
          <property name="text">
-          <string>加值額度</string>
+          <string>加值後餘額</string>
          </property>
         </column>
         <column>
@@ -294,6 +294,16 @@
         <column>
          <property name="text">
           <string>加值人員</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>圖</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>圖</string>
          </property>
         </column>
         <column>

@@ -52,7 +52,7 @@ int Action::checkLogin(QString sUser, QString sPass, QString &sError)
         m_currentUser.setData(dRe.dData);
         m_sCurrentUserId = m_currentUser.Sid;
         m_sCurrentUserName = m_currentUser.Name;
-
+        m_sCurrentSession=dRe.dData["Session"].toString();
         iRe =1;
     }
     else
@@ -61,6 +61,8 @@ int Action::checkLogin(QString sUser, QString sPass, QString &sError)
             iRe = -1;
         else
             iRe = 0;
+
+        m_sCurrentSession="";
     }
 
     return iRe;
@@ -555,6 +557,30 @@ DataGameItem Action::getGameItemFromSid(QString sSid, bool bQuery)
     }
 
     return re;
+}
+
+double Action::getGameItemPayCount(QString sGameItemSid, QString sPaySid, bool bQuery)
+{
+    double iRe = 0;
+
+   DataGameItem item = getGameItemFromSid(sGameItemSid,bQuery);
+
+   QStringList listTmp = item.AddValueTypeSid.split(";;");
+
+   for(int i=0;i<listTmp.length();i++)
+   {
+       QString pay = listTmp.at(i).split(",,").first();
+
+       double iCount = listTmp.at(i).split(",,").last().toDouble();
+
+       if(pay==sPaySid)
+       {
+           iRe=iCount;
+       }
+   }
+
+
+   return iRe;
 }
 
 QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery)
@@ -1056,7 +1082,7 @@ void Action::setPrimeMoney(OrderData &order)
         return cost;
     };
 
-    qDebug()<<"XXXXXXXXXXXX : "<<order.PrimeRateSid;
+
     DataRate rate=primeRate(order.PrimeRateSid,true);
 
     CListPair listPay =getAddValueType();

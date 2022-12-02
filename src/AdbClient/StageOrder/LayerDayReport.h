@@ -7,9 +7,27 @@
 #include "LayerSayCost.h"
 #include "DialogCommon.h"
 #include <QShowEvent>
+#include "DialogDayReportEdit.h"
 namespace Ui {
 class LayerDayReport;
 }
+
+
+namespace  _LayerDayReport{
+
+struct OrderPayType{
+
+    QString sPaySid;
+    QString sPayName;
+    int iTotalCount=0;
+
+    QList<int> m_iListCount;
+
+};
+
+
+}
+
 
 class LayerDayReport : public QWidget
 {
@@ -39,7 +57,6 @@ private slots:
 
     void on_cbStep5_clicked();
 
-    void on_tb_cellClicked(int, int);
 
     void delayRefresh();
 
@@ -52,10 +69,12 @@ private:
 
     QList<OrderData> m_listOrder;
 
-    QList<OrderData> m_listInto;
+    QList<OrderData> m_listInto; //after fitler , display of m_listOrder
 
     LayerSayCost *m_detialOrder = nullptr;
 
+
+    _LayerDayReport::OrderPayType getPayCount(OrderData data);
 
     bool m_bLockDate = false;
 };

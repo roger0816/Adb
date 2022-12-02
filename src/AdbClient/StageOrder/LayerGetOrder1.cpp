@@ -18,6 +18,8 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
     ui->lbDelay->hide();
 
     ui->wBottom->setCurrentIndex(0);
+
+
 }
 
 LayerGetOrder1::~LayerGetOrder1()
@@ -336,7 +338,16 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
                 listCb.append(list.at(i).toMap()["Name"].toString());
         }
         ui->cbAddValueType->clear();
+
         ui->cbAddValueType->addItems(listCb);
+
+        ui->cbAddValueType->setEditable(true);
+
+
+//        QCompleter *completer=new QCompleter(ui->cbAddValueType->model(),this);
+//        completer->setCompletionMode(QCompleter::PopupCompletion);
+//        ui->cbAddValueType->setCompleter(completer);
+
 
         QString sNote0;
         if(order.Note0.length()>2)

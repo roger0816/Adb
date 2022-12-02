@@ -32,6 +32,102 @@
    <item row="0" column="0">
     <widget class="QWidget" name="wBg" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QTableWidget" name="tb">
+        <property name="editTriggers">
+         <set>QAbstractItemView::NoEditTriggers</set>
+        </property>
+        <attribute name="horizontalHeaderMinimumSectionSize">
+         <number>28</number>
+        </attribute>
+        <attribute name="horizontalHeaderDefaultSectionSize">
+         <number>120</number>
+        </attribute>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <column>
+         <property name="text">
+          <string>訂單編號</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>序號</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>成立時間</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>專員代碼</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>客戶編號</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>訂單內容</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>訂單狀態</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>業積</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>主管確認</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>幣別</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>今天應收</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>應收(台幣)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>成本(台幣)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>利潤(台幣)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>儲值方式</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>數量</string>
+         </property>
+        </column>
+       </widget>
+      </item>
       <item row="0" column="0">
        <widget class="QWidget" name="widget" native="true">
         <property name="minimumSize">
@@ -177,95 +273,78 @@
         </layout>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QTableWidget" name="tb">
-        <property name="editTriggers">
-         <set>QAbstractItemView::NoEditTriggers</set>
+      <item row="2" column="0">
+       <widget class="QWidget" name="wTotal" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
         </property>
-        <attribute name="horizontalHeaderMinimumSectionSize">
-         <number>28</number>
-        </attribute>
-        <attribute name="horizontalHeaderDefaultSectionSize">
-         <number>120</number>
-        </attribute>
-        <attribute name="verticalHeaderVisible">
-         <bool>false</bool>
-        </attribute>
-        <column>
-         <property name="text">
-          <string>訂單編號</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>序號</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>成立時間</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>專員代碼</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>客戶編號</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>訂單內容</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>訂單狀態</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>業積</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>主管確認</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>幣別</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>今天應收</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>應收(台幣)</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>實際入帳(台幣)</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>成本(台幣)</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>利潤(台幣)</string>
-         </property>
-        </column>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_7">
+           <property name="text">
+            <string>小計(台幣)         </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>應收:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbTotal0">
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>成本:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbTotal1">
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>利潤:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbTotal2">
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </widget>
       </item>
      </layout>

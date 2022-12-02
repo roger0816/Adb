@@ -7,7 +7,7 @@ DialogAddValueTypeEdit::DialogAddValueTypeEdit(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_listItem<<ui->sb0<<ui->sb1<<ui->sb3<<ui->sbSub;
+    m_listItem<<ui->sb0<<ui->sb1<<ui->sb2<<ui->sb3<<ui->sbSub;
 
     ui->btnDel->hide();
 

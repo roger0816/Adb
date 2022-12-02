@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="1" column="0">
     <widget class="QWidget" name="wBg" native="true">
      <property name="minimumSize">
       <size>
@@ -45,7 +45,10 @@
       <property name="bottomMargin">
        <number>0</number>
       </property>
-      <property name="spacing">
+      <property name="horizontalSpacing">
+       <number>10</number>
+      </property>
+      <property name="verticalSpacing">
        <number>0</number>
       </property>
       <item row="0" column="0">
@@ -58,7 +61,7 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>400</width>
+          <width>420</width>
           <height>0</height>
          </size>
         </property>
@@ -154,7 +157,7 @@
          <item row="0" column="0">
           <widget class="QTableWidget" name="tbGame">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -169,7 +172,7 @@
             <enum>Qt::StrongFocus</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::NoEditTriggers</set>
+            <set>QAbstractItemView::DoubleClicked</set>
            </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
@@ -439,6 +442,42 @@
          <enum>Qt::Vertical</enum>
         </property>
        </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QGroupBox" name="groupBox_3">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="txSearch">
+        <property name="placeholderText">
+         <string>多條件符號&amp;</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnClear">
+        <property name="text">
+         <string>清除</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_4">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </widget>

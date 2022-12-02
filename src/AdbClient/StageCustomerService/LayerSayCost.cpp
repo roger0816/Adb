@@ -446,6 +446,7 @@ void LayerSayCost::addPayTypeToCb()
     ui->cbSelect->addItems(cbData);
 
 
+
 }
 
 bool LayerSayCost::checkPayType(CListPair &data)

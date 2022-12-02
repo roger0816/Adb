@@ -6,6 +6,31 @@ LayerDayDebit::LayerDayDebit(QWidget *parent) :
     ui(new Ui::LayerDayDebit)
 {
     ui->setupUi(this);
+
+    m_itemPic->setReadOnly(true);
+
+    m_itemPic->setEnableDetailMode(false);
+
+    connect(m_itemPic,&ItemPic::finishedSaveImage,this,[=](QString sName,bool b)
+    {
+        if(b)
+        {
+            DMSG.showMsg("","圖片下載完成\n"+sName.split("/").last(),QStringList()<<"OK");
+            m_dialogPic->done(1);
+        }
+        else
+            DMSG.showMsg("","圖片下載失敗\n"+sName.split("/").last(),QStringList()<<"OK");
+    });
+
+    m_dialogPic->setWindowFlags(m_dialogPic->windowFlags()  &  ~Qt::WindowContextHelpButtonHint);
+    QGridLayout *lay = new QGridLayout(m_itemPic);
+    lay->addWidget(m_itemPic);
+    m_dialogPic->setLayout(lay);
+
+    ui->tb->setColumnWidth(9,40);
+
+    ui->tb->setColumnWidth(10,40);
+
 }
 
 LayerDayDebit::~LayerDayDebit()
@@ -55,6 +80,7 @@ void LayerDayDebit::refreshTb()
 
     ui->tb->setRowCount(0);
 
+    m_listDisplayCustomerCost.clear();
 
     for(int i=0;i<m_listCustomerCost.length();i++)
     {
@@ -75,15 +101,27 @@ void LayerDayDebit::refreshTb()
         ui->tb->setItem(iRow,2,UI.tbItem(customer.Name));
         ui->tb->setItem(iRow,3,UI.tbItem(customer.Currency));
 
-        ui->tb->setItem(iRow,4,UI.tbItem(data.ChangeValue));
+        ui->tb->setItem(iRow,4,UI.tbItem(data.Total));
         ui->tb->setItem(iRow,5,UI.tbItem(data.DebitNote));
         ui->tb->setItem(iRow,6,UI.tbItem(data.OriginValue));
         ui->tb->setItem(iRow,7,UI.tbItem(QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss")));
-        ui->tb->setItem(iRow,8,UI.tbItem(ACTION.getUser(data.UserSid).Name));
-        ui->tb->setItem(iRow,9,UI.tbItem(data.Note0));
+           ui->tb->setItem(iRow,8,UI.tbItem(ACTION.getUser(data.UserSid).Name));
+        if(data.Pic0.trimmed()!="")
+        {
+            ui->tb->setItem(iRow,9,UI.tbItem("圖1",1));
+        }
+
+        if(data.Pic1.trimmed()!="")
+        {
+            ui->tb->setItem(iRow,10,UI.tbItem("圖2",1));
+        }
+
+
+
+        ui->tb->setItem(iRow,11,UI.tbItem(data.Note0));
         iTotal+=data.OriginValue.toDouble();
 
-
+        m_listDisplayCustomerCost.append(data.data());
     }
 
     ui->lbTotal->setText(QString::number(iTotal));
@@ -148,5 +186,44 @@ void LayerDayDebit::on_timeStart_userTimeChanged(const QTime &time)
 void LayerDayDebit::on_timeEnd_userTimeChanged(const QTime &time)
 {
     refreshTb();
+}
+
+
+void LayerDayDebit::on_tb_cellPressed(int row, int column)
+{
+    if(row<0 || row>=m_listDisplayCustomerCost.length())
+        return ;
+
+    if(column!=9 && column!=10)
+        return;
+
+
+    CustomerCost data(m_listDisplayCustomerCost.at(row).toMap());
+
+    QString sText=data.OrderId;
+    QString sKey="Md5";
+
+    QVariant sValue = data.Pic0;
+
+    if(column==10)
+        sValue = data.Pic1;
+
+
+    QVariantMap out;
+    ACTION.action(ACT::QUERY_PIC,sKey,sValue,out);
+    m_dialogPic->resize(480,360);
+
+    m_itemPic->setFileName(
+                ui->tb->item(row,0)->text()+"_"+
+                ui->tb->item(row,1)->text()+"_"+
+                sText);
+
+    m_itemPic->setData(out["Data"].toByteArray());
+
+    m_dialogPic->setWindowTitle("編號 : "+
+                                ui->tb->item(row,0)->text()+"          "
+                                +sText);
+
+    QTimer::singleShot(50,this,[=](){ m_dialogPic->exec();});
 }
 

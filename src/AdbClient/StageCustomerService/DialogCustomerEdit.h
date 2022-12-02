@@ -38,7 +38,7 @@ public:
     void setReadOnly(bool bReadOnly=true);
     QVariantMap data();
 
-    QVariantList dataGameInfo();
+    QVariantList dataGameInfo(QString sCustomerSid);
     QVariantList deleteGameInfo();
 
     void setCb(QVariantList listClass, QVariantList listGame);
@@ -60,6 +60,8 @@ private slots:
 
 private:
     Ui::DialogCustomerEdit *ui;
+
+    QString m_sCustomerSid="";
 
     QVariantMap m_data;
 

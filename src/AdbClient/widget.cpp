@@ -12,6 +12,8 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
 
+
+
     QFile file(":/style.qss");
 
     if(file.open(QIODevice::ReadOnly))
@@ -25,6 +27,9 @@ Widget::Widget(QWidget *parent)
     this->setWindowTitle("艾比代管理系統");
 
     connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));
+
+    connect(&ACTION,SIGNAL(sessionError()),this,SLOT(slotSessionError()));
+
 
     m_btns.addButton(ui->btn0,0);
     m_btns.addButton(ui->btn1,1);
@@ -187,6 +192,8 @@ void Widget::checkUserLv()
 
 void Widget::on_btnLogout_clicked()
 {
+    ACTION.setStartSyanc(false);
+
     this->hide();
 
     UI.m_dialogLogin->init();
@@ -225,5 +232,18 @@ void Widget::slotLogin()
 
 
 
+}
+
+void Widget::slotSessionError()
+{
+    ACTION.setStartSyanc(false);
+
+    this->hide();
+
+    UI.m_dialogLogin->init("登入失敗，網路異常或帳號重複登入");
+
+    UI.m_dialogLogin->exec();
+
+   // DMSG.showMsg("","連線失敗，網路狀態異常或帳密重複登入","OK");
 }
 

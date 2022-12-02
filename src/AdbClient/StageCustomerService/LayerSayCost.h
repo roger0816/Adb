@@ -6,6 +6,7 @@
 #include "GlobalUi.h"
 #include <QSpinBox>
 #include <QClipboard>
+#include <QCompleter>
 
 namespace Ui {
 class LayerSayCost;

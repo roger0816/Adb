@@ -419,7 +419,7 @@ struct CustomerGameInfo :public DataObj
 
 
         DataObj::setData(data);
-
+        CustomerSid = data["CustomerSid"].toString();
         CustomerId = data["CustomerId"].toString();
         GameSid = data["GameSid"].toString();
         LoginType = data["LoginType"].toString();
@@ -435,7 +435,7 @@ struct CustomerGameInfo :public DataObj
     QVariantMap data()
     {
         QVariantMap d = DataObj::data();
-
+            d["CustomerSid"] = CustomerSid;
         d["CustomerId"] = CustomerId;
         d["GameSid"] = GameSid;
         d["LoginType"] = LoginType;
@@ -449,7 +449,7 @@ struct CustomerGameInfo :public DataObj
 
         return d;
     }
-
+        QString CustomerSid;
     QString CustomerId;
     QString GameSid;
     QString LoginType;
@@ -637,6 +637,8 @@ struct DataGameList :public DataObj
     double GameRate;
 
     QString SellNote; //價目表
+    DataGameList():DataObj(){};
+    DataGameList(QVariantMap data){setData(data);}
 
     void setData(QVariantMap data)
     {

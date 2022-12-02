@@ -10,6 +10,12 @@ LayerCostTable::LayerCostTable(QWidget *parent) :
     ui->tabWidget->setCurrentWidget(ui->page0);
 
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(slotTabCurrentChanged(int)));
+
+    connect(ui->btnClear,&QPushButton::clicked,[=]()
+    {
+        ui->txSearch->clear();
+    });
+
 }
 
 LayerCostTable::~LayerCostTable()
@@ -28,17 +34,25 @@ void LayerCostTable::refreshGameList()
 
     ui->tbGame->setRowCount(0);
 
+    m_listGameDisplay.clear();
+
     for(int i=0;i<m_listGame.length();i++)
     {
-        ui->tbGame->setRowCount(i+1);
 
-        ui->tbGame->setItem(i,0,UI.tbItem(m_listGame.at(i).Id));
+        int iRow = ui->tbGame->rowCount();
+
+        if(!checkSearch(m_listGame[i].data()))
+            continue;
+
+        ui->tbGame->setRowCount(iRow+1);
+
+        ui->tbGame->setItem(iRow,0,UI.tbItem(m_listGame.at(i).Id));
 
         //  ui->tbGame->setItem(i,1,UI.tbItem(m_gameList.listData.at(i).Enable));
 
-        ui->tbGame->setItem(i,1,UI.tbItem(m_listGame.at(i).Name));
+        ui->tbGame->setItem(iRow,1,UI.tbItem(m_listGame.at(i).Name));
 
-
+        m_listGameDisplay.append(m_listGame.at(i));
     }
 
 }
@@ -53,15 +67,14 @@ void LayerCostTable::showEvent(QShowEvent *)
 
 void LayerCostTable::on_tbGame_cellPressed(int row, int )
 {
-    if(row<0 || row>=m_listGame.length())
+    if(row<0 || row>=m_listGameDisplay.length())
         return;
 
-    QString sGameSid = m_listGame.at(row).Sid;
+    QString sGameSid = m_listGameDisplay.at(row).Sid;
 
-    double iGameRate = m_listGame.at(row).GameRate;
+    double iGameRate = m_listGameDisplay.at(row).GameRate;
 
-    ui->txEdit->setText(m_listGame.at(row).SellNote);
-    qDebug()<<"GameRate : "<<iGameRate;
+    ui->txEdit->setText(m_listGameDisplay.at(row).SellNote);
 
     DataRate rate = ACTION.costRate("",true);
 
@@ -91,7 +104,6 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
 
         DataGameItem item = m_currentItems.at(i);
 
-        qDebug()<<"bouns : "<<item.Bonus.toDouble();
 
         double iNtd = item.Bonus.toDouble()*iGameRate;
 
@@ -203,10 +215,10 @@ void LayerCostTable::on_btnSaveText_clicked()
 {
     int iRow = ui->tbGame->currentRow();
 
-    if(iRow<0 || iRow>=m_listGame.length())
+    if(iRow<0 || iRow>=m_listGameDisplay.length())
         return;
 
-    DataGameList data = m_listGame.at(iRow);
+    DataGameList data = m_listGameDisplay.at(iRow);
 
     data.SellNote= ui->txEdit->toPlainText();
     QString sError;
@@ -216,6 +228,8 @@ void LayerCostTable::on_btnSaveText_clicked()
         sError="修改完成";
 
     DMSG.showMsg("",sError,"OK");
+
+    refreshGameList();
 }
 
 QString LayerCostTable::trText()
@@ -252,6 +266,45 @@ QString LayerCostTable::trText()
     return st;
 }
 
+bool LayerCostTable::checkSearch(QVariantMap data)
+{
+    QString searchKey = ui->txSearch->text();
+
+    if(searchKey.trimmed()=="")
+        return true;
+    QStringList listKey = searchKey.split("&");
+
+    DataGameList gameData(data);
+
+    bool bRe = false;
+
+    QList<int> listOk;
+
+    foreach(QString v, listKey)
+    {
+
+        QString sKey = v.toUpper().trimmed();
+
+        if(sKey=="")
+            continue;
+
+        int iOk = 0;
+
+        if(gameData.Name.toUpper().contains(sKey))
+            iOk = 1;
+        else if(gameData.Id.toUpper().contains(sKey))
+            iOk =1;
+        else if(QString::number(gameData.GameRate).toUpper().contains(sKey))
+            iOk = 1;
+
+        listOk.append(iOk);
+    }
+
+    bRe = !listOk.contains(0);
+
+    return bRe;
+}
+
 
 void LayerCostTable::on_txEdit_textChanged()
 {
@@ -261,4 +314,10 @@ void LayerCostTable::on_txEdit_textChanged()
 }
 
 
+
+
+void LayerCostTable::on_txSearch_textChanged(const QString &)
+{
+    refreshGameList();
+}
 

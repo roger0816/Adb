@@ -99,6 +99,8 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
 void DialogCustomerEdit::setData(QString sCustomerSid)
 {
+    m_sCustomerSid = sCustomerSid;
+
     QVariantMap tmp,outCustomer;
     tmp["Sid"] = sCustomerSid;
     QString sError;
@@ -184,8 +186,19 @@ QVariantMap DialogCustomerEdit::data()
     return re;
 }
 
-QVariantList DialogCustomerEdit::dataGameInfo()
+QVariantList DialogCustomerEdit::dataGameInfo(QString sCustomerSid)
 {
+    for(int i=0;i<m_listGameInfo.length();i++)
+    {
+        QVariantMap d =m_listGameInfo[i].toMap();
+
+        d["CustomerSid"]=sCustomerSid;
+
+        m_listGameInfo[i] = d;
+
+    }
+
+
     return m_listGameInfo;
 }
 
@@ -225,7 +238,7 @@ QString DialogCustomerEdit::checkId(int cbIdx)
     ACTION.action(ACT::LAST_CUSTOMER_ID,in,out,sError);
 
     QString sLastId  = out["Id"].toString();
-       qDebug()<<"SSSSSSSSSS000: "<<sLastId;
+
     QString sTargetWord="EA";
     QString sTargetNum="01";
 
@@ -257,7 +270,6 @@ QString DialogCustomerEdit::checkId(int cbIdx)
     sId = sClassId.toUpper()+"-"+sTargetWord.toUpper()+sTargetNum;
 
 
-    qDebug()<<"SSSSSSSSSSSSS : "<<sId;
     return sId;
     /*
     if(sLastId.length()>=4)
@@ -339,11 +351,15 @@ void DialogCustomerEdit::refresh()
     {
         QVariantMap data = m_listGameInfo.at(i).toMap();
 
-        if(data["CustomerId"]!="" && data["CustomerId"]!=ui->lbId->text().trimmed())
+//        if(data["CustomerId"]!="" && data["CustomerId"]!=ui->lbId->text().trimmed())
+//        {
+//            continue;
+//        }
+
+        if( data["CustomerSid"].toString()!="" && data["CustomerSid"].toString()!=m_sCustomerSid)
         {
             continue;
         }
-
         int iIdx = ui->tbGameList->rowCount();
 
         ui->tbGameList->setRowCount(ui->tbGameList->rowCount()+1);
@@ -417,6 +433,8 @@ void DialogCustomerEdit::on_btnAddGame_clicked()
     QVariantMap data;
 
     data["CustomerId"]="";
+
+    data["CustomerSid"]=m_sCustomerSid;
 
     data["GameSid"] = gameToSid(ui->cbGame->currentText().trimmed());
 

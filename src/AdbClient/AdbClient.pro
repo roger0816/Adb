@@ -24,6 +24,7 @@ INCLUDEPATH+= \
 SOURCES += \
     StageCustomerService/DialogCustomerCostHistory.cpp \
     StageManagerSetting/LayerItemCount.cpp \
+    StageOrder/DialogDayReportEdit.cpp \
     StageOrder/ItemOrderSelector.cpp \
     StageOrder/LayerDayDebit.cpp \
     StageReport/LayerGameReport.cpp \
@@ -86,6 +87,7 @@ SOURCES += \
 HEADERS += \
     StageCustomerService/DialogCustomerCostHistory.h \
     StageManagerSetting/LayerItemCount.h \
+    StageOrder/DialogDayReportEdit.h \
     StageOrder/ItemOrderSelector.h \
     StageOrder/LayerDayDebit.h \
     StageReport/LayerGameReport.h \
@@ -147,6 +149,7 @@ HEADERS += \
 FORMS += \
     StageCustomerService/DialogCustomerCostHistory.ui \
     StageManagerSetting/LayerItemCount.ui \
+    StageOrder/DialogDayReportEdit.ui \
     StageOrder/ItemOrderSelector.ui \
     StageOrder/LayerDayDebit.ui \
     StageReport/LayerGameReport.ui \

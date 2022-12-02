@@ -62,6 +62,9 @@ protected:
 
     QString m_sCurrentUserName;
 
+
+    QString m_sCurrentSession="";
+
  protected:
 
     QTimer m_timer;
@@ -81,6 +84,8 @@ signals:
     void lockLoading(bool b);
 
     void updateTrigger(QString sApiGroup);
+
+    void sessionError();
 
 public slots:
     void serverTrigger(QString sId, QByteArray data, int);

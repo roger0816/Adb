@@ -21,6 +21,10 @@ public:
 
     QList<DataGameList> m_listGame;
 
+    QList<DataGameList> m_listGameDisplay;
+
+
+
     QList<DataGameItem> m_currentItems;
 
     void showEvent(QShowEvent * ) override;
@@ -44,10 +48,15 @@ private slots:
     void on_txEdit_textChanged();
 
 
+    void on_txSearch_textChanged(const QString &);
+
 private:
     Ui::LayerCostTable *ui;
 
     QString trText();
+
+    bool checkSearch(QVariantMap data);
+
 };
 
 #endif // LAYERCOSTTABLE_H

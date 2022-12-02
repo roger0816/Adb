@@ -14,6 +14,11 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
 
     ui->tbGameItem->setMouseTracking(true);
 
+    connect(ui->btnClear,&QPushButton::clicked,[=]()
+    {
+        ui->txSearch->clear();
+    });
+
 
 }
 
@@ -28,7 +33,7 @@ LayerCostSetting::~LayerCostSetting()
 
 void LayerCostSetting::on_btnGameAdd_clicked()
 {
-    DialogGameEdit dialog;    
+    DialogGameEdit dialog;
 
     if(dialog.exec()==1)
     {
@@ -78,6 +83,38 @@ void LayerCostSetting::refreshGameList()
     QString sError;
     ACTION.action(ACT::QUERY_GAME_LIST,listIn,listOut,sError);
 
+    m_gameData = listOut;
+
+    ui->tbGame->setRowCount(0);
+
+    m_gameDisplayData.clear();
+
+    for(int i=0;i<m_gameData.length();i++)
+    {
+        if(!checkSearch(m_gameData.at(i).toMap()))
+            continue;
+
+        m_gameDisplayData.append(m_gameData.at(i).toMap());
+
+        int iRow = ui->tbGame->rowCount();
+
+        ui->tbGame->setRowCount(iRow+1);
+
+        DataGameList data(m_gameData.at(i).toMap());
+
+        ui->tbGame->setItem(iRow,0,UI.tbItem(data.Id));
+
+        ui->tbGame->setItem(iRow,1,UI.tbItem(data.GameRate));
+
+        ui->tbGame->setItem(iRow,2,UI.tbItem(data.Name));
+
+
+    }
+
+
+
+
+    /*
     m_gameList.setGameList(listOut);
 
     ui->tbGame->setRowCount(0);
@@ -96,34 +133,35 @@ void LayerCostSetting::refreshGameList()
 
     }
 
+    */
+
 }
 
 void LayerCostSetting::refreshItemList()
 {
 
     int iGameRow = ui->tbGame->currentRow();
-
-    if(iGameRow<0 || iGameRow>= m_gameList.listData.length())
-        return;
-
-    double GameRate = m_gameList.listData.at(iGameRow).GameRate;
-
-
     m_listItem.clear();
 
     ui->tbGameItem->setRowCount(0);
 
-    if(iGameRow<0 || iGameRow>=m_gameList.listData.length())
+    if(iGameRow<0 || iGameRow>= m_gameDisplayData.length())
     {
         m_iCurrentGameSid = -1;
         ui->lbItemTitle0->hide();
         ui->lbItemTitle1->setText("請先在左側選擇遊戲");
+
         return;
     }
 
-    QString sGameName = m_gameList.listData.at(iGameRow).Name;
 
-    m_iCurrentGameSid = m_gameList.listData.at(iGameRow).Sid.toInt();
+    DataGameList gameData(m_gameDisplayData.at(iGameRow).toMap());
+
+    double GameRate = gameData.GameRate;
+
+    QString sGameName = gameData.Name;
+
+    m_iCurrentGameSid = gameData.Sid.toInt();
 
     ui->lbItemTitle0->show();
 
@@ -157,22 +195,7 @@ void LayerCostSetting::refreshItemList()
     if(tmp.length()>0)
         rate2 = tmp.last();
 
-    //    QVariantList input,listRate;
 
-    //    bool bRateOk = ACTION.action(ACT::READ_EXCHANGE,input,listRate,sError);
-
-
-
-    //    if(!bRateOk)
-    //    {
-    //        UI.showMsg("","無法讀取匯率表","OK");
-    //    }
-    //    else
-    //    {
-    //        DataExchange tmp(listRate);
-
-    //        rate = tmp.last();
-    //    }
 
     m_listTipData.clear();
 
@@ -198,7 +221,7 @@ void LayerCostSetting::refreshItemList()
 
         ui->tbGameItem->setItem(i,4,UI.tbItem(QString::number(iNTD,'f',0)));
 
-      //  ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
+        //  ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
 
         toolData["NTD"] = QString::number(iNTD,'f',0);
         toolData["USD"] = QString::number(iNTD/rate2.USD(),'f',2);
@@ -234,6 +257,47 @@ void LayerCostSetting::refreshItemList()
 
 }
 
+bool LayerCostSetting::checkSearch(QVariantMap data)
+{
+    QString searchKey = ui->txSearch->text();
+
+    if(searchKey.trimmed()=="")
+        return true;
+    QStringList listKey = searchKey.split("&");
+
+    DataGameList gameData(data);
+
+    bool bRe = false;
+
+    QList<int> listOk;
+
+    foreach(QString v, listKey)
+    {
+
+        QString sKey = v.toUpper().trimmed();
+
+        if(sKey=="")
+            continue;
+
+        int iOk = 0;
+
+        if(gameData.Name.toUpper().contains(sKey))
+            iOk = 1;
+        else if(gameData.Id.toUpper().contains(sKey))
+            iOk =1;
+        else if(QString::number(gameData.GameRate).toUpper().contains(sKey))
+            iOk = 1;
+
+        listOk.append(iOk);
+    }
+
+    bRe = !listOk.contains(0);
+
+    return bRe;
+
+
+}
+
 void LayerCostSetting::refresh()
 {
     refreshGameList();
@@ -259,11 +323,16 @@ void LayerCostSetting::on_btnGameEdit_clicked()
         return ;
     }
 
+    if(iRow>=m_gameDisplayData.length())
+        return ;
+    DataGameList gameData (m_gameDisplayData.at(iRow).toMap());
+
+    /*
     if(iRow>=m_gameList.listData.length())
         return ;
 
     GameList::GameData gameData = m_gameList.listData.at(iRow);
-
+    */
     DialogGameEdit dialog;
 
     dialog.setData(gameData.Sid, gameData.Enable,gameData.Id,gameData.Name,gameData.GameRate);
@@ -316,13 +385,15 @@ void LayerCostSetting::on_btnGameEdit_clicked()
 
 
     }
+
+
 }
 
 
 void LayerCostSetting::on_btnItemAdd_clicked()
 {
 
-    if(ui->tbGame->currentRow()<0 || ui->tbGame->currentRow()>= m_gameList.listData.length())
+    if(ui->tbGame->currentRow()<0 || ui->tbGame->currentRow()>= m_gameDisplayData.length())
     {
         UI.showMsg("","請先在左側選擇遊戲","OK");
 
@@ -332,9 +403,11 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     DialogEditGameItem dialog;
 
-    QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
+    DataGameList gameData(m_gameDisplayData.at(ui->tbGame->currentRow()).toMap());
 
-    double iGameRate = m_gameList.listData.at(ui->tbGame->currentRow()).GameRate;
+    QString sGameName = gameData.Name;
+
+    double iGameRate = gameData.GameRate;
 
 
     DataRate rate;
@@ -395,7 +468,7 @@ void LayerCostSetting::on_tbGame_cellClicked(int , int )
 
 void LayerCostSetting::on_btnItemEdit_clicked()
 {
-    if(ui->tbGame->currentRow()<0 || ui->tbGame->currentRow()>= m_gameList.listData.length())
+    if(ui->tbGame->currentRow()<0 || ui->tbGame->currentRow()>= m_gameDisplayData.length())
     {
         UI.showMsg("","請先在左側選擇遊戲","OK");
 
@@ -412,9 +485,11 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     DialogEditGameItem dialog;
 
-    QString sGameName = m_gameList.listData.at(ui->tbGame->currentRow()).Name;
+    DataGameList gameData( m_gameDisplayData.at(ui->tbGame->currentRow()).toMap());
 
-    double gameRate=m_gameList.listData.at(ui->tbGame->currentRow()).GameRate;
+    QString sGameName =gameData.Name;
+
+    double gameRate=gameData.GameRate;
 
     DataRate rate;
 
@@ -442,7 +517,15 @@ void LayerCostSetting::on_btnItemEdit_clicked()
         UI.showMsg("",sError,"OK");
 
 
+        QVariantList dTmp;
+        QVariantMap inTmp;
+        inTmp["GameItemSid"]=data["Sid"].toString();
+        ACTION.action(ACT::QUERY_ITEM_COUNT,inTmp,dTmp,sError);
+
         DataItemCount dataCount;
+
+        if(dTmp.length()>0)
+            dataCount.setData(dTmp.last().toMap());
 
         dataCount.Id = data["GameSid"].toString();
         dataCount.GameItemSid = data["Sid"].toString();
@@ -507,19 +590,19 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
     if(row<0 || row>=ui->tbGameItem->rowCount() || row>=m_listTipData.length())
         return;
 
-  //  QString sName =ui->tbGameItem->itemAt(row,0)->text();
+    //  QString sName =ui->tbGameItem->itemAt(row,0)->text();
 
     QVariantMap data = m_listTipData.at(row).toMap();
 
     if(column==4)
     {
         QString st=
-                   "新台幣 : %1 \n "
-                   "美金 : %2 \n "
-                   "港幣 : %3 \n "
-                   "人民幣 : %4 \n "
-                   "林吉特 : %5 \n "
-        "新加坡元 : %6 ";
+                "新台幣 : %1 \n "
+                "美金 : %2 \n "
+                "港幣 : %3 \n "
+                "人民幣 : %4 \n "
+                "林吉特 : %5 \n "
+                "新加坡元 : %6 ";
 
         st = st.arg(data["NTD"].toString())
                 .arg(data["USD"].toString())
@@ -534,7 +617,7 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
     else  if(column==5)
     {
 
-         QToolTip::showText(QCursor::pos(),data["AddValueTypeSid"].toString());
+        QToolTip::showText(QCursor::pos(),data["AddValueTypeSid"].toString());
     }
     else
     {
@@ -542,5 +625,11 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
     }
 
 
+}
+
+
+void LayerCostSetting::on_txSearch_textChanged(const QString &)
+{
+   refresh();
 }
 

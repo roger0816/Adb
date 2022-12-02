@@ -30,7 +30,7 @@ DialogCustomerCostHistory::DialogCustomerCostHistory(QWidget *parent) :
         if(b)
         {
             DMSG.showMsg("","圖片下載完成\n"+sName.split("/").last(),QStringList()<<"OK");
-            done(1);
+            m_dialogPic->done(1);
         }
         else
             DMSG.showMsg("","圖片下載失敗\n"+sName.split("/").last(),QStringList()<<"OK");

@@ -18,7 +18,6 @@ public:
 
     CData implementRecall(CData data) override;
 
-    bool checkAppVersion(QString sVersion);
 
 signals:
 

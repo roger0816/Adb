@@ -61,15 +61,16 @@ void LayerCustomer::on_btnAdd_clicked()
 
         data["UserSid"] =ACTION.m_currentUser.Sid;
 
+        ACTION.action(ACT::ADD_CUSTOMER,data,sError);
 
-        in=dialog.dataGameInfo();
+        QString sCustomerSid = data["Sid"].toString();
+
+        in=dialog.dataGameInfo(sCustomerSid);
 
         ACTION.action(ACT::REPLACE_GAME_INFO,in,sError);
 
 
 
-
-        ACTION.action(ACT::ADD_CUSTOMER,data,sError);
 
         UI.showMsg("",sError,"OK");
 
@@ -245,9 +246,9 @@ void LayerCustomer::on_btnEdit_clicked()
     int iTmp = m_dIdxMapping.value(ui->tb->currentRow());
     int iIdx= qBound(0,iTmp,m_listData.length()-1);
 
-    CustomerData data(m_listData.at(iIdx).toMap());
+    CustomerData customerData(m_listData.at(iIdx).toMap());
 
-    dialog.setData(data.Sid);
+    dialog.setData(customerData.Sid);
 
 #endif
 
@@ -261,7 +262,7 @@ void LayerCustomer::on_btnEdit_clicked()
         data["UserSid"] =ACTION.m_currentUser.Sid;
 
 
-        ACTION.action(ACT::REPLACE_GAME_INFO,dialog.dataGameInfo(),sError);
+        ACTION.action(ACT::REPLACE_GAME_INFO,dialog.dataGameInfo(customerData.Sid),sError);
         ACTION.action(ACT::EDIT_CUSTOMER,data,sError);
 
         ACTION.action(ACT::DEL_GAME_INFO,dialog.deleteGameInfo(),sError);
@@ -278,6 +279,10 @@ void LayerCustomer::on_btnEdit_clicked()
 
 
         ACTION.action(ACT::DEL_CUSTOMER,data,sError);
+
+        QVariantMap v;
+        v["CustomerSid"] = customerData.Sid;
+        ACTION.action(ACT::DEL_GAME_INFO,v,sError);
 
         UI.showMsg("",sError,"OK");
 

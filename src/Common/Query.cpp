@@ -20,7 +20,7 @@ CData Query::implementRecall(CData data)
 
     bool bOk =false;
 
-    if(data.iAciton==ACT::LOGIN)
+/*    if(data.iAciton==ACT::LOGIN)
     {
         int iRe=-1;
 
@@ -33,10 +33,11 @@ CData Query::implementRecall(CData data)
 
         else
         {
-
+            QString sUserSid;
             if(data.listData.length()>=2)
             {
                 bOk = m_sql.checkLogin(data.listData.first().toString(),data.listData.last().toString(),re.dData,sError);
+
 
                 re.listData.append(iRe);
 
@@ -58,7 +59,7 @@ CData Query::implementRecall(CData data)
         }
 
     }
-    else if(data.iAciton==ACT::ADD_USER)
+    else*/ if(data.iAciton==ACT::ADD_USER)
     {
         while(data.listData.length()<6)
             data.listData.append("");
@@ -407,9 +408,27 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::ADD_CUSTOMER)
     {
 
-
         bOk = m_sql.insertTb(SQL_TABLE::CustomerData(),data.dData,sError);
-        sOkMsg = "客戶資料新增完成";
+
+        QString sCustomerSid;
+
+        if(bOk)
+        {
+            QVariantMap tmpV;
+
+            tmpV["Id"]=data.dData["Id"];
+
+            QVariantList tmp;
+            m_sql.queryTb(SQL_TABLE::CustomerData(),tmpV,tmp,sError);
+
+            if(tmp.length()>0)
+            {
+                re.dData["Sid"]=tmp.first().toMap()["Sid"];
+            }
+            sOkMsg = "客戶資料新增完成";
+        }
+
+
     }
 
     else if(data.iAciton==ACT::QUERY_CUSTOMER)
@@ -711,7 +730,7 @@ CData Query::implementRecall(CData data)
     {
 
         QVariantMap d;
-        d["GameItemSid"] = data.dData["GameItemSid"];
+        d["Sid"] = data.dData["Sid"];
         bOk = m_sql.updateTb(SQL_TABLE::GameItemCount(),d,data.dData,sError);
         sOkMsg = "修改完成";
 
@@ -739,11 +758,13 @@ CData Query::implementRecall(CData data)
 
 
 
-    re.iAciton = data.iAciton;
 
     re.bOk = bOk;
 
     re.sMsg = sError;
+
+    re.iAciton = data.iAciton;
+
     if(bOk)
     {
         re.sMsg = sOkMsg;
@@ -758,23 +779,3 @@ CData Query::implementRecall(CData data)
     return re;
 }
 
-bool Query::checkAppVersion(QString sVersion)
-{
-    bool bRe = false;
-
-    QStringList listTmp = sVersion.split(".");
-
-    if(listTmp.length()<3)
-        return false;
-
-    //ex :   v1.01.1115_2
-
-    if(listTmp.at(1).toInt()>=1)
-    {
-        if(listTmp.at(2).split("_").first().toInt()>1115)
-            bRe =true;
-    }
-
-
-    return bRe;
-}

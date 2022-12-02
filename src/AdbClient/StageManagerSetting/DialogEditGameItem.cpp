@@ -9,6 +9,10 @@ DialogEditGameItem::DialogEditGameItem(QWidget *parent) :
 
     this->setWindowTitle("商品設定");
 
+    ui->lbUSDtitle->hide();
+
+    ui->sbUSD->hide();
+
 
     connect(ui->sbNTD,SIGNAL(valueChanged(double)),this,SLOT(valueChange(double)));
     connect(ui->sbUSD,SIGNAL(valueChanged(double)),this,SLOT(valueChange(double)));
@@ -153,7 +157,7 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
 
     sp->setDecimals(2);
 
-    sp->setRange(0.0,10000.00);
+    sp->setRange(1,1000000);
 
     sp->setValue(cost);
 

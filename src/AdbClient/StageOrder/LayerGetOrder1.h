@@ -4,6 +4,8 @@
 #include <QWidget>
 #include "Global.h"
 #include "GlobalUi.h"
+#include <QCompleter>
+#include <QStringListModel>
 #include "LayerSayCost.h"
 
 namespace Ui {

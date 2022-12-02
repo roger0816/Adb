@@ -8,7 +8,31 @@ QueryObj::QueryObj(QObject *parent)
 {
     //  connect(&m_sql,&CSqlClass::tbUpdate,this,&QueryObj::updateTrigger);
 
+    m_timer.connect(&m_timer,&QTimer::timeout,[=]()
+    {
+        QStringList listKey = m_dLogingUser.keys();
 
+        QStringList listRmKey;
+
+        for(int i=0;i<listKey.length();i++)
+        {
+            int iCount = m_dLogingUser[listKey.at(i)].toMap()["Count"].toInt();
+
+            if(iCount>0)
+                m_dLogingUser[listKey.at(i)].toMap()["Count"]=iCount-1;
+            else
+                listRmKey.append(listKey.at(i));
+        }
+
+
+        foreach(QString s,listRmKey)
+        {
+            m_dLogingUser.remove(s);
+        }
+
+    });
+
+    m_timer.start(1000);
 
 
 }
@@ -51,6 +75,13 @@ CData QueryObj::queryData(CData data)
 
     CData re;
 
+    QString sMsg;
+
+    re.iAciton = data.iAciton;
+
+    re.iState = ACT_RECALL;
+
+
     if(data.iAciton==1)  //heartbeat (Trigger)
     {
 
@@ -60,11 +91,74 @@ CData QueryObj::queryData(CData data)
         QString st(heartBeat());
         re.dData["trigger"]=st;
 
-        re.bOk = true;
+
+        QString sUserSid = data.dData["UserSid"].toString();
+
+        QString sSession = data.dData["Session"].toString();
+
+        QVariantMap d;
+
+        re.bOk =checkSesison(sUserSid,sSession);
+
+        return re;
+
+    }
+
+
+    if(data.iAciton==1000)
+    {
+        int iRe=-1;
+
+        bool bOk=false;
+
+        if(!checkAppVersion(data.sMsg))
+        {
+            bOk=false;
+            sMsg="版本無法使用，請更新版本";
+        }
+
+        else
+        {
+            QString sUserId;
+
+            if(data.listData.length()>=2)
+            {
+
+                bOk = m_sql.checkLogin(data.listData.first().toString(),data.listData.last().toString(),re.dData,sMsg);
+
+                sUserId =re.dData["Sid"].toString();
+                re.listData.append(iRe);
+
+
+            }
+            if(bOk)
+            {
+                sMsg ="登入成功";
+
+                QString str=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+
+                QByteArray s=QCryptographicHash::hash(str.toLatin1(),QCryptographicHash::Md5);
+
+                QString sSession(s.toHex());
+
+                re.dData["Session"]=sSession;
+
+                QVariantMap d;
+                d["Session"]=sSession;
+                d["Count"]=5;
+
+                m_dLogingUser[sUserId] = d;
+            }
+            else
+                sMsg="帳密錯誤";
+        }
+
+        re.sMsg = sMsg;
+
+        re.bOk = bOk;
 
         return re;
     }
-
 
 
 
@@ -78,6 +172,9 @@ CData QueryObj::queryData(CData data)
     {
         re.sTrigger="0";
     }
+
+
+
 
     qDebug()<<"recall api "<<data.iAciton<<", trigger : "<<re.sTrigger;
 
@@ -145,6 +242,56 @@ QString QueryObj::checkUpdate(int iApi)
 
 
     return sTrigger;
+}
+
+bool QueryObj::checkAppVersion(QString sVersion)
+{
+    bool bRe = false;
+
+    QStringList listTmp = sVersion.split(".");
+
+    if(listTmp.length()<3)
+        return false;
+
+    //ex :   v1.01.1115_2
+
+    int iVersion = listTmp.at(1).toInt();
+
+    if(iVersion>=3)
+        return true;
+
+    /*
+    if(listTmp.at(1).toInt()>=1)
+    {
+
+        if(listTmp.at(2).split("_").first().toInt()>1129)
+            bRe =true;
+    }
+    */
+
+
+
+
+    return bRe;
+}
+
+bool QueryObj::checkSesison(QString sUserSid, QString sSession)
+{
+
+    if(!m_dLogingUser.keys().contains(sUserSid))
+        return false;
+
+
+    if(m_dLogingUser[sUserSid].toMap()["Session"].toString()!=sSession)
+        return false;
+
+    QVariantMap d= m_dLogingUser[sUserSid].toMap();
+
+    d["Count"]=5;
+
+    m_dLogingUser[sUserSid] =d;
+
+    return true;
 }
 
 

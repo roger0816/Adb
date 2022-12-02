@@ -8,11 +8,6 @@ LayerBulletin::LayerBulletin(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_btns.addButton(ui->btn0,0);
-
-    m_btns.addButton(ui->btn1,1);
-
-    connect(&m_btns,SIGNAL(buttonClicked(int)),ui->stackedWidget,SLOT(setCurrentIndex(int)));
 
     ui->stackedWidget->setCurrentIndex(0);
 }
@@ -87,7 +82,9 @@ void LayerBulletin::intoTopTb(QVariantMap data)
     ui->tbTop->setItem(iRow,0,UI.tbItem(d));
     ui->tbTop->setItem(iRow,1,UI.tbItem(userName(data["UserSid"].toString())));
     ui->tbTop->setItem(iRow,2,UI.tbItem(data["Title"]));
-    ui->tbTop->setItem(iRow,3,UI.tbItem(data["Content"]));
+    QString stContent=data["Content"].toString().replace("\n","");
+
+    ui->tbTop->setItem(iRow,3,UI.tbItem(stContent));
 
 
 }
@@ -103,7 +100,9 @@ void LayerBulletin::intoSysTb(QVariantMap data)
     ui->tbSys->setItem(iRow,0,UI.tbItem(d));
     ui->tbSys->setItem(iRow,1,UI.tbItem(userName(data["UserSid"].toString())));
     ui->tbSys->setItem(iRow,2,UI.tbItem(data["Title"]));
-    ui->tbSys->setItem(iRow,3,UI.tbItem(data["Content"]));
+    QString stContent=data["Content"].toString().replace("\n","");
+
+    ui->tbSys->setItem(iRow,3,UI.tbItem(stContent));
 }
 
 QString LayerBulletin::userName(QString sId)

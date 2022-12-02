@@ -551,6 +551,7 @@ void CSqlClass::createTableSqlite()
     sql.clear();
     sql.exec("CREATE TABLE 'CustomerGameInfo' (     \
              'Sid'	INTEGER,                            \
+            'CustomerSid'	TEXT,                           \
              'CustomerId'	TEXT,                           \
              'GameSid'	TEXT,                           \
              'LoginType'	TEXT,                           \

@@ -60,157 +60,157 @@ void LayerDayReport::refreshTb()
 
     m_listInto.clear();
 
+    int iTotal0=0;
+
+
+    int iTotal1=0;
+
+
+    int iTotal2=0;
+
     for(int i=0;i<m_listOrder.length();i++)
     {
         OrderData data = m_listOrder.at(i);
-        if(checkFilter(data))
+        if(!checkFilter(data))
+            continue;
+
+        QVariantMap d;
+        d["Sid"] = data.CustomerSid;
+        QVariantList listCustomer;
+        ACTION.action(ACT::QUERY_CUSTOMER,d,listCustomer,sError);
+        if(listCustomer.length()<1)
+            continue;
+
+        int iRow = ui->tb->rowCount();
+        ui->tb->setRowCount(iRow+1);
+
+        ui->tb->setItem(iRow,0,UI.tbItem(data.Id));
+        UserData owner =ACTION.getUser(data.Owner);
+
+
+
+        CustomerData customer(listCustomer.first().toMap());
+        QString sDate=data.OrderDate+data.OrderTime;
+        ui->tb->setItem(iRow,1,UI.tbItem(data.Name));
+        QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
+        ui->tb->setItem(iRow,2,UI.tbItem(date));
+
+
+        QString sUser="";
+
+        if(data.User.length()>2)
         {
-            QVariantMap d;
-            d["Sid"] = data.CustomerSid;
-            QVariantList listCustomer;
-            ACTION.action(ACT::QUERY_CUSTOMER,d,listCustomer,sError);
-            if(listCustomer.length()<1)
-                continue;
+            UserData user = ACTION.getUser(data.User.at(2));
 
-            int iRow = ui->tb->rowCount();
-            ui->tb->setRowCount(iRow+1);
-
-            ui->tb->setItem(iRow,0,UI.tbItem(data.Id));
-            UserData owner =ACTION.getUser(data.Owner);
+            sUser = user.Name;
+        }
 
 
-
-            CustomerData customer(listCustomer.first().toMap());
-            QString sDate=data.OrderDate+data.OrderTime;
-            ui->tb->setItem(iRow,1,UI.tbItem(data.Name));
-            QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
-            ui->tb->setItem(iRow,2,UI.tbItem(date));
+        ui->tb->setItem(iRow,3,UI.tbItem(sUser,GlobalUi::_TOOLTIP));
+        ui->tb->setItem(iRow,4,UI.tbItem(customer.Id));
+        ui->tb->setItem(iRow,5,UI.tbItem("詳細",GlobalUi::_BUTTON));
 
 
-            QString sUser="";
+        QString sStatus = data.Step;
 
-            if(data.User.length()>2)
-            {
-                UserData user = ACTION.getUser(data.User.at(2));
+        if(sStatus=="0")
+        {
+            sStatus+="報價";
+        }
+        if(sStatus=="1")
+        {
+            sStatus+="下單";
+        }
+        if(sStatus=="2")
+        {
+            sStatus+="待處理";
+        }
+        if(sStatus=="3")
+        {
+            sStatus+="待回報";
+        }
+        if(sStatus=="4")
+        {
+            sStatus+="主管確認";
+        }
+        if(sStatus=="5")
+        {
+            sStatus="訂單結束";
+        }
 
-                sUser = user.Name;
-            }
+        qDebug()<<"check status";
 
-
-            ui->tb->setItem(iRow,3,UI.tbItem(sUser,GlobalUi::_TOOLTIP));
-            ui->tb->setItem(iRow,4,UI.tbItem(customer.Id));
-            ui->tb->setItem(iRow,5,UI.tbItem("詳細",GlobalUi::_BUTTON));
-
-
-            QString sStatus = data.Step;
-
-            if(sStatus=="0")
-            {
-                sStatus+="報價";
-            }
-            if(sStatus=="1")
-            {
-                sStatus+="下單";
-            }
-            if(sStatus=="2")
-            {
-                sStatus+="待處理";
-            }
-            if(sStatus=="3")
-            {
-                sStatus+="待回報";
-            }
-            if(sStatus=="4")
-            {
-                sStatus+="主管確認";
-            }
-            if(sStatus=="5")
-            {
-                sStatus="訂單結束";
-            }
-
-            qDebug()<<"check status";
-
-            ui->tb->setItem(iRow,6,UI.tbItem(sStatus));
-            ui->tb->setItem(iRow,7,UI.tbItem(data.Bouns));
+        ui->tb->setItem(iRow,6,UI.tbItem(sStatus));
+        ui->tb->setItem(iRow,7,UI.tbItem(data.Bouns));
 
 
-            if(data.Step=="4")
-            {
-                ui->tb->setItem(iRow,8,UI.tbItem("點擊確認",GlobalUi::_BUTTON));
-            }
-            else if(data.Step=="5")
-            {
-                ui->tb->setItem(iRow,8,UI.tbItem("完成訂單"));
-            }
-            else
-            {
-                ui->tb->setItem(iRow,8,UI.tbItem("流程未到"));
-            }
+        if(data.Step=="4")
+        {
+            ui->tb->setItem(iRow,8,UI.tbItem("點擊確認",GlobalUi::_BUTTON));
+        }
+        else if(data.Step=="5")
+        {
+            ui->tb->setItem(iRow,8,UI.tbItem("完成訂單"));
+        }
+        else
+        {
+            ui->tb->setItem(iRow,8,UI.tbItem("流程未到"));
+        }
 
-            ui->tb->setItem(iRow,9,UI.tbItem(customer.Currency));
-            ui->tb->setItem(iRow,10,UI.tbItem(data.Cost));
+        ui->tb->setItem(iRow,9,UI.tbItem(customer.Currency));
+        ui->tb->setItem(iRow,10,UI.tbItem(data.Cost));
 
-            int iNtdCost = data.Money.first().toInt();
+        int iNtdCost = data.Money.first().toInt();
 
-            int iNtdPrime = data.Money[1].toInt();
+        int iNtdPrime = data.Money[1].toInt();
 
-            ui->tb->setItem(iRow,11,UI.tbItem(""));
-            ui->tb->setItem(iRow,13,UI.tbItem(""));
-            ui->tb->setItem(iRow,14,UI.tbItem(""));
+        ui->tb->setItem(iRow,11,UI.tbItem(""));
+        ui->tb->setItem(iRow,12,UI.tbItem(""));
+        ui->tb->setItem(iRow,13,UI.tbItem(""));
 
-            if(data.Step.toInt()>=1)
-            {
+        _LayerDayReport::OrderPayType orderPayType = getPayCount(data);
 
-                ui->tb->setItem(iRow,11,UI.tbItem(iNtdCost));
-
-            }
-
-            if(data.Step.toInt()>=3)
-            {
-                ui->tb->setItem(iRow,13,UI.tbItem(iNtdPrime));
-                ui->tb->setItem(iRow,14,UI.tbItem(iNtdCost-iNtdPrime));
-            }
-
-              m_listInto.append(data);
-
-            /*
-                QList<DataFactory> fac=ACTION.getFactoryClass("",true);
-                DataFactory target;
-                for(int i=0;i<fac.length();i++)
-                {
-                    if(fac.at(i).Name==data.Owner)
-                    {
-                        qDebug()<<data.Owner;
-                        target = fac.at(i);
-                    }
-                }
-
-                //target.Cost
+        ui->tb->setItem(iRow,14,UI.tbItem(orderPayType.sPayName,true));
+        ui->tb->setItem(iRow,15,UI.tbItem(orderPayType.iTotalCount));
 
 
-                DataRate rate=ACTION.primeRate("",true);
 
-                qDebug()<<" rate listKey "<<rate.listKey()<<" ,target currentcy : "<<target.Currency;
-                double r = 1;
+        if(data.Step.toInt()>=1)
+        {
 
-                int iIdx =qBound(0,rate.listKey().indexOf(target.Currency),rate.listKey().length()-1);
-                qDebug()<<"tar currency : "<<target.Currency<<" idx "<<iIdx;
-                r = rate.listData.at(iIdx).second.toDouble();
+            ui->tb->setItem(iRow,11,UI.tbItem(iNtdCost));
 
-                double primeCost = data.Bouns.toDouble()*target.Cost.toDouble()*r;
+        }
 
-                ui->tb->setItem(iRow,12,UI.tbItem(primeCost));
+        if(data.Step.toInt()>=3)
+        {
+            ui->tb->setItem(iRow,12,UI.tbItem(iNtdPrime));
+            ui->tb->setItem(iRow,13,UI.tbItem(iNtdCost-iNtdPrime));
+        }
 
-                ui->tb->setItem(iRow,13,UI.tbItem(data.Cost.toDouble()-primeCost));
+        m_listInto.append(data);
 
-            */
+        if(data.Step.toInt()==5)
+        {
+            iTotal0 +=iNtdCost;
+            iTotal1 +=iNtdPrime;
+
+            int iTmp = iNtdCost-iNtdPrime;
+            iTotal2 +=iTmp;
 
 
         }
 
+
+
+
     }
 
+
+
+    ui->lbTotal0->setText(QString::number(iTotal0));
+    ui->lbTotal1->setText(QString::number(iTotal1));
+    ui->lbTotal2->setText(QString::number(iTotal2));
 
 
 }
@@ -245,6 +245,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
     if(row<0 || row>=m_listInto.length())
         return;
     OrderData data = m_listInto.at(row);
+
 
     if(column==5)
     {
@@ -285,9 +286,9 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             listMoney.append(ui->tb->item(row,11)->text());
 
-            listMoney.append(ui->tb->item(row,13)->text());
+            listMoney.append(ui->tb->item(row,12)->text());
 
-            listMoney.append(ui->tb->item(row,14)->text());
+            listMoney.append(ui->tb->item(row,13)->text());
 
             data.Money = listMoney;
 
@@ -334,6 +335,42 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
         }
     }
+
+    if(column==14 && data.Step.toInt()>=4 )
+    {
+        DialogDayReportEdit dialog;
+
+        dialog.setData(data);
+
+
+        int iRet = dialog.exec();
+
+        if(iRet==1)
+        {
+            //擔心order的狀態已被其它人改變，重取一次
+            QVariantMap in,out;
+            QString sError;
+            in["Sid"]=data.Sid;
+            ACTION.action(ACT::QUERY_ORDER,in,out,sError);
+
+            OrderData order(out);
+            order.PayType = dialog.data();
+
+            ACTION.setPrimeMoney(order);
+
+            ACTION.setSellMoney(order);
+
+            bool bOk =ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
+
+            if(bOk)
+                sError="修改儲值方式完成";
+
+            DMSG.showMsg("",sError,"OK");
+            refreshTb();
+
+        }
+
+    }
 }
 
 
@@ -373,10 +410,7 @@ void LayerDayReport::on_cbStep5_clicked()
 }
 
 
-void LayerDayReport::on_tb_cellClicked(int , int )
-{
 
-}
 
 void LayerDayReport::delayRefresh()
 {
@@ -385,7 +419,9 @@ void LayerDayReport::delayRefresh()
     ui->tb->hideColumn(11);
     ui->tb->hideColumn(12);
     ui->tb->hideColumn(13);
-    ui->tb->hideColumn(14);
+
+    ui->wTotal->hide();
+
 
     qDebug()<<"lv : "<<ACTION.m_currentUser.Lv;
 
@@ -398,9 +434,10 @@ void LayerDayReport::delayRefresh()
     {
         ui->tb->showColumn(10);
         ui->tb->showColumn(11);
-        //   ui->tb->showColumn(12);
+        ui->tb->showColumn(12);
         ui->tb->showColumn(13);
-        ui->tb->showColumn(14);
+        ui->wTotal->show();
+
     }
 
     ACTION.primeRate("",true);
@@ -423,7 +460,6 @@ void LayerDayReport::on_dateEdit_userDateChanged(const QDate &date)
 void LayerDayReport::on_tb_cellEntered(int row, int column)
 {
 
-    qDebug()<<"AAAAAAAAAAA";
 
     if(row<0 || row>=m_listInto.length())
         return;
@@ -431,11 +467,11 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
     if(column==3)
     {
         QString st="訂單編號:"+data.Id+"\n"
-                   "報價: %1\n"
-                   "下單: %2\n"
-                   "處理: %3\n"
-                   "回報: %4\n"
-                   "簽核: %5\n";
+                                   "報價: %1\n"
+                                   "下單: %2\n"
+                                   "處理: %3\n"
+                                   "回報: %4\n"
+                                   "簽核: %5\n";
 
 
         QStringList listName;
@@ -458,7 +494,42 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
     }
     else
     {
-         // QToolTip::hideText();
+        // QToolTip::hideText();
     }
+}
+
+
+_LayerDayReport::OrderPayType LayerDayReport::getPayCount(OrderData data)
+{
+    _LayerDayReport::OrderPayType re;
+
+
+    QString sPaySid = data.PayType;
+
+    re.sPayName = ACTION.getAddValueName(sPaySid);
+
+
+    re.sPaySid = sPaySid;
+
+    QStringList listItem = data.Item.split(";;");
+
+    for(int i=0;i<listItem.length();i++)
+    {
+        QString itemSid = listItem.at(i).split(",,").first();
+
+        int itemCount = listItem.at(i).split(",,").last().toInt();
+
+        double iOnePayCount =ACTION.getGameItemPayCount(itemSid,sPaySid);
+
+
+        double count = itemCount*iOnePayCount;
+
+        re.m_iListCount.append(count);
+
+        re.iTotalCount+=count;
+    }
+
+
+    return re;
 }
 

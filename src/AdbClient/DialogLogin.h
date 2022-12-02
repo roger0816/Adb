@@ -26,7 +26,7 @@ public:
     explicit DialogLogin(QWidget *parent = nullptr);
     ~DialogLogin();
 
-    void init();
+    void init(QString sMsg="");
 
     void setRelease(bool b);
 
@@ -35,6 +35,7 @@ public:
     void paintEvent(QPaintEvent *) override;
 
     void setVer(QString sVer);
+
 
 private slots:
     void on_btnLogin_clicked();

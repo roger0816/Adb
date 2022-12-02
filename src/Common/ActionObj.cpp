@@ -14,6 +14,10 @@ ActionObj::ActionObj(QObject *parent)
 
         data.iAciton=1;
 
+        data.dData["UserSid"] = m_sCurrentUserId;
+
+        data.dData["Session"]=m_sCurrentSession;
+
         RPKCORE.network.connectHost("getTrigger",m_ip,m_port,data.enCodeJson());
     };
 
@@ -394,7 +398,8 @@ void ActionObj::serverTrigger(QString sId, QByteArray data, int )
                 qDebug()<<m_dUpdateTrigger;
             }
 
-
+            if(!re.bOk)
+                emit sessionError();
 
         }
     }

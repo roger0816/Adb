@@ -48,7 +48,7 @@ public:
 
     void toolTip(QString st);
 
-    QRegExpValidator *regRate =new QRegExpValidator(QRegExp("^([1-9][0-9]*)+(.[0-9]{1,3})?$"),this);
+    QRegExpValidator *regRate =new QRegExpValidator(QRegExp("^([0-9][0-9]*)+(.[0-9]{1,3})?$"),this);
 
     QWidget *m_mainWidget=nullptr;
 

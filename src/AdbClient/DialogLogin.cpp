@@ -31,7 +31,7 @@ DialogLogin::~DialogLogin()
     delete ui;
 }
 
-void DialogLogin::init()
+void DialogLogin::init(QString sMsg)
 {
 
 
@@ -47,7 +47,7 @@ void DialogLogin::init()
     }
 
     ui->txPass->clear();
-    ui->lbMsg->clear();
+    ui->lbMsg->setText(sMsg);
 }
 
 void DialogLogin::setRelease(bool b)

@@ -73,6 +73,9 @@ public:
 
     DataGameItem getGameItemFromSid(QString sSid,bool bQuery=false);
 
+    double getGameItemPayCount(QString sGameItemSid,QString sPaySid,bool bQuery=true);
+
+
     QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool bQuery=false);
 
 

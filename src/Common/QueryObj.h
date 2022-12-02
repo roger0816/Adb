@@ -7,7 +7,8 @@
 #include "CSqlClass.h"
 #include "DEF.h"
 #include "RpkCore.h"
-
+#include <QCryptographicHash>
+#include <QTimer>
 
 
 /*
@@ -65,6 +66,11 @@ protected:
 
     QString checkUpdate(int iApi);
 
+
+    bool checkAppVersion(QString sVersion);
+
+
+
     //void updateTrigger(QString sTableName, QString sDateTime);
 
     //api更新的時間標記
@@ -72,6 +78,15 @@ protected:
 
     //影響資料變動的api，與聯動trigger的api
     QVariantMap m_dLinkage;
+
+
+    QVariantMap m_dLogingUser;
+
+    bool checkSesison(QString sUserSid,QString sSession);
+
+
+    QTimer m_timer;
+
 signals:
 
 };

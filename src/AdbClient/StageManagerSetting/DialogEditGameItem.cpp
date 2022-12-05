@@ -28,6 +28,8 @@ DialogEditGameItem::DialogEditGameItem(QWidget *parent) :
 
 
     ui->tableWidget->setColumnWidth(1,110);
+
+    ui->cbEnable->setChecked(true);
 }
 
 DialogEditGameItem::~DialogEditGameItem()

@@ -417,7 +417,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     dialog.setRate(sGameName+" : 新增商品",rate);
     QVariantMap dat;
-
+    dat["Enable"] = true;
     dialog.setData(iGameRate,dat);
 
     if(dialog.exec()==1)

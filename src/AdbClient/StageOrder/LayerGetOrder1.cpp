@@ -322,11 +322,12 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
         QVariantList list;
 
-        QVariantMap d;
+        QVariantMap in;
 
         QString sError;
 
-        ACTION.action(ACT::QUERY_PAY_TYPE,d,list,sError);
+        in["ASC"]="Sort";
+        ACTION.action(ACT::QUERY_PAY_TYPE,in,list,sError);
 
         QStringList listCb;
 
@@ -341,12 +342,13 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
         ui->cbAddValueType->addItems(listCb);
 
+
+
         ui->cbAddValueType->setEditable(true);
 
-
-//        QCompleter *completer=new QCompleter(ui->cbAddValueType->model(),this);
+        QCompleter *completer=new QCompleter(ui->cbAddValueType->model(),this);
 //        completer->setCompletionMode(QCompleter::PopupCompletion);
-//        ui->cbAddValueType->setCompleter(completer);
+        ui->cbAddValueType->setCompleter(completer);
 
 
         QString sNote0;
@@ -403,6 +405,8 @@ void LayerGetOrder1::on_btnBackOrder_clicked()
 
 void LayerGetOrder1::on_btnFinish_clicked()
 {
+
+
     QVariantList listData =m_data[m_currentDataKey].toList();
 
     QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
@@ -411,9 +415,25 @@ void LayerGetOrder1::on_btnFinish_clicked()
 
     if(ui->cbAddValueType->count()<1)
     {
-        UI.showMsg("","支付方式錯誤",QStringList()<<"OK");
+
+        UI.showMsg("","儲值方式錯誤",QStringList()<<"OK");
         return ;
     }
+
+
+
+    QString sText=ui->cbAddValueType->currentText();
+
+
+
+    if(ui->cbAddValueType->findText(sText)<0)
+    {
+        UI.showMsg("","錯誤,請填寫正確的儲值方式",QStringList()<<"OK");
+        return ;
+    }
+
+
+
     int iRet= UI.showMsg("",QString("請再確認訂單(%1) \n已完成儲值處理？").arg(order.Id),QStringList()<<"否"<<"是");
 
     if(iRet==1)

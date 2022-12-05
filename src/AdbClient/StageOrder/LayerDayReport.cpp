@@ -27,6 +27,8 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
     //    ui->tb->setColumnWidth(9,80);
     //    ui->tb->setColumnWidth(11,100);
     //   ui->tb->setColumnWidth(7,80);
+
+    ui->btnExcel->hide();
 }
 
 LayerDayReport::~LayerDayReport()
@@ -53,7 +55,7 @@ void LayerDayReport::showEvent(QShowEvent *)
 void LayerDayReport::refreshTb()
 {
 
-    m_listOrder = ACTION.getOrder(true);
+    m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date());
 
     ui->tb->setRowCount(0);
     QString sError;
@@ -167,11 +169,18 @@ void LayerDayReport::refreshTb()
         ui->tb->setItem(iRow,11,UI.tbItem(""));
         ui->tb->setItem(iRow,12,UI.tbItem(""));
         ui->tb->setItem(iRow,13,UI.tbItem(""));
+        ui->tb->setItem(iRow,14,UI.tbItem(""));
 
         _LayerDayReport::OrderPayType orderPayType = getPayCount(data);
 
-        ui->tb->setItem(iRow,14,UI.tbItem(orderPayType.sPayName,true));
-        ui->tb->setItem(iRow,15,UI.tbItem(orderPayType.iTotalCount));
+
+        ui->tb->setItem(iRow,15,UI.tbItem(orderPayType.sPayName,true));
+        ui->tb->setItem(iRow,16,UI.tbItem(orderPayType.iTotalCount));
+
+        DataRate rate=ACTION.primeRate(data.PrimeRateSid,true);
+        double payRate = ACTION.payTypeToNTDRate(data.PayType,rate);
+
+        ui->tb->setItem(iRow,17,UI.tbItem(payRate));
 
 
 
@@ -186,6 +195,9 @@ void LayerDayReport::refreshTb()
         {
             ui->tb->setItem(iRow,12,UI.tbItem(iNtdPrime));
             ui->tb->setItem(iRow,13,UI.tbItem(iNtdCost-iNtdPrime));
+            double dTmp = 0.00;
+            dTmp = (double)(iNtdCost-iNtdPrime) / data.Bouns.toDouble();
+            ui->tb->setItem(iRow,14,UI.tbItem(dTmp));
         }
 
         m_listInto.append(data);
@@ -336,7 +348,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
         }
     }
 
-    if(column==14 && data.Step.toInt()>=4 )
+    if(column==15 && data.Step.toInt()>=4 )
     {
         DialogDayReportEdit dialog;
 
@@ -420,8 +432,14 @@ void LayerDayReport::delayRefresh()
     ui->tb->hideColumn(12);
     ui->tb->hideColumn(13);
 
+    ui->tb->hideColumn(14);
+    ui->tb->hideColumn(15);
+    ui->tb->hideColumn(16);
+    ui->tb->hideColumn(17);
+
     ui->wTotal->hide();
 
+    ui->btnExcel->hide();
 
     qDebug()<<"lv : "<<ACTION.m_currentUser.Lv;
 
@@ -436,7 +454,13 @@ void LayerDayReport::delayRefresh()
         ui->tb->showColumn(11);
         ui->tb->showColumn(12);
         ui->tb->showColumn(13);
+        ui->tb->showColumn(14);
+        ui->tb->showColumn(15);
+        ui->tb->showColumn(16);
+        ui->tb->showColumn(17);
         ui->wTotal->show();
+
+        ui->btnExcel->show();
 
     }
 
@@ -531,5 +555,79 @@ _LayerDayReport::OrderPayType LayerDayReport::getPayCount(OrderData data)
 
 
     return re;
+}
+
+
+void LayerDayReport::on_btnExcel_clicked()
+{
+    if(ui->tb->rowCount()<1)
+    {
+        DMSG.showMsg("","沒有資料","OK");
+
+        return ;
+    }
+    QString sPath = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
+
+    if(sPath.trimmed()=="")
+        return ;
+
+
+    QString sFileName = sPath+"/"+"DayReport_"+ui->dateEdit->date().toString("yyyy_MMdd");
+    qDebug()<<"sFileName : "<<sFileName;
+    QTXLSX_USE_NAMESPACE
+
+    Document xlsx;
+
+    //  xlsx.addSheet();
+
+    for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
+    {
+        int iXlsxCol =0;
+        for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
+        {
+            if(iCol==5)
+                continue;
+
+            iXlsxCol++;
+
+            if(iRow==0)
+            {
+                QString sHeader= ui->tb->horizontalHeaderItem(iCol)->text();
+                xlsx.write(iRow+1,iXlsxCol,sHeader);
+            }
+
+            QString st = ui->tb->item(iRow,iCol)->text();
+
+            xlsx.write(iRow+2,iXlsxCol,st);
+            xlsx.setColumnWidth(iXlsxCol,iXlsxCol,16);
+        }
+    }
+
+    xlsx.write("J"+QString::number(ui->tb->rowCount()+3),ui->lbT->text());
+    xlsx.write("K"+QString::number(ui->tb->rowCount()+3),ui->lbTotal0->text());
+    xlsx.write("L"+QString::number(ui->tb->rowCount()+3),ui->lbTotal1->text());
+    xlsx.write("M"+QString::number(ui->tb->rowCount()+3),ui->lbTotal2->text());
+
+    xlsx.saveAs(sFileName+".xls");
+
+    DMSG.showMsg("",sFileName.split("/").last()+"\n\n匯出完成","OK");
+    /*
+    CObjectExcel excel;
+
+    excel.open(sFileName+"_2.xls");
+
+    for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
+    {
+        for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
+            excel.setCell(iRow,iCol,ui->tb->item(iRow,iCol)->text());
+    }
+
+    excel.save();
+
+    excel.close();
+    */
+
+
+
 }
 

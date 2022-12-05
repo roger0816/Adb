@@ -11,6 +11,7 @@
 #include <QToolTip>
 #include "VojData.h"
 #include <QDoubleSpinBox>
+#include <QCompleter>
 namespace Ui {
 class DialogEditGameItem;
 }

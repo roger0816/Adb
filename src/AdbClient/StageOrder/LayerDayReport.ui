@@ -83,7 +83,7 @@
         </column>
         <column>
          <property name="text">
-          <string>業積</string>
+          <string>業績</string>
          </property>
         </column>
         <column>
@@ -118,12 +118,22 @@
         </column>
         <column>
          <property name="text">
+          <string>業績單位利潤</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>儲值方式</string>
          </property>
         </column>
         <column>
          <property name="text">
           <string>數量</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>成本參數</string>
          </property>
         </column>
        </widget>
@@ -190,7 +200,23 @@
           </widget>
          </item>
          <item>
-          <widget class="QWidget" name="widget_2" native="true"/>
+          <widget class="QWidget" name="widget_2" native="true">
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QPushButton" name="btnExcel">
+              <property name="maximumSize">
+               <size>
+                <width>90</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>匯出報表</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
          </item>
          <item>
           <widget class="QWidget" name="widget_3" native="true">
@@ -296,9 +322,9 @@
           </spacer>
          </item>
          <item>
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="lbT">
            <property name="text">
-            <string>小計(台幣)         </string>
+            <string>已完成訂單小計(台幣)         </string>
            </property>
           </widget>
          </item>

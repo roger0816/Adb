@@ -62,6 +62,32 @@ void QueryObj::linkage(int iApi, int iBindApi)
     return linkage(iApi,list);
 }
 
+void QueryObj::setKeyValue(QString sKey, QVariant value)
+{
+    QVariantMap d;
+    d["skey"]=sKey;
+    d["svalue"]=value;
+
+    QString sError;
+     m_sql.insertTb("Settings",d,sError,true);
+}
+
+QVariant QueryObj::keyValue(QString sKey)
+{
+    QVariant re;
+    QVariantMap d;
+    d["skey"]=sKey;
+    QVariantList out;
+    QString sError;
+    m_sql.queryTb("Settings",d,out,sError);
+
+    if(out.length()>0)
+    {
+        re = out.first().toMap()["svalue"];
+    }
+    return re;
+}
+
 
 
 void QueryObj::setDataBase(bool bMysql, QString sIp, QString sPort)

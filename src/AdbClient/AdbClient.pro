@@ -1,5 +1,6 @@
 QT       += core gui
-QT += sql network charts
+QT += sql network charts axcontainer
+
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -31,7 +32,9 @@ SOURCES += \
     StageReport/LayerUserReport.cpp \
     StageReport/ModelGameReport.cpp \
     StageReport/ModelUserReport.cpp \
+    component/CExcelExport.cpp \
     component/CLinkTable.cpp \
+    component/CObjectExcel.cpp \
     component/CSideMenu.cpp \
     DialogBulletinEdit.cpp \
     DialogCommon.cpp \
@@ -81,6 +84,7 @@ SOURCES += \
     StageReport/StageReport.cpp \
     StageTest.cpp \
     component/LayerTouchCheck.cpp \
+    component/cobjectspreadsheet.cpp \
     main.cpp \
     widget.cpp
 
@@ -94,7 +98,9 @@ HEADERS += \
     StageReport/LayerUserReport.h \
     StageReport/ModelGameReport.h \
     StageReport/ModelUserReport.h \
+    component/CExcelExport.h \
     component/CLinkTable.h \
+    component/CObjectExcel.h \
     component/CSideMenu.h \
     DialogBulletinEdit.h \
     DialogCommon.h \
@@ -144,6 +150,7 @@ HEADERS += \
     StageReport/StageReport.h \
     StageTest.h \
     component/LayerTouchCheck.h \
+    component/cobjectspreadsheet.h \
     widget.h
 
 FORMS += \
@@ -215,6 +222,9 @@ unix: TARGET =AdbClientUnix
 
 
 include(component/mutiScreen/mutiScreen.pri)
+
+
+ include(../../libs/QtXlsxWriter-master/src/xlsx/qtxlsx.pri)
 
 
 

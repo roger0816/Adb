@@ -36,6 +36,7 @@ struct SQL_TABLE
     static QString Schedule(){return "Schedule";}
     static QString PicData(){return "PicData";}
     static QString GameItemCount(){return "GameItemCount";}
+    static QString Settings(){return "Settings";}
 };
 
 namespace ACT
@@ -43,8 +44,8 @@ namespace ACT
 enum _KEY
 {
 
-    SET_VALUE=1001,
-    GET_VALUE,
+    SET_VALUE=9901,
+    GET_VALUE=9931,
 
     LOGIN = 1000,
 

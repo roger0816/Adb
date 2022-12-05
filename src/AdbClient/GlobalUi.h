@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QTableWidgetItem>
 #include <QDateTime>
+#include <QCompleter>
 #include "DialogLogin.h"
 #include "DialogInput.h"
 #include "ItemMiniLoadbar.h"

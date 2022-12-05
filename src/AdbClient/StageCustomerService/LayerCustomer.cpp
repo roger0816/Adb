@@ -69,7 +69,14 @@ void LayerCustomer::on_btnAdd_clicked()
 
         ACTION.action(ACT::REPLACE_GAME_INFO,in,sError);
 
+        CustomerData cus(data);
 
+        QVariantMap kValue;
+        kValue["skey"]="CustomerId";
+        kValue["svalue"]=cus.Id.split("-").last();
+
+        QString sError2;
+        ACTION.action(ACT::SET_VALUE,kValue,sError2);
 
 
         UI.showMsg("",sError,"OK");

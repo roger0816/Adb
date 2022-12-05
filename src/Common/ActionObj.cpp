@@ -350,9 +350,12 @@ QString ActionObj::apiCacheKey(QString  sApi,QVariantMap conditions)
 
     return sRe;
 }
+static int AAA=0;
 
 void ActionObj::serverTrigger(QString sId, QByteArray data, int )
 {
+
+    AAA++;
 
     if(sId=="getTrigger")
     {
@@ -400,6 +403,13 @@ void ActionObj::serverTrigger(QString sId, QByteArray data, int )
 
             if(!re.bOk)
                 emit sessionError();
+
+
+            if(AAA%2==0)
+            {
+
+                qDebug()<<"TTTTTT : "<<m_dUpdateTrigger.value("11");
+            }
 
         }
     }

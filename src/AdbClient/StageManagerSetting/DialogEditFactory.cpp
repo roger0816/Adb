@@ -161,6 +161,11 @@ void DialogEditFactory::addCb(int iIdx, QStringList listData)
 
     cb->addItems(listData);
 
+    cb->setEditable(true);
+
+    QCompleter *completer=new QCompleter(cb->model(),this);
+    cb->setCompleter(completer);
+
     int index = qBound(0,iIdx,listData.length()-1);
 
     cb->setCurrentIndex(index);

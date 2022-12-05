@@ -31,6 +31,8 @@ LayerDayDebit::LayerDayDebit(QWidget *parent) :
 
     ui->tb->setColumnWidth(10,40);
 
+    connect(ui->btnDebitExport,&QPushButton::clicked,this,&LayerDayDebit::slotBtnDebitExport);
+
 }
 
 LayerDayDebit::~LayerDayDebit()
@@ -225,5 +227,63 @@ void LayerDayDebit::on_tb_cellPressed(int row, int column)
                                 +sText);
 
     QTimer::singleShot(50,this,[=](){ m_dialogPic->exec();});
+}
+
+
+void LayerDayDebit::slotBtnDebitExport()
+{
+    if(ui->tb->rowCount()<1)
+    {
+        DMSG.showMsg("","沒有資料","OK");
+
+        return ;
+    }
+    QString sPath = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
+
+    if(sPath.trimmed()=="")
+        return ;
+
+
+    QString sFileName = sPath+"/"+"DayDebit_"+ui->cbDebit->currentText()+"_"+ui->dateEdit->date().toString("yyyy_MMdd");
+    qDebug()<<"sFileName : "<<sFileName;
+
+    QTXLSX_USE_NAMESPACE
+
+    Document xlsx;
+
+   // xlsx.renameSheet(xlsx.currentSheet()->sheetName(),ui->cbDebit->currentText());
+    //  xlsx.addSheet();
+
+    for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
+    {
+        int iXlsxCol =0;
+        for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
+        {
+
+            if(iCol==9 || iCol==10)
+                continue;
+
+            iXlsxCol++;
+
+            if(iRow==0)
+            {
+                QString sHeader= ui->tb->horizontalHeaderItem(iCol)->text();
+                xlsx.write(iRow+1,iXlsxCol,sHeader);
+            }
+
+            QString st = ui->tb->item(iRow,iCol)->text();
+            qDebug()<<"row : "<<iRow<<" col: "<<iCol<<" data: "<<st;
+            xlsx.write(iRow+2,iXlsxCol,st);
+            xlsx.setColumnWidth(iXlsxCol,iXlsxCol,16);
+        }
+    }
+
+    xlsx.write("F"+QString::number(ui->tb->rowCount()+3),ui->lbT->text());
+    xlsx.write("G"+QString::number(ui->tb->rowCount()+3),ui->lbTotal->text());
+
+
+    xlsx.saveAs(sFileName+".xls");
+
+    DMSG.showMsg("",sFileName.split("/").last()+"\n\n匯出完成","OK");
 }
 

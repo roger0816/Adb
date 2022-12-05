@@ -44,7 +44,7 @@ void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
     ui->cbCurrency->addItems(m_lastPrimeRate.listKey());
 }
 
-void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,QVariantList listGameInfo,QVariantMap data)
+void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,QVariantList listCustomerInfo,QVariantMap data)
 {
 
 
@@ -84,7 +84,7 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     ui->btnDel->show();
 
-    m_listGameInfo = listGameInfo;
+    m_listCustomerInfo =listCustomerInfo;
 
     refresh();
 
@@ -107,8 +107,8 @@ void DialogCustomerEdit::setData(QString sCustomerSid)
     ACTION.action(ACT::QUERY_CUSTOMER,tmp,outCustomer,sError);
 
 
-
-    QVariantList in,outClass,outGame,outGameInfo;
+    QVariantMap in;
+    QVariantList outClass,outGame,outCustomerInfo;
 
 
 
@@ -116,9 +116,11 @@ void DialogCustomerEdit::setData(QString sCustomerSid)
 
     ACTION.action(ACT::QUERY_GAME_LIST,in,outGame,sError);
 
-    ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,outGameInfo,sError);
+    in["CustomerSid"] = m_sCustomerSid;
 
-    setData(outClass,outGame,outGameInfo,outCustomer);
+    ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,outCustomerInfo,sError);
+
+    setData(outClass,outGame,outCustomerInfo,outCustomer);
 
 
 }
@@ -188,18 +190,19 @@ QVariantMap DialogCustomerEdit::data()
 
 QVariantList DialogCustomerEdit::dataGameInfo(QString sCustomerSid)
 {
-    for(int i=0;i<m_listGameInfo.length();i++)
+
+    for(int i=0;i<m_listCustomerInfo.length();i++)
     {
-        QVariantMap d =m_listGameInfo[i].toMap();
+        QVariantMap d =m_listCustomerInfo[i].toMap();
 
         d["CustomerSid"]=sCustomerSid;
 
-        m_listGameInfo[i] = d;
+        m_listCustomerInfo[i] = d;
 
     }
 
 
-    return m_listGameInfo;
+    return m_listCustomerInfo;
 }
 
 QVariantList DialogCustomerEdit::deleteGameInfo()
@@ -220,7 +223,7 @@ QStringList DialogCustomerEdit::mapToList(QVariantList list, QString sKey)
 
     return listRe;
 }
-
+/*
 QString DialogCustomerEdit::checkId(int cbIdx)
 {
     QString sId="";
@@ -271,33 +274,7 @@ QString DialogCustomerEdit::checkId(int cbIdx)
 
 
     return sId;
-    /*
-    if(sLastId.length()>=4)
-    {
-        QString sTmp = sLastId.mid(sLastId.length()-4,4);
 
-        QString sSecond = sTmp.mid(1,3);
-
-        QString sFirst = sTmp.mid(0,1);
-
-        if(sSecond.toInt()<999)
-        {
-            QString sNum = QString("%1").arg(sSecond.toInt()+1,3,10,QLatin1Char('0'));
-
-            sId = sClassId+"-"+sFirst+sNum;
-        }
-        else
-        {
-
-
-            sFirst=QChar::fromLatin1(sFirst.at(0).toLatin1()+1);
-
-            sId = sClassId+"-"+sFirst+"001";
-        }
-
-    }
-       return sId;
-    */
 
 
 }
@@ -342,19 +319,19 @@ QString DialogCustomerEdit::strAdd1(QString st)
 
     return sRe0+sRe1;
 }
-
+*/
 void DialogCustomerEdit::refresh()
 {
     ui->tbGameList->setRowCount(0);
 
-    for(int i=0;i<m_listGameInfo.length();i++)
+    for(int i=0;i<m_listCustomerInfo.length();i++)
     {
-        QVariantMap data = m_listGameInfo.at(i).toMap();
+        QVariantMap data = m_listCustomerInfo.at(i).toMap();
 
-//        if(data["CustomerId"]!="" && data["CustomerId"]!=ui->lbId->text().trimmed())
-//        {
-//            continue;
-//        }
+        //        if(data["CustomerId"]!="" && data["CustomerId"]!=ui->lbId->text().trimmed())
+        //        {
+        //            continue;
+        //        }
 
         if( data["CustomerSid"].toString()!="" && data["CustomerSid"].toString()!=m_sCustomerSid)
         {
@@ -448,7 +425,7 @@ void DialogCustomerEdit::on_btnAddGame_clicked()
 
     data["Characters"] = ui->txChr->text().trimmed();
 
-    m_listGameInfo.append(data);
+    m_listCustomerInfo.append(data);
 
     refresh();
 
@@ -462,20 +439,23 @@ void DialogCustomerEdit::on_btnAddGame_clicked()
 
 void DialogCustomerEdit::on_tbGameList_cellClicked(int row, int col)
 {
-    if(row >=m_listGameInfo.length() || row<0 )
+
+    qDebug()<<"irow : "<<row;
+
+    if(row >=m_listCustomerInfo.length() || row<0 )
     {
         return;
     }
 
     if(col==0)
     {
-        QVariantMap d = m_listGameInfo.at(row).toMap();
+        QVariantMap d = m_listCustomerInfo.at(row).toMap();
 
         if(d["Sid"]!="")
             m_listDeleteInfo.append(d);
 
-        m_listGameInfo.removeAt(row);
-
+        m_listCustomerInfo.removeAt(row);
+        qDebug()<<m_listCustomerInfo.length();
         refresh();
 
     }
@@ -502,8 +482,17 @@ void DialogCustomerEdit::on_cbClass_currentIndexChanged(int index)
         return;
     }
 
-    ui->lbId->setText(checkId(index));
+    QString sId;
 
+    bool bOk = ACTION.getNewCustomerId(sId);
+
+    if(!bOk)
+        return;
+
+    QString sClassId  = m_listClass.at(index).toMap()["Id"].toString();
+
+    ui->lbId->setText(sClassId+"-"+sId);
+    qDebug()<<sClassId+"-"+sId;
 }
 
 
@@ -532,16 +521,49 @@ void DialogCustomerEdit::on_btnOk_clicked()
     }
 
 
+    QString customerId= ui->lbId->text();
 
-    for(int i=0;i<m_listGameInfo.length();i++)
+    if(m_sCustomerSid=="")
     {
-        QVariantMap d = m_listGameInfo.at(i).toMap();
+        QVariantMap in;
+
+        in["Id"]=customerId;
+
+        QVariantList out;
+        QString sError;
+        bool bOk = ACTION.action(ACT::QUERY_CUSTOMER,in,out,sError);
+
+
+        if(!bOk)
+        {
+            DMSG.showMsg("","讀取資料錯誤。","OK");
+            return;
+        }
+        else
+        {
+            if(out.length()>0)
+            {
+                DMSG.showMsg("","編號: "+customerId.split("_").last()+"已經被使用,\n已更新編號，請再試一次","OK");
+
+                on_cbClass_currentIndexChanged(ui->cbClass->currentIndex());
+
+                return;
+            }
+
+        }
+    }
+
+
+
+    for(int i=0;i<m_listCustomerInfo.length();i++)
+    {
+        QVariantMap d = m_listCustomerInfo.at(i).toMap();
 
         if(d["CustomerId"]=="")
         {
             d["CustomerId"] =ui->lbId->text().trimmed();
 
-            m_listGameInfo[i] = d;
+            m_listCustomerInfo[i] = d;
         }
     }
 
@@ -559,7 +581,7 @@ void DialogCustomerEdit::on_btnDel_clicked()
 {
     if(1==UI.showMsg("","確定要刪除此客戶資料嗎？",QStringList()<<"否"<<"是"))
     {
-        m_listDeleteInfo = m_listGameInfo;
+        m_listDeleteInfo = m_listCustomerInfo;
         done(3);
     }
 }

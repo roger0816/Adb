@@ -91,6 +91,9 @@ public:
 
     QList<OrderData> getOrder(bool bRequest = false);
 
+    QList<OrderData> getOrderByDate(QDate date);
+
+
     OrderData getOrder(QString sSid, bool bRequest = false);
     OrderData getOrderCustomerLast(QString sCustomerSid, bool bRequest = false);
 
@@ -126,7 +129,7 @@ public:
     QString getAddValueName(QString sSid);
 
 
-    double payTypeToNTD(QString payTypeSid, DataRate rate);
+    double payTypeToNTDRate(QString payTypeSid, DataRate rate);
 
     bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
 
@@ -137,6 +140,11 @@ public:
     QString findGameSid(QString sGameItemSid, bool bQuery=false);
 
     void clearCacheData(int iApi);
+
+
+    bool getNewCustomerId(QString &sGetId,bool bRenew=false);
+    //舊的id用匯入的從AA01起，少一碼則最前面加上D，程式新增的規則從EA起
+    void setNewCustomerId(QString sCustomerId);
 
 private:
     QList<UserData> m_listUser;

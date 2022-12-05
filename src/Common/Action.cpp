@@ -90,16 +90,7 @@ bool Action::addUser(QString sUser, QString sPass,QString sCid, QString sName,in
 bool Action::editUser(QVariantMap userData, QString &sError)
 {
 
-    CData data;
-
-    data.iAciton = ACT::EDIT_USER;
-
-    data.listData.append(userData);
-
-    CData dRe = query(data);
-
-    sError = dRe.sMsg;
-    return dRe.bOk;
+    return action(ACT::EDIT_USER,userData,sError);
 
 }
 
@@ -166,8 +157,8 @@ bool Action::setKeyValue(QString key, QString value, bool inLocal)
 
     data.iAciton=ACT::SET_VALUE;
 
-    data.listData.append(key);
-    data.listData.append(value);
+    data.dData["skey"]=key;
+    data.dData["svalue"]=value;
 
     CData re = query(data);
 
@@ -190,11 +181,17 @@ QString Action::getKeyValue(QString key, bool inLocal)
 
     data.iAciton=ACT::GET_VALUE;
 
-    data.listData.append(key);
+    QVariantMap in;
+    in["skey"]=key;
+
+    data.dData=in;
 
     CData re = query(data);
 
-    return re.listData.first().toString();
+    if(re.dData.values().length()>0)
+        sRe = re.dData["svalue"].toString();
+
+    return sRe;
 
 }
 
@@ -286,8 +283,10 @@ void Action::reQuerty()
 QList<UserData> Action::getUser(bool bQuery)
 {
     if(bQuery)
+    {
         m_listUser = queryUser();
 
+    }
     return m_listUser;
 }
 
@@ -563,24 +562,24 @@ double Action::getGameItemPayCount(QString sGameItemSid, QString sPaySid, bool b
 {
     double iRe = 0;
 
-   DataGameItem item = getGameItemFromSid(sGameItemSid,bQuery);
+    DataGameItem item = getGameItemFromSid(sGameItemSid,bQuery);
 
-   QStringList listTmp = item.AddValueTypeSid.split(";;");
+    QStringList listTmp = item.AddValueTypeSid.split(";;");
 
-   for(int i=0;i<listTmp.length();i++)
-   {
-       QString pay = listTmp.at(i).split(",,").first();
+    for(int i=0;i<listTmp.length();i++)
+    {
+        QString pay = listTmp.at(i).split(",,").first();
 
-       double iCount = listTmp.at(i).split(",,").last().toDouble();
+        double iCount = listTmp.at(i).split(",,").last().toDouble();
 
-       if(pay==sPaySid)
-       {
-           iRe=iCount;
-       }
-   }
+        if(pay==sPaySid)
+        {
+            iRe=iCount;
+        }
+    }
 
 
-   return iRe;
+    return iRe;
 }
 
 QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery)
@@ -676,8 +675,10 @@ QList<OrderData> Action::getOrder(bool bRequest)
 {
     if(bRequest)
     {
-        QVariantList in,out;
-
+        QVariantMap in;
+        QVariantList out;
+        QDate tDate=QDate::currentDate().addDays(-1);
+        in["OrderDate >="]=tDate.toString("yyyyMMdd");
         QString sError;
         action(ACT::QUERY_ORDER,in,out,sError);
 
@@ -693,6 +694,28 @@ QList<OrderData> Action::getOrder(bool bRequest)
     }
 
     return m_listOrder;
+}
+
+QList<OrderData> Action::getOrderByDate(QDate date)
+{
+    QList<OrderData> re;
+    QVariantMap in;
+    QVariantList out;
+    QDate tDate=date;
+    in["OrderDate >="]=tDate.toString("yyyyMMdd");
+    QString sError;
+    action(ACT::QUERY_ORDER,in,out,sError);
+
+
+    for(int i=0;i<out.length();i++)
+    {
+        OrderData data(out.at(i).toMap());
+
+        re.append(data);
+    }
+
+
+    return re;
 }
 
 bool Action::replaceOrder(OrderData order, QString &sError)
@@ -1110,7 +1133,7 @@ void Action::setPrimeMoney(OrderData &order)
 
         QString sValue = payType.findValue(order.PayType);
 
-        double iOneItemPrice = payTypeToNTD(order.PayType,rate)*sValue.toDouble();
+        double iOneItemPrice = payTypeToNTDRate(order.PayType,rate)*sValue.toDouble();
 
         prime =prime+(itemCount*iOneItemPrice);
 
@@ -1163,6 +1186,7 @@ CListPair Action::getAddValueType(bool bRequest)
     QVariantMap in;
     QVariantList list;
     QString sError;
+    in["ASC"]="Sort";
     action(ACT::QUERY_PAY_TYPE,in,list,sError);
 
     for(int i=0;i<list.length();i++)
@@ -1195,7 +1219,7 @@ QString Action::getAddValueName(QString sSid)
     return sRe;
 }
 
-double Action::payTypeToNTD(QString payTypeSid, DataRate rate)
+double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate)
 {
     double re=1.00;
 
@@ -1212,13 +1236,10 @@ double Action::payTypeToNTD(QString payTypeSid, DataRate rate)
 
 
     DataPayType data(rawData.first().toMap());
-    qDebug()<<"BBBBBBBBBBBB2: "<<data.Currency;
-
-    qDebug()<<"list "<<rate.listKey()<<" , "<<rate.listValue();
 
     double r = rate.listData.findValue(data.Currency).toDouble();
 
-    qDebug()<<"BBBBBBBBBBBBB3 : "<<r;
+
 
 
     re=r*data.Value[0].toDouble()*data.Value[1].toDouble()
@@ -1368,5 +1389,127 @@ void Action::clearCacheData(int iApi)
 
     return ;
 
+}
+
+
+
+bool Action::getNewCustomerId(QString &sGetId, bool bRenew)
+{
+    QString sKey = "CustomerId";
+
+    if(!bRenew)
+        sGetId =getKeyValue(sKey,false).toUpper();
+
+    if(sGetId=="")
+    {
+        return false;
+    }
+
+    else if(sGetId=="0")
+    {
+        sGetId ="EA01";
+    }
+
+    else
+    {
+
+        auto strAdd1=[=](QString st)
+        {
+
+            if(st.length()!=2)
+                return st;
+
+            QString sRe0,sRe1;
+            QString sFirst=st.at(0);
+            QString sSecond =st.at(1);
+            if(sSecond.toUpper()=="Z")
+            {
+                sRe1="A";
+
+                int iTmp = (int)sFirst.toUtf8().at(0)+1;
+
+                QByteArray d;
+                d.append(iTmp);
+
+                sRe0=QString(d);
+
+
+            }
+            else
+            {
+                sRe0=sFirst;
+
+                int iTmp = (int)sSecond.toUtf8().at(0)+1;
+
+                QByteArray d;
+                d.append(iTmp);
+
+                sRe1=QString(d);
+
+            }
+
+
+            return sRe0+sRe1;
+        };
+
+
+        QString sLastId =sGetId;
+
+        while(sLastId.length()<4)
+            sLastId+="0";
+
+
+
+        QString sWord = sLastId.mid(0,2);
+
+        QString sNum=sLastId.mid(2,2);
+
+        if(sNum=="99")
+        {
+            sNum="01";
+
+            sWord = strAdd1(sWord);
+
+        }
+        else
+        {
+
+            sNum=QString("%1").arg(sNum.toInt()+1,2,10,QLatin1Char('0'));
+        }
+
+        sGetId = sWord.toUpper()+sNum;
+
+    }
+
+    QVariantMap in;
+    QVariantList out;
+    QString sError;
+
+    in["Id like"]="%"+sGetId+"%";
+    bool bOk=action(ACT::QUERY_CUSTOMER,in,out,sError);
+
+
+
+    if(!bOk)
+        return false;
+    else
+    {
+        if(out.length()>0)
+        {
+
+            return getNewCustomerId(sGetId,true);
+        }
+        else
+            return true;
+    }
+
+
+}
+
+void Action::setNewCustomerId(QString sCustomerId)
+{
+    QString sTmp = sCustomerId.split("-").last();
+
+    setKeyValue("CustomerId",sTmp);
 }
 

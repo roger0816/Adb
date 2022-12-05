@@ -48,6 +48,11 @@
         </attribute>
         <column>
          <property name="text">
+          <string>排序</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>儲值方式</string>
          </property>
         </column>

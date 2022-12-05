@@ -49,6 +49,9 @@ public:
 
     void linkage(int iApi,int iBindApi);
 
+    void setKeyValue(QString sKey,QVariant value);
+
+    QVariant keyValue(QString sKey);
 
     void setDataBase(bool bMysql, QString sIp="127.0.0.1", QString sPort="3306");
 

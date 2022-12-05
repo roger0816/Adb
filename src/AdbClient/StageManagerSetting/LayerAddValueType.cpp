@@ -6,9 +6,9 @@ LayerAddValueType::LayerAddValueType(QWidget *parent) :
     ui(new Ui::LayerAddValueType)
 {
     ui->setupUi(this);
-
-    ui->tb->setColumnWidth(0,200);
-    ui->tb->setColumnWidth(1,120);
+    ui->tb->setColumnWidth(0,60);
+    ui->tb->setColumnWidth(1,200);
+    ui->tb->setColumnWidth(2,120);
 }
 
 LayerAddValueType::~LayerAddValueType()
@@ -27,6 +27,7 @@ void LayerAddValueType::refresh()
     m_listData.clear();
 
     QString sError;
+    in["ASC"]="Sort";
     ACTION.action(ACT::QUERY_PAY_TYPE,in,m_listData,sError);
 
     ui->tb->setRowCount(0);
@@ -41,25 +42,27 @@ void LayerAddValueType::refresh()
         ui->tb->setRowCount(i+1);
         DataPayType data(m_listData.at(i).toMap());
 
-        ui->tb->setItem(i,0,UI.tbItem(data.Name));
+        ui->tb->setItem(i,0,UI.tbItem(data.Sort));
 
-        ui->tb->setItem(i,1,UI.tbItem(data.Currency));
+        ui->tb->setItem(i,1,UI.tbItem(data.Name));
 
-        ui->tb->setItem(i,2,UI.tbItem(list.last().findValue(data.Currency)));
+        ui->tb->setItem(i,2,UI.tbItem(data.Currency));
 
-        ui->tb->setItem(i,4,UI.tbItem(data.SubValue.first()));
+        ui->tb->setItem(i,3,UI.tbItem(list.last().findValue(data.Currency)));
 
-        ui->tb->setItem(i,5,UI.tbItem(data.Value[0]));
-        ui->tb->setItem(i,6,UI.tbItem(data.Value[1]));
-        ui->tb->setItem(i,7,UI.tbItem(data.Value[2]));
-        ui->tb->setItem(i,8,UI.tbItem(data.Value[3]));
+        ui->tb->setItem(i,5,UI.tbItem(data.SubValue.first()));
+
+        ui->tb->setItem(i,6,UI.tbItem(data.Value[0]));
+        ui->tb->setItem(i,7,UI.tbItem(data.Value[1]));
+        ui->tb->setItem(i,8,UI.tbItem(data.Value[2]));
+        ui->tb->setItem(i,9,UI.tbItem(data.Value[3]));
 
         double total = list.last().findValue(data.Currency)
                 *data.Value[0].toDouble()*data.Value[1].toDouble()
                 *data.Value[2].toDouble()*data.Value[3].toDouble()
                 /data.SubValue.first().toDouble();
 
-               ui->tb->setItem(i,3,UI.tbItem(total));
+               ui->tb->setItem(i,4,UI.tbItem(total));
 
     }
 

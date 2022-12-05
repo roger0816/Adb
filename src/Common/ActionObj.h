@@ -43,7 +43,8 @@ public:
 
     QueryObj m_queryObj;
 
-    bool m_bIsLock = false;;
+    bool m_bIsLock = false;
+
 
 protected:
     CData callServer(CData data);

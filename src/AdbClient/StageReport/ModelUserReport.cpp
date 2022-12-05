@@ -214,8 +214,6 @@ void ModelUserReport::requestAction()
     }
 
 
-    m_listOrder = ACTION.getOrder(true);
-
     auto checkDate = [=](QString sDate)
     {
         if(sDate.length()<8)
@@ -232,6 +230,13 @@ void ModelUserReport::requestAction()
         }
 
     };
+
+    QString st = m_dateTime.toString("yyyyMM")+"01";
+
+    QDate tmp=QDate::fromString(st,"yyyyMMdd");
+
+    m_listOrder = ACTION.getOrderByDate(tmp);
+
 
 
     for(int i=0;i<m_listOrder.length();i++)

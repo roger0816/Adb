@@ -5,6 +5,7 @@
 #include "GlobalUi.h"
 #include "Global.h"
 #include "ItemPic.h"
+#include "xlsxdocument.h"
 namespace Ui {
 class LayerDayDebit;
 }
@@ -45,6 +46,7 @@ private slots:
     void on_timeStart_userTimeChanged(const QTime &time);
     void on_timeEnd_userTimeChanged(const QTime &time);
     void on_tb_cellPressed(int row, int column);
+    void slotBtnDebitExport();
 };
 
 #endif // LAYERDAYDEBIT_H

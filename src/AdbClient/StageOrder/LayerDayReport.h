@@ -8,6 +8,10 @@
 #include "DialogCommon.h"
 #include <QShowEvent>
 #include "DialogDayReportEdit.h"
+#include "CExcelExport.h"
+#include "CObjectExcel.h"
+#include "xlsxdocument.h"
+#include <QFileDialog>
 namespace Ui {
 class LayerDayReport;
 }
@@ -63,6 +67,8 @@ private slots:
     void on_dateEdit_userDateChanged(const QDate &date);
 
     void on_tb_cellEntered(int row, int column);
+
+    void on_btnExcel_clicked();
 
 private:
     Ui::LayerDayReport *ui;

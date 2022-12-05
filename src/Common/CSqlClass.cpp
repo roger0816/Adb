@@ -632,6 +632,7 @@ void CSqlClass::createTableSqlite()
 
     sql.exec("CREATE TABLE 'PayType' (    \
              'Sid'	INTEGER,                    \
+             'Sort'	INTEGER,                    \
              'Name'	TEXT,                       \
              'Id'	TEXT,                       \
             'Currency'	TEXT,                       \

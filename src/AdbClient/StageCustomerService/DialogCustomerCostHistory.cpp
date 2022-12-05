@@ -92,6 +92,7 @@ void DialogCustomerCostHistory::refresh(int)
 
     m_listAddCost = out;
 
+
     ACTION.action(ACT::QUERY_ORDER,in,out,sError);
 
     m_listOrder = out;

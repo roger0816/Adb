@@ -31,7 +31,7 @@ public:
     ~DialogCustomerEdit();
 
 
-    void setData(QVariantList listClass, QVariantList listGame, QVariantList listGameInfo, QVariantMap data);
+    void setData(QVariantList listClass, QVariantList listGame, QVariantList listCustomerInfo, QVariantMap data);
 
     void setData(QString sCustomerSid);
 
@@ -71,17 +71,19 @@ private:
 
     QStringList mapToList(QVariantList list,QString sKey);
 
-    QVariantList m_listGameInfo;
+   // QVariantList m_listGameInfo;
+
+    QVariantList m_listCustomerInfo;
 
     QVariantList m_listDeleteInfo;
 
 
-
+/*
     QString checkId(int cbIdx);
 
 
     QString strAdd1(QString st);
-
+*/
     void refresh();
 
     QString gameToName(QString sSid);

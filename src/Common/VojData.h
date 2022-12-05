@@ -991,6 +991,12 @@ struct DataPayType :public DataObj
     {
         setData(data);
 
+    }
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
         Value.clear();
 
         Value = data["Value"].toString().split(",");
@@ -1001,12 +1007,7 @@ struct DataPayType :public DataObj
         SubValue =data["SubValue"].toString().split(",");
 
         Currency =data["Currency"].toString();
-
-    }
-
-    void setData(QVariantMap data)
-    {
-        DataObj::setData(data);
+        Sort = data["Sort"].toInt();
     }
 
     QVariantMap data()
@@ -1021,12 +1022,13 @@ struct DataPayType :public DataObj
         re["SubValue"] =SubValue.join(",");
 
         re["Currency"] =Currency;
+        re["Sort"] =Sort;
 
         return re;
     }
 
     QStringList Value={"1","1","1","1"};
-
+    int Sort=0;
     QString Currency;
 
     QStringList SubValue={"1"};

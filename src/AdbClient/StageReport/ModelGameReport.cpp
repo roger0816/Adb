@@ -183,8 +183,6 @@ void ModelGameReport::requestAction()
         m_dGame[data.Sid]=&m_listGame.last();
     }
 
-    m_listOrder = ACTION.getOrder(true);
-
     auto checkDate = [=](QString sDate)
     {
         if(sDate.length()<8)
@@ -201,6 +199,15 @@ void ModelGameReport::requestAction()
         }
 
     };
+
+
+
+    QString st = m_dateTime.toString("yyyyMM")+"01";
+
+    QDate tmp=QDate::fromString(st,"yyyyMMdd");
+
+    m_listOrder = ACTION.getOrderByDate(tmp);
+
 
     qDebug()<<" get order len : "<<m_listOrder.length();
 

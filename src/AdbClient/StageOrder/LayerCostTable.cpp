@@ -27,6 +27,16 @@ LayerCostTable::~LayerCostTable()
 void LayerCostTable::refreshGameList()
 {
 
+    bool bEdit = ACTION.m_currentUser.Lv>=USER_LV::_LV2;
+
+#if (QT_VERSION<= QT_VERSION_CHECK(5,15,0))
+    ui->tabWidget->setTabEnabled(1,bEdit);
+    ui->tabWidget->setTabEnabled(2,bEdit);
+#else
+    ui->tabWidget->setTabVisible(1,bEdit);
+    ui->tabWidget->setTabVisible(2,bEdit);
+#endif
+
 
 
     m_listGame = ACTION.getGameList(true);
@@ -185,7 +195,7 @@ void LayerCostTable::on_btnClear_clicked()
 
 void LayerCostTable::on_btnCopy_clicked()
 {
-      UI.copyMsg(ui->txt->toPlainText().trimmed());
+    UI.copyMsg(ui->txt->toPlainText().trimmed());
 }
 
 

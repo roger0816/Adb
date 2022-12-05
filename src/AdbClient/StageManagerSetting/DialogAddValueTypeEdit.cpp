@@ -98,6 +98,8 @@ void DialogAddValueTypeEdit::setData(QVariantMap data)
 
     ui->txName->setText(d.Name);
 
+    ui->sbSort->setValue(d.Sort);
+
     ui->sbSub->setValue(d.SubValue.first().toDouble());
 
     ui->sb0->setValue(d.Value[0].toDouble());
@@ -127,6 +129,8 @@ QVariantMap DialogAddValueTypeEdit::data()
    data.Value<<ui->sb0->text()<<ui->sb1->text()<<ui->sb2->text()<<ui->sb3->text();
 
    data.SubValue.clear();
+
+   data.Sort=ui->sbSort->value();
 
    data.SubValue<<ui->sbSub->text();
 

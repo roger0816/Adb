@@ -20,7 +20,7 @@ CData Query::implementRecall(CData data)
 
     bool bOk =false;
 
-/*    if(data.iAciton==ACT::LOGIN)
+    /*    if(data.iAciton==ACT::LOGIN)
     {
         int iRe=-1;
 
@@ -94,7 +94,10 @@ CData Query::implementRecall(CData data)
     {
 
 
-        bOk = m_sql.editUser(data.listData.first().toMap(),sError);
+        QVariantMap d;
+        d["Sid"] =data.dData["Sid"];
+        bOk = m_sql.updateTb(SQL_TABLE::UserData(),d ,data.dData,sError);
+
 
         //re.listData = m_sql.queryUser(data.sMsg);
 
@@ -104,10 +107,21 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::SET_VALUE)
     {
 
+         bOk = m_sql.insertTb(SQL_TABLE::Settings(),data.dData,sError,true);
+
+
     }
 
     else if(data.iAciton==ACT::GET_VALUE)
     {
+
+        QVariantList listOut;
+
+        bOk = m_sql.queryTb(SQL_TABLE::Settings(),listOut,sError);
+
+        if(bOk&& listOut.length()>0)
+            re.dData=listOut.first().toMap();
+
 
     }
 

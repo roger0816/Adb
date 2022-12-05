@@ -59,16 +59,16 @@ void StageAccount::on_btnPassword_clicked()
 {
     DialogMsg dialog;
 
-    QList<UserData> list= ACTION.queryUser(ACTION.m_currentUser.Id);
+    UserData user= ACTION.getUser(ACTION.m_currentUser.Sid,true);
 
-    if(list.length()<1)
+    if(user.Sid!=ACTION.m_currentUser.Sid)
+
     {
         DMSG.showMsg("","未知錯誤",QStringList()<<"OK");
 
         return ;
     }
 
-    UserData user = list.first();
 
     if(user.Password!=ui->txPass->text().trimmed())
     {
@@ -99,6 +99,12 @@ void StageAccount::on_btnPassword_clicked()
     else
     {
         DMSG.showMsg("","新密碼修改完成",QStringList()<<"OK");
+
+        ui->txPass->clear();
+
+        ui->txNewPass->clear();
+
+        ui->txNewPass2->clear();
 
     }
 

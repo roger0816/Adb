@@ -110,9 +110,12 @@ QVariantMap DialogEditGameItem::data()
 
     for(int i=0;i<ui->tableWidget->rowCount();i++)
     {
+        QComboBox *cb=dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(i,0));
 
-
-        QString target = dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(i,0))->currentText();
+       QStringList listItem =cb->property("items").toStringList();
+        if(cb->currentIndex()<0 || cb->currentIndex()>=listItem.length())
+            continue;
+        QString target = listItem.at(cb->currentIndex());
 
         int iTypeIdx = listCurrentType.listSecond().indexOf(target);
 
@@ -143,7 +146,18 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
 
     QComboBox *cb = new QComboBox(ui->tableWidget);
 
-    cb->addItems(ACTION.getAddValueType().listSecond());
+    QStringList listText = ACTION.getAddValueType().listSecond();
+
+    cb->setProperty("items",listText);
+
+    cb->addItems(listText);
+
+    cb->setEditable(true);
+
+    QCompleter *completer=new QCompleter(cb->model(),this);
+//        completer->setCompletionMode(QCompleter::PopupCompletion);
+    cb->setCompleter(completer);
+
 
     int idx= qBound(0,iCbIdx,cb->count()-1);
 

@@ -73,11 +73,6 @@
         </column>
         <column>
          <property name="text">
-          <string>訂單內容</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>訂單狀態</string>
          </property>
         </column>
@@ -128,12 +123,22 @@
         </column>
         <column>
          <property name="text">
-          <string>數量</string>
+          <string>單位</string>
          </property>
         </column>
         <column>
          <property name="text">
           <string>成本參數</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>圖</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>圖</string>
          </property>
         </column>
        </widget>
@@ -234,6 +239,16 @@
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
+             <widget class="QCheckBox" name="cbStep0_1">
+              <property name="text">
+               <string>-1 取消訂單</string>
+              </property>
+              <property name="checked">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QCheckBox" name="cbStep0">
               <property name="text">
                <string>0報價狀態</string>
@@ -308,6 +323,12 @@
          </size>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <property name="rightMargin">
+          <number>20</number>
+         </property>
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">
@@ -329,14 +350,46 @@
           </widget>
          </item>
          <item>
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>業績:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lbTotalBonus">
+           <property name="minimumSize">
+            <size>
+             <width>40</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>0</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QLabel" name="label">
            <property name="text">
             <string>應收:</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
            </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="lbTotal0">
+           <property name="minimumSize">
+            <size>
+             <width>40</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>0</string>
            </property>
@@ -347,10 +400,19 @@
            <property name="text">
             <string>成本:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="lbTotal1">
+           <property name="minimumSize">
+            <size>
+             <width>40</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>0</string>
            </property>
@@ -361,10 +423,19 @@
            <property name="text">
             <string>利潤:</string>
            </property>
+           <property name="alignment">
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QLabel" name="lbTotal2">
+           <property name="minimumSize">
+            <size>
+             <width>40</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>0</string>
            </property>

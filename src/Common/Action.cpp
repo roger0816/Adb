@@ -725,7 +725,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
     bool bToUpdateMoney = false;
 
 
-    int iStep =qBound(0,order.Step.toInt(),5);
+    int iStep =qBound(-1,order.Step.toInt(),5);
 
     order.Step=QString::number(iStep);
 

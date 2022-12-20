@@ -75,6 +75,7 @@ private slots:
      void refresh();
 
      void on_txSearch_textChanged(const QString &);
+
 };
 
 #endif // LAYERCOSTSETTING_H

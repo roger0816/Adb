@@ -555,7 +555,7 @@ void LayerGetOrder1::slotCancel()
 
     order.StepTime[1]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
-
+   // order.PaddingUser="";
     order.Pic0 = ui->wPic0->uploadPic();
     QString sError;
     bool bOk =ACTION.replaceOrder(order,sError);

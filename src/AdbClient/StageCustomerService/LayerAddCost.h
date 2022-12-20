@@ -43,6 +43,8 @@ private:
 
     QString getNewOrderId();
 
+    QString sub(QString sCost,QString sCurrency);
+
 
 signals:
     void back(int iPage=0);

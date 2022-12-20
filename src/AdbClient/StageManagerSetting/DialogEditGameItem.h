@@ -58,10 +58,16 @@ private slots:
 
     void on_sbOrderUSD_valueChanged(double arg1);
 
+    void on_btnCopy_clicked();
+
+    void on_btnPaste_clicked();
+
 private:
     Ui::DialogEditGameItem *ui;
 
     QVariantMap m_data;
+
+    void refreshCb();
 
 
 };

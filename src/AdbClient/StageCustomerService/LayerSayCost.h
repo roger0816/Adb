@@ -97,7 +97,7 @@ private slots:
     void on_cbAccount_currentTextChanged(const QString &arg1);
     void on_cbServer_currentTextChanged(const QString &arg1);
     void on_cbChr_currentTextChanged(const QString &arg1);
-    void on_tbGameItem_cellClicked(int row, int column);
+    void slotTbGameItemCellClicked(int row, int column);
     void on_tbInfo_cellPressed(int row, int column);
     void on_btnCopy_clicked();
     void on_btnSayClose_clicked();

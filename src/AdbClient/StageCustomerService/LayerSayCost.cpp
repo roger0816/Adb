@@ -19,6 +19,7 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
     ui->wSelect->hide();
 
 
+    connect(ui->tbGameItem,&QTableWidget::cellClicked,this,&LayerSayCost::slotTbGameItemCellClicked);
 }
 
 LayerSayCost::~LayerSayCost()
@@ -46,8 +47,14 @@ void LayerSayCost::orderMode()
     }
     else
     {
-        m_order= ACTION.getOrder(m_sLoadOrderSid);
 
+        QVariantMap inTmp,out;
+        QString sError;
+
+        inTmp["Sid"] = m_sLoadOrderSid;
+        ACTION.action(ACT::QUERY_ORDER,inTmp,out,sError);
+
+        m_order.setData(out);
     }
 
     if(m_bReadOnly)
@@ -82,7 +89,7 @@ void LayerSayCost::orderMode()
 
 
     CListPair list(m_order.Item);
-
+    qDebug()<<"AAAAAAAAAAAAAAAAAA: "<<m_order.Item;
     m_listInto.clear();
     for(int j=0;j<list.length();j++)
     {
@@ -97,7 +104,7 @@ void LayerSayCost::orderMode()
             if(d["Sid"]==sid)
             {
                 d["Count"] = count;
-
+                qDebug()<<"BBBBBBBBB : "<<d;
                 m_listInto.append(d);
             }
 
@@ -111,7 +118,7 @@ void LayerSayCost::orderMode()
 
 void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 {
-    qDebug()<<"set customer : "<<data;
+    qDebug()<<"set customer : "<<data<<" ,orderSid : "<<sOrderSid;
     m_listInto.clear();
 
     ui->tbInfo->setRowCount(0);
@@ -145,7 +152,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
     QVariantMap d;
 
-    d["CustomerId"] = m_dataCustomer.Id;
+    d["CustomerSid"] = m_dataCustomer.Sid;
 
 
     ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,m_listGameInfo,sError);
@@ -268,7 +275,7 @@ void LayerSayCost::refreshInfo()
         QSpinBox *sp = new QSpinBox(this);
 
         QPair<int ,int > tmp =  ACTION.getItemCount(DataGameItem(data).Sid);
-;
+        ;
 
         int iTotalItem = tmp.second-tmp.first;
 
@@ -716,7 +723,7 @@ void LayerSayCost::on_cbChr_currentTextChanged(const QString &arg1)
 
 
 
-void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
+void LayerSayCost::slotTbGameItemCellClicked(int row, int column)
 {
 
 
@@ -725,11 +732,16 @@ void LayerSayCost::on_tbGameItem_cellClicked(int row, int column)
 
     QString sItemName = ui->tbGameItem->item(row,1)->text();
 
+
     for(int i=0;i<m_listGameItem.length();i++)
     {
         // QVariantMap data = m_listGameItem.at(i).toMap();
 
         DataGameItem item(m_listGameItem.at(i).toMap());
+
+
+        if(item.GameSid!= m_sCurrentGameSid)
+            continue;
 
         if(item.Name!= sItemName)
             continue;

@@ -8,7 +8,7 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
     ui->setupUi(this);
 
 
-    //ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(0);
 
     connect(ui->pageSayCost,SIGNAL(back(int)),this,SLOT(slotBack(int)));
     connect(ui->pageAddCost,SIGNAL(back(int)),this,SLOT(slotBack(int)));

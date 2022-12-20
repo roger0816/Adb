@@ -67,29 +67,7 @@ void DialogEditGameItem::setData(double iGameRate,QVariantMap data)
     ui->sbNTD->setValue(m_iGameRate*m_data["Bonus"].toDouble());
 
 
-    QStringList tmp = data["AddValueTypeSid"].toString().split(SPLIT1);
-
-    CListPair listPairSid(data["AddValueTypeSid"].toString());
-
-    ui->tableWidget->setRowCount(0);
-
-    CListPair listCurrent = ACTION.getAddValueType();
-
-    for(int i=0;i<listPairSid.length();i++)
-    {
-        QString sSid = listPairSid.at(i).first;
-        double cost = listPairSid.at(i).second.toDouble();
-
-        int iIdx = listCurrent.listFirst().indexOf(sSid);
-
-        if(iIdx<0 || iIdx>listCurrent.listSecond().length())
-            continue;
-
-        QString sName= listCurrent.listSecond().at(iIdx);
-
-        appendCb(iIdx,cost);
-
-    }
+    refreshCb();
 
 }
 
@@ -357,5 +335,55 @@ void DialogEditGameItem::on_sbOrderUSD_valueChanged(double arg1)
     ui->sbMYR->setValue(ntd/m_rate.MYR());
     ui->sbSGD->setValue(ntd/m_rate.SGD());
 
+}
+
+
+void DialogEditGameItem::on_btnCopy_clicked()
+{
+    GLOBAL.m_copyGameItem = data();
+}
+
+
+void DialogEditGameItem::on_btnPaste_clicked()
+{
+
+    if(GLOBAL.m_copyGameItem.keys().indexOf("AddValueTypeSid")>=0)
+    {
+        QString tmp = GLOBAL.m_copyGameItem["AddValueTypeSid"].toString();
+
+
+        m_data["AddValueTypeSid"] = tmp;
+
+        refreshCb();
+
+    }
+
+}
+
+void DialogEditGameItem::refreshCb()
+{
+    QStringList tmp = m_data["AddValueTypeSid"].toString().split(SPLIT1);
+
+    CListPair listPairSid(m_data["AddValueTypeSid"].toString());
+
+    ui->tableWidget->setRowCount(0);
+
+    CListPair listCurrent = ACTION.getAddValueType();
+
+    for(int i=0;i<listPairSid.length();i++)
+    {
+        QString sSid = listPairSid.at(i).first;
+        double cost = listPairSid.at(i).second.toDouble();
+
+        int iIdx = listCurrent.listFirst().indexOf(sSid);
+
+        if(iIdx<0 || iIdx>listCurrent.listSecond().length())
+            continue;
+
+        QString sName= listCurrent.listSecond().at(iIdx);
+
+        appendCb(iIdx,cost);
+
+    }
 }
 

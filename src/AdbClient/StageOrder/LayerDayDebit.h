@@ -24,7 +24,11 @@ private:
     void showEvent(QShowEvent*) override;
 
 
+    QVariantList m_allDebit;
+
+
     QVariantList m_listDebit;
+
 
     QVariantList m_listCustomerCost;
 
@@ -35,6 +39,12 @@ private:
 
     QDialog *m_dialogPic = new QDialog();
     ItemPic *m_itemPic  = new ItemPic(m_dialogPic);
+
+    void setCb();
+
+    bool m_bLockRe = false;
+
+    QString getDebitName(QString debitSid);
 
 private slots:
     void refresh();

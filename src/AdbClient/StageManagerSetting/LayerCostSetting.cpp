@@ -633,3 +633,4 @@ void LayerCostSetting::on_txSearch_textChanged(const QString &)
    refresh();
 }
 
+

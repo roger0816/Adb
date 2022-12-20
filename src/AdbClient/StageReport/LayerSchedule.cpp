@@ -854,6 +854,8 @@ void LayerSchedule::on_btnNext_clicked()
 
     if(QDate::currentDate().toString("MM")!=m_sMonth)
         ui->btnNext->setDisabled(true);
+    else
+        ui->btnNext->setDisabled(false);
 
 
     ui->lbTitle->setText(m_sYear+" / "+m_sMonth);
@@ -893,6 +895,8 @@ void LayerSchedule::on_btnPre_clicked()
 
     if(QDate::currentDate().toString("MM")!=m_sMonth)
         ui->btnPre->setDisabled(true);
+    else
+         ui->btnPre->setDisabled(false);
 
     ui->lbTitle->setText(m_sYear+" / "+m_sMonth);
 

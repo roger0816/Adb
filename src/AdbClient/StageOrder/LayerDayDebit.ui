@@ -192,33 +192,72 @@
             <property name="bottomMargin">
              <number>0</number>
             </property>
+            <item row="0" column="3">
+             <widget class="QPushButton" name="btnDebitExport">
+              <property name="text">
+               <string>匯出入帳</string>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="1">
-             <widget class="QLabel" name="lbCurrency">
+             <widget class="QComboBox" name="cbCurrency">
               <property name="minimumSize">
                <size>
                 <width>100</width>
                 <height>0</height>
                </size>
               </property>
-              <property name="text">
-               <string/>
-              </property>
+              <item>
+               <property name="text">
+                <string>全部</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>新台幣(NTD)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>美金(USD)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>港幣(HKD)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>人民幣(RMB)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>林吉特(MYR)</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>新加坡元(SGD)</string>
+               </property>
+              </item>
              </widget>
             </item>
             <item row="0" column="0">
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>幣別:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
              <widget class="QComboBox" name="cbDebit">
               <property name="minimumSize">
                <size>
                 <width>240</width>
                 <height>0</height>
                </size>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="2">
-             <widget class="QPushButton" name="btnDebitExport">
-              <property name="text">
-               <string>匯出</string>
               </property>
              </widget>
             </item>
@@ -258,6 +297,11 @@
         <attribute name="verticalHeaderVisible">
          <bool>false</bool>
         </attribute>
+        <column>
+         <property name="text">
+          <string>支付管道</string>
+         </property>
+        </column>
         <column>
          <property name="text">
           <string>加值編號</string>

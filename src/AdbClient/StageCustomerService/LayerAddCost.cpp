@@ -41,6 +41,8 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     ui->cbCurrency->clear();
 
+    ui->sbAdd->setValue(0);
+
     m_bLock = true;
     ui->cbCurrency->addItems(m_rate.listKey());
     m_bLock = false;
@@ -52,26 +54,32 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     ui->cbCurrency->setCurrentIndex(idx);
 
+    QDateTime time = GLOBAL.dateTimeUtc8();
+    ui->lbTime->setText(time.toString("yyyy/MM/dd hh:mm"));
+
 
     QList<CustomerCost> list =ACTION.getCustomerCost(m_dataCustomer.Sid,true);
 
     if(list.length()>0)
+    {
         m_lastCostData = list.last();
-
-    QDateTime time = GLOBAL.dateTimeUtc8();
-    m_lastCostData.UserSid = ACTION.m_currentUser.Sid;
-
-    m_lastCostData.CustomerSid = m_dataCustomer.Sid;
-
-    m_lastCostData.OrderTime = time.toString("yyyyMMddhhmmss");
-
-    m_lastCostData.Currency = m_dataCustomer.Currency;
+    }
+    else
+    {
+        m_lastCostData.Total="0";
+    }
 
     ui->lbCurrentCost->setText(m_lastCostData.Total);
 
     ui->lbCurrentCost_2->setText(m_lastCostData.Total);
 
-    ui->lbTime->setText(time.toString("yyyy/MM/dd hh:mm"));
+    m_lastCostData.OrderTime = time.toString("yyyyMMddhhmmss");
+
+    m_lastCostData.Currency = m_dataCustomer.Currency;
+
+    m_lastCostData.UserSid = ACTION.m_currentUser.Sid;
+
+    m_lastCostData.CustomerSid = m_dataCustomer.Sid;
 
     checkTotal();
 }
@@ -112,9 +120,14 @@ void LayerAddCost::checkTotal()
     //  ui->lbChange->setText(ui->lbCurrency->text()+" : $ "+QString::number(m_addValue,'f',2));
 
 
-    m_lastCostData.ChangeValue=QString::number(m_addValue,'f',2);
 
-    m_lastCostData.Total= QString::number(m_addValue+ ui->lbCurrentCost->text().toDouble(),'f',2);
+    QString sTmpChangeValue = QString::number(m_addValue,'f',2);
+    m_lastCostData.ChangeValue= sub(sTmpChangeValue,m_lastCostData.Currency);
+
+
+    QString sTmpTotal= QString::number(m_addValue+ ui->lbCurrentCost->text().toDouble(),'f',2);
+
+    m_lastCostData.Total =   sub(sTmpTotal,m_lastCostData.Currency);
 
     ui->lbAdd->setText(m_lastCostData.ChangeValue);
 
@@ -146,6 +159,28 @@ QString LayerAddCost::getNewOrderId()
     int iIdx = list.last().toInt()+1;
 
     sRe = list.first()+"-"+QString("%1").arg(iIdx,4,10,QLatin1Char('0'));  // QString::number(iIdx);
+
+    return sRe;
+}
+
+QString LayerAddCost::sub(QString sCost, QString sCurrency)
+{
+    QString sRe;
+
+    QStringList listTmp = sCost.split(".");
+
+    sRe = listTmp.first();
+
+    if(sCurrency.indexOf("新加坡元(SGD)")>=0)
+    {
+        if(listTmp.length()>1 && listTmp.last().length()>0)
+        {
+            sRe+="."+listTmp.last().mid(0,1);
+        }
+
+
+    }
+
 
     return sRe;
 }

@@ -62,6 +62,14 @@ void LayerCustomer::on_btnAdd_clicked()
         data["UserSid"] =ACTION.m_currentUser.Sid;
 
         ACTION.action(ACT::ADD_CUSTOMER,data,sError);
+        QVariantMap tmp;
+        tmp["Id"]=data["Id"];
+
+        QVariantMap out;
+
+        ACTION.action(ACT::QUERY_CUSTOMER,tmp,out,sError);
+
+        data["Sid"] = out["Sid"];
 
         QString sCustomerSid = data["Sid"].toString();
 

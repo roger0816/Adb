@@ -366,8 +366,8 @@
             <property name="horizontalSpacing">
              <number>40</number>
             </property>
-            <item row="0" column="0">
-             <spacer name="horizontalSpacer_2">
+            <item row="0" column="3">
+             <spacer name="horizontalSpacer_3">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>
@@ -417,8 +417,8 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="3">
-             <spacer name="horizontalSpacer_3">
+            <item row="0" column="0">
+             <spacer name="horizontalSpacer_2">
               <property name="orientation">
                <enum>Qt::Horizontal</enum>
               </property>

@@ -73,6 +73,7 @@ public:
 
     bool checkSearch(QString sFilterStr,QVariantMap dTarget,bool caseNeedDiff=false);
 
+    QVariantMap m_copyGameItem;
 
 private:
     static Global *m_pInstance;

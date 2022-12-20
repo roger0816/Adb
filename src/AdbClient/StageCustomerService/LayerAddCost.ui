@@ -298,7 +298,7 @@ border: 1px solid #5b5b5b; }</string>
                         <set>Qt::AlignCenter</set>
                        </property>
                        <property name="minimum">
-                        <double>0.000000000000000</double>
+                        <double>-99.000000000000000</double>
                        </property>
                        <property name="singleStep">
                         <double>0.010000000000000</double>

@@ -405,11 +405,7 @@ void ActionObj::serverTrigger(QString sId, QByteArray data, int )
                 emit sessionError();
 
 
-            if(AAA%2==0)
-            {
 
-                qDebug()<<"TTTTTT : "<<m_dUpdateTrigger.value("11");
-            }
 
         }
     }

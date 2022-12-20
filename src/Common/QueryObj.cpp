@@ -283,7 +283,7 @@ bool QueryObj::checkAppVersion(QString sVersion)
 
     int iVersion = listTmp.at(1).toInt();
 
-    if(iVersion>=3)
+    if(iVersion>=4)
         return true;
 
     /*

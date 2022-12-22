@@ -58,6 +58,11 @@
         </column>
         <column>
          <property name="text">
+          <string>核對單位</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>成立時間</string>
          </property>
         </column>
@@ -83,7 +88,17 @@
         </column>
         <column>
          <property name="text">
-          <string>主管確認</string>
+          <string>遊戲名稱</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>儲值方式</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>單位</string>
          </property>
         </column>
         <column>
@@ -98,7 +113,17 @@
         </column>
         <column>
          <property name="text">
+          <string>售價匯率</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>應收(台幣)</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>成本匯率</string>
          </property>
         </column>
         <column>
@@ -118,27 +143,22 @@
         </column>
         <column>
          <property name="text">
-          <string>儲值方式</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>單位</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
           <string>成本參數</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>圖</string>
+          <string>圖2</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>圖</string>
+          <string>圖1</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>備註</string>
          </property>
         </column>
        </widget>
@@ -326,9 +346,54 @@
          <property name="spacing">
           <number>10</number>
          </property>
+         <property name="topMargin">
+          <number>4</number>
+         </property>
          <property name="rightMargin">
           <number>20</number>
          </property>
+         <property name="bottomMargin">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QWidget" name="wShowArea" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>300</width>
+             <height>30</height>
+            </size>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QCheckBox" name="cbShowBonus">
+              <property name="text">
+               <string>顯示&quot;業績&quot;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cbShowPic">
+              <property name="text">
+               <string>顯示&quot;圖檔&quot;</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cbShowCost">
+              <property name="text">
+               <string>顯示&quot;應收(台幣)</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
          <item>
           <spacer name="horizontalSpacer">
            <property name="orientation">

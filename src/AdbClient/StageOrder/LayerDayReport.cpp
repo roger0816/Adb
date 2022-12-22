@@ -1,11 +1,25 @@
 #include "LayerDayReport.h"
 #include "ui_LayerDayReport.h"
 
+using namespace _LayerDayReport;
+
 LayerDayReport::LayerDayReport(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LayerDayReport)
 {
     ui->setupUi(this);
+
+    ui->wShowArea->hide();
+
+    ui->tb->hideColumn(_Bonus);
+
+    ui->tb->hideColumn(_Cost);
+
+    ui->tb->hideColumn(_Pic1);
+
+    ui->tb->hideColumn(_Pic0);
+
+    ui->tb->setColumnCount(_TB_COL_COUNT);
 
     m_itemPic->setReadOnly(true);
 
@@ -36,18 +50,16 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 
 
 
-    ui->tb->hideColumn(12);
+
     //    ui->tb->setColumnWidth(1,120);
     //    ui->tb->setColumnWidth(3,100);
-    ui->tb->setColumnWidth(4,100);
+    ui->tb->setColumnWidth(_Customer,100);
 
-    ui->tb->setColumnWidth(5,100);
-    ui->tb->setColumnWidth(6,80);
-    ui->tb->setColumnWidth(17,60);
+    ui->tb->setColumnWidth(_Status,100);
+    ui->tb->setColumnWidth(_Bonus,80);
+    ui->tb->setColumnWidth(_Pic0,60);
 
-    ui->tb->setColumnWidth(18,60);
-
-    ui->tb->hideColumn(17);
+    ui->tb->setColumnWidth(_Pic1,60);
 
     ui->btnExcel->hide();
 }
@@ -109,16 +121,16 @@ void LayerDayReport::refreshTb()
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
 
-        ui->tb->setItem(iRow,0,UI.tbItem(data.Id,GlobalUi::_BUTTON));
+        ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
         UserData owner =ACTION.getUser(data.Owner);
 
 
 
         CustomerData customer(listCustomer.first().toMap());
         QString sDate=data.OrderDate+data.OrderTime;
-        ui->tb->setItem(iRow,1,UI.tbItem(data.Name,GlobalUi::_BUTTON));
+        ui->tb->setItem(iRow,_Name,UI.tbItem(data.Name,GlobalUi::_BUTTON));
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
-        ui->tb->setItem(iRow,2,UI.tbItem(date));
+        ui->tb->setItem(iRow,_DateTime,UI.tbItem(date));
 
 
         QString sUser="";
@@ -131,9 +143,8 @@ void LayerDayReport::refreshTb()
         }
 
 
-        ui->tb->setItem(iRow,3,UI.tbItem(sUser,GlobalUi::_TOOLTIP));
-        ui->tb->setItem(iRow,4,UI.tbItem(customer.Id));
-        // ui->tb->setItem(iRow,5,UI.tbItem("詳細",GlobalUi::_BUTTON));
+        ui->tb->setItem(iRow,_User,UI.tbItem(sUser,GlobalUi::_TOOLTIP));
+        ui->tb->setItem(iRow,_Customer,UI.tbItem(customer.Id));
 
 
         QString sStatus = data.Step;
@@ -161,7 +172,7 @@ void LayerDayReport::refreshTb()
         }
         if(sStatus=="4")
         {
-            sStatus+="主管確認";
+            sStatus+="待確認";
         }
         if(sStatus=="5")
         {
@@ -170,63 +181,77 @@ void LayerDayReport::refreshTb()
 
         qDebug()<<"check status";
 
-        ui->tb->setItem(iRow,5,UI.tbItem(sStatus));
-        ui->tb->setItem(iRow,6,UI.tbItem(data.Bouns));
 
-
+        ui->tb->setItem(iRow,_Status,UI.tbItem(sStatus));
         if(data.Step=="4")
-        {
-            ui->tb->setItem(iRow,7,UI.tbItem("點擊確認",GlobalUi::_BUTTON));
-        }
-        else if(data.Step=="5")
-        {
-            ui->tb->setItem(iRow,7,UI.tbItem("完成訂單"));
-        }
-        else
-        {
-            ui->tb->setItem(iRow,7,UI.tbItem("流程未到"));
-        }
+            ui->tb->setItem(iRow,_Status,UI.tbItem(sStatus,GlobalUi::_BUTTON));
+        ui->tb->setItem(iRow,_Bonus,UI.tbItem(data.Bouns));
 
-        ui->tb->setItem(iRow,8,UI.tbItem(customer.Currency));
-        ui->tb->setItem(iRow,9,UI.tbItem(data.Cost));
+        QString sGameName = ACTION.getGameName( data.GameSid);
+
+        ui->tb->setItem(iRow,_GameName,UI.tbItem(sGameName));
 
 
-        ui->tb->setItem(iRow,10,UI.tbItem(""));
-        ui->tb->setItem(iRow,11,UI.tbItem(""));
-        ui->tb->setItem(iRow,12,UI.tbItem(""));
-        ui->tb->setItem(iRow,13,UI.tbItem(""));
+
+        ui->tb->setItem(iRow,_Currency,UI.tbItem(customer.Currency));
+        ui->tb->setItem(iRow,_TodayCost,UI.tbItem(data.Cost));
+
 
         _LayerDayReport::OrderPayType orderPayType = getPayCount(data);
 
 
-        DataRate rate=ACTION.primeRate(data.PrimeRateSid,true);
-        double payRate = ACTION.payTypeToNTDRate(data.PayType,rate);
+        DataRate primeRate=ACTION.primeRate(data.PrimeRateSid,true);
+
+        DataRate exRate=ACTION.costRate(data.ExRateSid,true);
+
+        QString sPrimeRate="";
+
+        //double payRate = ACTION.payTypeToNTDRate(data.PayType,primeRate,sPrimeRate);
 
 
         int iNtdCost = data.Money.first().toInt();
 
         int iNtdPrime = data.Money[1].toInt();
 
+        QStringList listNote = data.Note0;
+
+        if(listNote.length()>4)
+        {
+            ui->tb->setItem(iRow,_Note,UI.tbItem(listNote.at(4),1));
+        }
+
+
         if(data.Step.toInt()>=0)
         {
-            ui->tb->setItem(iRow,14,UI.tbItem(orderPayType.sPayName,true));
+            ui->tb->setItem(iRow,_PayType,UI.tbItem(orderPayType.sPayName,true));
 
 
-            ui->tb->setItem(iRow,15,UI.tbItem(orderPayType.iTotalCount));
+            ui->tb->setItem(iRow,_PayCount,UI.tbItem(orderPayType.iTotalCount));
 
-            ui->tb->setItem(iRow,16,UI.tbItem(payRate));
+
+            // ui->tb->setItem(iRow,_PayRate,UI.tbItem(payRate));
         }
 
         if(data.Step.toInt()>=1)
         {
             if(iNtdCost==0 && data.Cost!="0")
             {
-                ACTION.setSellMoney(data);
+                QString sExRate =ACTION.setSellMoney(data);
 
                 iNtdCost=data.Money.first().toInt();
             }
 
-            ui->tb->setItem(iRow,10,UI.tbItem(iNtdCost));
+
+            QString sExRate="1";
+
+            int idx =exRate.listKey().indexOf(ACTION.getCustomer(data.CustomerSid).Currency);
+
+            if(idx>=0)
+                sExRate = exRate.listValue().at(idx);
+
+            ui->tb->setItem(iRow,_ExRate,UI.tbItem(sExRate));
+
+            ui->tb->setItem(iRow,_Cost,UI.tbItem(iNtdCost));
 
         }
 
@@ -239,19 +264,28 @@ void LayerDayReport::refreshTb()
                 iNtdPrime=data.Money[1].toInt();
             }
 
-            ui->tb->setItem(iRow,11,UI.tbItem(iNtdPrime));
-            ui->tb->setItem(iRow,12,UI.tbItem(iNtdCost-iNtdPrime));
+
+
+            //成本匯率是要看儲值方式的幣別
+            QString sPayTypeCurrency= ACTION.getAddValueCurrency(data.PayType);
+            sPrimeRate = primeRate.listData.findValue(sPayTypeCurrency);
+
+            ui->tb->setItem(iRow,_PayRate,UI.tbItem(ACTION.getPayRate(data.PayType)));
+            ui->tb->setItem(iRow,_PrimeRate,UI.tbItem(sPrimeRate));
+            ui->tb->setItem(iRow,_Prime,UI.tbItem(iNtdPrime));
+            ui->tb->setItem(iRow,_Profit,UI.tbItem(iNtdCost-iNtdPrime));
             double dTmp = 0.00;
             dTmp = (double)(iNtdCost-iNtdPrime) / data.Bouns.toDouble();
-            ui->tb->setItem(iRow,13,UI.tbItem(dTmp));
+            ui->tb->setItem(iRow,_ProfitForOne,UI.tbItem(dTmp));
 
             if(data.Pic0.length()>0)
-                ui->tb->setItem(iRow,17,UI.tbItem("圖",1));
+                ui->tb->setItem(iRow,_Pic0,UI.tbItem("儲值",1));
             if(data.Pic1.length()>0)
-                ui->tb->setItem(iRow,18,UI.tbItem("圖",1));
+                ui->tb->setItem(iRow,_Pic1,UI.tbItem("回報",1));
+
         }
 
-        m_listInto.append(data);
+
 
         if(data.Step.toInt()==5)
         {
@@ -265,6 +299,7 @@ void LayerDayReport::refreshTb()
         }
 
 
+        m_listInto.append(data);
 
 
     }
@@ -313,7 +348,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
     OrderData data = m_listInto.at(row);
 
 
-    if(column==0 || column==1)
+    if(column==_OderId || column==_Name)
     {
 
         QVariantMap d;
@@ -330,7 +365,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
     }
 
-    if(column==7 && data.Step=="4" )
+    if(column==_Status && data.Step=="4" && ACTION.m_currentUser.Lv>=USER_LV::_LV3)
     {
 
         int iRet= UI.showMsg("",QString("請再確認 ( %1 ) \n完成訂單嗎？").arg(data.Id),QStringList()<<"否"<<"是");
@@ -402,7 +437,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
         }
     }
 
-    if(column==14 && data.Step.toInt()>=4 )
+    if(column==_PayType && data.Step.toInt()>=4 )
     {
         DialogDayReportEdit dialog;
 
@@ -438,7 +473,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
     }
 
-    if(column==17 || column==18 )
+    if(column==_Pic0 || column==_Pic1 )
     {
 
 
@@ -447,7 +482,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
         QVariant sValue = data.Pic0;
 
-        if(column==18)
+        if(column==_Pic1)
             sValue = data.Pic1;
 
         if(sValue.toString().length()<1)
@@ -469,6 +504,28 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
         //+"          "+sText);
 
         QTimer::singleShot(50,this,[=](){ m_dialogPic->exec();});
+
+    }
+
+    if(column==_Note)
+    {
+        QStringList list= data.Note0;
+
+
+        while(list.length()<5)
+            list.append("");
+
+        QString st="報價:    %1 \n"
+                   "下單:    %2 \n"
+                   "處理中:   %3 \n"
+                   "處理完成: %4 \n"
+                   "回報:    %5"   ;
+
+
+
+
+        DMSG.showMsg("備註",st.arg(list.at(0)).arg(list.at(1)).arg(list.at(2)).arg(list.at(3)).arg(list.at(4)),"OK");
+
 
     }
 }
@@ -519,16 +576,18 @@ void LayerDayReport::on_cbStep5_clicked()
 
 void LayerDayReport::delayRefresh()
 {
-    ui->tb->hideColumn(7);
-    ui->tb->hideColumn(9);
-    ui->tb->hideColumn(10);
-    ui->tb->hideColumn(11);
-    ui->tb->hideColumn(12);
 
-    ui->tb->hideColumn(13);
-    ui->tb->hideColumn(14);
-    ui->tb->hideColumn(15);
-    ui->tb->hideColumn(16);
+    ui->tb->hideColumn(_CheckNum);
+    //
+    ui->tb->hideColumn(_Cost);
+    ui->tb->hideColumn(_PrimeRate);
+    ui->tb->hideColumn(_Prime);
+    ui->tb->hideColumn(_Profit);
+
+    ui->tb->hideColumn(_ProfitForOne);
+    ui->tb->hideColumn(_PayRate);
+
+
 
     ui->wTotal->hide();
 
@@ -536,21 +595,19 @@ void LayerDayReport::delayRefresh()
 
     qDebug()<<"lv : "<<ACTION.m_currentUser.Lv;
 
-    if(ACTION.m_currentUser.Lv>=USER_LV::_LV3)
-    {
-        ui->tb->showColumn(7);
-    }
+
 
     if(ACTION.m_currentUser.Lv>=USER_LV::_LV4)
     {
-        ui->tb->showColumn(9);
-        ui->tb->showColumn(10);
-        ui->tb->showColumn(11);
-        ui->tb->showColumn(12);
-        ui->tb->showColumn(13);
-        ui->tb->showColumn(14);
-        ui->tb->showColumn(15);
-        ui->tb->showColumn(16);
+
+        ui->wShowArea->show();
+        ui->tb->showColumn(_Cost);
+        ui->tb->showColumn(_PrimeRate);
+        ui->tb->showColumn(_Prime);
+        ui->tb->showColumn(_Profit);
+
+        ui->tb->showColumn(_ProfitForOne);
+        ui->tb->showColumn(_PayRate);
         ui->wTotal->show();
 
         ui->btnExcel->show();
@@ -581,7 +638,7 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
     if(row<0 || row>=m_listInto.length())
         return;
     OrderData data = m_listInto.at(row);
-    if(column==3)
+    if(column==_User)
     {
         QString st="訂單編號:"+data.Id+"\n"
                                    "報價: %1\n"
@@ -650,6 +707,19 @@ _LayerDayReport::OrderPayType LayerDayReport::getPayCount(OrderData data)
     return re;
 }
 
+void LayerDayReport::changeVisable()
+{
+    ui->tb->setColumnHidden(_Bonus,!ui->cbShowBonus->isChecked());
+
+
+    ui->tb->setColumnHidden(_Cost,!ui->cbShowCost->isChecked());
+
+    bool bHidePic = !ui->cbShowPic->isChecked();
+
+    ui->tb->setColumnHidden(_Pic0,bHidePic);
+    ui->tb->setColumnHidden(_Pic1,bHidePic);
+}
+
 
 void LayerDayReport::on_btnExcel_clicked()
 {
@@ -678,7 +748,9 @@ void LayerDayReport::on_btnExcel_clicked()
         int iXlsxCol =0;
         for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
         {
-            if(iCol==17 || iCol==18)
+            qDebug()<<"col : "<<iCol<<" row: "<<iRow;
+
+            if(iCol==_Pic0 || iCol==_Pic1 || iCol==_CheckNum)
                 continue;
             iXlsxCol++;
 
@@ -689,13 +761,32 @@ void LayerDayReport::on_btnExcel_clicked()
             }
 
 
-            QString st = ui->tb->item(iRow,iCol)->text();
+            QString st ="";
+
+            if(ui->tb->item(iRow,iCol)!=nullptr)
+                st = ui->tb->item(iRow,iCol)->text();
+
             if(st.trimmed()!="")
             {
-                if(iCol==6 || iCol==9 ||iCol==10 || iCol==11 || iCol==12 || iCol==13)
-                    xlsx.write(iRow+2,iXlsxCol,st.toDouble());
+
+                bool bOk = false;
+                if(iCol==_Bonus || iCol==_PayCount ||iCol==_TodayCost || iCol==_Cost
+                        || iCol==_Prime || iCol==_Profit || iCol==_ProfitForOne || iCol==_PayRate)
+                {
+                    bOk=xlsx.write(iRow+2,iXlsxCol,st.toDouble());
+
+                }
                 else
-                    xlsx.write(iRow+2,iXlsxCol,st);
+                {
+                    bOk = xlsx.write(iRow+2,iXlsxCol,st);
+
+                }
+
+                if(!bOk)
+                {
+                    qDebug()<<"st : "<<st;
+                }
+
             }
             xlsx.setColumnWidth(iXlsxCol,iXlsxCol,16);
         }
@@ -728,5 +819,23 @@ void LayerDayReport::on_btnExcel_clicked()
 
 
 
+}
+
+
+void LayerDayReport::on_cbShowBonus_clicked()
+{
+    changeVisable();
+}
+
+
+void LayerDayReport::on_cbShowPic_clicked()
+{
+    changeVisable();
+}
+
+
+void LayerDayReport::on_cbShowCost_clicked()
+{
+    changeVisable();
 }
 

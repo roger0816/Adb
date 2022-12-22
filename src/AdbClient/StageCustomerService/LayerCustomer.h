@@ -6,6 +6,7 @@
 #include "DialogCustomerCostHistory.h"
 #include "Global.h"
 #include "GlobalUi.h"
+#include "xlsxdocument.h"
 
 
 namespace Ui {
@@ -38,6 +39,8 @@ private slots:
 
     void on_txSearch_textChanged(const QString &arg1);
 
+    void on_btnInport_clicked();
+
 private:
     Ui::LayerCustomer *ui;
 
@@ -52,6 +55,8 @@ private:
     bool checkSearch(CustomerData data);
 
     void keyPressEvent(QKeyEvent *e) override;
+
+    bool m_bReLock = false;
 
 signals:
     void into(int iRow);

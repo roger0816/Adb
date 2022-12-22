@@ -15,6 +15,8 @@ LayerCustomer::LayerCustomer(QWidget *parent) :
 
     connect(ui->btnClear,&QPushButton::clicked,this,&LayerCustomer::slotClearSearch);
 
+    ui->btnInport->hide();
+
 }
 
 LayerCustomer::~LayerCustomer()
@@ -25,6 +27,8 @@ LayerCustomer::~LayerCustomer()
 void LayerCustomer::init()
 {
     ui->btnEdit->setEnabled(false);
+
+
 
     QTimer::singleShot(50,this,SLOT(refresh()));
 }
@@ -95,6 +99,11 @@ void LayerCustomer::on_btnAdd_clicked()
 
 void LayerCustomer::refresh()
 {
+    if(m_bReLock)
+        return;
+
+    m_bReLock= true;
+
     ui->btnEdit->setEnabled(false);
 
 
@@ -173,6 +182,7 @@ void LayerCustomer::refresh()
 
 
 
+    m_bReLock = false;
 }
 
 void LayerCustomer::showEvent(QShowEvent *)
@@ -374,5 +384,16 @@ CustomerData LayerCustomer::checkSelect(QString sSid)
 
 
     return re;
+}
+
+
+void LayerCustomer::on_btnInport_clicked()
+{
+    QString sPath = QFileDialog::getOpenFileName(this,"請選擇檔案",".xls");
+    if(sPath.trimmed()=="")
+        return ;
+
+    qDebug()<<"AAAAA "<<sPath;
+
 }
 

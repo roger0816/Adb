@@ -48,7 +48,9 @@ void LayerAddValueType::refresh()
 
         ui->tb->setItem(i,2,UI.tbItem(data.Currency));
 
-        ui->tb->setItem(i,3,UI.tbItem(list.last().findValue(data.Currency)));
+        QString primeRate = QString::number(list.last().findValue(data.Currency),'f',3);
+
+        ui->tb->setItem(i,3,UI.tbItem(primeRate));
 
         ui->tb->setItem(i,5,UI.tbItem(data.SubValue.first()));
 
@@ -62,7 +64,8 @@ void LayerAddValueType::refresh()
                 *data.Value[2].toDouble()*data.Value[3].toDouble()
                 /data.SubValue.first().toDouble();
 
-               ui->tb->setItem(i,4,UI.tbItem(total));
+        QString sTotal = QString::number(total,'f',3);
+               ui->tb->setItem(i,4,UI.tbItem(sTotal));
 
     }
 

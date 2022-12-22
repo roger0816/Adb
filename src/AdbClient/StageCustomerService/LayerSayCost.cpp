@@ -329,7 +329,10 @@ double LayerSayCost::checkTotal()
 
         double iPrice =sp->value();
 
-        double r = m_listInto.at(i).toMap()["NTD"].toDouble();
+        double ntd = m_listInto.at(i).toMap()["NTD"].toDouble();
+
+        QString sCost = QString::number(ntd,'f',0);
+
 
         bouns+=m_listInto.at(i).toMap()["Bonus"].toDouble()*iPrice;
 
@@ -345,37 +348,40 @@ double LayerSayCost::checkTotal()
         if(m_dataCustomer.Currency.toUpper().contains("USD"))
         {
 
-            r=r/m_costRate.USD();
+            sCost = QString::number(ntd/m_costRate.USD(),'f',2);
+
 
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("HKD"))
         {
+            sCost = QString::number(ntd/m_costRate.HKD(),'f',0);
 
 
-            r = r/m_costRate.HKD();
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("RMB"))
         {
+            sCost = QString::number(ntd/m_costRate.RMB(),'f',0);
 
 
-            r = r/m_costRate.RMB();
         }
         else if(m_dataCustomer.Currency.toUpper().contains("MYR"))
         {
+            sCost = QString::number(ntd/m_costRate.MYR(),'f',0);
 
-
-            r = r/m_costRate.MYR();
         }
         else if(m_dataCustomer.Currency.toUpper().contains("SGD"))
         {
+            sCost = QString::number(ntd/m_costRate.SGD(),'f',1);
 
 
-            r = r/m_costRate.SGD();
+
         }
 
-        double cost = r* iPrice;
+        double cost = sCost.toDouble()* iPrice;
+
+        //   QString sTmp = QString::number(iNTD/rate2.USD(),'f',2);
 
 
         re=re+cost;

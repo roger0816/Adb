@@ -86,8 +86,8 @@ public:
     bool setCustomerCost(CustomerCost costData, QString &sError);
 
     bool replaceOrder(OrderData order, QString &sError);
-    void setSellMoney(OrderData &order);
-    void setPrimeMoney(OrderData &order);
+    QString setSellMoney(OrderData &order);
+    QString setPrimeMoney(OrderData &order);
 
     QList<OrderData> getOrder(bool bRequest = false);
 
@@ -128,8 +128,12 @@ public:
 
     QString getAddValueName(QString sSid);
 
+    QString getAddValueCurrency(QString sSid);
 
-    double payTypeToNTDRate(QString payTypeSid, DataRate rate);
+
+    double payTypeToNTDRate(QString payTypeSid, DataRate rate, QString &sOutRate);
+
+    QString getPayRate(QString sPayTypeSid);
 
     bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
 

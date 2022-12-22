@@ -42,6 +42,8 @@ void LayerCostTable::refreshGameList()
     m_listGame = ACTION.getGameList(true);
 
 
+    int iOldIdx = ui->tbGame->currentRow();
+
     ui->tbGame->setRowCount(0);
 
     m_listGameDisplay.clear();
@@ -63,6 +65,12 @@ void LayerCostTable::refreshGameList()
         ui->tbGame->setItem(iRow,1,UI.tbItem(m_listGame.at(i).Name));
 
         m_listGameDisplay.append(m_listGame.at(i));
+    }
+
+    if(iOldIdx>=0 && iOldIdx< ui->tbGame->rowCount())
+    {
+        ui->tbGame->setCurrentCell(iOldIdx,0);
+
     }
 
 }
@@ -225,6 +233,8 @@ void LayerCostTable::on_btnSaveText_clicked()
 {
     int iRow = ui->tbGame->currentRow();
 
+    qDebug()<<"AAAAAAAAAAAAA"<<iRow;
+
     if(iRow<0 || iRow>=m_listGameDisplay.length())
         return;
 
@@ -254,9 +264,10 @@ QString LayerCostTable::trText()
         d["%Item"+QString::number(i+1)] = ui->tbGameItem->item(i,0)->text();
         d["%NTD"+QString::number(i+1)] = ui->tbGameItem->item(i,1)->text();
         d["%USD"+QString::number(i+1)] = ui->tbGameItem->item(i,2)->text();
-        d["%RMB"+QString::number(i+1)] = ui->tbGameItem->item(i,3)->text();
-        d["%MYR"+QString::number(i+1)] = ui->tbGameItem->item(i,4)->text();
-        d["%SGD"+QString::number(i+1)] = ui->tbGameItem->item(i,5)->text();
+        d["%HKD"+QString::number(i+1)] = ui->tbGameItem->item(i,3)->text();
+        d["%RMB"+QString::number(i+1)] = ui->tbGameItem->item(i,4)->text();
+        d["%MYR"+QString::number(i+1)] = ui->tbGameItem->item(i,5)->text();
+        d["%SGD"+QString::number(i+1)] = ui->tbGameItem->item(i,6)->text();
 
     }
 

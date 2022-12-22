@@ -57,8 +57,11 @@ private:
 
     QStringList m_listRate;
 
+    double m_prime;
 
-    double m_iTotal;
+    double m_NtdPrime;
+
+    double m_rate;
 
 };
 

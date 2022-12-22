@@ -37,6 +37,7 @@ LayerDayDebit::LayerDayDebit(QWidget *parent) :
         refresh();
     });
 
+
 }
 
 LayerDayDebit::~LayerDayDebit()
@@ -46,14 +47,18 @@ LayerDayDebit::~LayerDayDebit()
 
 void LayerDayDebit::showEvent(QShowEvent *)
 {
-    ui->dateEdit->setDate(QDateTime::currentDateTime().date());
 
+    ui->dateEdit->setProperty("lock",true);
+    ui->dateEdit->setDate(QDateTime::currentDateTime().date());
+    ui->dateEdit->setProperty("lock",false);
     QTimer::singleShot(100,this,SLOT(refresh()));
 }
 
 
 void LayerDayDebit::refresh()
 {
+
+
     if(m_bLockRe)
         return;
     m_bLockRe = true;
@@ -61,6 +66,7 @@ void LayerDayDebit::refresh()
     setCb();
 
     refreshTb();
+
     m_bLockRe = false;
 }
 
@@ -248,6 +254,8 @@ void LayerDayDebit::on_cbDebit_currentIndexChanged(int index)
 
 void LayerDayDebit::on_dateEdit_userDateChanged(const QDate &date)
 {
+    if(ui->dateEdit->property("lock").toBool())
+        return;
     refreshTb();
 }
 
@@ -349,12 +357,17 @@ void LayerDayDebit::slotBtnDebitExport()
                 xlsx.write(iRow+1,iXlsxCol,sHeader);
             }
 
-            QString st = ui->tb->item(iRow,iCol)->text();
-            qDebug()<<"row : "<<iRow<<" col: "<<iCol<<" data: "<<st;
-            if(iCol!=5 && iCol!=7)
-                xlsx.write(iRow+2,iXlsxCol,st);
-            else
-                xlsx.write(iRow+2,iXlsxCol,st.toDouble());
+            QString st="";
+            if(ui->tb->item(iRow,iCol)!=nullptr)
+                st= ui->tb->item(iRow,iCol)->text();
+
+            if(st.trimmed()!="")
+            {
+                if(iCol!=5 && iCol!=7)
+                    xlsx.write(iRow+2,iXlsxCol,st);
+                else
+                    xlsx.write(iRow+2,iXlsxCol,st.toDouble());
+            }
             xlsx.setColumnWidth(iXlsxCol,iXlsxCol,16);
         }
     }

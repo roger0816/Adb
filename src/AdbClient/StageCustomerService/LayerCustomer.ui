@@ -207,6 +207,22 @@ background-color:#3c78b4;
           </spacer>
          </item>
          <item>
+          <widget class="QPushButton" name="btnInport">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>90</width>
+             <height>36</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>匯入</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="btnEdit">
            <property name="enabled">
             <bool>false</bool>

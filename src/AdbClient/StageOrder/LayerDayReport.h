@@ -34,26 +34,31 @@ enum tbHeader
 {
     _OderId=0,      //訂單編號
     _Name=1,        //序號
-    _DateTime=2,    //成立時間
-    _User=3,        //專員代碼
-    _Customer=4,    //客戶編號
-    _Content=5,     //訂單內容
-    _Status=6,
-    _Bonus=7,
-    _Check=8,
-    _Currency=9,
-    _TodayCost=10,
-    _Cost=11,
-    _Prime=12,
-    _Profit=13,
-    _ProfitForOne=14,
-    _PayType = 15,
-    _PayCount=16,
-    _PayRate=17,
-    _Pic0=18,
-    _Pic1=19
+    _CheckNum,      //核對單位
+    _DateTime,    //成立時間
+    _User,        //專員代碼
+    _Customer,    //客戶編號
+    _Status,        //訂單狀態
+    _Bonus,         //業績
+    _GameName,      //遊戲名稱
+    _PayType,    //儲值方式
+    _PayCount,  //單位
+    _Currency,      //幣別
+    _TodayCost,     //今日應收
+    _ExRate,        //售價匯率
+    _Cost,          //應收(台幣)
+    _PrimeRate,      //成本匯率
+    _Prime,         //成本(台幣)
+    _Profit,        //利潤(台幣
+    _ProfitForOne,  //每業績利潤
+    _PayRate,       //成本參數
+    _Pic1,           //回報圖
+    _Pic0,          //儲值圖
+
+    _Note,
 
 
+    _TB_COL_COUNT
 };
 
 
@@ -100,6 +105,12 @@ private slots:
 
     void on_btnExcel_clicked();
 
+    void on_cbShowBonus_clicked();
+
+    void on_cbShowPic_clicked();
+
+    void on_cbShowCost_clicked();
+
 private:
     Ui::LayerDayReport *ui;
 
@@ -116,6 +127,8 @@ private:
 
     QDialog *m_dialogPic = new QDialog();
     ItemPic *m_itemPic  = new ItemPic(m_dialogPic);
+
+    void changeVisable();
 
 };
 

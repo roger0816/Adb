@@ -197,14 +197,28 @@ void DialogAddValueTypeEdit::updateTotal(double)
         return;
 
 
-    double d= 1.000*ui->sb0->value()*ui->sb1->value()*ui->sb2->value()*ui->sb3->value()/ui->sbSub->value();
+//    double d= 1.000*ui->sb0->value()*ui->sb1->value()*ui->sb2->value()*ui->sb3->value()/ui->sbSub->value();
 
 
-    double total= d*m_listRate.at(ui->comboBox->currentIndex()-1).toDouble();
+//    double total= d*m_listRate.at(ui->comboBox->currentIndex()-1).toDouble();
 
-    ui->lbTotal->setText(QString::number(total, 'f', 3));
+//    ui->lbTotal->setText(QString::number(total, 'f', 3));
 
-    ui->spPrime->setValue(ui->spOrigin->value()* ui->lbTotal->text().toDouble());
+//    ui->spPrime->setValue(ui->spOrigin->value()* ui->lbTotal->text().toDouble());
+
+
+
+
+
+    m_prime= 1.000*ui->sb0->value()*ui->sb1->value()*ui->sb2->value()*ui->sb3->value()/ui->sbSub->value();
+
+    m_rate = m_listRate.at(ui->comboBox->currentIndex()-1).toDouble();
+
+    m_NtdPrime = m_prime*m_rate;
+
+    ui->lbTotal->setText(QString::number(m_prime, 'f', 3));
+
+    ui->spPrime->setValue(ui->spOrigin->value()* m_NtdPrime);
 
 }
 
@@ -212,12 +226,12 @@ void DialogAddValueTypeEdit::updateTotal(double)
 
 void DialogAddValueTypeEdit::on_spOrigin_valueChanged(double )
 {
-     ui->spPrime->setValue(ui->spOrigin->value()*ui->lbTotal->text().toDouble());
+     ui->spPrime->setValue(ui->spOrigin->value()*m_NtdPrime);
 }
 
 
 void DialogAddValueTypeEdit::on_spPrime_valueChanged(double )
 {
-    ui->spOrigin->setValue(ui->spPrime->value()/ui->lbTotal->text().toDouble());
+    ui->spOrigin->setValue(ui->spPrime->value()/m_NtdPrime);
 }
 

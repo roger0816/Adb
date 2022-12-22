@@ -664,7 +664,7 @@ QList<CustomerCost> Action::getCustomerCost(QString sCustomerSid, bool bQuery)
 bool Action::setCustomerCost(CustomerCost costData,QString &sError)
 {
     bool bRe = false;
-
+    costData.UpdateTime=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
 
     bRe = action(ACT::ADD_CUSTOMER_COST,costData.data(),sError);
 
@@ -1053,8 +1053,55 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
     return re;
 }
 
-void Action::setSellMoney(OrderData &order)
+QString Action::setSellMoney(OrderData &order)
 {
+    int Money0=0;
+
+
+    QStringList listItem = order.Item.split(SPLIT1);
+
+    for(int i=0;i<listItem.length();i++)
+    {
+        QStringList tmp = listItem.at(i).split(SPLIT2);
+
+        if(tmp.length()<2)
+            continue;
+
+
+        QString gameItemSid = tmp.first();
+
+        int iCount = tmp.last().toInt();
+
+        DataGameItem item = getGameItemFromSid(gameItemSid);
+
+         DataGameList game =getGameList(item.GameSid);
+
+         QString sCost = QString::number(item.Bonus.toDouble()*game.GameRate,'f',0);
+
+         Money0+=sCost.toDouble()*iCount;
+
+    }
+
+
+    order.Money[0]=QString::number(Money0);
+
+
+
+    DataRate rate=costRate(order.ExRateSid,true);
+
+    int idx =rate.listKey().indexOf(getCustomer(order.CustomerSid).Currency);
+
+    if(idx<0)
+        return "1";
+
+
+    return QString::number(rate.listValue().at(idx).toDouble());
+
+
+
+    /*
+
+
     auto ntdToInt=[=](double iCost)
     {
         QStringList listTmp = QString::number(iCost).split(".");
@@ -1073,22 +1120,23 @@ void Action::setSellMoney(OrderData &order)
 
     QStringList listMoney;
 
-    DataRate rate=costRate(order.ExRateSid,false);
-
-    //cost
+    DataRate rate=costRate(order.ExRateSid,true);
 
     int idx =rate.listKey().indexOf(getCustomer(order.CustomerSid).Currency);
 
     if(idx<0)
-        return;
+        return "1";
 
     double iCost = order.Cost.toDouble()*rate.listValue().at(idx).toDouble(); //原幣應收
+
+
     order.Money[0]= QString::number(ntdToInt(iCost));
 
-
+    return QString::number(rate.listValue().at(idx).toDouble());
+    */
 }
 
-void Action::setPrimeMoney(OrderData &order)
+QString Action::setPrimeMoney(OrderData &order)
 {
 
     auto ntdToInt=[=](double iCost)
@@ -1108,15 +1156,21 @@ void Action::setPrimeMoney(OrderData &order)
 
     DataRate rate=primeRate(order.PrimeRateSid,true);
 
+
+
+
+
     CListPair listPay =getAddValueType();
     int idx = listPay.listFirst().indexOf(order.PayType);
 
     if(idx<0)
-        return;
+        return "";
 
     CListPair listItem(order.Item);
 
-    double prime=0.00;
+    double prime=0.000;
+
+    QString sRe="";
 
     for(int i=0;i<listItem.length();i++)  //訂單裡的  GameItem
     {
@@ -1133,7 +1187,7 @@ void Action::setPrimeMoney(OrderData &order)
 
         QString sValue = payType.findValue(order.PayType);
 
-        double iOneItemPrice = payTypeToNTDRate(order.PayType,rate)*sValue.toDouble();
+        double iOneItemPrice = payTypeToNTDRate(order.PayType,rate,sRe)*sValue.toDouble();
 
         prime =prime+(itemCount*iOneItemPrice);
 
@@ -1144,6 +1198,8 @@ void Action::setPrimeMoney(OrderData &order)
 
     order.Money[1] = QString::number(ntdToInt(prime));    //換成台幣的成本
 
+
+    return sRe;
 }
 
 QList<DataUserBonus> Action::listBouns(QString sUserSid)
@@ -1219,9 +1275,21 @@ QString Action::getAddValueName(QString sSid)
     return sRe;
 }
 
-double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate)
+QString Action::getAddValueCurrency(QString sSid)
 {
-    double re=1.00;
+    QVariantMap in;
+    QVariantMap out;
+    QString sError;
+    in["Sid"]=sSid;
+    action(ACT::QUERY_PAY_TYPE,in,out,sError);
+
+    return out["Currency"].toString();
+
+}
+
+double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutRate)
+{
+    double re=1.000;
 
     QVariantMap input;
     QVariantList rawData;
@@ -1239,6 +1307,8 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate)
 
     double r = rate.listData.findValue(data.Currency).toDouble();
 
+    sOutRate = QString::number(r);
+
 
 
 
@@ -1246,8 +1316,37 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate)
             *data.Value[2].toDouble()*data.Value[3].toDouble()
             /data.SubValue.first().toDouble();
 
+    if(data.Sid=="23")
+    {
+        qDebug()<<"r : "<<r;
+        qDebug()<<"AAAAAAAAAAAAXX : "<<data.Value;
 
+        qDebug()<<"RRRRRRRR "<<re;
+    }
     return re;
+}
+
+QString Action::getPayRate(QString sPayTypeSid)
+{
+    QVariantMap input;
+    QVariantList rawData;
+    QString sError;
+
+    input["Sid"] = sPayTypeSid;
+    action(ACT::QUERY_PAY_TYPE,input,rawData,sError);
+
+
+    if(rawData.length()<1)
+        return 0;
+
+    DataPayType data(rawData.first().toMap());
+
+    double re = data.Value[0].toDouble()*data.Value[1].toDouble()
+            *data.Value[2].toDouble()*data.Value[3].toDouble()
+            /data.SubValue.first().toDouble();
+
+
+    return QString::number(re,'f',3);;
 }
 
 bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrderItem)

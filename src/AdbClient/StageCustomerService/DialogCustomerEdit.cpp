@@ -66,6 +66,8 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
     ui->cbVip->setCurrentIndex(vip);
     ui->txName->setText(m_data["Name"].toString());
 
+    ui->txNum5->setText(m_data["Num5"].toString());
+
     QString sCurrency = m_data["Currency"].toString();
 
     m_sOriginCurrency=sCurrency;
@@ -146,6 +148,7 @@ void DialogCustomerEdit::setReadOnly(bool bReadOnly)
     ui->txPassword->setReadOnly(!bEnable);
     ui->txChr->setReadOnly(!bEnable);
     ui->txServer->setReadOnly(!bEnable);
+    ui->txNum5->setReadOnly(!bEnable);
 
     ui->tbGameList->hideColumn(0);
 
@@ -161,6 +164,8 @@ QVariantMap DialogCustomerEdit::data()
     m_data["Id"] = ui->lbId->text().trimmed();
 
     m_data["Name"] = ui->txName->text().trimmed();
+
+    m_data["Num5"] = ui->txNum5->text().trimmed();
 
     m_data["Vip"]="0";
 

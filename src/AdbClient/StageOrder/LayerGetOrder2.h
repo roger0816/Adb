@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "Global.h"
 #include "GlobalUi.h"
+#include "DialogNote.h"
 #include "LayerSayCost.h"
 
 namespace Ui {
@@ -33,8 +34,24 @@ private slots:
 
     void on_btnOrder2Copy_clicked();
 
+    void on_btnNoteChange_clicked();
+
 private:
     Ui::LayerGetOrder2 *ui;
+
+    enum _tbHeader{
+        _User=0,
+        _Name,
+        _Id,
+        _CustomerId,
+        _CustomerName,
+        _GameName,
+        _Bouns,
+        _Status,
+        _Action,
+        _Note
+
+    };
 
     void refreshUser(bool bRe=true);
 

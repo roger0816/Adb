@@ -679,6 +679,7 @@ QList<OrderData> Action::getOrder(bool bRequest)
         QVariantList out;
         QDate tDate=QDate::currentDate().addDays(-1);
         in["OrderDate >="]=tDate.toString("yyyyMMdd");
+
         QString sError;
         action(ACT::QUERY_ORDER,in,out,sError);
 
@@ -882,6 +883,8 @@ OrderData Action::getOrderCustomerLast(QString sCustomerSid, bool bRequest)
 
     return re;
 }
+
+
 
 QVariant Action::trKey(QVariantList list, QVariantMap info, QString sTargetKey)
 {

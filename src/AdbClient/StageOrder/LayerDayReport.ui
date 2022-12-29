@@ -261,7 +261,7 @@
             <item>
              <widget class="QCheckBox" name="cbStep0_1">
               <property name="text">
-               <string>-1 取消訂單</string>
+               <string>-1 取消</string>
               </property>
               <property name="checked">
                <bool>false</bool>
@@ -271,7 +271,7 @@
             <item>
              <widget class="QCheckBox" name="cbStep0">
               <property name="text">
-               <string>0報價狀態</string>
+               <string>0報價</string>
               </property>
               <property name="checked">
                <bool>false</bool>
@@ -291,7 +291,7 @@
             <item>
              <widget class="QCheckBox" name="cbStep2">
               <property name="text">
-               <string>2待處理</string>
+               <string>2接單</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -301,7 +301,7 @@
             <item>
              <widget class="QCheckBox" name="cbStep3">
               <property name="text">
-               <string>3待回報</string>
+               <string>3儲值</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -311,7 +311,7 @@
             <item>
              <widget class="QCheckBox" name="cbStep4">
               <property name="text">
-               <string>4待主管確認</string>
+               <string>4回報</string>
               </property>
               <property name="checked">
                <bool>true</bool>
@@ -321,7 +321,7 @@
             <item>
              <widget class="QCheckBox" name="cbStep5">
               <property name="text">
-               <string>已完成訂單</string>
+               <string>5完成</string>
               </property>
               <property name="checked">
                <bool>false</bool>

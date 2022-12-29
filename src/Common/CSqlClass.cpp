@@ -543,6 +543,7 @@ void CSqlClass::createTableSqlite()
              'PayInfo'	TEXT,                   \
              'UpdateTime'	TEXT,               \
              'UserSid'	TEXT,                   \
+           'Num5'	TEXT,                   \
              'Note1'	TEXT,                       \
              'Note2'	TEXT,                       \
              PRIMARY KEY('Sid' AUTOINCREMENT)    \

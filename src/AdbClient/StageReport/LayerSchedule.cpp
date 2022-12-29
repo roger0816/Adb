@@ -806,6 +806,8 @@ void LayerSchedule::delayRefresh()
 
     }
 
+    ui->btnNext->setEnabled(true);
+    ui->btnPre->setEnabled(true);
 
     m_sYear = GLOBAL.dateTimeUtc8().toString("yyyy");
     m_sMonth = GLOBAL.dateTimeUtc8().toString("MM");

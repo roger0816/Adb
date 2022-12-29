@@ -93,12 +93,17 @@ void LayerGetOrder2::refreshUser(bool bRe)
 
         QString sCount = QString::number(m_data[fac.Name].toList().length());
 
-        QString st = fac.Id+"    "+fac.Name+"  ("+sCount+")";
+        QString st = //fac.Id+"    "+
+                fac.Name+"  ("+sCount+")";
 
         if(ui->tbUser->columnCount()<=col)
             ui->tbUser->setColumnCount(ui->tbUser->columnCount()+1);
 
-        ui->tbUser->setItem(row,col,UI.tbItem(st));
+        QTableWidgetItem *item = UI.tbItem(st);
+        if(sCount!="0")
+            item->setForeground(Qt::darkRed);
+
+        ui->tbUser->setItem(row,col,item);
 
         col++;
 
@@ -177,10 +182,10 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
         }
 
 
-        ui->tbOrder->setItem(i,0,UI.tbItem(sUserCid));
+        ui->tbOrder->setItem(i,_User,UI.tbItem(sUserCid));
 
-        ui->tbOrder->setItem(i,1,UI.tbItem(order.Name));
-        ui->tbOrder->setItem(i,2,UI.tbItem(order.Id,GlobalUi::_BUTTON));
+        ui->tbOrder->setItem(i,_Name,UI.tbItem(order.Name));
+        ui->tbOrder->setItem(i,_Id,UI.tbItem(order.Id,GlobalUi::_BUTTON));
 
         QVariantMap d;
         QVariantList tmpOut;
@@ -197,34 +202,57 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
         if(tmpOut.length()>0)
             customer = tmpOut.first().toMap();
 
-        ui->tbOrder->setItem(i,3,UI.tbItem(customer["Id"]));
-        ui->tbOrder->setItem(i,4,UI.tbItem(customer["Name"]));
+        QTableWidgetItem *tmpItem = UI.tbItem(customer["Id"]);
+
+        if(customer["Vip"].toString()=="1")
+        {
+
+            tmpItem->setForeground(QColor("#996515"));
+        }
+        else
+        {
+             tmpItem->setForeground(QColor(Qt::darkGray));
+        }
+
+        ui->tbOrder->setItem(i,_CustomerId,tmpItem);
+
+
+        ui->tbOrder->setItem(i,_CustomerName,UI.tbItem(customer["Name"]));
+
 
         QString sGameItemSid= order.Item.split(";;").first().split(",,").first();
         QVariantMap item=gameItem(sGameItemSid);
 
-        ui->tbOrder->setItem(i,5,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
+        ui->tbOrder->setItem(i,_GameName,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
+        ui->tbOrder->setItem(i,_Bouns,UI.tbItem(order.Bouns));
+
+        QString sNote="";
+
+        if(order.Note0.length()>=5)
+            sNote=order.Note0[4];
+
+        ui->tbOrder->setItem(i,_Note,UI.tbItem(sNote,true));
 
 
         if(order.Step=="3" )
         {
             if(order.PaddingUser.trimmed()=="")
             {
-                ui->tbOrder->setItem(i,6,UI.tbItem("待處理"));
-                ui->tbOrder->setItem(i,7,UI.tbItem("訂單回報",GlobalUi::_BUTTON));
+                ui->tbOrder->setItem(i,_Status,UI.tbItem("待處理"));
+                ui->tbOrder->setItem(i,_Action,UI.tbItem("訂單回報",GlobalUi::_BUTTON));
             }
 
             else
             {
 
-                ui->tbOrder->setItem(i,6,UI.tbItem(ACTION.getUser(order.PaddingUser,true).Name+" 處理中"));
+                ui->tbOrder->setItem(i,_Status,UI.tbItem(ACTION.getUser(order.PaddingUser,true).Name+" 處理中"));
                 if(order.PaddingUser==ACTION.m_currentUser.Sid)
                 {
-                    ui->tbOrder->setItem(i,7,UI.tbItem("處理訂單",true));
+                    ui->tbOrder->setItem(i,_Action,UI.tbItem("處理訂單",true));
                 }
                 else
                 {
-                    ui->tbOrder->setItem(i,7,UI.tbItem(""));
+                    ui->tbOrder->setItem(i,_Action,UI.tbItem(""));
                 }
             }
         }
@@ -248,7 +276,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
     ui->wBottom->setCurrentIndex(0);
     OrderData order(listData.at(row).toMap());
 
-    if(column==2)
+    if(column==_Id)
     {
 
         QVariantMap d;
@@ -261,7 +289,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
     }
 
 
-    if(column==7 && ui->tbOrder->item(row,7)->text()=="訂單回報")
+    if(column==_Action && ui->tbOrder->item(row,_Action)->text()=="訂單回報")
     {
         if(1==UI.showMsg("",QString("請確認是否鎖定處理訂單 :%1？").arg(order.Id),QStringList()<<"否"<<"是"))
         {
@@ -295,6 +323,18 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
         return;
     }
 
+    if(column==_Note)
+    {
+        DialogNote dialogNote;
+
+        dialogNote.setData(order.Note0);
+
+        dialogNote.exec();
+
+        return;
+
+    }
+
 
     if(order.PaddingUser==ACTION.m_currentUser.Sid)
     {
@@ -304,15 +344,18 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
         QString sError;
         ACTION.action(ACT::QUERY_CUSTOMER_COST,tmp,listOut,sError);
         QString sValue="0";
+        CustomerCost customerData;
         if(listOut.length()>0)
         {
-            CustomerCost customerData(listOut.last().toMap());
+            customerData.setData(listOut.last().toMap());
             sValue = customerData.Total;
         }
 
         ui->lbOri->setText(sValue);
 
         ui->lbCost->setText(order.Cost);
+
+        ui->lbCurrency->setText(customerData.Currency);
 
         ui->wPic0->slotClear();
 
@@ -455,5 +498,28 @@ void LayerGetOrder2::on_btnOrder2Copy_clicked()
             ui->lb1->text()+":    "+ui->lbCost->text()+"\n"+
             ui->lb2->text()+":    "+ui->lbFinal->text();
     UI.copyMsg(sMsg);
+}
+
+
+void LayerGetOrder2::on_btnNoteChange_clicked()
+{
+    QVariantList listData =m_data[m_currentDataKey].toList();
+
+    QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
+
+    OrderData order(data);
+
+
+    QString sError;
+
+
+    QString sNote= ui->txNote->toPlainText();
+
+    order.Note0[4]=sNote;
+
+    ACTION.replaceOrder(order,sError);
+
+
+    refreshUser();
 }
 

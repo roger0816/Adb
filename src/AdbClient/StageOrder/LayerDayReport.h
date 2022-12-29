@@ -2,6 +2,7 @@
 #define LAYERDAYREPORT_H
 
 #include <QWidget>
+#include "DialogNote.h"
 #include "Global.h"
 #include "GlobalUi.h"
 #include "LayerSayCost.h"

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "Global.h"
 #include "GlobalUi.h"
+#include "DialogNote.h"
 #include <QCompleter>
 #include <QStringListModel>
 #include "LayerSayCost.h"
@@ -33,12 +34,30 @@ private slots:
 
     void refresh();
 
-    void on_btnDelay_clicked();
+    void on_btnChangeNote_clicked();
 
     void slotCancel();
 
+
+
+    void on_btnDelayOrder_clicked();
+
 private:
     Ui::LayerGetOrder1 *ui;
+
+    enum _tbHeader{
+        _User=0,
+        _Name,
+        _Id,
+        _CustomerId,
+        _CustomerName,
+        _GameName,
+        _Bouns,
+        _Status,
+        _Action,
+        _Note
+
+    };
 
     void refreshUser(bool bRe=true);
 

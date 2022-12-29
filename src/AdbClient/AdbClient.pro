@@ -23,6 +23,7 @@ INCLUDEPATH+= \
               StageManagerSetting
 
 SOURCES += \
+    DialogNote.cpp \
     StageCustomerService/DialogCustomerCostHistory.cpp \
     StageManagerSetting/LayerItemCount.cpp \
     StageOrder/DialogDayReportEdit.cpp \
@@ -89,6 +90,7 @@ SOURCES += \
     widget.cpp
 
 HEADERS += \
+    DialogNote.h \
     StageCustomerService/DialogCustomerCostHistory.h \
     StageManagerSetting/LayerItemCount.h \
     StageOrder/DialogDayReportEdit.h \
@@ -154,6 +156,7 @@ HEADERS += \
     widget.h
 
 FORMS += \
+    DialogNote.ui \
     StageCustomerService/DialogCustomerCostHistory.ui \
     StageManagerSetting/LayerItemCount.ui \
     StageOrder/DialogDayReportEdit.ui \

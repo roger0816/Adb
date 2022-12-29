@@ -151,7 +151,7 @@ void LayerDayReport::refreshTb()
 
         if(sStatus=="-1")
         {
-            sStatus+="取消訂單";
+            sStatus+="取消";
         }
 
         if(sStatus=="0")
@@ -164,19 +164,19 @@ void LayerDayReport::refreshTb()
         }
         if(sStatus=="2")
         {
-            sStatus+="待處理";
+            sStatus+="接單";
         }
         if(sStatus=="3")
         {
-            sStatus+="待回報";
+            sStatus+="儲值";
         }
         if(sStatus=="4")
         {
-            sStatus+="待確認";
+            sStatus+="回報";
         }
         if(sStatus=="5")
         {
-            sStatus="訂單結束";
+            sStatus="完成";
         }
 
         qDebug()<<"check status";
@@ -509,23 +509,29 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
     if(column==_Note)
     {
-        QStringList list= data.Note0;
+//        QStringList list= data.Note0;
 
 
-        while(list.length()<5)
-            list.append("");
+//        while(list.length()<5)
+//            list.append("");
 
-        QString st="報價:    %1 \n"
-                   "下單:    %2 \n"
-                   "處理中:   %3 \n"
-                   "處理完成: %4 \n"
-                   "回報:    %5"   ;
-
-
+//        QString st="報價:    %1 \n"
+//                   "下單:    %2 \n"
+//                   "處理中:   %3 \n"
+//                   "處理完成: %4 \n"
+//                   "回報:    %5"   ;
 
 
-        DMSG.showMsg("備註",st.arg(list.at(0)).arg(list.at(1)).arg(list.at(2)).arg(list.at(3)).arg(list.at(4)),"OK");
 
+
+       // DMSG.showMsg("備註",st.arg(list.at(0)).arg(list.at(1)).arg(list.at(2)).arg(list.at(3)).arg(list.at(4)),"OK");
+
+
+        DialogNote dialog;
+
+        dialog.setData(data.Note0);
+
+        dialog.exec();
 
     }
 }
@@ -643,9 +649,9 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
         QString st="訂單編號:"+data.Id+"\n"
                                    "報價: %1\n"
                                    "下單: %2\n"
-                                   "處理: %3\n"
-                                   "回報: %4\n"
-                                   "簽核: %5\n";
+                                   "接單: %3\n"
+                                   "儲值: %4\n"
+                                   "回報: %5\n";
 
 
         QStringList listName;

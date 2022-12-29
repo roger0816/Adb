@@ -183,6 +183,7 @@ struct CustomerData :public DataObj
         PayType =data["PayType"].toString();
         PayInfo =data["PayInfo"].toString();
         UserSid = data["UserSid"].toString();
+        Num5 = data["Num5"].toString();
         Note1   =data["Note1"].toString();
         Note2   =data["Note2"].toString();
 
@@ -200,6 +201,7 @@ struct CustomerData :public DataObj
         d["PayType"] = PayType;
         d["PayInfo"] =PayInfo;
         d["UserSid"] =UserSid;
+        d["Num5"] = Num5;
         d["Note1"] = Note1;
         d["Note2"]= Note2;
 
@@ -213,6 +215,7 @@ struct CustomerData :public DataObj
     QString PayType;
     QString PayInfo;
     QString UserSid;
+    QString Num5;
     QString Note1;
     QString Note2;
 };

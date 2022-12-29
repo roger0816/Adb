@@ -175,18 +175,18 @@ CData ActionObj::query(CData data)
 CData ActionObj::callServer(CData data)
 {
 
-    //    if(m_bIsLock)
-    //    {
-    //        QEventLoop *loop=new QEventLoop(this);
+        if(m_bIsLock)
+        {
+            QEventLoop *loop=new QEventLoop(this);
 
-    //        loop->connect(this,&ActionObj::lockLoading,[=](bool)
-    //        {
-    //            if(!m_bIsLock)
-    //                loop->quit();
-    //        });
+            loop->connect(this,&ActionObj::lockLoading,[=](bool)
+            {
+                if(!m_bIsLock)
+                    loop->quit();
+            });
 
-    //        delete loop;
-    //    }
+            delete loop;
+        }
 
 
 

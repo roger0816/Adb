@@ -74,7 +74,7 @@ void LayerDayDebit::refreshTb()
 {
 
     QVariantMap in;
-    in["UpdateTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
+    in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
     in["IsAddCost"]="1";
 
     ACTION.action(ACT::QUERY_CUSTOMER_COST,in,m_listCustomerCost);
@@ -145,7 +145,7 @@ bool LayerDayDebit::checkData(CustomerCost data)
     if(data.Sid=="")
         return false;
 
-    QDateTime date =QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss");
+    QDateTime date =QDateTime::fromString(data.OrderTime,"yyyyMMddhhmmss");
 
     if(date.time()<ui->timeStart->time() || date.time()>ui->timeEnd->time())
     {
@@ -154,6 +154,10 @@ bool LayerDayDebit::checkData(CustomerCost data)
     }
 
 
+
+
+
+    /*
 
     if(ui->cbCurrency->currentIndex()==0 && ui->cbDebit->currentIndex()==0)
         return true;
@@ -165,18 +169,37 @@ bool LayerDayDebit::checkData(CustomerCost data)
     }
     if(ui->cbDebit->currentIndex()==0)
         return true;
+*/
+
+
+    QStringList listDebitSid;
+    if(ui->cbDebit->currentIndex()==0)
+    {
+
+
+        for(int i=0;i<m_listDebit.length();i++)
+        {
+            listDebitSid.append(DebitClass(m_listDebit.at(i).toMap()).Sid);
+
+        }
+
+
+    }
+    else
+    {
 
 
 
+        int iIdx = qBound(0,ui->cbDebit->currentIndex()-1,m_listDebit.length()-1);
 
 
-    int iIdx = qBound(0,ui->cbDebit->currentIndex()-1,m_listDebit.length()-1);
+        QString sCurrentDebitSid =  DebitClass(m_listDebit.at(iIdx).toMap()).Sid;
 
+        listDebitSid.append(sCurrentDebitSid);
 
-    QString sCurrentDebitSid =  DebitClass(m_listDebit.at(iIdx).toMap()).Sid;
+    }
 
-
-    return data.DebitSid==sCurrentDebitSid;
+    return listDebitSid.contains(data.DebitSid);
 
 
 }

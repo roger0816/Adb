@@ -44,9 +44,14 @@ QPixmap *mutiScreen::get_screen()
 
 void mutiScreen::showCaptureScreen()
 {
+    QDesktopWidget *desktop = QApplication::desktop();
+    int i = 0;
     foreach(frmScreen * s ,mScreenlist )
     {
         s->showMaximized();
+        s->move(desktop->screen(i)->pos());
+        s->setGeometry(desktop->screen(i)->geometry());
+        i++;
     }
 }
 

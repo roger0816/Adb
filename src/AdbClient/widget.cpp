@@ -197,8 +197,8 @@ void Widget::checkUserLv()
 
     // if(iLv>=USER_LV::_ROOT)
     {
-        ui->btnTest->setEnabled(true);
-        ui->btnTest->show();
+        //ui->btnTest->setEnabled(true);
+       // ui->btnTest->show();
     }
 
     UI.m_loading->resize(this->size());

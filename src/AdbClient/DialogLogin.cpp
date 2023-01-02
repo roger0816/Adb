@@ -52,7 +52,14 @@ void DialogLogin::init(QString sMsg)
 
 void DialogLogin::setRelease(bool b)
 {
-    ui->lbRelease->setVisible(b);
+    if(!b)
+    {
+        ui->lbRelease->setText("Test");
+
+        ui->wBg->setStyleSheet("backgrond-color:gary");
+    }
+
+ //   ui->lbRelease->setVisible(b);
 }
 
 void DialogLogin::closeEvent(QCloseEvent *)

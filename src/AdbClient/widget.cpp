@@ -11,7 +11,7 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-
+    ui->lbTestName->hide();
 
     QFile file(":/style.qss");
 
@@ -60,6 +60,9 @@ Widget::Widget(QWidget *parent)
     m_touchCheck = new LayerTouchCheck(this);
 
     m_touchCheck->hide();
+
+    ui->btnTest->hide();
+
 }
 
 Widget::~Widget()
@@ -76,7 +79,7 @@ void Widget::slotPage(int iIdx)
 
     if(ui->stackedWidget->currentWidget()==ui->pageService)
     {
-//        ui->pageService->changePage(0);
+        //        ui->pageService->changePage(0);
     }
 
     else if(ui->stackedWidget->currentWidget()== ui->pageOrder)
@@ -128,6 +131,19 @@ void Widget::on_btnTest_clicked()
 void Widget::showEvent(QShowEvent *)
 {
 
+
+    if(ACTION.m_bTest)
+    {
+
+        ui->lbTestName->show();
+
+
+        ui->wTop->setStyleSheet("background-color:lightgray;");
+
+        ui->wMenu->setStyleSheet("backgound-color:red;");
+
+        ui->btnTest->show();
+    }
 
 }
 
@@ -213,7 +229,7 @@ void Widget::slotLogin()
 
     QEventLoop *loop=new QEventLoop(this);
 
- //   loop.connect(&timer,&QTimer::timeout,&loop,&QEventLoop::quit);
+    //   loop.connect(&timer,&QTimer::timeout,&loop,&QEventLoop::quit);
 
     QTimer::singleShot(1000,[=]()
     {
@@ -247,6 +263,6 @@ void Widget::slotSessionError()
 
     UI.m_dialogLogin->exec();
 
-   // DMSG.showMsg("","連線失敗，網路狀態異常或帳密重複登入","OK");
+    // DMSG.showMsg("","連線失敗，網路狀態異常或帳密重複登入","OK");
 }
 

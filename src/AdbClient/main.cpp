@@ -25,10 +25,14 @@ int main(int argc, char *argv[])
 
     QString st=argv[0];
 
+qDebug()<<"AAAAAAA : "<<st.split("\\").last().trimmed();
+    ACTION.m_bTest = st.split("\\").last().trimmed()!="AdbClientWin.exe";
 
-    ACTION.m_bTest = st.split("/").last().trimmed()=="AdbClient";
+   // ACTION.m_bTest = true;
 
     qDebug()<<"test mode : "<<ACTION.m_bTest;
+
+
 
     RUN_MODE mode = _RELEASE;
 
@@ -113,7 +117,7 @@ int main(int argc, char *argv[])
 
     login.connect(&login,&DialogLogin::signalLogin,&w,&Widget::slotLogin);
 
-    login.setRelease(b);
+    login.setRelease(!ACTION.m_bTest);
 
     UI.m_dialogLogin = &login;
 

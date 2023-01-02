@@ -24,7 +24,7 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
         changePage(1);
     });
 
-  //  changePage(0);
+    //  changePage(0);
 }
 
 LayerSearchCustomer::~LayerSearchCustomer()
@@ -34,27 +34,31 @@ LayerSearchCustomer::~LayerSearchCustomer()
 
 void LayerSearchCustomer::init()
 {
-
+    qDebug()<<"LayerSearchCustomer init";
     changePage(0);
 
     //ui->stackedWidget->setCurrentWidget(ui->page0);
 
-   // QTimer::singleShot(50,[this](){ refresh(true); });
+    // QTimer::singleShot(50,[this](){ refresh(true); });
 }
 
-void LayerSearchCustomer::refresh(bool bReQuery)
-{
-    qDebug()<<"refresh serachCustomer";
-
-
-
-}
 
 void LayerSearchCustomer::changePage(int iPage)
 {
-    if(iPage<0 || m_iIdx<0 || iPage>=ui->stackedWidget->count())
+    qDebug()<<"AAAAAAAAAA"<<iPage;
+
+    if(iPage<0 ||iPage>=ui->stackedWidget->count())
         return;
 
+    if(iPage==0)
+    {
+        return ui->page0->init();
+    }
+    else
+    {
+        if(m_iIdx<0)
+            return;
+    }
 
 
     QVariantList tmp;
@@ -74,6 +78,12 @@ void LayerSearchCustomer::changePage(int iPage)
 
     QString sLastGameSid=order.GameSid;
     qDebug()<<"lastGameSid : "<<sLastGameSid;
+
+    qDebug()<<"page "<<iPage;
+
+
+
+
 
     if(iPage==1)
     {
@@ -137,6 +147,8 @@ void LayerSearchCustomer::changePage(int iPage)
     {
         ui->pageSayCost->setCustomer(customer.data());
 
+        ui->pageSayCost->init();
+
     }
 
     else if(iPage==3)
@@ -144,7 +156,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
         ui->pageAddCost->setCustomer(customer.data());
 
-
+        ui->pageAddCost->init();
     }
 
     else if(iPage==4)
@@ -161,6 +173,8 @@ void LayerSearchCustomer::changePage(int iPage)
 
         ui->pageOrder->setCustomer(customer.data());
 
+        ui->pageOrder->init();
+
 
     }
 
@@ -171,7 +185,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
 void LayerSearchCustomer::showEvent(QShowEvent *)
 {
-    QTimer::singleShot(50,[this](){ refresh(false); });
+
 }
 
 

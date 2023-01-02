@@ -24,7 +24,7 @@ ActionObj::ActionObj(QObject *parent)
     m_timer.connect(&m_timer,&QTimer::timeout,heartBeat);
 
 
-
+    connect(this,&ActionObj::lockLoading,this,&ActionObj::checklock);
 }
 
 ActionObj::~ActionObj()
@@ -174,19 +174,85 @@ CData ActionObj::query(CData data)
 
 CData ActionObj::callServer(CData data)
 {
+//        if(m_bIsLock)
+//        {
 
-        if(m_bIsLock)
-        {
-            QEventLoop *loop=new QEventLoop(this);
+//            QElapsedTimer timer;
 
-            loop->connect(this,&ActionObj::lockLoading,[=](bool)
+//            timer.start();
+
+//            int iTmp = timer.elapsed();
+//            qDebug()<<"action wait: " <<QString::number(data.iAciton);
+
+//            while(m_bIsLock)
+//            {
+
+//                QCoreApplication::processEvents();
+
+
+//              //  qDebug()<<"aaaaaaaaaa "<<timer.elapsed();
+
+//            }
+
+//            qDebug()<<"action OK";
+
+
+//        }
+
+
+            /*
+            QElapsedTimer timer;
+
+            timer.start();
+
+            int iTmp=timer.elapsed();
+            qDebug()<<"action wait: " <<QString::number(data.iAciton);
+
+            bool bStop = true;
+
+            while(bStop)
             {
-                if(!m_bIsLock)
-                    loop->quit();
-            });
+                if(timer.elapsed()-iTmp>=50)
+                {
+                    iTmp = timer.elapsed();
 
-            delete loop;
-        }
+                    bStop = m_bIsLock;
+                    qDebug()<<"itmp "<<iTmp;
+                    qDebug()<<m_bIsLock;
+
+                    qDebug()<<QDateTime::currentDateTime().toString("hhmmsszz");
+                }
+
+
+            }
+
+             qDebug()<<"action OK";
+
+             */
+
+
+
+
+
+    if(m_bIsLock)
+    {
+
+        qDebug()<<"call server wait : "<<data.iAciton;
+        return data;
+     //   m_lockLoop.exec();
+
+//        QEventLoop *loop=new QEventLoop(this);
+
+
+//        loop->connect(this,&ActionObj::lockLoading,[=](bool)
+//        {
+//            if(!m_bIsLock)
+//                loop->quit();
+//        });
+
+//        loop->disconnect(this);
+//        delete loop;
+    }
 
 
 
@@ -204,8 +270,10 @@ CData ActionObj::callServer(CData data)
     bool bIsQuery = isQueryApi(data.iAciton);
 
     bool bNeedFromeServer =isNeedFromServer(data.iAciton,data.dData);
+
+
     qDebug()<<"trigger local:"<<m_dLocalTrigger[sGroup]<<", update:"<<m_dUpdateTrigger[sGroup];
-    qDebug()<<"call aip :"+sApi<<",data from server:"<<bNeedFromeServer<<",cacheKey:"<<sCacheKey<<"\n";
+    qDebug()<<"call api :"+sApi<<",data from server:"<<bNeedFromeServer<<",cacheKey:"<<sCacheKey<<"\n";
 
     if(!bNeedFromeServer)
     {
@@ -217,6 +285,8 @@ CData ActionObj::callServer(CData data)
 
     m_bIsLock= true;
 
+    qDebug()<<"api lock "<<data.iAciton;
+
     emit lockLoading(m_bIsLock);
 
 
@@ -225,11 +295,14 @@ CData ActionObj::callServer(CData data)
     qDebug()<<"call server : "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
 
     qDebug()<<data.enCodeJson().toStdString().c_str();
-    RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
+        qDebug()<<"AAAAAAAAAA_準備送出 : ";
+    int iTmp = RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
 
-
+      qDebug()<<"AAAAAAAAAA_已完成送出 : "<<iTmp;
+    qDebug()<<"AAAAAAAAAA0";
     re.deCodeJson(out);
 
+    qDebug()<<"AAAAAAAAAA1";
 
     auto  clearGroupCache = [=](QString sGroup)
     {
@@ -244,14 +317,17 @@ CData ActionObj::callServer(CData data)
     };
 
 
+    qDebug()<<"AAAAAAAAAA2";
 
     if(re.bOk)
     {
 
+        qDebug()<<"AAAAAAAAAA3";
         QString sCacheKey = apiCacheKey(sApi,data.dData);
 
 
 
+        qDebug()<<"AAAAAAAAAA4";
         if(bIsQuery)
         {
             m_dLocalTrigger[sGroup] = re.sTrigger;
@@ -269,21 +345,24 @@ CData ActionObj::callServer(CData data)
 
 
 
+        qDebug()<<"AAAAAAAAAA5";
 
     }
 
 
 
     qDebug()<<"server return : "<<re.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
-    if(data.iAciton==ACT::QUERY_PIC)
-        qDebug()<<"pic size : "<<out.length();
-    else
-        qDebug()<<out.toStdString().c_str();
-
+//    if(data.iAciton==ACT::QUERY_PIC)
+//        qDebug()<<"pic size : "<<out.length();
+//    else
+//        qDebug()<<out.toStdString().c_str();
+       qDebug()<<"AAAAAAAAAA6";
     m_bIsLock= false;
-
-
     emit lockLoading(m_bIsLock);
+
+
+    qDebug()<<"api unlock "<<data.iAciton;
+       qDebug()<<"AAAAAAAAAA7";
 
     return re;
 }
@@ -375,7 +454,8 @@ void ActionObj::serverTrigger(QString sId, QByteArray data, int )
             {
 
                 QStringList tmp = st.split("=");
-
+                if(tmp.length()<1)
+                    continue;
                 QString sApiGroup = tmp.first();
 
                 QString sTrigger = tmp.last();
@@ -411,4 +491,17 @@ void ActionObj::serverTrigger(QString sId, QByteArray data, int )
     }
 
 
+}
+
+void ActionObj::checklock(bool b)
+{
+    if(!b && m_lockLoop.isRunning())
+    {
+        qDebug()<<"wait ok";
+        m_lockLoop.quit();
+    }
+    else
+    {
+
+    }
 }

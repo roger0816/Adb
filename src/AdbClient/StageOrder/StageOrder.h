@@ -17,13 +17,16 @@ class StageOrder : public QWidget
 public:
     explicit StageOrder(QWidget *parent = nullptr);
     ~StageOrder();
-
+       void init();
 private:
     Ui::StageOrder *ui;
 
-    void showEvent(QShowEvent *) override;
+    bool m_bFirst = true;
 
     QButtonGroup m_btns;
+
+private slots:
+    void changePage(int iPage);
 };
 
 #endif // STAGEORDER_H

@@ -45,6 +45,9 @@ void StageManagerSetting::showEvent(QShowEvent *)
 void StageManagerSetting::changePage(int iIdx)
 {
 
+
+
+
     ui->stackedWidget->setCurrentIndex(iIdx);
 }
 

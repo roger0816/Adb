@@ -45,9 +45,9 @@ void ItemMiniLoadbar::setLoading(bool bIsLoading)
 
     m_bIsRun = bIsLoading;
 
-    if(!m_bIsRun)
-        QTimer::singleShot(500,this,SLOT(slotChangeEnaled()));
-    else
+//    if(!m_bIsRun)
+//        QTimer::singleShot(500,this,SLOT(slotChangeEnaled()));
+//    else
         slotChangeEnaled();
 
 }

@@ -13,7 +13,6 @@ Widget::Widget(QWidget *parent)
 
 
 
-
     QFile file(":/style.qss");
 
     if(file.open(QIODevice::ReadOnly))
@@ -80,6 +79,10 @@ void Widget::slotPage(int iIdx)
 //        ui->pageService->changePage(0);
     }
 
+    else if(ui->stackedWidget->currentWidget()== ui->pageOrder)
+    {
+        ui->pageOrder->init();
+    }
 
 }
 
@@ -226,9 +229,9 @@ void Widget::slotLogin()
     qDebug()<<"preload ok";
     show();
     qDebug()<<"main ui show";
-
-    ui->stackedWidget->setCurrentIndex(0);
     checkUserLv();
+    ui->stackedWidget->setCurrentIndex(0);
+
 
 
 

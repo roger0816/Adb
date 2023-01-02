@@ -5,12 +5,13 @@
 
 //#include "CSqlClass.h"
 #include "RpkCore.h"
+#include <QElapsedTimer>
 #include "DEF.h"
 #include "QueryObj.h"
 #include "VojData.h"
 #include <QTimer>
 #include <QEventLoop>
-
+#include <QCoreApplication>
 
 
 class ActionObj : public QObject
@@ -90,6 +91,14 @@ signals:
 
 public slots:
     void serverTrigger(QString sId, QByteArray data, int);
+
+private slots:
+
+    void checklock(bool b);
+
+private :
+    QEventLoop m_lockLoop;
+
 
 
 };

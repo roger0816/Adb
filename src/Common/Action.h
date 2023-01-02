@@ -20,6 +20,7 @@ public:
 
     ~Action();
 
+    bool m_bTest=false;
 
     void setServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
 
@@ -62,12 +63,12 @@ public:
     bool editFacotryClass(QVariantMap data,QString &sError);
 
 
-    QList<DataGameList> getGameList(bool bQuery=false);
-    DataGameList getGameList(QString sSid, bool bQuery=false);
+    QList<DataGameList> getGameList(bool bQuery=true);
+    DataGameList getGameList(QString sSid, bool bQuery=true);
 
-    QList<DataGameItem> getGameItem(bool bQuery = false);
+    QList<DataGameItem> getGameItem(bool bQuery = true);
 
-    QList<DataGameItem> getGameItem(QString sGameSid, bool bQuery=false);
+    QList<DataGameItem> getGameItem(QString sGameSid, bool bQuery=true);
 
     void updateGameItemPrice(QString sGameSid,double iGameRate);
 
@@ -76,13 +77,13 @@ public:
     double getGameItemPayCount(QString sGameItemSid,QString sPaySid,bool bQuery=true);
 
 
-    QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool bQuery=false);
+    QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool bQuery=true);
 
 
     QString getGameName(QString sId);
     QString getGameId(QString sName);
 
-    QList<CustomerCost> getCustomerCost(QString sCustomerSid,bool bQuery=false);
+    QList<CustomerCost> getCustomerCost(QString sCustomerSid,bool bQuery=true);
     bool setCustomerCost(CustomerCost costData, QString &sError);
 
     bool replaceOrder(OrderData order, QString &sError);
@@ -149,6 +150,8 @@ public:
     bool getNewCustomerId(QString &sGetId,bool bRenew=false);
     //舊的id用匯入的從AA01起，少一碼則最前面加上D，程式新增的規則從EA起
     void setNewCustomerId(QString sCustomerId);
+
+
 
 private:
     QList<UserData> m_listUser;

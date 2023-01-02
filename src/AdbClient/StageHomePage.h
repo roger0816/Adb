@@ -30,7 +30,7 @@ private slots:
 private:
     Ui::StageHomePage *ui;
 
-    bool m_bFirstRun = true;  //啟動程式的預設首頁 showEvent 會等待比較久
+    bool m_bLock = false;
 };
 
 #endif // STAGEHOMEPAGE_H

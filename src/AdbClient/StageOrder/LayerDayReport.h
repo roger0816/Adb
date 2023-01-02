@@ -74,7 +74,7 @@ public:
     explicit LayerDayReport(QWidget *parent = nullptr);
     ~LayerDayReport();
 
-    void showEvent(QShowEvent *) override;
+    void init();
 
     bool checkFilter(OrderData order);
 
@@ -112,6 +112,8 @@ private slots:
 
     void on_cbShowCost_clicked();
 
+    void on_btnChangeDate_clicked();
+
 private:
     Ui::LayerDayReport *ui;
 
@@ -130,6 +132,8 @@ private:
     ItemPic *m_itemPic  = new ItemPic(m_dialogPic);
 
     void changeVisable();
+
+    bool m_bLockLoading=false;
 
 };
 

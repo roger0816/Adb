@@ -19,11 +19,18 @@ LayerBulletin::~LayerBulletin()
 
 void LayerBulletin::showEvent(QShowEvent *)
 {
-    QTimer::singleShot(300,[this](){ refresh(true); });
+    //QTimer::singleShot(300,[this](){ refresh(true); });
 }
 
 void LayerBulletin::refresh(bool bRequery)
 {
+
+    if(m_block)
+        return ;
+
+
+    m_block=true;
+
 
     if(bRequery)
     {
@@ -39,7 +46,7 @@ void LayerBulletin::refresh(bool bRequery)
 
         QVariantMap in;
         in["DESC"] ="Sid";
-
+        qDebug()<<"layer Bulletin";
         m_listUser = ACTION.queryUser();
 
         ACTION.action(ACT::QUERY_BULLETIN,in,m_listData,sError);
@@ -69,6 +76,10 @@ void LayerBulletin::refresh(bool bRequery)
 
 
     }
+
+
+    m_block=false;
+
 }
 
 void LayerBulletin::intoTopTb(QVariantMap data)

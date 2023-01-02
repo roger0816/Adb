@@ -89,7 +89,7 @@ void LayerSayCost::orderMode()
 
 
     CListPair list(m_order.Item);
-    qDebug()<<"AAAAAAAAAAAAAAAAAA: "<<m_order.Item;
+
     m_listInto.clear();
     for(int j=0;j<list.length();j++)
     {
@@ -104,7 +104,7 @@ void LayerSayCost::orderMode()
             if(d["Sid"]==sid)
             {
                 d["Count"] = count;
-                qDebug()<<"BBBBBBBBB : "<<d;
+
                 m_listInto.append(d);
             }
 
@@ -198,6 +198,13 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
 }
 
+void LayerSayCost::init()
+{
+    ui->txNote1->clear();
+
+    delayShowEvent();
+}
+
 void LayerSayCost::setReadOnly()
 {
 
@@ -223,10 +230,6 @@ void LayerSayCost::setReadOnly()
     //  ui->wBottom->hide();
 }
 
-void LayerSayCost::showEvent(QShowEvent *)
-{
-    QTimer::singleShot(30,this,SLOT(delayShowEvent()));
-}
 
 void LayerSayCost::refreshInfo()
 {
@@ -833,21 +836,48 @@ void LayerSayCost::on_btnCopy_clicked()
 {
     //   QClipboard* clipboard = QApplication::clipboard();
 
-    QString sMsg="客戶編號: "+ui->lbId->text()+"\n客戶名稱: "+ui->lbName->text()+"\n";
+    QString sMsg="客戶編號: "+ui->lbId->text()+"\n"+
+            ui->tTime->text()+" "+ui->lbTime->text()+"\n";
 
-    sMsg+=ui->label_1->text()+" %1\n"+ui->label_2->text()+"   %2\n"+
-            ui->label_3->text()+" %3\n"+ui->label_4->text()+" %4\n"+
-            ui->label_5->text()+" %5\n"+ui->label_10->text()+" %6\n"+
-            ui->label_6->text()+" %7\n"+ui->label_7->text()+" %8\n";
+    QString sInfo;
 
-    sMsg =sMsg.arg(ui->lbTime->text())
-            .arg(ui->lbCurrency->text())
-            .arg(ui->lbGameName->text())
-            .arg(ui->lbLoginType->text())
-            .arg(ui->lbGameAccount->text())
-            .arg(ui->lbGamePassword->text())
-            .arg(ui->lbServer->text())
-            .arg(ui->lbChr->text());
+    if(!m_bOrderMode) //報價
+    {
+        sMsg+= ui->tGameName->text()+"  "+ui->lbGameName->text()+"\n"
+                +ui->tLoginType->text()+"  "+ui->lbLoginType->text()+"\n"
+                +ui->tAccount->text()+"  "+ui->lbGameAccount->text()+"\n"
+                +ui->tPassword->text()+"  "+ui->lbGamePassword->text()+"\n"
+                +ui->tServerName->text()+"  "+ui->lbServer->text()+"\n"
+                +ui->tChr->text()+"  "+ui->lbChr->text()+"\n";
+
+
+    }
+    else                //下單
+    {
+        sMsg+= ui->tGameName->text()+"  "+ui->lbGameName->text()+"\n"
+                +ui->tLoginType->text()+"  "+ui->lbLoginType->text()+"\n"
+                +ui->tAccount->text()+"  "+ui->lbGameAccount->text()+"\n"
+                +ui->tPassword->text()+"  "+ui->lbGamePassword->text()+"\n"
+                +ui->tServerName->text()+"  "+ui->lbServer->text()+"\n"
+                +ui->tChr->text()+"  "+ui->lbChr->text()+"\n";
+
+    }
+
+
+
+    //    sMsg+=ui->label_1->text()+" %1\n"+ui->label_2->text()+"   %2\n"+
+    //            ui->label_3->text()+" %3\n"+ui->label_4->text()+" %4\n"+
+    //            ui->label_5->text()+" %5\n"+ui->label_10->text()+" %6\n"+
+    //            ui->label_6->text()+" %7\n"+ui->label_7->text()+" %8\n";
+
+    //    sMsg =sMsg.arg(ui->lbTime->text())
+    //            .arg(ui->lbCurrency->text())
+    //            .arg(ui->lbGameName->text())
+    //            .arg(ui->lbLoginType->text())
+    //            .arg(ui->lbGameAccount->text())
+    //            .arg(ui->lbGamePassword->text())
+    //            .arg(ui->lbServer->text())
+    //            .arg(ui->lbChr->text());
 
 
     QString sCost="";
@@ -856,16 +886,26 @@ void LayerSayCost::on_btnCopy_clicked()
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
         sCost+=ui->tbInfo->item(i,1)->text();
-        sCost+=" x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,2))->text();
+        sCost+="  x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,2))->text();
 
         if(!m_bOrderMode)
-            sCost+="  "+ui->tbInfo->item(i,3)->text()+"\n";
+        {
+            sCost+="  "+ui->tbInfo->item(i,3)->text();
+        }
+
+        sCost+="\n";
 
     }
 
     if(!m_bOrderMode)
-        sCost+="總計: $ "+ui->lbTotal->text();
-
+    {
+        sCost+="\n總計: $ "+ui->lbTotal->text()+"\n"
+                +"幣別: "+ui->lbCurrency->text();
+    }
+    else
+    {
+        sCost+="\n備註: "+ui->txNote1->toPlainText();
+    }
     UI.copyMsg(sMsg+sCost);
 
     //    clipboard->setText(sMsg+sCost, QClipboard::Clipboard);

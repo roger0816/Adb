@@ -29,13 +29,13 @@ StageCustomerService::~StageCustomerService()
 
 void StageCustomerService::changePage(int iPage)
 {
-
+    qDebug()<<"stage customerService : "<<iPage;
     ui->stackedWidget->setCurrentIndex(iPage);
 
     if(iPage==0)
          ui->page->init();
 
-    if(iPage==1)
+    else if(iPage==1)
          ui->page1->init();
 }
 

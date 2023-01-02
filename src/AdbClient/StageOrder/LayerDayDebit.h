@@ -17,11 +17,11 @@ class LayerDayDebit : public QWidget
 public:
     explicit LayerDayDebit(QWidget *parent = nullptr);
     ~LayerDayDebit();
-
+    void init();
 private:
     Ui::LayerDayDebit *ui;
 
-    void showEvent(QShowEvent*) override;
+
 
 
     QVariantList m_allDebit;
@@ -57,6 +57,7 @@ private slots:
     void on_timeEnd_userTimeChanged(const QTime &time);
     void on_tb_cellPressed(int row, int column);
     void slotBtnDebitExport();
+    void on_btnChangeDate_clicked();
 };
 
 #endif // LAYERDAYDEBIT_H

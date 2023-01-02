@@ -172,7 +172,7 @@ max-height:12px;</string>
            </widget>
           </item>
           <item>
-           <widget class="LayerBulletin" name="widget" native="true"/>
+           <widget class="LayerBulletin" name="wBulletin" native="true"/>
           </item>
          </layout>
         </widget>

@@ -88,6 +88,9 @@ void DialogLogin::on_btnLogin_clicked()
 {
     ui->lbMsg->clear();
 
+
+                  // ACTION.setServer(true,"167.172.87.35","6000");
+
     QString sErrorMsg;
     int iRe = ACTION.checkLogin(ui->txUser->text().trimmed(),ui->txPass->text().trimmed(),sErrorMsg);
 

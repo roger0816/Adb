@@ -45,13 +45,13 @@ LayerDayDebit::~LayerDayDebit()
     delete ui;
 }
 
-void LayerDayDebit::showEvent(QShowEvent *)
+void LayerDayDebit::init()
 {
 
     ui->dateEdit->setProperty("lock",true);
     ui->dateEdit->setDate(QDateTime::currentDateTime().date());
     ui->dateEdit->setProperty("lock",false);
-    QTimer::singleShot(100,this,SLOT(refresh()));
+    refresh();
 }
 
 
@@ -59,19 +59,23 @@ void LayerDayDebit::refresh()
 {
 
 
-    if(m_bLockRe)
-        return;
-    m_bLockRe = true;
 
     setCb();
 
+
+
     refreshTb();
 
-    m_bLockRe = false;
+
 }
 
 void LayerDayDebit::refreshTb()
 {
+
+    if(m_bLockRe)
+        return;
+
+    m_bLockRe = true;
 
     QVariantMap in;
     in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
@@ -136,6 +140,8 @@ void LayerDayDebit::refreshTb()
     }
 
     ui->lbTotal->setText(QString::number(iTotal));
+
+    m_bLockRe = false;
 
 }
 
@@ -207,6 +213,11 @@ bool LayerDayDebit::checkData(CustomerCost data)
 void LayerDayDebit::setCb()
 {
 
+    if(m_bLockRe)
+        return;
+    m_bLockRe = true;
+
+
     m_listDebit.clear();
 
     ACTION.action(ACT::QUERY_DEBIT_CLASS,QVariantMap(),m_allDebit);
@@ -242,6 +253,8 @@ void LayerDayDebit::setCb()
     ui->cbDebit->addItems(listCbName);
 
     ui->cbDebit->setProperty("lock",false);
+
+    m_bLockRe = false;
 }
 
 QString LayerDayDebit::getDebitName(QString debitSid)
@@ -277,21 +290,21 @@ void LayerDayDebit::on_cbDebit_currentIndexChanged(int index)
 
 void LayerDayDebit::on_dateEdit_userDateChanged(const QDate &date)
 {
-    if(ui->dateEdit->property("lock").toBool())
-        return;
-    refreshTb();
+//    if(ui->dateEdit->property("lock").toBool())
+//        return;
+//    refreshTb();
 }
 
 
 void LayerDayDebit::on_timeStart_userTimeChanged(const QTime &time)
 {
-    refreshTb();
+   // refreshTb();
 }
 
 
 void LayerDayDebit::on_timeEnd_userTimeChanged(const QTime &time)
 {
-    refreshTb();
+    //refreshTb();
 }
 
 
@@ -402,5 +415,11 @@ void LayerDayDebit::slotBtnDebitExport()
     xlsx.saveAs(sFileName+".xls");
 
     DMSG.showMsg("",sFileName.split("/").last()+"\n\n匯出完成","OK");
+}
+
+
+void LayerDayDebit::on_btnChangeDate_clicked()
+{
+    refresh();
 }
 

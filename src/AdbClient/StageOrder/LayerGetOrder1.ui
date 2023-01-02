@@ -189,7 +189,12 @@
            </column>
            <column>
             <property name="text">
-             <string>備註</string>
+             <string>下單備註</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
+             <string>接單備註</string>
             </property>
            </column>
           </widget>

@@ -6,9 +6,9 @@ Launch::Launch(QObject *parent)
 
     //QString sIp="206.189.185.20";
    //  QString sIp="178.128.62.72";
-      QString sIp="167.172.87.35";
+   //   QString sIp="167.172.87.35";
 
-   // QString sLocal="127.0.0.1";
+    QString sIp="127.0.0.1";
 
       qDebug()<<"version : "<<ADP_VER;
 

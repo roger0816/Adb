@@ -27,19 +27,17 @@ public:
 
     QList<DataGameItem> m_currentItems;
 
-    void showEvent(QShowEvent * ) override;
+    void init();
+
 
 
 private slots:
     void on_tbGame_cellPressed(int row, int);
 
-    void on_btnSearch_clicked();
-
+    void refreshGameList();
     void on_btnClear_clicked();
 
     void on_btnCopy_clicked();
-
-    void refreshGameList();
 
     void slotTabCurrentChanged(int index);
 

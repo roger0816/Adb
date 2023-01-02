@@ -253,7 +253,7 @@ border: 1px solid #aaaaaa;
            </property>
            <property name="minimumSize">
             <size>
-             <width>245</width>
+             <width>300</width>
              <height>100</height>
             </size>
            </property>
@@ -497,13 +497,13 @@ border: 1px solid #aaaaaa;
            </property>
            <property name="minimumSize">
             <size>
-             <width>200</width>
+             <width>300</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>245</width>
+             <width>16777215</width>
              <height>16777215</height>
             </size>
            </property>
@@ -546,7 +546,7 @@ background-color:#3c78b4;
              <widget class="QWidget" name="widget_11" native="true">
               <layout class="QFormLayout" name="formLayout_3">
                <item row="0" column="0">
-                <widget class="QLabel" name="label_1">
+                <widget class="QLabel" name="tTime">
                  <property name="text">
                   <string>下單時間:</string>
                  </property>
@@ -560,14 +560,14 @@ background-color:#3c78b4;
                 </widget>
                </item>
                <item row="2" column="0">
-                <widget class="QLabel" name="label_3">
+                <widget class="QLabel" name="tGameName">
                  <property name="text">
                   <string>遊戲名稱:</string>
                  </property>
                 </widget>
                </item>
                <item row="3" column="0">
-                <widget class="QLabel" name="label_4">
+                <widget class="QLabel" name="tLoginType">
                  <property name="text">
                   <string>登入方式:</string>
                  </property>
@@ -588,14 +588,14 @@ background-color:#3c78b4;
                 </widget>
                </item>
                <item row="4" column="0">
-                <widget class="QLabel" name="label_5">
+                <widget class="QLabel" name="tAccount">
                  <property name="text">
                   <string>遊戲帳號:</string>
                  </property>
                 </widget>
                </item>
                <item row="6" column="0">
-                <widget class="QLabel" name="label_6">
+                <widget class="QLabel" name="tServerName">
                  <property name="text">
                   <string>伺服器:</string>
                  </property>
@@ -616,7 +616,7 @@ background-color:#3c78b4;
                 </widget>
                </item>
                <item row="7" column="0">
-                <widget class="QLabel" name="label_7">
+                <widget class="QLabel" name="tChr">
                  <property name="text">
                   <string>角色名稱:</string>
                  </property>
@@ -630,7 +630,7 @@ background-color:#3c78b4;
                 </widget>
                </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="label_2">
+                <widget class="QLabel" name="tCurrency">
                  <property name="text">
                   <string>幣別:</string>
                  </property>
@@ -644,7 +644,7 @@ background-color:#3c78b4;
                 </widget>
                </item>
                <item row="5" column="0">
-                <widget class="QLabel" name="label_10">
+                <widget class="QLabel" name="tPassword">
                  <property name="text">
                   <string>遊戲密碼:</string>
                  </property>
@@ -670,7 +670,7 @@ background-color:#3c78b4;
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
                <item row="0" column="0" colspan="2">
-                <widget class="QLabel" name="label">
+                <widget class="QLabel" name="tNote">
                  <property name="text">
                   <string>備註:</string>
                  </property>

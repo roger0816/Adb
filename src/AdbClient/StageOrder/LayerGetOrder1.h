@@ -21,7 +21,7 @@ public:
     explicit LayerGetOrder1(QWidget *parent = nullptr);
     ~LayerGetOrder1();
 
-    void showEvent(QShowEvent *) override;
+    void init();
 
 private slots:
     void on_tbUser_cellPressed(int row, int column);
@@ -55,7 +55,8 @@ private:
         _Bouns,
         _Status,
         _Action,
-        _Note
+        _Note1,
+        _Note2
 
     };
 
@@ -80,6 +81,7 @@ private:
     int m_iPreUserRow=-1;
     int m_iPreUserCol=-1;
 
+    bool m_bLockLoading = false;
 
 };
 

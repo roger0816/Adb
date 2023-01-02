@@ -25,13 +25,21 @@ LayerGetOrder1::~LayerGetOrder1()
     delete ui;
 }
 
-void LayerGetOrder1::showEvent(QShowEvent *)
+void LayerGetOrder1::init()
 {
-    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
+    refresh();
 }
 
 void LayerGetOrder1::refreshUser(bool bRe)
 {
+
+    if(m_bLockLoading)
+        return ;
+
+    m_bLockLoading= true;
+
+
+
     ui->wBottom->setCurrentIndex(0);
     QList<UserData> list =ACTION.getUser(bRe);
 
@@ -123,6 +131,11 @@ void LayerGetOrder1::refreshUser(bool bRe)
     }
 
     on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
+
+
+    m_bLockLoading= false;
+
+
 }
 
 QVariantMap LayerGetOrder1::gameItem(QString sSid)
@@ -233,9 +246,10 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         QVariantMap item=gameItem(sGameItemSid);
 
         ui->tbOrder->setItem(i,_GameName,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
-        QString sTmpNote= order.Note0.at(2);
 
-        ui->tbOrder->setItem(i,_Note,UI.tbItem(sTmpNote,true));
+        ui->tbOrder->setItem(i,_Note1,UI.tbItem(order.Note0.at(1),true));
+
+        ui->tbOrder->setItem(i,_Note2,UI.tbItem(order.Note0.at(2),true));
 
         ui->tbOrder->setItem(i,_Bouns,UI.tbItem(order.Bouns));
 
@@ -333,7 +347,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
     }
 
 
-    if(column==_Note)
+    if(column==_Note1 || column==_Note2)
     {
         DialogNote dialogNote;
 
@@ -387,9 +401,6 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
             sNote0=order.Note0.at(2);
 
         ui->btnDelayOrder->setChecked(sNote0.contains("["+ui->btnDelayOrder->text()+"]"));
-
-
-      //  ui->btnDelay->setChecked(sNote0.contains("[訂單延誤]"));
 
         ui->txNote->setText(sNote0.replace("[訂單延誤]",""));
 
@@ -519,6 +530,12 @@ void LayerGetOrder1::on_btnFinish_clicked()
 
 void LayerGetOrder1::refresh()
 {
+
+    if(m_bLockLoading)
+        return ;
+
+    m_bLockLoading= true;
+
     ui->wBottom->setCurrentIndex(0);
     ACTION.getUser(true);
 
@@ -533,6 +550,9 @@ void LayerGetOrder1::refresh()
     ui->tbOrder->setRowCount(0);
 
     ui->cbAddValueType->clear();
+
+    m_bLockLoading= false;
+
 
     refreshUser();
 }

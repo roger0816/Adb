@@ -20,6 +20,8 @@ public:
     void setCustomer(QVariantMap data);
 
 
+    void init();
+
 private:
     Ui::LayerAddCost *ui;
 
@@ -32,8 +34,6 @@ private:
     QVariantList m_listRowDebit; //支付管道:原始資料
 
     void checkTotal();
-
-    void showEvent(QShowEvent*) override;
 
     double m_addValue=0;
 
@@ -61,7 +61,7 @@ private slots:
     void on_btnCopy_clicked();
     void on_cbCurrency_currentIndexChanged(int index);
 
-    void on_sb_valueChanged(int);
+    void on_sb_valueChanged(double);
     void on_btnOk_clicked();
 
     void on_sbAdd_valueChanged(double);

@@ -19,7 +19,7 @@ public:
     explicit LayerGetOrder2(QWidget *parent = nullptr);
     ~LayerGetOrder2();
 
-    void showEvent(QShowEvent *) override;
+    void init();
 
 private slots:
     void on_tbUser_cellPressed(int row, int column);
@@ -68,6 +68,8 @@ private:
     LayerSayCost *m_layerCost  = nullptr;
     int m_iPreUserRow=-1;
     int m_iPreUserCol=-1;
+
+    bool m_bLockLoading = false;
 };
 
 #endif // LAYERGETORDER2_H

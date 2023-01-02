@@ -715,7 +715,6 @@ QList<OrderData> Action::getOrderByDate(QDate date)
         re.append(data);
     }
 
-
     return re;
 }
 
@@ -1319,13 +1318,13 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutR
             *data.Value[2].toDouble()*data.Value[3].toDouble()
             /data.SubValue.first().toDouble();
 
-    if(data.Sid=="23")
-    {
-        qDebug()<<"r : "<<r;
-        qDebug()<<"AAAAAAAAAAAAXX : "<<data.Value;
+//    if(data.Sid=="23")
+//    {
+//        qDebug()<<"r : "<<r;
+//        qDebug()<<"AAAAAAAAAAAAXX : "<<data.Value;
 
-        qDebug()<<"RRRRRRRR "<<re;
-    }
+//        qDebug()<<"RRRRRRRR "<<re;
+//    }
     return re;
 }
 

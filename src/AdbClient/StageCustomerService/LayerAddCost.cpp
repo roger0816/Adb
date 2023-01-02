@@ -8,6 +8,7 @@ LayerAddCost::LayerAddCost(QWidget *parent) :
     ui->setupUi(this);
 
 
+
 }
 
 LayerAddCost::~LayerAddCost()
@@ -134,11 +135,15 @@ void LayerAddCost::checkTotal()
     ui->lbAfAdd->setText(m_lastCostData.Total);
 }
 
-void LayerAddCost::showEvent(QShowEvent *)
+void LayerAddCost::init()
 {
+    ui->txNote0->clear();
+
+    ui->txDebitNote->clear();
+
     ui->lbTime->setText(GLOBAL.dateTimeUtc8().toString("yyyy/MM/dd hh:mm"));
 
-    QTimer::singleShot(50,Qt::PreciseTimer,this,SLOT(refresh()));
+    refresh();
 
 
 }
@@ -269,7 +274,7 @@ void LayerAddCost::on_cbCurrency_currentIndexChanged(int index)
 }
 
 
-void LayerAddCost::on_sb_valueChanged(int )
+void LayerAddCost::on_sb_valueChanged(double )
 {
     checkTotal();
 }

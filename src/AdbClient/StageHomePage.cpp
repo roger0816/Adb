@@ -22,6 +22,8 @@ StageHomePage::StageHomePage(QWidget *parent) :
     connect(ui->btnSend,&QPushButton::clicked,this,&StageHomePage::slotSavePic);
 
 
+
+
 }
 
 StageHomePage::~StageHomePage()
@@ -36,8 +38,14 @@ void StageHomePage::showEvent(QShowEvent *)
     ui->btnFn->setVisible(ACTION.m_currentUser.Lv>=USER_LV::_LV3);
 
 
+
     QTimer::singleShot(100,this,[=]()
     {
+
+        if(m_bLock)
+            return;
+
+        m_bLock = true;
 
         QVariantMap in;
         QVariantList listOut;
@@ -58,6 +66,11 @@ void StageHomePage::showEvent(QShowEvent *)
             ui->wPic->setMd5(sPicMd5);
 
         }
+
+        ui->wBulletin->refresh(true);
+
+        m_bLock = false;
+
 
     });
 }

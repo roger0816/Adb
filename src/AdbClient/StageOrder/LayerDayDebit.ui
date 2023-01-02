@@ -64,13 +64,13 @@
           <widget class="QWidget" name="widget_4" native="true">
            <property name="minimumSize">
             <size>
-             <width>180</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>180</width>
+             <width>260</width>
              <height>16777215</height>
             </size>
            </property>
@@ -100,6 +100,13 @@
               </property>
               <property name="currentSection">
                <enum>QDateTimeEdit::DaySection</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QPushButton" name="btnChangeDate">
+              <property name="text">
+               <string>變更時間日期</string>
               </property>
              </widget>
             </item>

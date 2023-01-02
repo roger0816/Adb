@@ -24,7 +24,7 @@ private slots:
     void on_tbSys_cellDoubleClicked(int row, int);
 
     void on_tbTop_cellDoubleClicked(int row, int);
-
+public slots:
     void refresh(bool bRequery=true);
 
 private:
@@ -45,6 +45,8 @@ private:
      QString userName(QString sId);
 
      QButtonGroup m_btns;
+
+    bool m_block= false;
 };
 
 #endif // LAYERBULLETIN_H

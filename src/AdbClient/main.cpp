@@ -23,6 +23,13 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    QString st=argv[0];
+
+
+    ACTION.m_bTest = st.split("/").last().trimmed()=="AdbClient";
+
+    qDebug()<<"test mode : "<<ACTION.m_bTest;
+
     RUN_MODE mode = _RELEASE;
 
     if(argc>=2)
@@ -51,10 +58,16 @@ int main(int argc, char *argv[])
 
     GLOBAL;
 
+
     QString sServerIp =GLOBAL.config("ServerIp").toString();
 
 
+    QString sTestIp =GLOBAL.config("TestIp").toString();
+
     QString sServerPort = GLOBAL.config("ServerPort").toString();
+
+
+    QString sTestPort = GLOBAL.config("TestPort").toString();
 
     bool b = GLOBAL.config("UseServer").toBool();
 
@@ -76,10 +89,15 @@ int main(int argc, char *argv[])
 
     case _RELEASE:
     default:
-        ACTION.setServer(b,sServerIp,sServerPort);
+    {
+        if(!ACTION.m_bTest)
+            ACTION.setServer(b,sServerIp,sServerPort);
+        else
+            ACTION.setServer(b,sTestIp,sTestPort);
+
 
         break;
-
+    }
     }
 
 

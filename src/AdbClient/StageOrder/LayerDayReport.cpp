@@ -75,14 +75,14 @@ LayerDayReport::~LayerDayReport()
     delete ui;
 }
 
-void LayerDayReport::showEvent(QShowEvent *)
+void LayerDayReport::init()
 {
     m_bLockDate = true;
     ui->dateEdit->setDate(GLOBAL.dateTimeUtc8().date());
     m_bLockDate = false;
 
 
-    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(delayRefresh()));
+    delayRefresh();
 }
 
 void LayerDayReport::refreshTb()
@@ -107,9 +107,16 @@ void LayerDayReport::refreshTb()
 
     for(int i=0;i<m_listOrder.length();i++)
     {
+        qDebug()<<"iiiiiiiiii-1"<<m_listOrder.length()<<"  ii : "<<i;
+
         OrderData data = m_listOrder.at(i);
+
+        qDebug()<<"iiiiiiiiii"<<data.UpdateTime;
+
         if(!checkFilter(data))
             continue;
+
+        qDebug()<<"AAAAAAAAAAAA0";
 
         QVariantMap d;
         d["Sid"] = data.CustomerSid;
@@ -121,9 +128,9 @@ void LayerDayReport::refreshTb()
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
 
+        qDebug()<<"AAAAAAAAAAAA1";
         ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
         UserData owner =ACTION.getUser(data.Owner);
-
 
 
         CustomerData customer(listCustomer.first().toMap());
@@ -132,20 +139,24 @@ void LayerDayReport::refreshTb()
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
         ui->tb->setItem(iRow,_DateTime,UI.tbItem(date));
 
+        qDebug()<<"AAAAAAAAAAAA2";
 
         QString sUser="";
 
         if(data.User.length()>2)
         {
             UserData user = ACTION.getUser(data.User.at(2));
+            qDebug()<<"AAAAAAAAAAAA3";
 
             sUser = user.Name;
         }
 
+        qDebug()<<"AAAAAAAAAAAA4";
 
         ui->tb->setItem(iRow,_User,UI.tbItem(sUser,GlobalUi::_TOOLTIP));
         ui->tb->setItem(iRow,_Customer,UI.tbItem(customer.Id));
 
+        qDebug()<<"AAAAAAAAAAAA5";
 
         QString sStatus = data.Step;
 
@@ -180,7 +191,7 @@ void LayerDayReport::refreshTb()
         }
 
         qDebug()<<"check status";
-
+        qDebug()<<"AAAAAAAAAAAA6";
 
         ui->tb->setItem(iRow,_Status,UI.tbItem(sStatus));
         if(data.Step=="4")
@@ -191,7 +202,7 @@ void LayerDayReport::refreshTb()
 
         ui->tb->setItem(iRow,_GameName,UI.tbItem(sGameName));
 
-
+        qDebug()<<"AAAAAAAAAAAA7";
 
         ui->tb->setItem(iRow,_Currency,UI.tbItem(customer.Currency));
         ui->tb->setItem(iRow,_TodayCost,UI.tbItem(data.Cost));
@@ -199,7 +210,7 @@ void LayerDayReport::refreshTb()
 
         _LayerDayReport::OrderPayType orderPayType = getPayCount(data);
 
-
+        qDebug()<<"AAAAAAAAAAAA8";
         DataRate primeRate=ACTION.primeRate(data.PrimeRateSid,true);
 
         DataRate exRate=ACTION.costRate(data.ExRateSid,true);
@@ -208,7 +219,7 @@ void LayerDayReport::refreshTb()
 
         //double payRate = ACTION.payTypeToNTDRate(data.PayType,primeRate,sPrimeRate);
 
-
+        qDebug()<<"AAAAAAAAAAAA9";
         int iNtdCost = data.Money.first().toInt();
 
         int iNtdPrime = data.Money[1].toInt();
@@ -227,7 +238,6 @@ void LayerDayReport::refreshTb()
 
 
             ui->tb->setItem(iRow,_PayCount,UI.tbItem(orderPayType.iTotalCount));
-
 
             // ui->tb->setItem(iRow,_PayRate,UI.tbItem(payRate));
         }
@@ -298,6 +308,7 @@ void LayerDayReport::refreshTb()
             iTotalBonus+=data.Bouns.toDouble();
         }
 
+        qDebug()<<"AAAAAAAAAAAA11";
 
         m_listInto.append(data);
 
@@ -319,25 +330,56 @@ bool LayerDayReport::checkFilter(OrderData order)
     QString step = order.Step;
     QString sDate = order.OrderDate;
 
-    if(ui->dateEdit->date().toString("yyyyMMdd") != sDate)
-        return false;
+    qDebug()<<"GGGGGGGGG "<<sDate;
 
-    if(step=="-1" && !ui->cbStep0_1->isChecked())
+    if(ui->dateEdit->date().toString("yyyyMMdd") != sDate)
+    {
+        qDebug()<<"GGGGGGGGG1 ";
+
         return false;
+    }
+
+    qDebug()<<"GGGGG2";
+    if(step=="-1" && !ui->cbStep0_1->isChecked())
+    {
+        qDebug()<<"GGGGGGGGG2 ";
+        return false;
+    }
+
+    qDebug()<<"GGGGG3";
+
     if(step=="0" && !ui->cbStep0->isChecked())
         return false;
+
+
+    qDebug()<<"GGGGG4";
+
     if(step=="1" && !ui->cbStep1->isChecked())
         return false;
+
+    qDebug()<<"GGGGG4";
     if(step=="2" && !ui->cbStep2->isChecked())
         return false;
+
+
+    qDebug()<<"GGGGG4";
     if(step=="3" && !ui->cbStep3->isChecked())
         return false;
+
+
+    qDebug()<<"GGGGG4";
     if(step=="4" && !ui->cbStep4->isChecked())
         return false;
+
+
+    qDebug()<<"GGGGG4";
     if(step=="5" && !ui->cbStep5->isChecked())
         return false;
 
 
+    qDebug()<<"GGGGG4";
+
+    qDebug()<<"iiiiii"<<true;
     return true;
 }
 
@@ -509,22 +551,22 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
     if(column==_Note)
     {
-//        QStringList list= data.Note0;
+        //        QStringList list= data.Note0;
 
 
-//        while(list.length()<5)
-//            list.append("");
+        //        while(list.length()<5)
+        //            list.append("");
 
-//        QString st="報價:    %1 \n"
-//                   "下單:    %2 \n"
-//                   "處理中:   %3 \n"
-//                   "處理完成: %4 \n"
-//                   "回報:    %5"   ;
-
-
+        //        QString st="報價:    %1 \n"
+        //                   "下單:    %2 \n"
+        //                   "處理中:   %3 \n"
+        //                   "處理完成: %4 \n"
+        //                   "回報:    %5"   ;
 
 
-       // DMSG.showMsg("備註",st.arg(list.at(0)).arg(list.at(1)).arg(list.at(2)).arg(list.at(3)).arg(list.at(4)),"OK");
+
+
+        // DMSG.showMsg("備註",st.arg(list.at(0)).arg(list.at(1)).arg(list.at(2)).arg(list.at(3)).arg(list.at(4)),"OK");
 
 
         DialogNote dialog;
@@ -583,6 +625,11 @@ void LayerDayReport::on_cbStep5_clicked()
 void LayerDayReport::delayRefresh()
 {
 
+    if(m_bLockLoading)
+        return;
+
+    m_bLockLoading=true;
+
     ui->tb->hideColumn(_CheckNum);
     //
     ui->tb->hideColumn(_Cost);
@@ -598,9 +645,6 @@ void LayerDayReport::delayRefresh()
     ui->wTotal->hide();
 
     ui->btnExcel->hide();
-
-    qDebug()<<"lv : "<<ACTION.m_currentUser.Lv;
-
 
 
     if(ACTION.m_currentUser.Lv>=USER_LV::_LV4)
@@ -622,6 +666,8 @@ void LayerDayReport::delayRefresh()
 
     ACTION.primeRate("",true);
     refreshTb();
+
+    m_bLockLoading = false;
 }
 
 
@@ -630,10 +676,23 @@ void LayerDayReport::delayRefresh()
 
 void LayerDayReport::on_dateEdit_userDateChanged(const QDate &date)
 {
-    if(m_bLockDate)
-        return ;
 
-    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(delayRefresh()));
+    /*
+    if(m_bLockDate)
+    {
+
+        return ;
+    }
+
+    QTimer::singleShot(500,[=]()
+    {
+        ui->dateEdit->setEnabled(false);
+        delayRefresh();
+
+
+        ui->dateEdit->setEnabled(true);
+    });
+    */
 }
 
 
@@ -843,5 +902,12 @@ void LayerDayReport::on_cbShowPic_clicked()
 void LayerDayReport::on_cbShowCost_clicked()
 {
     changeVisable();
+}
+
+
+void LayerDayReport::on_btnChangeDate_clicked()
+{
+    delayRefresh();
+
 }
 

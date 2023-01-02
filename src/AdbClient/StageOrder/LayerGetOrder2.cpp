@@ -21,13 +21,20 @@ LayerGetOrder2::~LayerGetOrder2()
     delete ui;
 }
 
-void LayerGetOrder2::showEvent(QShowEvent *)
+void LayerGetOrder2::init()
 {
-    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
+    refresh();
 }
 
 void LayerGetOrder2::refreshUser(bool bRe)
 {
+
+    if(m_bLockLoading)
+        return ;
+
+    m_bLockLoading = true;
+
+
     ui->wBottom->setCurrentIndex(0);
     QList<UserData> list =ACTION.getUser(bRe);
 
@@ -116,6 +123,9 @@ void LayerGetOrder2::refreshUser(bool bRe)
     }
 
     on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
+
+    m_bLockLoading = false;
+
 }
 
 QVariantMap LayerGetOrder2::gameItem(QString sSid)
@@ -357,6 +367,13 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
         ui->lbCurrency->setText(customerData.Currency);
 
+        QString sNote0;
+        if(order.Note0.length()>4)
+            sNote0=order.Note0.at(4);
+
+        ui->txNote->setText(sNote0);
+
+
         ui->wPic0->slotClear();
 
         double d = sValue.toDouble()-order.Cost.toDouble();
@@ -465,7 +482,17 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
 void LayerGetOrder2::refresh()
 {
+    if(m_bLockLoading)
+        return ;
+
+    m_bLockLoading = true;
+
+
     ui->wBottom->setCurrentIndex(0);
+
+
+
+
     ACTION.getUser(true);
 
     ACTION.getOrder(true);
@@ -487,16 +514,20 @@ void LayerGetOrder2::refresh()
 
     //ui->cbAddValueType->clear();
 
+  m_bLockLoading = false;
 
     refreshUser();
+
+
 }
 
 
 void LayerGetOrder2::on_btnOrder2Copy_clicked()
 {
-    QString sMsg = ui->lb0->text()+":    "+ui->lbOri->text()+"\n"+
-            ui->lb1->text()+":    "+ui->lbCost->text()+"\n"+
-            ui->lb2->text()+":    "+ui->lbFinal->text();
+    QString sMsg = ui->lbT->text()+":    "+ui->lbCurrency->text()+"\n"+
+            ui->lb0->text()+":    $"+ui->lbOri->text()+"\n"+
+            ui->lb1->text()+":    $"+ui->lbCost->text()+"\n"+
+            ui->lb2->text()+":    $"+ui->lbFinal->text();
     UI.copyMsg(sMsg);
 }
 

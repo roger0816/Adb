@@ -238,13 +238,13 @@ border-width: 0px;
       <item row="0" column="1">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>4</number>
+         <number>3</number>
         </property>
-        <widget class="LayerCostTable" name="page"/>
-        <widget class="LayerGetOrder1" name="page_2"/>
-        <widget class="LayerGetOrder2" name="page_3"/>
-        <widget class="LayerDayReport" name="page_4"/>
-        <widget class="LayerDayDebit" name="page_5"/>
+        <widget class="LayerCostTable" name="pageCostTable"/>
+        <widget class="LayerGetOrder1" name="pageGetOrder1"/>
+        <widget class="LayerGetOrder2" name="pageGetOrder2"/>
+        <widget class="LayerDayReport" name="pageDayReport"/>
+        <widget class="LayerDayDebit" name="pageDayDebit"/>
        </widget>
       </item>
      </layout>

@@ -26,9 +26,8 @@ LayerCustomer::~LayerCustomer()
 
 void LayerCustomer::init()
 {
+    qDebug()<<"layer customer init";
     ui->btnEdit->setEnabled(false);
-
-
 
     QTimer::singleShot(50,this,SLOT(refresh()));
 }
@@ -187,7 +186,7 @@ void LayerCustomer::refresh()
 
 void LayerCustomer::showEvent(QShowEvent *)
 {
-    init();
+  //  init();
 }
 
 bool LayerCustomer::checkSearch(CustomerData data)

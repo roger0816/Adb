@@ -23,6 +23,11 @@ LayerCostTable::~LayerCostTable()
     delete ui;
 }
 
+void LayerCostTable::init()
+{
+    refreshGameList();
+}
+
 
 void LayerCostTable::refreshGameList()
 {
@@ -75,11 +80,6 @@ void LayerCostTable::refreshGameList()
 
 }
 
-void LayerCostTable::showEvent(QShowEvent *)
-{
-    // ACTION.rate("",true);
-    QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refreshGameList()));
-}
 
 
 
@@ -187,10 +187,6 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
 }
 
 
-void LayerCostTable::on_btnSearch_clicked()
-{
-    refreshGameList();
-}
 
 
 void LayerCostTable::on_btnClear_clicked()

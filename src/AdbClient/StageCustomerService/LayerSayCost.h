@@ -23,10 +23,10 @@ public:
         void orderMode();
 
      void setCustomer(QVariantMap data,QString sOrderSid="");
-
+     void init();
      void setReadOnly();
 
-     void showEvent(QShowEvent *) override;
+    // void showEvent(QShowEvent *) override;
      void refreshInfo();
      Ui::LayerSayCost *ui;
      bool m_bOrderMode = false;

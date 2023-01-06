@@ -36,9 +36,21 @@ public:
 
     void setVer(QString sVer);
 
+    void setReleaseIp(QString sIp,QString sPort);
+
+    void setTestIp(QString sIp,QString sPort);
+
+private:
+    QString m_sIp,m_sPort;
+
+    QString m_sTestIp,m_sTestPort;
 
 private slots:
     void on_btnLogin_clicked();
+
+    void on_btnTestLogin_clicked();
+
+    void doLogin(bool bIsTestMode=false);
 
 signals:
     void signalLogin();

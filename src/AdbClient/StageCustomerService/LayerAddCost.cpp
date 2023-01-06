@@ -152,6 +152,26 @@ QString LayerAddCost::getNewOrderId()
 {
     QString sRe ;
 
+
+    QString sTmp=GLOBAL.dateTimeUtc8().toString("hhmmsszzz").mid(0,7);
+
+    qlonglong tmp = sTmp.toLongLong();
+
+    QString sDate=QDate::currentDate().toString("MMdd");
+
+    sTmp=QString("%1").arg(tmp,6,16,QLatin1Char('0'));
+
+    sRe= sDate+"-"+sTmp;
+
+    return sRe;
+
+
+
+
+
+
+    //
+
     QVariantMap out;
 
     QString sError;
@@ -245,6 +265,7 @@ void LayerAddCost::on_btnCopy_clicked()
             "\n客戶名稱: "+ui->lbName->text();
 
     sMsg+="\n"+ui->lb0->text()+ui->lbCurrency_2->text()+
+            "\n入帳末五碼:"+ui->txDebitNote->text()+
             "\n"+ui->lb1->text()+ui->lbTime->text()+
             "\n"+ui->lb2->text()+ui->lbCurrentCost_2->text()+
             "\n"+ui->lb3->text()+ui->lbAdd->text()+
@@ -302,7 +323,10 @@ void LayerAddCost::on_btnOk_clicked()
 
     m_lastCostData.IsAddCost=true;
 
+
+
     m_lastCostData.OrderId=getNewOrderId();
+
     m_lastCostData.Note0=ui->txNote0->toPlainText();
 
 
@@ -367,8 +391,21 @@ void LayerAddCost::on_btnOk_clicked()
 
         }
 
+        bool bOk = ACTION.sendAddValue(m_dataCustomer,m_lastCostData,sError);
 
+        if(bOk)
+        {
+            m_dataCustomer.Money=m_lastCostData.Total;
 
+        }
+
+        UI.showMsg("",sError,"OK");
+
+        setCustomer(m_dataCustomer.data());
+
+        emit back();
+
+#if 0
 
         bool b=ACTION.setCustomerCost(m_lastCostData,sError);
 
@@ -387,6 +424,10 @@ void LayerAddCost::on_btnOk_clicked()
         }
 
         emit back();
+
+#endif
+
+
 
     }
 

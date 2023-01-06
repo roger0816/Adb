@@ -24,6 +24,8 @@ DialogLogin::DialogLogin(QWidget *parent) :
 //    setTabOrder(ui->btnLogin,ui->txUser);
 
     init();
+
+    ui->btnTestLogin->hide();
 }
 
 DialogLogin::~DialogLogin()
@@ -91,12 +93,51 @@ void DialogLogin::setVer(QString sVer)
     ui->lbVersion->setText(sVer);
 }
 
+void DialogLogin::setReleaseIp(QString sIp, QString sPort)
+{
+    m_sIp=sIp;
+    m_sPort = sPort;
+}
+
+void DialogLogin::setTestIp(QString sIp, QString sPort)
+{
+    m_sTestIp=sIp;
+
+    m_sTestPort = sPort;
+}
+
 void DialogLogin::on_btnLogin_clicked()
 {
+    doLogin();
+}
+
+
+void DialogLogin::on_btnTestLogin_clicked()
+{
+
+    doLogin(true);
+}
+
+void DialogLogin::doLogin(bool bIsTestMode)
+{
+
+    /*
+    ACTION.m_bTest = bIsTestMode;
+
+    if(ACTION.m_bTest)
+    {
+        qDebug()<<"ip : "<<m_sTestIp;
+        ACTION.setServer(true,m_sTestIp,m_sTestPort);
+    }
+    else
+    {
+         qDebug()<<"ip : "<<m_sIp;
+         ACTION.setServer(true,m_sIp,m_sPort);
+    }
+    */
+
     ui->lbMsg->clear();
 
-
-                  // ACTION.setServer(true,"167.172.87.35","6000");
 
     QString sErrorMsg;
     int iRe = ACTION.checkLogin(ui->txUser->text().trimmed(),ui->txPass->text().trimmed(),sErrorMsg);

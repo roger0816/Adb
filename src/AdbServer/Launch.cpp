@@ -4,23 +4,28 @@ Launch::Launch(QObject *parent)
     : QObject{parent}
 {
 
-    //QString sIp="206.189.185.20";
-   //  QString sIp="178.128.62.72";
-   //   QString sIp="167.172.87.35";
-
-    QString sIp="127.0.0.1";
-
-      qDebug()<<"version : "<<ADP_VER;
-
-    queryObj.setDataBase(true,sIp);
 
 
-    RPKCORE.network.runTcpServer("6000");
+   // 167.172.87.35  server
+    //167.99.66.45 test server
+   // QString sIp="127.0.0.1";
+
+
 
     connect(&RPKCORE.network,SIGNAL(signalReadAll(QByteArray,uintptr_t)),this,SLOT(getData(QByteArray,uintptr_t)));
 
 
 
+}
+
+void Launch::startServer(QString sIp)
+{
+    qDebug()<<"version : "<<ADP_VER;
+
+  queryObj.setDataBase(true,sIp);
+
+
+  RPKCORE.network.runTcpServer("6000");
 }
 
 void Launch::getData(QByteArray dData, uintptr_t handleId)

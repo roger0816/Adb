@@ -648,6 +648,7 @@ QList<CustomerCost> Action::getCustomerCost(QString sCustomerSid, bool bQuery)
 
         QString sError;
 
+        qDebug()<<"DDDDD";
         action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError);
 
         m_listCustomerCost.clear();
@@ -669,6 +670,16 @@ bool Action::setCustomerCost(CustomerCost costData,QString &sError)
     bRe = action(ACT::ADD_CUSTOMER_COST,costData.data(),sError);
 
     return bRe;
+}
+
+QString Action::getCustomerNowMoney(QString sCustomerSid)
+{
+    QList<CustomerCost> list =getCustomerCost(sCustomerSid,true);
+
+    if(list.length()<1)
+        return "0";
+
+    return list.last().Total;
 }
 
 QList<OrderData> Action::getOrder(bool bRequest)
@@ -767,6 +778,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         in["DESC"]="Sid";
 
         double iCurrentTotal=0;
+
 
         bRe = action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError);
 
@@ -1612,5 +1624,52 @@ void Action::setNewCustomerId(QString sCustomerId)
     QString sTmp = sCustomerId.split("-").last();
 
     setKeyValue("CustomerId",sTmp);
+}
+
+QString Action::sendAddValue(QString sCustomerSid, QString sUserSid, QString sMoney)
+{
+    QVariantMap in,out;
+
+    in["CustomerSid"]=sCustomerSid;
+    in["UserSid"]=sUserSid;
+    in["Money"]=sMoney;
+
+    QString sError;
+
+    action(ACT::PAY_ADD,in,out,sError);
+
+    QString sRe="0";
+
+    if(out.keys().contains("Money"))
+    {
+        sRe = out["Money"].toString();
+    }
+
+    return sRe;
+
+}
+
+bool Action::sendAddValue(CustomerData customerData, CustomerCost costData, QString &sError)
+{
+    QVariantMap in;
+
+    in["CustomerData"] = customerData.data();
+
+    in["CostData"] = costData.data();
+
+    return action(ACT::PAY_ADD,in,sError);
+
+
+}
+
+bool Action::sendPayOrder(CustomerData customerData, CustomerCost costData, QString &sError)
+{
+    QVariantMap in;
+
+    in["CustomerData"] = customerData.data();
+
+    in["CostData"] = costData.data();
+
+    return action(ACT::PAY_ORDER,in,sError);
 }
 

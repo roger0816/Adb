@@ -7,6 +7,7 @@
 #include <QDebug>
 #include "Action.h"
 #include "VojData.h"
+#include "DataSync.h"
 
 #define GLOBAL Global::Instance()
 
@@ -30,6 +31,8 @@ public:
     ~Global();
 
 //    GLOBAL_DATA::Data m_data;
+
+    void setServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
 
     QStringList listMapToList(const QVariantList list,QString sKey);
 
@@ -82,6 +85,9 @@ private:
     QString strNumber(double number);
 
     QMap<QString,QVariant> m_config;
+
+
+    DataSync m_dataSync;
 
 
 

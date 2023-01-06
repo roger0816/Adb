@@ -58,6 +58,14 @@ private:
 
     bool m_bReLock = false;
 
+    QString checkCurrency(QString sKey);
+
+public:
+
+    void exportXml(QString sFilePath);
+
+
+
 signals:
     void into(int iRow);
 };

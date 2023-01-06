@@ -12,6 +12,7 @@ class Launch : public QObject
 public:
     explicit Launch(QObject *parent = nullptr);
 
+    void startServer(QString sDbIp);
 private:
     Query queryObj;
 signals:

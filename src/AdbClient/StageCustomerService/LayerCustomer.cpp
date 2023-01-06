@@ -15,7 +15,7 @@ LayerCustomer::LayerCustomer(QWidget *parent) :
 
     connect(ui->btnClear,&QPushButton::clicked,this,&LayerCustomer::slotClearSearch);
 
-    ui->btnInport->hide();
+    //ui->btnInport->hide();
 
 }
 
@@ -186,7 +186,7 @@ void LayerCustomer::refresh()
 
 void LayerCustomer::showEvent(QShowEvent *)
 {
-  //  init();
+    //  init();
 }
 
 bool LayerCustomer::checkSearch(CustomerData data)
@@ -244,9 +244,12 @@ void LayerCustomer::keyPressEvent(QKeyEvent *e)
 {
     if(e->key()==Qt::Key_Enter || e->key()==Qt::Key_Return)
     {
-      //  on_btnCheck_clicked();
+        //  on_btnCheck_clicked();
     }
 }
+
+
+
 
 
 void LayerCustomer::on_btnEdit_clicked()
@@ -385,6 +388,244 @@ CustomerData LayerCustomer::checkSelect(QString sSid)
     return re;
 }
 
+QString LayerCustomer::checkCurrency(QString sKey)
+{
+    if(sKey.trimmed()=="新")
+    {
+        return "新加坡元(SGD)";
+    }
+
+
+    QString sRe="";
+
+    qDebug()<<"check key : "<<sKey;
+
+    if(sKey.length()<1)
+        return "";
+
+    QString st=sKey.trimmed().mid(0,1);
+
+    if(st=="马" || st=="馬")
+    {
+        st="林";
+    }
+
+
+    QStringList listCurrency;
+
+    listCurrency<<"美金(USD)"<<"新台幣(NTD)"<<"港幣(HKD)"<<"人民幣(RMB)"<<"新加坡元(SGD)"<<"林吉特(MYR)";
+
+    foreach(QString tmp,listCurrency)
+    {
+        if(tmp.contains(st))
+        {
+            sRe = tmp;
+
+            break;
+        }
+
+    }
+
+    qDebug()<<"re currency :"<<sRe;
+
+    return sRe;
+}
+
+
+void LayerCustomer::exportXml(QString sFilePath)
+{
+
+    using namespace QXlsx;
+
+    Document xlsx(sFilePath);
+
+
+
+    //    qDebug() << xlsx.read("A1");
+    //    qDebug() << xlsx.read("A2");
+    //    qDebug() << xlsx.read("A3");
+    //    qDebug() << xlsx.read("A4");
+    //    qDebug() << xlsx.read("A5");
+    //    qDebug() << xlsx.read("A6");
+    //    qDebug() << xlsx.read("A7");
+
+    ACTION.getCustomerClass(true);
+
+    QString sDefaultClass=ACTION.getCustomerClass(true).first().Sid;
+
+    int xxx=57105;
+
+    QList<CustomerData> list;
+
+    QString sErrorMsg="";
+
+    for(int iRow=2;iRow<10000;iRow++)
+    {
+        CustomerData data;
+
+         data.Class=sDefaultClass;
+
+         data.Vip="0";
+
+        bool bHasData=false;
+
+        for(int iCol=1;iCol<10;iCol++)
+        {
+            Cell *cell = xlsx.cellAt(iRow, iCol);
+
+            if(cell!=nullptr)
+            {
+
+                bHasData = true;
+
+                QString cellData = cell->value().toString().trimmed();
+
+                if(iCol==1)   //客戶分類
+                {
+
+                    QString sClassSid = ACTION.getCustomerClass(cellData).Sid;
+
+                    if(sClassSid.trimmed()=="")
+                        sClassSid =sDefaultClass;
+
+                    data.Class=sClassSid;
+
+                }
+                else if(iCol==2)  //客戶編號
+                {
+
+                    if(cellData.length()<1)
+                    {
+                        break;
+
+                    }
+
+
+                    if(cellData.length()<3 || cellData.length()>4)
+                    {
+                        sErrorMsg="第"+QString::number(iRow-1)+"筆 客戶編號異常 : "+cellData;
+
+                        break;
+                    }
+                    else
+                    {
+                        QString sId = cellData;
+
+                        if(sId.length()<4)
+                        {
+                            sId="D"+sId;
+                        }
+
+                        data.Id="A-"+sId;
+                    }
+
+
+                }
+
+                else if(iCol==3)  //客戶名稱
+                {
+                    if(cellData=="")
+                    {
+                        sErrorMsg="第"+QString::number(iRow-1)+"筆 客戶名稱空白 : "+cellData;
+
+                        break;
+                    }
+                    else
+                    {
+                        data.Name=cellData;
+                    }
+
+
+                }
+
+                else if(iCol==4)  //幣別
+                {
+                    if(cellData=="")
+                    {
+                        sErrorMsg="第"+QString::number(iRow-1)+"筆 幣別空白 : "+cellData;
+
+                        break;
+                    }
+                    else
+                    {
+                        QString sCurrency= checkCurrency(cellData);
+
+                        if(sCurrency=="")
+                        {
+                            sErrorMsg="第"+QString::number(iRow-1)+"筆 幣別無法分辨 : "+cellData;
+                            break;
+                        }
+
+                        data.Currency=sCurrency;
+                    }
+
+
+                }
+
+                else if(iCol==5)  //後五碼
+                {
+                    data.Num5=cellData;
+                }
+
+                else if(iCol==6)  //vip
+                {
+                    if(cellData.trimmed()=="1")
+                    {
+                        data.Vip="1";
+                    }
+                    else
+                    {
+                        data.Vip="0";
+                    }
+                }
+
+
+
+
+            }
+
+        }
+
+
+        if(sErrorMsg!="")
+        {
+            DMSG.showMsg("資料錯誤，取消匯入",sErrorMsg,"OK");
+
+            return;
+        }
+
+        if(bHasData && data.Name.trimmed()!="" && data.Id.trimmed()!="")
+        {
+
+            data.Sid=QString::number(xxx++);
+
+            list.append(data);
+        }
+
+    }
+
+    QString sError="";
+
+
+    for(int i=0;i<list.length();i++)
+    {
+
+        CustomerData cus = list.at(i);
+
+        ACTION.action(ACT::ADD_CUSTOMER,cus.data(),sError);
+        qDebug()<<cus.Id<<" : "<<cus.Currency<<cus.Vip;
+        qDebug()<<cus.data();
+
+
+    }
+
+
+
+    //    for (int row = 1; row < 10; ++row) {
+    //        if (QXlsx::Cell *cell = xlsx.cellAt(row, 5))
+    //            qDebug() << cell->value();
+    //    }
+}
 
 void LayerCustomer::on_btnInport_clicked()
 {
@@ -392,7 +633,10 @@ void LayerCustomer::on_btnInport_clicked()
     if(sPath.trimmed()=="")
         return ;
 
+    exportXml(sPath);
     qDebug()<<"AAAAA "<<sPath;
+
+
 
 }
 

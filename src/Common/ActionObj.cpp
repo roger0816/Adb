@@ -295,7 +295,7 @@ CData ActionObj::callServer(CData data)
     qDebug()<<"call server : "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
 
     qDebug()<<data.enCodeJson().toStdString().c_str();
-        qDebug()<<"AAAAAAAAAA_準備送出 : ";
+        qDebug()<<"準備送出到 : "<<m_ip;;
     int iTmp = RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
 
       qDebug()<<"AAAAAAAAAA_已完成送出 : "<<iTmp;
@@ -364,7 +364,18 @@ CData ActionObj::callServer(CData data)
     qDebug()<<"api unlock "<<data.iAciton;
        qDebug()<<"AAAAAAAAAA7";
 
-    return re;
+       return re;
+}
+
+CData ActionObj::sendData(CData data)
+{
+    CData re;
+
+    QString sApi = QString::number(data.iAciton);
+
+   // int iTmp = RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
+
+    return data;
 }
 
 

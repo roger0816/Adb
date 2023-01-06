@@ -13,6 +13,13 @@ Global::~Global()
     qDebug()<<"~Global";
 }
 
+void Global::setServer(bool b, QString sIp, QString sPort)
+{
+    m_action.setServer(b,sIp,sPort);
+
+ //   m_dataSync.setServer(b,sIp,sPort);
+}
+
 QStringList Global::listMapToList(const QVariantList list, QString sKey)
 {
     QStringList listRe;

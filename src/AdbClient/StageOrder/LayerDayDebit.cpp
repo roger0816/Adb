@@ -55,7 +55,7 @@ void LayerDayDebit::init()
 }
 
 
-void LayerDayDebit::refresh()
+void LayerDayDebit::refresh(bool bRe)
 {
 
 
@@ -81,9 +81,10 @@ void LayerDayDebit::refreshTb()
     in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
     in["IsAddCost"]="1";
 
+    qDebug()<<"BBBBB";
     ACTION.action(ACT::QUERY_CUSTOMER_COST,in,m_listCustomerCost);
 
-    double iTotal=0.00;
+    long int iTotal=0;
 
     ui->tb->setRowCount(0);
 
@@ -118,7 +119,8 @@ void LayerDayDebit::refreshTb()
 
         ui->tb->setItem(iRow,5,UI.tbItem(data.Total));
         ui->tb->setItem(iRow,6,UI.tbItem(data.DebitNote));
-        ui->tb->setItem(iRow,7,UI.tbItem(data.OriginValue));
+        int iValue = data.OriginValue.toDouble();
+        ui->tb->setItem(iRow,7,UI.tbItem(iValue));
         ui->tb->setItem(iRow,8,UI.tbItem(QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss")));
         ui->tb->setItem(iRow,9,UI.tbItem(ACTION.getUser(data.UserSid).Name));
         if(data.Pic0.trimmed()!="")
@@ -210,7 +212,7 @@ bool LayerDayDebit::checkData(CustomerCost data)
 
 }
 
-void LayerDayDebit::setCb()
+void LayerDayDebit::setCb(bool bRe)
 {
 
     if(m_bLockRe)
@@ -247,12 +249,19 @@ void LayerDayDebit::setCb()
 
     }
 
+    int iOldIdx = ui->cbDebit->currentIndex();
+
     ui->cbDebit->setProperty("lock",true);
     ui->cbDebit->clear();
 
     ui->cbDebit->addItems(listCbName);
 
     ui->cbDebit->setProperty("lock",false);
+
+    iOldIdx=qBound(0,iOldIdx,ui->cbDebit->count()-1);
+
+    if(bRe)
+        ui->cbDebit->setCurrentIndex(iOldIdx);
 
     m_bLockRe = false;
 }
@@ -409,7 +418,7 @@ void LayerDayDebit::slotBtnDebitExport()
     }
 
     xlsx.write("F"+QString::number(ui->tb->rowCount()+3),ui->lbT->text().toDouble());
-    xlsx.write("G"+QString::number(ui->tb->rowCount()+3),ui->lbTotal->text().toDouble());
+    xlsx.write("G"+QString::number(ui->tb->rowCount()+3),ui->lbTotal->text().toLongLong());
 
 
     xlsx.saveAs(sFileName+".xls");

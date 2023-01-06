@@ -86,6 +86,8 @@ public:
     QList<CustomerCost> getCustomerCost(QString sCustomerSid,bool bQuery=true);
     bool setCustomerCost(CustomerCost costData, QString &sError);
 
+    QString getCustomerNowMoney(QString sCustomerSid);
+
     bool replaceOrder(OrderData order, QString &sError);
     QString setSellMoney(OrderData &order);
     QString setPrimeMoney(OrderData &order);
@@ -150,6 +152,15 @@ public:
     bool getNewCustomerId(QString &sGetId,bool bRenew=false);
     //舊的id用匯入的從AA01起，少一碼則最前面加上D，程式新增的規則從EA起
     void setNewCustomerId(QString sCustomerId);
+
+
+
+    //api
+    QString sendAddValue(QString sCustomerSid,QString sUserSid,QString sMoney);
+
+    bool sendAddValue(CustomerData customerData, CustomerCost costData, QString &sError);
+
+    bool sendPayOrder(CustomerData customerData,CustomerCost costData,QString &sError);
 
 
 

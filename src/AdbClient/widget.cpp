@@ -11,6 +11,13 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
+  qlonglong i=1234567890;
+
+  QString s=QString("%1").arg(i,8,16,QLatin1Char('0'));
+
+qDebug()<<"SSSS : "<<s;
+
+
     ui->lbTestName->hide();
 
     QFile file(":/style.qss");
@@ -132,18 +139,27 @@ void Widget::showEvent(QShowEvent *)
 {
 
 
+
+    ui->lbTestName->setVisible(ACTION.m_bTest);
+    ui->btnTest->setVisible(ACTION.m_bTest);
     if(ACTION.m_bTest)
     {
 
-        ui->lbTestName->show();
 
 
-        ui->wTop->setStyleSheet("background-color:lightgray;");
+        ui->wTop->setStyleSheet("QWidget#wTop{background-color:lightgray;}");
 
-        ui->wMenu->setStyleSheet("backgound-color:red;");
+        ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:;}");
 
-        ui->btnTest->show();
+
     }
+//    else
+//    {
+
+//        ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:rgb(0, 37, 88);}");
+
+//        ui->wTop->setStyleSheet("QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}");
+//    }
 
 }
 
@@ -198,7 +214,7 @@ void Widget::checkUserLv()
     // if(iLv>=USER_LV::_ROOT)
     {
         //ui->btnTest->setEnabled(true);
-       // ui->btnTest->show();
+        // ui->btnTest->show();
     }
 
     UI.m_loading->resize(this->size());

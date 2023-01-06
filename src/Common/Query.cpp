@@ -107,7 +107,7 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::SET_VALUE)
     {
 
-         bOk = m_sql.insertTb(SQL_TABLE::Settings(),data.dData,sError,true);
+        bOk = m_sql.insertTb(SQL_TABLE::Settings(),data.dData,sError,true);
 
 
     }
@@ -768,8 +768,70 @@ CData Query::implementRecall(CData data)
     }
 
 
+    else if(data.iAciton==ACT::PAY_ADD)
+    {
+
+        QVariantMap costData = data.dData["CostData"].toMap();
 
 
+        QVariantMap customerData = data.dData["CustomerData"].toMap();
+
+        customerData["Money"] = costData["Total"];
+        CData cost;
+
+        cost.iAciton=ACT::ADD_CUSTOMER_COST;
+
+        cost.dData=costData;
+
+        CData costRe= queryData(cost);
+
+        bOk = costRe.bOk;
+
+       // bOk = m_sql.insertTb(SQL_TABLE::CustomerCost(),costData,sError,true);
+
+        if(bOk)
+        {
+            qDebug()<<"pay add Ok";
+            CData cus;
+
+            cus.iAciton=ACT::EDIT_CUSTOMER;
+
+            cus.dData=customerData;
+
+            CData cusRe= queryData(cus);
+
+            bOk = cusRe.bOk;
+
+                 qDebug()<<"edit customer "<<bOk;
+//            QVariantMap d;
+//            d["Sid"] = customerData["Sid"];
+//            bOk = m_sql.updateTb(SQL_TABLE::CustomerData(),d,customerData,sError);
+
+
+            if(!bOk)
+            {
+
+                QVariantMap tmp;
+                tmp["Sid"]=costData["Sid"];
+                QString sTmp;
+                m_sql.delFromTb(SQL_TABLE::CustomerCost(),tmp,sTmp);
+
+            }
+
+        }
+
+
+
+            sOkMsg = "加值完成";
+
+            sError="加值失敗 : "+sError;
+
+
+    }
+
+
+
+    qDebug()<<"Msg : "<<sOkMsg<<" : error : "<<sError;
 
 
 

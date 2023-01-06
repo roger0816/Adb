@@ -50,6 +50,8 @@ public:
 protected:
     CData callServer(CData data);
 
+    CData sendData(CData data);
+
     bool isQueryApi(int iApi);
 
     bool isNeedFromServer(int iApi, const QVariantMap conditions);

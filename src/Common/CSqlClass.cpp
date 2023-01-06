@@ -3,16 +3,24 @@
 CSqlClass::CSqlClass(QObject *parent)
     : QObject{parent}
 {
-    bool bOk = RPKCORE.database.openDb("local.db");
+
+    openLocalDb();
+
+}
+
+void CSqlClass::openLocalDb(QString sDbName)
+{
+
+    if(!m_bLocalDbOpen)
+    {
+    bool bOk = RPKCORE.database.openDb(sDbName);
 
     m_local = RPKCORE.database.getDb(0);
 
-
+    m_bLocalDbOpen =true;
 
     qDebug()<<"open local sql save"<<bOk;
-
-
-
+    }
 }
 
 

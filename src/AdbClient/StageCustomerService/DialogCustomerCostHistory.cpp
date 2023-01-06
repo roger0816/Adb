@@ -70,7 +70,8 @@ void DialogCustomerCostHistory::setCustomer(CustomerData data)
     ui->lbClass->setText(sTmp);
     ui->lbName->setText(m_cus.Name);
     ui->lbCurrency->setText(m_cus.Currency);
-    ui->lbMoney->setText(m_cus.Money);
+    ui->lbMoney->setText(ACTION.getCustomerNowMoney(m_cus.Sid));
+   // ui->lbMoney->setText(m_cus.Money);
     ACTION.costRate("",true);
     refresh();
 
@@ -87,7 +88,7 @@ void DialogCustomerCostHistory::refresh(int)
 
     QString sError;
 
-
+    qDebug()<<"AAAAAAAA";
     ACTION.action(ACT::QUERY_CUSTOMER_COST,in,out,sError);
 
     m_listAddCost = out;

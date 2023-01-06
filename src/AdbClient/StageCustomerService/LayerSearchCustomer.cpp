@@ -52,7 +52,11 @@ void LayerSearchCustomer::changePage(int iPage)
 
     if(iPage==0)
     {
-        return ui->page0->init();
+        ui->page0->init();
+
+        ui->stackedWidget->setCurrentIndex(iPage);
+
+        return ;
     }
     else
     {
@@ -100,7 +104,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
         ui->lbPayInfo->setText(customer.PayInfo);
 
-        ui->lbMoney->setText(customer.Money);
+        ui->lbMoney->setText(ACTION.getCustomerNowMoney(customer.Sid));
 
         QVariantMap d;
 

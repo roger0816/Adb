@@ -17,6 +17,7 @@ class CSqlClass : public QObject
 public:
     explicit CSqlClass(QObject *parent = nullptr);
 
+    void openLocalDb(QString sDbName="local.db");
 
     bool insertTb(QString sTableName, QVariantMap input, QString &sError,bool bOrRplace=false);
 
@@ -92,5 +93,9 @@ signals:
     void tbUpdate(QString tbName,QString sDateTime);
 
 };
+
+
+static bool m_bLocalDbOpen = false;
+
 
 #endif // CSQLCLASS_H

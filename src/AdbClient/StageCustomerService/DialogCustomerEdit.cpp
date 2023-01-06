@@ -504,6 +504,14 @@ void DialogCustomerEdit::on_cbClass_currentIndexChanged(int index)
 void DialogCustomerEdit::on_btnOk_clicked()
 {
 
+
+    if(!ui->txName->isReadOnly() && ui->txName->text().trimmed()=="")
+    {
+        DMSG.showMsg("","客户名稱不能空白","OK");
+        return;
+    }
+
+
     if(m_sOriginCurrency!=ui->cbCurrency->currentText())
     {
 

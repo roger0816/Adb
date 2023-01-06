@@ -6,13 +6,14 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include "StageTest.h"
-
+#include "LayerCustomer.h"
 typedef enum
 {
     _RELEASE=1,
     _LOCAL_SERVER,
     _NO_SERVER,
-    _NO_SERVER_NO_DB
+    _NO_SERVER_NO_DB,
+    _TEST
 
 }RUN_MODE;
 
@@ -23,12 +24,22 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+
+    LayerCustomer cus;
+
+//    ACTION.setServer(true,"167.99.66.45");
+//    cus.exportXml("D:/work/q_project/Adb/doc/客戶編號.xlsx");
+//    return a.exec();
+
+
+    //
+
     QString st=argv[0];
 
-qDebug()<<"AAAAAAA : "<<st.split("\\").last().trimmed();
+
     ACTION.m_bTest = st.split("\\").last().trimmed()!="AdbClientWin.exe";
 
-   // ACTION.m_bTest = true;
+
 
     qDebug()<<"test mode : "<<ACTION.m_bTest;
 
@@ -54,6 +65,12 @@ qDebug()<<"AAAAAAA : "<<st.split("\\").last().trimmed();
         {
             mode = _NO_SERVER_NO_DB;
         }
+        else if(st=="test")
+        {
+            mode = _TEST;
+
+            ACTION.m_bTest = true;
+        }
 
         else{}
     }
@@ -78,15 +95,15 @@ qDebug()<<"AAAAAAA : "<<st.split("\\").last().trimmed();
 
     switch (mode) {
     case _LOCAL_SERVER :
-        ACTION.setServer(true,"127.0.0.1","6000");
+        GLOBAL.setServer(true,"127.0.0.1","6000");
         break;
     case _NO_SERVER :
-        ACTION.setServer(false);
+        GLOBAL.setServer(false);
         ACTION.m_queryObj.setDataBase(true,"167.172.87.35");
         break;
 
     case _NO_SERVER_NO_DB :
-        ACTION.setServer(false);
+        GLOBAL.setServer(false);
         ACTION.m_queryObj.setDataBase(false);
         break;
 
@@ -95,9 +112,9 @@ qDebug()<<"AAAAAAA : "<<st.split("\\").last().trimmed();
     default:
     {
         if(!ACTION.m_bTest)
-            ACTION.setServer(b,sServerIp,sServerPort);
+            GLOBAL.setServer(b,sServerIp,sServerPort);
         else
-            ACTION.setServer(b,sTestIp,sTestPort);
+            GLOBAL.setServer(b,sTestIp,sTestPort);
 
 
         break;
@@ -112,6 +129,11 @@ qDebug()<<"AAAAAAA : "<<st.split("\\").last().trimmed();
     UI.m_mainWidget=&w;
 
     DialogLogin login;
+
+    login.setReleaseIp(sServerIp,sServerPort);
+
+    login.setTestIp(sTestIp,sTestPort);
+
 
     login.setVer(ADP_VER);
 

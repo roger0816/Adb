@@ -40,14 +40,14 @@ private:
     QDialog *m_dialogPic = new QDialog();
     ItemPic *m_itemPic  = new ItemPic(m_dialogPic);
 
-    void setCb();
+    void setCb(bool bRe= true);
 
     bool m_bLockRe = false;
 
     QString getDebitName(QString debitSid);
 
 private slots:
-    void refresh();
+    void refresh(bool bRe=true);
 
     void refreshTb();
 

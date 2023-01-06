@@ -10,7 +10,7 @@
 #include <QVariantList>
 #include <QVariantMap>
 
-#define ADP_VER "v1.07.0102"
+#define ADP_VER "v1.07.0107"
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;
@@ -141,8 +141,11 @@ enum _KEY
     ADD_DEBIT_CLASS = 2811,
     EDIT_DEBIT_CLASS,
     DEL_DEBIT_CLASS,
-    QUERY_DEBIT_CLASS=2831
+    QUERY_DEBIT_CLASS=2831,
 
+
+    PAY_ADD=3001,
+    PAY_ORDER=3002
 
 };
 

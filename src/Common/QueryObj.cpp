@@ -92,6 +92,8 @@ QVariant QueryObj::keyValue(QString sKey)
 
 void QueryObj::setDataBase(bool bMysql, QString sIp, QString sPort)
 {
+    qDebug()<<"database ip :"<<sIp;
+
     if(m_sql.openDb(bMysql,sIp,sPort,"adp"))
         m_dTrigger = m_sql.readTrigger();
 }

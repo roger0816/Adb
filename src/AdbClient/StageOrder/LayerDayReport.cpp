@@ -651,7 +651,7 @@ void LayerDayReport::delayRefresh()
     {
 
         ui->wShowArea->show();
-        ui->tb->showColumn(_Cost);
+
         ui->tb->showColumn(_PrimeRate);
         ui->tb->showColumn(_Prime);
         ui->tb->showColumn(_Profit);

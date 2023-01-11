@@ -479,7 +479,16 @@ void CSqlClass::createTableSqlite()
              'Note'	TEXT,               \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
              );");
-
+  sql.clear();
+    sql.exec("CREATE TABLE 'CustomerMoney' ( \
+             'Sid'	INTEGER, \
+             'Id'	TEXT, \
+             'Name'	TEXT, \
+             'Currency'	TEXT, \
+             'Money'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid' AUTOINCREMENT) \
+             );");
 
     sql.clear();
     sql.exec("CREATE TABLE 'CustomerClass' (      \

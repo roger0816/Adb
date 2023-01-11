@@ -15,6 +15,8 @@ DialogCustomerEdit::DialogCustomerEdit(QWidget *parent) :
 
 
     ui->btnDel->hide();
+
+
 }
 
 DialogCustomerEdit::~DialogCustomerEdit()
@@ -84,7 +86,7 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     ui->txNote1->setText(m_data["Note1"].toString());
 
-    ui->btnDel->show();
+    //ui->btnDel->show();
 
     m_listCustomerInfo =listCustomerInfo;
 

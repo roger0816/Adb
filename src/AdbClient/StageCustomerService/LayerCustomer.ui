@@ -46,7 +46,42 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="btnSearch">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::StrongFocus</enum>
+           </property>
+           <property name="text">
+            <string>搜尋</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="btnClear">
+           <property name="minimumSize">
+            <size>
+             <width>60</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="text">
             <string>清除</string>
            </property>
@@ -122,7 +157,7 @@
         </column>
         <column>
          <property name="text">
-          <string>餘額</string>
+          <string>消費紀錄</string>
          </property>
         </column>
         <column>
@@ -209,7 +244,7 @@ background-color:#3c78b4;
          <item>
           <widget class="QPushButton" name="btnInport">
            <property name="enabled">
-            <bool>true</bool>
+            <bool>false</bool>
            </property>
            <property name="minimumSize">
             <size>
@@ -233,6 +268,9 @@ background-color:#3c78b4;
              <height>36</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="text">
             <string>編輯</string>
            </property>
@@ -245,6 +283,9 @@ background-color:#3c78b4;
              <width>90</width>
              <height>36</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
            </property>
            <property name="text">
             <string>新增</string>

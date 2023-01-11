@@ -7,6 +7,7 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include "xlsxdocument.h"
+#include <QKeyEvent>
 
 
 namespace Ui {
@@ -41,6 +42,8 @@ private slots:
 
     void on_btnInport_clicked();
 
+    void slotSearch();
+
 private:
     Ui::LayerCustomer *ui;
 
@@ -59,6 +62,8 @@ private:
     bool m_bReLock = false;
 
     QString checkCurrency(QString sKey);
+
+
 
 public:
 

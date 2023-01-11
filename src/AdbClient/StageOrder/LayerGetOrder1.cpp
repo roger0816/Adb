@@ -236,7 +236,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         }
         else
         {
-             tmpItem->setForeground(QColor(Qt::darkGray));
+            tmpItem->setForeground(QColor(Qt::darkGray));
         }
 
         ui->tbOrder->setItem(i,_CustomerId,tmpItem);
@@ -374,6 +374,28 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
         in["ASC"]="Sort";
         ACTION.action(ACT::QUERY_PAY_TYPE,in,list,sError);
 
+
+
+        auto getFac=[=]()
+        {
+            DataFactory re;
+
+            QList<DataFactory> list=ACTION.getFactoryClass("",true);
+
+            for(int i=0;i<list.length();i++)
+            {
+                if(list.at(i).Name == order.Owner)
+                {
+                    re= list.at(i);
+                }
+            }
+
+            return re;
+        };
+
+        DataFactory currentFac = getFac();
+        qDebug()<<"AAAAAAD : "<<currentFac.data();
+
         QStringList listCb;
 
         for(int i=0;i<list.length();i++)
@@ -381,7 +403,13 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
             QString sSid = list.at(i).toMap()["Sid"].toString();
 
             if(GLOBAL.toList(order.CanSelectPayType).indexOf(sSid)>=0)
-                listCb.append(list.at(i).toMap()["Name"].toString());
+            {
+                if(currentFac.PayTypdSid.contains(sSid))
+                {
+
+                    listCb.append(list.at(i).toMap()["Name"].toString());
+                }
+            }
         }
         ui->cbAddValueType->clear();
 
@@ -560,7 +588,7 @@ void LayerGetOrder1::refresh()
 
 void LayerGetOrder1::on_btnChangeNote_clicked()
 {
-   // ui->lbDelay->setVisible(ui->btnDelay->isChecked());
+    // ui->lbDelay->setVisible(ui->btnDelay->isChecked());
 
     QVariantList listData =m_data[m_currentDataKey].toList();
 

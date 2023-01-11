@@ -29,6 +29,8 @@ public:
 
     QString sTrigger;
 
+    QString sHeartBeat;
+
 
     bool bOk =false;
 
@@ -55,6 +57,8 @@ public:
         d.insert("data",dData);
 
         d.insert("listName",listName);
+
+        d.insert("heartBeat",sHeartBeat);
 
         d.insert("listData",listData);
 
@@ -102,6 +106,8 @@ public:
         bOk = map["ok"].toBool();
 
         iState = map["status"].toInt();
+
+        sHeartBeat = map["heartBeat"].toString();
 
         dData = map["data"].toMap();
 

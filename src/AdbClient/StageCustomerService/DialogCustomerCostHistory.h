@@ -56,6 +56,7 @@ private:
 
 
 
+
 };
 
 #endif // DIALOGCUSTOMERCOSTHISTORY_H

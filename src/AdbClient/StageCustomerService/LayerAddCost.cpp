@@ -126,7 +126,7 @@ void LayerAddCost::checkTotal()
     m_lastCostData.ChangeValue= sub(sTmpChangeValue,m_lastCostData.Currency);
 
 
-    QString sTmpTotal= QString::number(m_addValue+ ui->lbCurrentCost->text().toDouble(),'f',2);
+    QString sTmpTotal= QString::number(m_lastCostData.ChangeValue.toDouble()+ ui->lbCurrentCost->text().toDouble(),'f',2);
 
     m_lastCostData.Total =   sub(sTmpTotal,m_lastCostData.Currency);
 
@@ -265,6 +265,7 @@ void LayerAddCost::on_btnCopy_clicked()
             "\n客戶名稱: "+ui->lbName->text();
 
     sMsg+="\n"+ui->lb0->text()+ui->lbCurrency_2->text()+
+            "\n支付管道:"+ui->cbDebit->currentText()+
             "\n入帳末五碼:"+ui->txDebitNote->text()+
             "\n"+ui->lb1->text()+ui->lbTime->text()+
             "\n"+ui->lb2->text()+ui->lbCurrentCost_2->text()+

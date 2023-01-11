@@ -738,6 +738,15 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
     int iStep =qBound(-1,order.Step.toInt(),5);
 
+
+    if(iStep==4)
+    {
+
+        return action(ACT::PAY_ORDER,order.data(),sError);
+
+    }
+
+
     order.Step=QString::number(iStep);
 
     if(order.Step=="0")  //報價- 儲存匯率sid
@@ -755,8 +764,9 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         setPrimeMoney(order);
     }
 
-    else if(order.Step=="4") //回報 - 更新用戶餘額
-        bToUpdateMoney=true;
+//    else if(order.Step=="4") //回報 - 更新用戶餘額
+//        bToUpdateMoney=true;
+                                //確認 - 更新user bouns
     else if(order.Step=="-1")
     {
 
@@ -830,11 +840,11 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         {
             bRe = true;
 
-            CustomerData customerData = getCustomer(order.CustomerSid);
+//            CustomerData customerData = getCustomer(order.CustomerSid);
 
-            customerData.Money=data.Total;
+//            customerData.Money=data.Total;
 
-            bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);
+//            bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);
 
 
         }
@@ -1657,7 +1667,7 @@ bool Action::sendAddValue(CustomerData customerData, CustomerCost costData, QStr
 
     in["CostData"] = costData.data();
 
-    return action(ACT::PAY_ADD,in,sError);
+    return action(ACT::PAY_ADD_COST,in,sError);
 
 
 }

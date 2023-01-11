@@ -17,6 +17,8 @@ LayerCustomer::LayerCustomer(QWidget *parent) :
 
     //ui->btnInport->hide();
 
+    connect(ui->btnSearch,&QPushButton::clicked,this,&LayerCustomer::slotSearch);
+
 }
 
 LayerCustomer::~LayerCustomer()
@@ -154,8 +156,9 @@ void LayerCustomer::refresh()
         ui->tb->setItem(iRow,4,UI.tbItem(sLv));
 
         ui->tb->setItem(iRow,5,UI.tbItem(data.Currency));
-        ui->tb->setItem(iRow,6,UI.tbItem(data.Money,GlobalUi::_BUTTON));
+       // ui->tb->setItem(iRow,6,UI.tbItem(data.Money,GlobalUi::_BUTTON));
 
+        ui->tb->setItem(iRow,6,UI.tbItem("詳細",GlobalUi::_BUTTON));
 
         QVariantMap in;
 
@@ -244,7 +247,7 @@ void LayerCustomer::keyPressEvent(QKeyEvent *e)
 {
     if(e->key()==Qt::Key_Enter || e->key()==Qt::Key_Return)
     {
-        //  on_btnCheck_clicked();
+       slotSearch();
     }
 }
 
@@ -368,7 +371,7 @@ void LayerCustomer::slotClearSearch()
 
 void LayerCustomer::on_txSearch_textChanged(const QString &arg1)
 {
-    refresh();
+
 }
 
 CustomerData LayerCustomer::checkSelect(QString sSid)
@@ -463,9 +466,9 @@ void LayerCustomer::exportXml(QString sFilePath)
     {
         CustomerData data;
 
-         data.Class=sDefaultClass;
+        data.Class=sDefaultClass;
 
-         data.Vip="0";
+        data.Vip="0";
 
         bool bHasData=false;
 
@@ -638,5 +641,10 @@ void LayerCustomer::on_btnInport_clicked()
 
 
 
+}
+
+void LayerCustomer::slotSearch()
+{
+    refresh();
 }
 

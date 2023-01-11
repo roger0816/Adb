@@ -41,9 +41,20 @@ public:
     void setTestIp(QString sIp,QString sPort);
 
 private:
+
+    void showEvent(QShowEvent *) override;
+
+    void timerEvent(QTimerEvent *) override;
+
     QString m_sIp,m_sPort;
 
     QString m_sTestIp,m_sTestPort;
+
+    void preload(bool bTrue);
+
+    int m_iTimerCount=0;
+
+    bool m_bPreLock= true;
 
 private slots:
     void on_btnLogin_clicked();
@@ -59,6 +70,7 @@ private:
 private:
 
     ItemMiniLoadbar *m_loading=new ItemMiniLoadbar(this);
+
 
 };
 

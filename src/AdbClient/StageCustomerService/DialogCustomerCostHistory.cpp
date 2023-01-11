@@ -88,7 +88,7 @@ void DialogCustomerCostHistory::refresh(int)
 
     QString sError;
 
-    qDebug()<<"AAAAAAAA";
+
     ACTION.action(ACT::QUERY_CUSTOMER_COST,in,out,sError);
 
     m_listAddCost = out;
@@ -128,7 +128,7 @@ void DialogCustomerCostHistory::refresh(int)
 
             ui->tableWidget->setItem(i,4,UI.tbItem("完成"));
 
-            ui->tableWidget->setItem(i,5,UI.tbItem(QDateTime::fromString(d.UpdateTime,"yyyyMMddhhmmss")));
+            ui->tableWidget->setItem(i,5,UI.tbItem(QDateTime::fromString(d.OrderTime,"yyyyMMddhhmmss")));
 
             ui->tableWidget->setItem(i,6,UI.tbItem(ACTION.getUser(d.UserSid).Name));
 
@@ -261,10 +261,27 @@ void DialogCustomerCostHistory::mergeData()
 
         re["IsAddCost"] =false;
 
+        re["OrderTime"]=d.OrderDate+d.OrderTime;
+
         m_listRowData.append(re);
 
 
     }
+
+
+
+    qSort(m_listRowData.begin(),m_listRowData.end(),[=](const QVariant &v1, const QVariant &v2)
+    {
+        return v1.toMap()["OrderTime"].toString() > v2.toMap()["OrderTime"].toString();
+    }
+
+    );
+
+
+
+
+
+
 }
 
 void DialogCustomerCostHistory::btnCustomerHistory()

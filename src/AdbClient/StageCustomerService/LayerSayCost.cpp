@@ -233,7 +233,7 @@ void LayerSayCost::setReadOnly()
 
 void LayerSayCost::refreshInfo()
 {
-    addPayTypeToCb();
+
     qDebug()<<"refresh Into ";
     ui->tbInfo->setRowCount(0);
 
@@ -300,7 +300,7 @@ void LayerSayCost::refreshInfo()
     }
 
     ui->cbGame->setEnabled(ui->tbInfo->rowCount()==0);
-
+    addPayTypeToCb();
     checkTotal();
 }
 
@@ -401,6 +401,7 @@ double LayerSayCost::checkTotal()
     ui->lbTotal->setText(QString::number(re,'f',2));
     //    DATA.rate()
 
+
     return re;
 }
 
@@ -417,6 +418,7 @@ void LayerSayCost::addPayTypeToCb()
 
     m_order.CanSelectPayType = GLOBAL.toString(tmp.listFirst());
 
+    qDebug()<<"canselect pay type : "<<m_order.CanSelectPayType;
 
     auto factoryPaySid =[=](QStringList list)
     {
@@ -424,6 +426,8 @@ void LayerSayCost::addPayTypeToCb()
         QList<DataFactory> listRe;
 
         QList<DataFactory> listFac = ACTION.getFactoryClass("",true);
+
+
 
         for(int j=0;j<listFac.length();j++)
         {
@@ -475,6 +479,8 @@ bool LayerSayCost::checkPayType(CListPair &data)
     for(int i=0;i<m_listInto.length();i++)
     {
         DataGameItem t(m_listInto.at(i).toMap());
+
+        qDebug()<<"into dataGameItem : "<<t.data();
 
         if(i==0)
         {

@@ -220,6 +220,40 @@ struct CustomerData :public DataObj
     QString Note2;
 };
 
+
+
+struct CustomerMoney :public DataObj
+{
+    QString Money;
+    QString Currency;
+
+    CustomerMoney():DataObj(){};
+    CustomerMoney(QVariantMap data){setData(data);}
+
+    void setData(QVariantMap data)
+    {
+        DataObj::setData(data);
+
+        Money = data["Money"].toString();
+
+        Currency=data["Currency"].toString();
+
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re =DataObj::data();
+        re["Money"] = Money;
+        re["Currency"] =Currency;
+        return re;
+    }
+};
+
+
+
+
+
+
 struct CustomerCost
 {
     CustomerCost(){}

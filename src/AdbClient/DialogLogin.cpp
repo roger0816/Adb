@@ -17,13 +17,15 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     m_loading->setLoading(false);
 
-//    setTabOrder(ui->txUser,ui->txPass);
+    //    setTabOrder(ui->txUser,ui->txPass);
 
-//    setTabOrder(ui->txPass,ui->btnLogin);
+    //    setTabOrder(ui->txPass,ui->btnLogin);
 
-//    setTabOrder(ui->btnLogin,ui->txUser);
+    //    setTabOrder(ui->btnLogin,ui->txUser);
 
     init();
+
+    startTimer(500);
 
     ui->btnTestLogin->hide();
 }
@@ -61,7 +63,7 @@ void DialogLogin::setRelease(bool b)
         ui->wBg->setStyleSheet("backgrond-color:gary");
     }
 
- //   ui->lbRelease->setVisible(b);
+    //   ui->lbRelease->setVisible(b);
 }
 
 void DialogLogin::closeEvent(QCloseEvent *)
@@ -73,18 +75,18 @@ void DialogLogin::closeEvent(QCloseEvent *)
 void DialogLogin::paintEvent(QPaintEvent *)
 {
 
-//        QBitmap bmp(this->size());
-//        bmp.fill();
-//        QPainter p(&bmp);
-//        QPen pen(Qt::gray,2);
+    //        QBitmap bmp(this->size());
+    //        bmp.fill();
+    //        QPainter p(&bmp);
+    //        QPen pen(Qt::gray,2);
 
-//        p.setPen(pen);
+    //        p.setPen(pen);
 
-//        p.setBrush(Qt::black);
+    //        p.setBrush(Qt::black);
 
-//        QRect r(1,1,bmp.width()-2,bmp.height()-2);
-//        p.drawRoundedRect(bmp.rect(),15,20);
-//        setMask(bmp);
+    //        QRect r(1,1,bmp.width()-2,bmp.height()-2);
+    //        p.drawRoundedRect(bmp.rect(),15,20);
+    //        setMask(bmp);
 
 }
 
@@ -106,6 +108,54 @@ void DialogLogin::setTestIp(QString sIp, QString sPort)
     m_sTestPort = sPort;
 }
 
+void DialogLogin::showEvent(QShowEvent *)
+{
+    preload(true);
+}
+
+void DialogLogin::timerEvent(QTimerEvent *)
+{
+    if(this->isHidden())
+        return;
+
+    bool bIsLock = ACTION.m_bIsLock;
+
+    if(!bIsLock && !m_bPreLock && m_iTimerCount>=5)
+    {
+        preload(false);
+
+        return ;
+    }
+
+    if(ui->lbMsg->text().toUpper().contains("PRELOAD"))
+    {
+        if(ui->lbMsg->text().length()<12)
+            ui->lbMsg->setText(ui->lbMsg->text()+".");
+        else
+            ui->lbMsg->setText("Preload.");
+    }
+
+    m_iTimerCount++;
+
+    m_bPreLock=bIsLock;
+}
+
+void DialogLogin::preload(bool bTrue)
+{
+    if(bTrue)
+    {
+        ui->lbMsg->setText("Preload.");
+    }
+    else
+    {
+        m_bPreLock = true;
+        m_iTimerCount =0;
+        ui->lbMsg->clear();
+    }
+
+    ui->btnLogin->setDisabled(bTrue);
+}
+
 void DialogLogin::on_btnLogin_clicked()
 {
     doLogin();
@@ -120,7 +170,8 @@ void DialogLogin::on_btnTestLogin_clicked()
 
 void DialogLogin::doLogin(bool bIsTestMode)
 {
-
+    ui->btnLogin->setDisabled(true);
+    ui->lbMsg->setText("loading");
     /*
     ACTION.m_bTest = bIsTestMode;
 

@@ -2,7 +2,8 @@
 #define COMMON_H
 
 #include <QObject>
-
+#include "DEF.h"
+#include "VojData.h"
 
 #define COMMON Common::INS()
 

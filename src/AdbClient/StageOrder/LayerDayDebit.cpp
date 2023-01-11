@@ -81,7 +81,6 @@ void LayerDayDebit::refreshTb()
     in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
     in["IsAddCost"]="1";
 
-    qDebug()<<"BBBBB";
     ACTION.action(ACT::QUERY_CUSTOMER_COST,in,m_listCustomerCost);
 
     long int iTotal=0;
@@ -119,9 +118,9 @@ void LayerDayDebit::refreshTb()
 
         ui->tb->setItem(iRow,5,UI.tbItem(data.Total));
         ui->tb->setItem(iRow,6,UI.tbItem(data.DebitNote));
-        int iValue = data.OriginValue.toDouble();
-        ui->tb->setItem(iRow,7,UI.tbItem(iValue));
-        ui->tb->setItem(iRow,8,UI.tbItem(QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss")));
+
+        ui->tb->setItem(iRow,7,UI.tbItem(data.OriginValue));
+        ui->tb->setItem(iRow,8,UI.tbItem(QDateTime::fromString(data.OrderTime,"yyyyMMddhhmmss")));
         ui->tb->setItem(iRow,9,UI.tbItem(ACTION.getUser(data.UserSid).Name));
         if(data.Pic0.trimmed()!="")
         {
@@ -335,6 +334,10 @@ void LayerDayDebit::on_tb_cellPressed(int row, int column)
 
     if(column==11)
         sValue = data.Pic1;
+
+    if(sValue.toString().trimmed()=="")
+        return;
+
 
 
     QVariantMap out;

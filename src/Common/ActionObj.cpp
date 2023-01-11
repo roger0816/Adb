@@ -388,6 +388,8 @@ bool ActionObj::isQueryApi(int iApi)
 bool ActionObj::isNeedFromServer(int iApi, const QVariantMap conditions)
 {
 
+
+
     QString sApi=QString::number(iApi);
 
     while(sApi.length()<4)
@@ -415,6 +417,13 @@ bool ActionObj::isNeedFromServer(int iApi, const QVariantMap conditions)
         qDebug()<<"\napi:"<<iApi<<"no cacheData";
 
         return true;
+    }
+    else
+    {
+
+        if(iApi==ACT::QUERY_CUSTOMER)
+            return false;
+
     }
 
     return m_dLocalTrigger[sGroup] != m_dUpdateTrigger[sGroup];

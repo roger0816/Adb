@@ -59,7 +59,7 @@ void ItemMiniLoadbar::timerEvent(QTimerEvent *)
 
 
     m_list.append(m_bIsRun);
-    while(m_list.length()>3)
+    while(m_list.length()>2)
         m_list.pop_front();
 
     bool bRun = m_bIsRun;

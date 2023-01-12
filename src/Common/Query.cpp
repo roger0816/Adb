@@ -968,6 +968,8 @@ CData Query::implementRecall(CData data)
              QString sReTmp;
              changeMoney(cus, cost.Total,sError);
              checkUpdate(ACT::ADD_CUSTOMER_COST);
+             checkUpdate(ACT::REPLACE_ORDER);
+
 
              bOk=true;
              sOkMsg="回報完成";

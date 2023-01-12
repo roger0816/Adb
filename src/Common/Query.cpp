@@ -853,7 +853,7 @@ CData Query::implementRecall(CData data)
         QVariantList listOut;
         QVariantMap in;
         in["CustomerSid"]=cus.Sid;
-        in["ASC"]="OrderTime";
+        in["ASC"]="Sid";
 
         bool b = m_sql.queryTb(SQL_TABLE::CustomerCost(),in,listOut,sError);
 

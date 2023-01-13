@@ -2,7 +2,7 @@
 #include "ui_DialogCustomerCostHistory.h"
 
 DialogCustomerCostHistory::DialogCustomerCostHistory(QWidget *parent) :
-    QDialog(parent),
+    DialogBase(parent),
     ui(new Ui::DialogCustomerCostHistory)
 {
     ui->setupUi(this);
@@ -35,6 +35,16 @@ DialogCustomerCostHistory::DialogCustomerCostHistory(QWidget *parent) :
         else
             DMSG.showMsg("","圖片下載失敗\n"+sName.split("/").last(),QStringList()<<"OK");
     });
+
+    m_wMaskClick=new QWidget(ui->wBg);
+
+    m_wMaskClick->resize(400,300);
+    m_wMaskClick->setStyleSheet("background-color: rgba(81, 81, 81, 150);");
+    m_wMaskClick->hide();
+    //connect(m_itemPic,&ItemPic::sendLock,this,[=](bool b)
+    //{
+    //    m_wMaskClick->setVisible(b);
+    //});
 
     m_dialogPic->setWindowFlags(m_dialogPic->windowFlags()  &  ~Qt::WindowContextHelpButtonHint);
 
@@ -71,7 +81,7 @@ void DialogCustomerCostHistory::setCustomer(CustomerData data)
     ui->lbName->setText(m_cus.Name);
     ui->lbCurrency->setText(m_cus.Currency);
     ui->lbMoney->setText(ACTION.getCustomerNowMoney(m_cus.Sid));
-   // ui->lbMoney->setText(m_cus.Money);
+    // ui->lbMoney->setText(m_cus.Money);
     ACTION.costRate("",true);
     refresh();
 
@@ -302,6 +312,9 @@ void DialogCustomerCostHistory::on_tableWidget_cellClicked(int row, int column)
 
     if(column==7 || column==8)
     {
+        m_wMaskClick->move(0,0);
+        m_wMaskClick->resize(size());
+        m_wMaskClick->show();
         QVariantMap d= m_listRowData.at(row).toMap();
 
         QVariantMap out;
@@ -319,16 +332,16 @@ void DialogCustomerCostHistory::on_tableWidget_cellClicked(int row, int column)
 
         m_itemPic->setFileName(
                     ui->tableWidget->item(row,0)->text()+"_"+
-                ui->tableWidget->item(row,1)->text()+"_"+
-                sText);
+                    ui->tableWidget->item(row,1)->text()+"_"+
+                    sText);
 
         m_itemPic->setData(out["Data"].toByteArray());
 
         m_dialogPic->setWindowTitle("單號 : "+
                                     ui->tableWidget->item(row,0)->text()+"          "
                                     +sText);
-
-        QTimer::singleShot(50,this,[=](){ m_dialogPic->exec();});
+        m_wMaskClick->hide();
+        QTimer::singleShot(50,this,[=](){ m_dialogPic->exec(); });
 
 
     }

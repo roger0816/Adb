@@ -47,6 +47,8 @@ int main(int argc, char *argv[])
 
     RUN_MODE mode = _RELEASE;
 
+
+
     if(argc>=2)
     {
         QString st=QString(argv[1]).toLower();

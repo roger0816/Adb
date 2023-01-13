@@ -45,7 +45,6 @@ void LayerSearchCustomer::init()
 
 void LayerSearchCustomer::changePage(int iPage)
 {
-    qDebug()<<"AAAAAAAAAA"<<iPage;
 
     if(iPage<0 ||iPage>=ui->stackedWidget->count())
         return;

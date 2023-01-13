@@ -60,7 +60,7 @@ void DialogLogin::setRelease(bool b)
     {
         ui->lbRelease->setText("Test");
 
-        ui->wBg->setStyleSheet("backgrond-color:gary");
+        //ui->wBg->setStyleSheet("background-color:lightgary");
     }
 
     //   ui->lbRelease->setVisible(b);

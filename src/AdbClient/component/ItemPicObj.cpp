@@ -110,8 +110,8 @@ void ItemPicObj::setNoButton()
 
 void ItemPicObj::showEvent(QShowEvent *)
 {
+    QTimer::singleShot(100,this,SLOT(reSetPic()));
 
-    reSetPic();
 }
 
 void ItemPicObj::resizeEvent(QResizeEvent *)

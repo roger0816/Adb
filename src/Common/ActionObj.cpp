@@ -295,14 +295,13 @@ CData ActionObj::callServer(CData data)
     qDebug()<<"call server : "<<data.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
 
     qDebug()<<data.enCodeJson().toStdString().c_str();
-        qDebug()<<"準備送出到 : "<<m_ip;;
+        qDebug()<<sApi+" 準備送出到 : "<<m_ip;;
     int iTmp = RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
 
-      qDebug()<<"AAAAAAAAAA_已完成送出 : "<<iTmp;
-    qDebug()<<"AAAAAAAAAA0";
+      qDebug()<<sApi+"已完成送出 : "<<iTmp;
+
     re.deCodeJson(out);
 
-    qDebug()<<"AAAAAAAAAA1";
 
     auto  clearGroupCache = [=](QString sGroup)
     {
@@ -317,22 +316,22 @@ CData ActionObj::callServer(CData data)
     };
 
 
-    qDebug()<<"AAAAAAAAAA2";
+
 
     if(re.bOk)
     {
 
-        qDebug()<<"AAAAAAAAAA3";
+
         QString sCacheKey = apiCacheKey(sApi,data.dData);
 
 
-
-        qDebug()<<"AAAAAAAAAA4";
         if(bIsQuery)
         {
             m_dLocalTrigger[sGroup] = re.sTrigger;
 
             m_dKeepData[sCacheKey] = out;
+
+            decodeTrigger(re.sHeartBeat.toString());
         }
         else
         {
@@ -345,7 +344,6 @@ CData ActionObj::callServer(CData data)
 
 
 
-        qDebug()<<"AAAAAAAAAA5";
 
     }
 
@@ -356,13 +354,13 @@ CData ActionObj::callServer(CData data)
 //        qDebug()<<"pic size : "<<out.length();
 //    else
 //        qDebug()<<out.toStdString().c_str();
-       qDebug()<<"AAAAAAAAAA6";
+
     m_bIsLock= false;
     emit lockLoading(m_bIsLock);
 
 
     qDebug()<<"api unlock "<<data.iAciton;
-       qDebug()<<"AAAAAAAAAA7";
+
 
        return re;
 }
@@ -418,13 +416,7 @@ bool ActionObj::isNeedFromServer(int iApi, const QVariantMap conditions)
 
         return true;
     }
-    else
-    {
 
-        if(iApi==ACT::QUERY_CUSTOMER)
-            return false;
-
-    }
 
     return m_dLocalTrigger[sGroup] != m_dUpdateTrigger[sGroup];
 
@@ -449,12 +441,10 @@ QString ActionObj::apiCacheKey(QString  sApi,QVariantMap conditions)
 
     return sRe;
 }
-static int AAA=0;
 
 void ActionObj::serverTrigger(QString sId, QByteArray data, int )
 {
 
-    AAA++;
 
     if(sId=="getTrigger")
     {
@@ -465,52 +455,56 @@ void ActionObj::serverTrigger(QString sId, QByteArray data, int )
         {
 
             QString sTrigger(re.dData["trigger"].toString());
-
-            QStringList listSt = sTrigger.split(",");
-
-            QMap<QString,QString> d;
-
-            foreach(QString st,listSt)
-            {
-
-                QStringList tmp = st.split("=");
-                if(tmp.length()<1)
-                    continue;
-                QString sApiGroup = tmp.first();
-
-                QString sTrigger = tmp.last();
-
-                d[sApiGroup] = sTrigger;
-
-                if(m_dLocalTrigger[tmp.first()]!=""
-                        && m_dLocalTrigger[tmp.first()]!="0" )
-                {
-                    if(m_dLocalTrigger[sApiGroup] !=sTrigger)
-
-                        emit updateTrigger(sApiGroup);
-                }
-
-
-            }
-
-
-            m_dUpdateTrigger = d;
-
-            if(m_dLocalTrigger.keys().length()<1)
-            {
-                qDebug()<<m_dUpdateTrigger;
-            }
+            decodeTrigger(sTrigger);
 
             if(!re.bOk)
                 emit sessionError();
-
-
 
 
         }
     }
 
 
+}
+
+void ActionObj::decodeTrigger(QString sData)
+{
+    if(sData.trimmed().length()<1)
+        return;
+    QStringList listSt = sData.split(",");
+
+    QMap<QString,QString> d;
+
+    foreach(QString st,listSt)
+    {
+
+        QStringList tmp = st.split("=");
+        if(tmp.length()<1)
+            continue;
+        QString sApiGroup = tmp.first();
+
+        QString sTrigger = tmp.last();
+
+        d[sApiGroup] = sTrigger;
+
+        if(m_dLocalTrigger[tmp.first()]!=""
+                && m_dLocalTrigger[tmp.first()]!="0" )
+        {
+            if(m_dLocalTrigger[sApiGroup] !=sTrigger)
+
+                emit updateTrigger(sApiGroup);
+        }
+
+
+    }
+
+
+    m_dUpdateTrigger = d;
+
+    if(m_dLocalTrigger.keys().length()<1)
+    {
+        qDebug()<<m_dUpdateTrigger;
+    }
 }
 
 void ActionObj::checklock(bool b)

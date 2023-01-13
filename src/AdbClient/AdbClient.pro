@@ -46,6 +46,7 @@ SOURCES += \
     Global.cpp \
     DataProviderAdp.cpp \
     GlobalUi.cpp \
+    component/DialogBase.cpp \
     component/DialogObj.cpp \
     component/ItemClock.cpp \
     component/ItemMiniLoadbar.cpp \
@@ -85,6 +86,7 @@ SOURCES += \
     StageReport/StageReport.cpp \
     StageTest.cpp \
     component/LayerTouchCheck.cpp \
+    component/WidgetBase.cpp \
     component/cobjectspreadsheet.cpp \
     main.cpp \
     widget.cpp
@@ -113,6 +115,7 @@ HEADERS += \
     Global.h \
     DataProviderAdp.h \
     GlobalUi.h \
+    component/DialogBase.h \
     component/DialogObj.h \
     component/ItemClock.h \
     component/ItemMiniLoadbar.h \
@@ -152,6 +155,7 @@ HEADERS += \
     StageReport/StageReport.h \
     StageTest.h \
     component/LayerTouchCheck.h \
+    component/WidgetBase.h \
     component/cobjectspreadsheet.h \
     widget.h
 

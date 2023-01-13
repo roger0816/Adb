@@ -29,7 +29,7 @@ public:
 
     QString sTrigger;
 
-    QString sHeartBeat;
+    QVariant sHeartBeat;
 
 
     bool bOk =false;

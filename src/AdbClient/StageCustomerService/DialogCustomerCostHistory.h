@@ -7,12 +7,13 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include "ItemPic.h"
+#include "DialogBase.h"
 
 namespace Ui {
 class DialogCustomerCostHistory;
 }
 
-class DialogCustomerCostHistory : public QDialog
+class DialogCustomerCostHistory : public DialogBase
 {
     Q_OBJECT
 
@@ -55,7 +56,7 @@ private:
     ItemPic *m_itemPic  = new ItemPic(m_dialogPic);
 
 
-
+   QWidget *m_wMaskClick;
 
 };
 

@@ -24,7 +24,7 @@ void ItemPic::showEvent(QShowEvent *e)
 
 void ItemPic::setMd5(QString sMd5)
 {
-
+    emit sendLock(true);
     QVariantMap out;
 
     QString sKey="Md5";
@@ -34,6 +34,8 @@ void ItemPic::setMd5(QString sMd5)
     ACTION.action(ACT::QUERY_PIC,sKey,sValue,out);
 
     setData(out["Data"].toByteArray());
+
+    emit sendLock(false);
 }
 
 QString ItemPic::uploadPic()

@@ -94,6 +94,8 @@ signals:
 public slots:
     void serverTrigger(QString sId, QByteArray data, int);
 
+    void decodeTrigger(QString sData);
+
 private slots:
 
     void checklock(bool b);

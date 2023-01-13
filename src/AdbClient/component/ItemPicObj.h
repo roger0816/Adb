@@ -11,7 +11,7 @@
 #include <QDebug>
 #include <QMouseEvent>
 #include <QCryptographicHash>
-
+#include <QTimer>
 #include <QResizeEvent>
 #include <QGridLayout>
 
@@ -42,14 +42,7 @@ public:
 
     ~DialogPicDetail(){delete m_img;}
 
-    void reSetPic()
-    {
-        //  m_pic->setStyleSheet(" background-color: #f3f3f3;");
 
-        m_pic->resize(size());
-
-        m_pic->setPixmap(QPixmap::fromImage(m_img->scaled(m_pic->size(),Qt::KeepAspectRatio)));
-    }
 
 
     void showEvent(QShowEvent *)override{reSetPic();}
@@ -59,6 +52,16 @@ public:
     QLabel *m_pic = new QLabel(this);
 
     QImage *m_img = new QImage();
+
+
+    void reSetPic()
+    {
+        //  m_pic->setStyleSheet(" background-color: #f3f3f3;");
+
+        m_pic->resize(size());
+
+        m_pic->setPixmap(QPixmap::fromImage(m_img->scaled(m_pic->size(),Qt::KeepAspectRatio)));
+    }
 };
 
 }
@@ -122,13 +125,13 @@ protected:
 
     void mousePressEvent(QMouseEvent *e) override;
 
-    void reSetPic();
 
 
 
    // QString m_sFileName = GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
 private slots:
+    void reSetPic();
 
 
     void showDetail();

@@ -119,7 +119,7 @@ CData QueryObj::queryData(CData data)
         QString st(heartBeat());
         re.dData["trigger"]=st;
 
-
+        re.sHeartBeat=st;
         QString sUserSid = data.dData["UserSid"].toString();
 
         QString sSession = data.dData["Session"].toString();
@@ -202,7 +202,7 @@ CData QueryObj::queryData(CData data)
     }
 
 
-
+    re.sHeartBeat=QString(heartBeat());
 
     qDebug()<<"recall api "<<data.iAciton<<", trigger : "<<re.sTrigger;
 

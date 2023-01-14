@@ -293,7 +293,10 @@ void LayerCustomer::on_btnEdit_clicked()
 
 
         ACTION.action(ACT::REPLACE_GAME_INFO,dialog.dataGameInfo(customerData.Sid),sError);
-        if(dialog.checkHasChange())
+
+        bool hasChangeCus = dialog.checkHasChange();
+        qDebug()<<"CCCCCCCCC : "<<hasChangeCus;
+        if(hasChangeCus)
             ACTION.action(ACT::EDIT_CUSTOMER,data,sError);
 
         ACTION.action(ACT::DEL_GAME_INFO,dialog.deleteGameInfo(),sError);

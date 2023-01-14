@@ -5,7 +5,7 @@
 #include "DEF.h"
 #include "VojData.h"
 #include <QCryptographicHash>
-
+#include <QTimer>
 
 
 
@@ -26,6 +26,9 @@ public:
 
     bool getCustomer(QString sSid,CustomerData &data);
 
+    void printTime(QString st="");
+
+    void setPic(QVariantMap data);
 
 signals:
 

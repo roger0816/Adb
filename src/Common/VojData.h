@@ -959,11 +959,11 @@ struct DataItemCount :public DataObj
 
     QString  GameItemSid;
 
-    int ChangeValue=0;
+    qlonglong ChangeValue=0;
 
-    int TotalCount=0;
+    qlonglong TotalCount=0;
 
-    int TotalSell=0;
+    qlonglong TotalSell=0;
     QString OrderSid;
 
     QString Note;
@@ -981,10 +981,10 @@ struct DataItemCount :public DataObj
 
         GameItemSid=data["GameItemSid"].toString();
 
-        ChangeValue = data["ChangeValue"].toInt();
+        ChangeValue = data["ChangeValue"].toLongLong();
 
-        TotalCount = data["TotalCount"].toInt();
-        TotalSell = data["TotalSell"].toInt();
+        TotalCount = data["TotalCount"].toLongLong();
+        TotalSell = data["TotalSell"].toLongLong();
         OrderSid = data["OrderSid"].toString();
         GameRate = data["GameRate"].toString();
         Pic0 = data["Pic0"].toString();

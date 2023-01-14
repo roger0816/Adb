@@ -46,6 +46,26 @@ void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
     ui->cbCurrency->addItems(m_lastPrimeRate.listKey());
 }
 
+bool DialogCustomerEdit::checkHasChange()
+{
+    QVariantMap d =data();
+
+    QStringList listKey = d.keys();
+
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        QString sKey=listKey.at(i);
+
+        if(d[sKey]!=m_originData[sKey])
+            return true;
+
+    }
+
+
+    return false;
+}
+
 void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,QVariantList listCustomerInfo,QVariantMap data)
 {
 
@@ -109,7 +129,7 @@ void DialogCustomerEdit::setData(QString sCustomerSid)
     tmp["Sid"] = sCustomerSid;
     QString sError;
     ACTION.action(ACT::QUERY_CUSTOMER,tmp,outCustomer,sError);
-
+    m_originData = outCustomer;
 
     QVariantMap in;
     QVariantList outClass,outGame,outCustomerInfo;
@@ -186,8 +206,12 @@ QVariantMap DialogCustomerEdit::data()
     QString sCurrency = ui->cbCurrency->currentText();
 
     m_data["Currency"] = sCurrency;
+    QString sTmp=ui->txNote1->toPlainText();
 
-    m_data["Note1"] = ui->txNote1->toPlainText();
+    if(sTmp.trimmed().length()<1)
+        sTmp=" ";
+
+    m_data["Note1"] = sTmp;
 
     re = m_data;
 

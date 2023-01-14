@@ -17,6 +17,8 @@ public:
 
     void setMd5(QString sMd5);
 
+    QString md5();
+
     QString uploadPic() override;
 
 signals:

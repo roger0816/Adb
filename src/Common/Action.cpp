@@ -741,7 +741,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
     if(iStep==4)
     {
-
+        clearCache(ACT::REPLACE_ORDER);
         return action(ACT::PAY_ORDER,order.data(),sError);
 
     }
@@ -1423,12 +1423,12 @@ bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrder
     return bRe;
 }
 
-QPair<int,int> Action::getItemCount(QString sGameItemSid,bool bQuery)
+QPair<qlonglong,qlonglong> Action::getItemCount(QString sGameItemSid,bool bQuery)
 {
 
     getItemCount(bQuery);
 
-    QPair<int ,int > re={0,0};
+    QPair<qlonglong ,qlonglong > re={0,0};
 
     if(m_listItemCount.length()<=0)
         return re;

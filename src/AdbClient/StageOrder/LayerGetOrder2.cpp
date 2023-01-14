@@ -453,6 +453,8 @@ void LayerGetOrder2::on_btnFinish_clicked()
     if(iRet==1)
     {
 
+        qDebug()<<" Time : 1:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
+
         QString sError;
 
         order.PaddingUser="";
@@ -465,16 +467,19 @@ void LayerGetOrder2::on_btnFinish_clicked()
         order.Note0[4] =ui->txNote->toPlainText();
 
         order.Pic1 = ui->wPic0->uploadPic();
+        qDebug()<<" Time : 2:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
+
 
 
         bool bOk =ACTION.replaceOrder(order,sError);
 
         QString sMsg = "回報完成";
+        qDebug()<<" Time : 3:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
+
         if(bOk)
-
-
             UI.showMsg("","回報完成",QStringList()<<"OK");
         refreshUser();
+        qDebug()<<" Time : 4:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
 
         return;
     }

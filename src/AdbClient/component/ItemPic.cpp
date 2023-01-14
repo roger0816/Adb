@@ -38,6 +38,11 @@ void ItemPic::setMd5(QString sMd5)
     emit sendLock(false);
 }
 
+QString ItemPic::md5()
+{
+    return this->data()["Md5"].toString();
+}
+
 QString ItemPic::uploadPic()
 {
    QString sRe="";

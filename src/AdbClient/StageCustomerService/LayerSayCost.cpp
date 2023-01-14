@@ -277,9 +277,9 @@ void LayerSayCost::refreshInfo()
 
         QSpinBox *sp = new QSpinBox(this);
 
-        QPair<int ,int > tmp =  ACTION.getItemCount(DataGameItem(data).Sid);
-        ;
+        QPair<qlonglong ,qlonglong > tmp =  ACTION.getItemCount(DataGameItem(data).Sid);
 
+        qDebug()<<"XXXXXXXXXXX : sid "<<DataGameItem(data).Sid<<" , "<<tmp;
         int iTotalItem = tmp.second-tmp.first;
 
         sp->setRange(1,iTotalItem);

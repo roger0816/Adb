@@ -720,8 +720,9 @@ CData Query::implementRecall(CData data)
     {
 
 
-        bOk = m_sql.insertTb(SQL_TABLE::PicData(),data.dData,sError,true);
-
+        //bOk = m_sql.insertTb(SQL_TABLE::PicData(),data.dData,sError,true);
+        setPic(data.dData);
+        bOk = true;
         sOkMsg = "圖片上傳完成";
     }
 
@@ -865,7 +866,7 @@ CData Query::implementRecall(CData data)
         costData.Total=QString::number(iNewTotal);
 
 
-    //    cus.Money = costData.Total;
+        //    cus.Money = costData.Total;
         CData cost;
 
         cost.iAciton=ACT::ADD_CUSTOMER_COST;
@@ -901,7 +902,11 @@ CData Query::implementRecall(CData data)
     {
         CData tmp=data;
         tmp.iAciton=ACT::REPLACE_ORDER;
+        printTime("1");
+
         CData tmpRe=queryData(tmp);
+        printTime("2");
+
 
         if(!tmpRe.bOk)
         {
@@ -913,24 +918,36 @@ CData Query::implementRecall(CData data)
         {
 
 
-            OrderData order(data.dData);
-
+            /*
+            "\nTime : 1 : " "23/01/14 07:47:15:188"
+            cmd :  "REPLACE INTO OrderData (Bouns,CanSelectPayType,Cost,CustomerSid,ExRateSid,GameSid,Id,Item,Money,Name,Note0,Note1,Note2,Note3,Note4,Note5,OrderDate,OrderTime,Owner,PaddingUser,PayType,Pic0,Pic1,PrimeRateSid,Sid,Step,StepTime,UiRecord,UpdateTime,User)  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+            "\nTime : 2 : " "23/01/14 07:47:16:025"
+            "query tb SELECT * FROM CustomerData  WHERE Sid =?  : " (QVariant(QString, "560"))  :  true
+            "\nTime : 3 : " "23/01/14 07:47:16:621"
+            "query tb SELECT * FROM CustomerCost  WHERE CustomerSid =?  Order By Sid DESC : " (QVariant(QString, "560"))  :  true
+            "\nTime : 4 : " "23/01/14 07:47:17:219"
+            cmd :  "INSERT INTO CustomerCost (AddRate,ChangeValue,Currency,CustomerSid,DebitNote,DebitSid,IsAddCost,Note0,Note1,OrderId,OrderTime,OriginCurrency,OriginValue,Pic0,Pic1,Rate,Total,UpdateTime,UserSid)  VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);"
+            "\nTime : 5 : " "23/01/14 07:47:17:837"
+            "query tb SELECT * FROM CustomerMoney  WHERE Sid =?  : " (QVariant(QString, "560"))  :  true
+            cmd :  "REPLACE INTO CustomerMoney (Currency,Id,Money,Name,Sid,UpdateTime)  VALUES(?,?,?,?,?,?);"
+            "\nTime : 6 : " "23/01/14 07:47:19:029"
+            sCmd :  "REPLACE INTO TriggerData (ApiGroup,UpdateTime) VALUES('13','20230114074719');"  ,  true
+            "\nTime : 7 : " "23/01/14 07:47:19:231"
+        */
             CustomerData cus;
-
+            OrderData order;
+            order.setData(data.dData);
             getCustomer(order.CustomerSid,cus);
 
+
+            printTime("3");
 
             bool b;
             QVariantMap in;
             QVariantList listOut;
             in["CustomerSid"]=order.CustomerSid;
             in["DESC"]="Sid";
-//            b=m_sql.queryTb(SQL_TABLE::OrderData(),in,listOut,sError);
 
-//            if(b && listOut.length()>0)
-//                order.Sid=listOut.first().toMap()["Sid"].toString();
-
-            //
             double preTotal=0;
 
             listOut.clear();
@@ -939,6 +956,9 @@ CData Query::implementRecall(CData data)
             if(b && listOut.length()>0)
                 preTotal=listOut.first().toMap()["Total"].toDouble();
 
+            printTime("4");
+
+            //   QString Error;
 
             CustomerCost cost;
 
@@ -952,27 +972,41 @@ CData Query::implementRecall(CData data)
 
             cost.IsAddCost=false;
 
-             cost.Currency = cus.Currency;
+            cost.Currency = cus.Currency;
 
-             cost.ChangeValue=QString::number(order.Cost.toDouble()*-1);
+            cost.ChangeValue=QString::number(order.Cost.toDouble()*-1);
 
-             double tTotal =preTotal+cost.ChangeValue.toDouble();
+            double tTotal =preTotal+cost.ChangeValue.toDouble();
 
-             cost.Total = QString::number(tTotal);
+            cost.Total = QString::number(tTotal);
 
-             cost.OrderId = order.Id;
+            cost.OrderId = order.Id;
 
-             cost.OrderTime=order.OrderDate+order.OrderTime;
+            cost.OrderTime=order.OrderDate+order.OrderTime;
 
-             m_sql.insertTb(SQL_TABLE::CustomerCost(),cost.data(),sError);
-             QString sReTmp;
-             changeMoney(cus, cost.Total,sError);
-             checkUpdate(ACT::ADD_CUSTOMER_COST);
-             checkUpdate(ACT::REPLACE_ORDER);
+            m_sql.insertTb(SQL_TABLE::CustomerCost(),cost.data(),sError);
+            printTime("5");
+
+            changeMoney(cus, cost.Total,sError);
+
+            printTime("6");
 
 
-             bOk=true;
-             sOkMsg="回報完成";
+
+            checkUpdate(ACT::ADD_CUSTOMER_COST);
+            //   checkUpdate(ACT::REPLACE_ORDER);
+
+            printTime("7");
+
+            bOk=true;
+            sOkMsg="回報完成";
+
+
+
+
+
+
+
         }
 
 
@@ -1089,6 +1123,23 @@ bool Query::getCustomer(QString sSid, CustomerData &data)
         data.setData(listOut.first().toMap());
 
     return bRe;
+}
+
+void Query::printTime(QString st)
+{
+    qDebug()<<"\nTime : "+st+" : "<<QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yy/MM/dd hh:mm:ss:zzz");
+}
+
+void Query::setPic(QVariantMap data)
+{
+    QTimer::singleShot(100,[=]()
+    {
+        printTime("insert Pic: ");
+        QString sError;
+        m_sql.insertTb(SQL_TABLE::PicData(),data,sError,true);
+        printTime("insert Pic OK: ");
+    });
+
 }
 
 

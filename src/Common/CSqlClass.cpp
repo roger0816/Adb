@@ -32,7 +32,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
     QString sDateTime =currentDateTime().toString("yyyyMMddhhmmss");
 
-    if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
+    //if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
         data["UpdateTime"] =sDateTime;
 
     QStringList listKey = data.keys();
@@ -86,7 +86,8 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
 
         query.bindValue(j,data[sKey]);
 
-        qDebug()<<sKey<< ": "<<data[sKey];
+        if(sTableName!="PicData")
+            qDebug()<<sKey<< ": "<<data[sKey];
 
     }
 

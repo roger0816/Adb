@@ -73,6 +73,8 @@ protected:
 
     QTimer m_timer;
 
+    int m_iWaitHeart=0;
+
     QMap<QString,QString > m_dLocalTrigger;
 
     QMap<QString,QString > m_dUpdateTrigger;
@@ -82,6 +84,8 @@ protected:
    // void writeTrigger(QString sTrigger,bool isFromHeartBeat);
 
     QString apiCacheKey(QString sApi, QVariantMap conditions);
+
+    void clearCache(int iApi);
 
 signals:
 

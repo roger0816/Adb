@@ -293,7 +293,8 @@ void LayerCustomer::on_btnEdit_clicked()
 
 
         ACTION.action(ACT::REPLACE_GAME_INFO,dialog.dataGameInfo(customerData.Sid),sError);
-        ACTION.action(ACT::EDIT_CUSTOMER,data,sError);
+        if(dialog.checkHasChange())
+            ACTION.action(ACT::EDIT_CUSTOMER,data,sError);
 
         ACTION.action(ACT::DEL_GAME_INFO,dialog.deleteGameInfo(),sError);
 

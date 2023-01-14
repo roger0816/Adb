@@ -140,7 +140,7 @@ public:
 
     bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
 
-    QPair<int, int> getItemCount(QString sGameItemSid, bool bQuery=true);
+    QPair<qlonglong, qlonglong> getItemCount(QString sGameItemSid, bool bQuery=true);
 
     QList<DataItemCount> getItemCount(bool bQuery=false);
 

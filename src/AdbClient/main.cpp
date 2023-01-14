@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
     RUN_MODE mode = _RELEASE;
 
-
+   // mode = _LOCAL_SERVER;
 
     if(argc>=2)
     {

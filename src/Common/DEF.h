@@ -12,7 +12,7 @@
 
 
 
-#define ADP_VER "v1.08.0113_3"
+#define ADP_VER "v1.08.0114"
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;
@@ -134,7 +134,7 @@ enum _KEY
     QUERY_PRIMERATE=2531,
 
     UPLOAD_PIC=2601,
-    QUERY_PIC=2641,
+    QUERY_PIC=2631,
 
     ADD_ITEM_COUNT=2701,
     EDIT_ITEM_COUNT,

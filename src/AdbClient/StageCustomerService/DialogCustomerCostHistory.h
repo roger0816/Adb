@@ -33,6 +33,9 @@ private slots:
 
     void on_tableWidget_cellClicked(int row, int column);
  void refresh(int =-1);
+
+ void on_cbShowNoPay_clicked();
+
 private:
 
 
@@ -49,6 +52,8 @@ private:
     QVariantList m_listAddCost;
 
     QVariantList m_listRowData;
+
+    QVariantList m_listDisplayData;
 
     QButtonGroup m_btns;
 

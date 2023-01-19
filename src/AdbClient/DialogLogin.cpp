@@ -115,7 +115,7 @@ void DialogLogin::showEvent(QShowEvent *)
 
 void DialogLogin::timerEvent(QTimerEvent *)
 {
-    if(this->isHidden())
+    if(this->isHidden() || bMLogin)
         return;
 
     bool bIsLock = ACTION.m_bIsLock;
@@ -232,5 +232,24 @@ void DialogLogin::doLogin(bool bIsTestMode)
     {
         ui->lbMsg->setText("連線錯誤");
     }
+}
+
+void DialogLogin::loginTarget(QString sSid)
+{
+    QList<UserData> list =ACTION.queryUser(sSid);
+
+    if(list.length()>0)
+    {
+        UserData d = list.first();
+
+        ACTION.m_currentUser.setData(d.data());
+        ACTION.m_sCurrentUserId = ACTION.m_currentUser.Sid;
+        ACTION.m_sCurrentUserName = ACTION.m_currentUser.Name;
+        bMLogin = true;
+        emit signalLogin();
+        done(_DialogLogin::_LoginOk);
+
+    }
+
 }
 

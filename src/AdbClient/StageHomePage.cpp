@@ -59,7 +59,7 @@ void StageHomePage::showEvent(QShowEvent *)
         if(listOut.length()>0)
         {
             QString sPicMd5 = listOut.last().toMap()["Content"].toString();
-
+            qDebug()<<"pic : "<<sPicMd5;
 
             QVariant inPic,outPic;
 

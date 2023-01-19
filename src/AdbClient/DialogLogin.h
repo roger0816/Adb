@@ -39,6 +39,9 @@ public:
     void setReleaseIp(QString sIp,QString sPort);
 
     void setTestIp(QString sIp,QString sPort);
+    void loginTarget(QString sSid);
+
+    bool bMLogin= false;
 
 private:
 
@@ -62,6 +65,7 @@ private slots:
     void on_btnTestLogin_clicked();
 
     void doLogin(bool bIsTestMode=false);
+
 
 signals:
     void signalLogin();

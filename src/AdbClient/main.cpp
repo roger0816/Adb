@@ -160,12 +160,7 @@ int main(int argc, char *argv[])
 
 
 #else
-    ACTION.m_currentUser.Id="sysroot";
-    ACTION.m_currentUser.Name="sysroot";
-    ACTION.m_currentUser.Lv=99;
-    ACTION.m_currentUser.Sid="0";
-    ACTION.m_currentUser.Cid="R00";
-    w.slotLogin();
+    login.loginTarget("21");
 #endif
 
 

@@ -216,6 +216,10 @@ void ModelGameReport::requestAction()
     {
         OrderData order = m_listOrder.at(i);
 
+        qDebug()<<"order AA : "<<order.data();
+
+
+
         bool bCheck = checkDate(order.OrderDate);
 
         if(!bCheck)

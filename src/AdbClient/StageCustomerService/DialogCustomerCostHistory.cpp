@@ -207,12 +207,12 @@ void DialogCustomerCostHistory::refresh(int)
 
 
 
-
 }
 
 QVariantList DialogCustomerCostHistory::filterData()
 {
-    QVariantList listRe;
+
+    m_listDisplayData.clear();
 
     for(int i=0;i<m_listRowData.length();i++)
     {
@@ -230,10 +230,21 @@ QVariantList DialogCustomerCostHistory::filterData()
                 continue;
         }
 
-        listRe.append(data);
+
+        if(!data["IsAddCost"].toBool())
+        {
+            if(ui->cbShowNoPay->isChecked())
+            {
+                if(data["Step"].toInt()<4)
+                    continue;
+            }
+        }
+
+        m_listDisplayData.append(data);
     }
 
-    return listRe;
+
+    return m_listDisplayData;
 }
 
 void DialogCustomerCostHistory::mergeData()
@@ -302,7 +313,7 @@ void DialogCustomerCostHistory::btnCustomerHistory()
 
 void DialogCustomerCostHistory::on_tableWidget_cellClicked(int row, int column)
 {
-    if(row<0|| row>=m_listRowData.length())
+    if(row<0|| row>=m_listDisplayData.length())
         return;
 
     QString sText = ui->tableWidget->item(row,column)->text();
@@ -315,7 +326,7 @@ void DialogCustomerCostHistory::on_tableWidget_cellClicked(int row, int column)
         m_wMaskClick->move(0,0);
         m_wMaskClick->resize(size());
         m_wMaskClick->show();
-        QVariantMap d= m_listRowData.at(row).toMap();
+        QVariantMap d= m_listDisplayData.at(row).toMap();
 
         QVariantMap out;
 
@@ -328,7 +339,7 @@ void DialogCustomerCostHistory::on_tableWidget_cellClicked(int row, int column)
 
 
         ACTION.action(ACT::QUERY_PIC,sKey,sValue,out);
-        m_dialogPic->resize(480,360);
+        m_dialogPic->resize(640,640);
 
         m_itemPic->setFileName(
                     ui->tableWidget->item(row,0)->text()+"_"+
@@ -345,5 +356,13 @@ void DialogCustomerCostHistory::on_tableWidget_cellClicked(int row, int column)
 
 
     }
+}
+
+
+
+
+void DialogCustomerCostHistory::on_cbShowNoPay_clicked()
+{
+       refresh();
 }
 

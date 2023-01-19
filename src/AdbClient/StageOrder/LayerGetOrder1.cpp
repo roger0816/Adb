@@ -168,7 +168,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 
         return;
     }
-    if(ui->tbUser->item(row,column)->text()
+    if(ui->tbUser->item(row,column)==nullptr  || ui->tbUser->item(row,column)->text()
             .split("(").last().split(")").first().toInt()<1)
     {
         ui->tbOrder->setRowCount(0);

@@ -64,6 +64,9 @@ CData Query::implementRecall(CData data)
         while(data.listData.length()<6)
             data.listData.append("");
 
+
+
+
         bOk = m_sql.addUser(data.listData.at(0).toString(),data.listData.at(1).toString(),
                             data.listData.at(2).toString(),data.listData.at(3).toString(),
                             data.listData.at(4).toInt(),data.listData.at(5).toString(),sError);

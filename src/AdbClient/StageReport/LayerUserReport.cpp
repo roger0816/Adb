@@ -25,11 +25,11 @@ LayerUserReport::LayerUserReport(QWidget *parent) :
     });
 
 
-    connect(ui->cbType,QOverload<int>::of(&QComboBox::currentIndexChanged),[=](){refresh();});
+//    connect(ui->cbType,QOverload<int>::of(&QComboBox::currentIndexChanged),[=](){refresh();});
 
-    connect(ui->dateEdit,QOverload<const QDate&>::of(&QDateTimeEdit::dateChanged),[=](){refresh();});
+//    connect(ui->dateEdit,QOverload<const QDate&>::of(&QDateTimeEdit::dateChanged),[=](){refresh();});
 
-    connect(ui->lineEdit,&QLineEdit::textChanged,[=](){refresh();});
+//    connect(ui->lineEdit,&QLineEdit::textChanged,[=](){refresh();});
 
 
 
@@ -70,7 +70,6 @@ void LayerUserReport::slotBtnDate(int iId)
         ui->dateEdit->setCurrentSection(QDateTimeEdit::DaySection);
     }
 
-    refresh();
 
 }
 
@@ -80,4 +79,11 @@ void LayerUserReport::slotBtnDate(int iId)
 
 
 
+
+
+void LayerUserReport::on_btnOk_clicked()
+{
+    refresh();
+
+}
 

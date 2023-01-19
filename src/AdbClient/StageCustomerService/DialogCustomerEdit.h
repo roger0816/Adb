@@ -45,6 +45,7 @@ public:
 
     bool checkHasChange();//有可能只改客戶遊戲資料，沒有更動客戶資料
 
+    void setRoot(bool b);
 
 private slots:
     void on_btnAddGame_clicked();
@@ -81,6 +82,7 @@ private:
 
     QVariantMap m_originData;
 
+    bool m_bIsRoot=false;
 
 
 /*

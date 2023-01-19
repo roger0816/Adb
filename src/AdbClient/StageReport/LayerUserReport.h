@@ -35,6 +35,7 @@ private slots:
     void refresh();
 
 
+    void on_btnOk_clicked();
 };
 
 #endif // LAYERUSERREPORT_H

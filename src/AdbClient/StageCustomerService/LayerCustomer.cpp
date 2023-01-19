@@ -108,7 +108,7 @@ void LayerCustomer::refresh()
     ui->btnEdit->setEnabled(false);
 
 
-    ACTION.reQuerty();
+ //   ACTION.reQuerty();
 
     QString sError;
 
@@ -258,6 +258,10 @@ void LayerCustomer::keyPressEvent(QKeyEvent *e)
 void LayerCustomer::on_btnEdit_clicked()
 {
     DialogCustomerEdit dialog;
+
+    bool isRoot = ACTION.m_currentUser.Lv>=99;
+
+    dialog.setRoot(isRoot);
 
     QString sError;
 #if 0
@@ -460,7 +464,7 @@ void LayerCustomer::exportXml(QString sFilePath)
 
     QString sDefaultClass=ACTION.getCustomerClass(true).first().Sid;
 
-    int xxx=57105;
+    int xxx=65014;
 
     QList<CustomerData> list;
 

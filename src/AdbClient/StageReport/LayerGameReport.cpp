@@ -26,11 +26,11 @@ LayerGameReport::LayerGameReport(QWidget *parent) :
     });
 
 
-    connect(ui->cbType,QOverload<int>::of(&QComboBox::currentIndexChanged),[=](){refresh();});
+//    connect(ui->cbType,QOverload<int>::of(&QComboBox::currentIndexChanged),[=](){refresh();});
 
-    connect(ui->dateEdit,QOverload<const QDate&>::of(&QDateTimeEdit::dateChanged),[=](){refresh();});
+//    connect(ui->dateEdit,QOverload<const QDate&>::of(&QDateTimeEdit::dateChanged),[=](){refresh();});
 
-    connect(ui->lineEdit,&QLineEdit::textChanged,[=](){refresh();});
+//    connect(ui->lineEdit,&QLineEdit::textChanged,[=](){refresh();});
 
 
 
@@ -71,7 +71,13 @@ void LayerGameReport::slotBtnDate(int iId)
         ui->dateEdit->setCurrentSection(QDateTimeEdit::DaySection);
     }
 
-    refresh();
+   // refresh();
 }
 
+
+
+void LayerGameReport::on_btnOk_clicked()
+{
+    refresh();
+}
 

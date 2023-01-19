@@ -137,7 +137,7 @@ void LayerDayReport::refreshTb()
         QString sDate=data.OrderDate+data.OrderTime;
         ui->tb->setItem(iRow,_Name,UI.tbItem(data.Name,GlobalUi::_BUTTON));
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
-        ui->tb->setItem(iRow,_DateTime,UI.tbItem(date));
+        ui->tb->setItem(iRow,_DateTime,UI.tbItem(date.toString("hh:mm:ss")));
 
         qDebug()<<"AAAAAAAAAAAA2";
 

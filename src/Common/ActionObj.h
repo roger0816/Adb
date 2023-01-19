@@ -46,7 +46,12 @@ public:
 
     bool m_bIsLock = false;
 
+    QString m_sCurrentUserId;
 
+    QString m_sCurrentUserName;
+
+
+    QString m_sCurrentSession="";
 protected:
     CData callServer(CData data);
 
@@ -62,12 +67,7 @@ protected:
 
     QString m_port;
 
-    QString m_sCurrentUserId;
 
-    QString m_sCurrentUserName;
-
-
-    QString m_sCurrentSession="";
 
  protected:
 

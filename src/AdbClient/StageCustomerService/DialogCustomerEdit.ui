@@ -145,19 +145,6 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
-                <widget class="QLabel" name="lbId">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>30</height>
-                  </size>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
                <item row="6" column="0">
                 <widget class="QLabel" name="label_8">
                  <property name="text">
@@ -244,6 +231,9 @@
                </item>
                <item row="5" column="1">
                 <widget class="QLineEdit" name="txNum5"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="lbId"/>
                </item>
               </layout>
              </widget>

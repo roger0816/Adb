@@ -16,6 +16,8 @@ DialogCustomerEdit::DialogCustomerEdit(QWidget *parent) :
 
     ui->btnDel->hide();
 
+    ui->lbId->setReadOnly(true);
+
 
 }
 
@@ -69,6 +71,13 @@ bool DialogCustomerEdit::checkHasChange()
     return false;
 }
 
+void DialogCustomerEdit::setRoot(bool b)
+{
+    m_bIsRoot = b;
+
+    ui->lbId->setReadOnly(!b);
+}
+
 void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,QVariantList listCustomerInfo,QVariantMap data)
 {
 
@@ -109,7 +118,8 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     ui->txNote1->setText(m_data["Note1"].toString());
 
-    //ui->btnDel->show();
+
+    ui->btnDel->setVisible(m_bIsRoot);
 
     m_listCustomerInfo =listCustomerInfo;
 
@@ -565,7 +575,7 @@ void DialogCustomerEdit::on_btnOk_clicked()
 
     QString customerId= ui->lbId->text();
 
-    if(m_sCustomerSid=="")
+    if(m_sCustomerSid=="" && !m_bIsRoot)
     {
         QVariantMap in;
 
@@ -573,7 +583,8 @@ void DialogCustomerEdit::on_btnOk_clicked()
 
         QVariantList out;
         QString sError;
-        bool bOk = ACTION.action(ACT::QUERY_CUSTOMER,in,out,sError);
+        bool bOk;
+        bOk= ACTION.action(ACT::QUERY_CUSTOMER,in,out,sError);
 
 
         if(!bOk)
@@ -585,7 +596,7 @@ void DialogCustomerEdit::on_btnOk_clicked()
         {
             if(out.length()>0)
             {
-                DMSG.showMsg("","編號: "+customerId.split("_").last()+"已經被使用,\n已更新編號，請再試一次","OK");
+                DMSG.showMsg("","編號: "+customerId.split("-").last()+"已經被使用,\n已更新編號，請再試一次","OK");
 
                 on_cbClass_currentIndexChanged(ui->cbClass->currentIndex());
 

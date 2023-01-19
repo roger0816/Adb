@@ -30,7 +30,7 @@ qDebug()<<"SSSS : "<<s;
         qApp->setStyleSheet(style);
         file.close();
     }
-    this->setWindowTitle("艾比代管理系統");
+    this->setWindowTitle("艾比代管理系統      "+QString(ADP_VER));
 
     connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));
 

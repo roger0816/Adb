@@ -35,6 +35,7 @@ private slots:
     void slotBtnDate(int iId);
     void refresh();
 
+    void on_btnOk_clicked();
 };
 
 #endif // LAYERGAMEREPORT_H

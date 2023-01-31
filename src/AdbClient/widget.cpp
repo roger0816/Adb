@@ -11,11 +11,11 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-  qlonglong i=1234567890;
+//  qlonglong i=1234567890.123;
 
-  QString s=QString("%1").arg(i,8,16,QLatin1Char('0'));
+//  QString s=QString("%1").arg(i,12,10,QLatin1Char('0'));
 
-qDebug()<<"SSSS : "<<s;
+//qDebug()<<"SSSS : "<<s;
 
 
     ui->lbTestName->hide();

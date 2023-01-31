@@ -47,7 +47,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
     }
 
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     QString sTmp="INSERT";
     if(bOrRplace)
@@ -118,7 +118,7 @@ bool CSqlClass::delFromTb(QString sTableName, QVariantMap conditions, QString &s
     QString sDateTime =currentDateTime().toString("yyyyMMddhhmmss");
 
     bool bRe =false;
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
     QString sCmd ="DELETE FROM "+sTableName;
 
 
@@ -171,7 +171,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
     listOut.clear();
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     QString sCmd = "SELECT * FROM " +sTableName;
 
@@ -181,6 +181,8 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
 
     QString sOrderBy="";
+
+    QString sLimit="";
 
     int iCount = 0;
 
@@ -195,6 +197,12 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
         if(sKey.toUpper()=="DESC")
         {
             sOrderBy =" Order By "+conditions[sKey].toString()+" DESC";
+            continue;
+        }
+
+        if(sKey.toUpper()=="LIMIT")
+        {
+            sLimit =" LIMIT "+conditions[sKey].toString()+" ";
             continue;
         }
 
@@ -213,6 +221,9 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
     if(sOrderBy!="")
         sSub=sSub+sOrderBy;
 
+    if(sLimit!="")
+        sSub=sSub+sLimit;
+
     query.prepare(sCmd+sSub);
 
 
@@ -224,7 +235,8 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
     for(int j=0;j<listKey.length();j++)
     {
         QString sKey =listKey.at(j);
-        if(sKey.toUpper()=="ASC" || sKey.toUpper()=="DESC")
+        if(sKey.toUpper()=="ASC" || sKey.toUpper()=="DESC"
+                ||sKey.toUpper()=="LIMIT")
             continue;
 
         query.bindValue(iCount,conditions[sKey]);
@@ -335,7 +347,7 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
         //sSub+=tmp.at(i)=;
     }
 
-    QSqlQuery sql(m_db);
+    QSqlQuery sql(db());
 
     sql.prepare(sCmd+sSub);
 
@@ -380,7 +392,7 @@ void CSqlClass::createTable()
 
 void CSqlClass::createTableSqlite()
 {
-    QSqlQuery sql(m_db);
+    QSqlQuery sql(db());
 
 
 
@@ -723,6 +735,14 @@ void CSqlClass::createTableMysql()
 
 }
 
+QSqlDatabase CSqlClass::db()
+{
+    if(!m_db.isOpen())
+        m_db.open();
+
+    return m_db;
+}
+
 QStringList CSqlClass::fieldNames(QSqlRecord record)
 {
     QStringList list;
@@ -756,7 +776,7 @@ void CSqlClass::saveTrigger(QString sApi, QString sDateTime)
 {
     QString sCmd ="REPLACE INTO TriggerData (ApiGroup,UpdateTime) VALUES('%1','%2');";
     sCmd=sCmd.arg(sApi,sDateTime);
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
 
     bool bRe=query.exec(sCmd);
@@ -769,7 +789,7 @@ void CSqlClass::saveTrigger(QString sApi, QString sDateTime)
 QMap<QString, QString> CSqlClass::readTrigger()
 {
     QMap<QString,QString> re;
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
     query.exec("select * from TriggerData");
     while(query.next())
     {
@@ -808,7 +828,7 @@ QDateTime CSqlClass::currentDateTime()
 bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QString &sError)
 {
     qDebug()<<"user :"<<sUser<<" ,pass:"<<sPass;
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     query.prepare("SELECT * FROM UserData WHERE Id=:id AND Password =:pass;");
 
@@ -853,7 +873,7 @@ bool CSqlClass::addUser(QString sId, QString sPass, QString sCid, QString sName,
     {
         bRe = true;
 
-        QSqlQuery query(m_db);
+        QSqlQuery query(db());
 
         query.prepare("INSERT INTO  UserData (Id,Password,Cid,Name,Lv,StartDay,CreateTime,UpdateTime) "
                       " VALUES(?,?,?,?,?,?,?,?);");
@@ -877,7 +897,7 @@ bool CSqlClass::addUser(QString sId, QString sPass, QString sCid, QString sName,
 bool CSqlClass::delUser(QString sId, QString &sError)
 {
     bool bRe =false;
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
     query.prepare("DELETE FROM UserData WHERE Id=? ");
     query.bindValue(0,sId);
     bRe = query.exec();
@@ -894,7 +914,7 @@ bool CSqlClass::editUser(QVariantMap data, QString &sError)
                  " ,BirthDay=?,Tel=? ,Email=?,Note1=? ,Note2=?,Note3=? ,CreateTime=? ,UpdateTime=? "
                  " WHERE Id =? ;";
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     query.prepare(sCmd);
 
@@ -929,7 +949,7 @@ bool CSqlClass::queryUser(QString sId, QVariantMap &sData)
 
     bool bRe =false;
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     query.prepare("SELECT * FROM UserData WHERE Id= ? ;");
     query.bindValue(0,sId);
@@ -947,7 +967,7 @@ QVariantList CSqlClass::queryUser(QString sId)
 {
     QVariantList listRe;
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     QString sCmd = "SELECT * FROM UserData ";
 
@@ -1008,7 +1028,7 @@ bool CSqlClass::saveExchange(QVariantList list, QString &sError)
     }
 
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     query.prepare("INSERT INTO  ExchangeRate (Class,Rate,UpdateTime) "
                   " VALUES(?,?,?);");
@@ -1033,7 +1053,7 @@ QVariantList CSqlClass::readExchange(int iSid)
     else
         sCmd +=" ORDER BY  Sid ASC ;";
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     query.exec(sCmd);
 
@@ -1075,7 +1095,7 @@ bool CSqlClass::lsatCustomerId(QString sClassSid, QString sClassId, QString &out
 {
     out = sClassId+"-EA00";
 
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
 
 
@@ -1097,7 +1117,7 @@ bool CSqlClass::lastCustomerAddCostId(QString sDate, QString &sId, QString &sErr
 {
     QString tmpDate = sDate;
     sId=tmpDate.remove(0,2)+"-0000";
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
    // SELECT * FROM CustomerCost where OrderTime like "%202210%" ORDER BY OrderId DESC;
     QString sCmd = "SELECT * FROM CustomerCost where OrderTime like '%%1%' ORDER BY OrderId DESC;";
 
@@ -1122,7 +1142,7 @@ bool CSqlClass::lastOrderId(QString sDate,QString &sId,QString &sError)
 {
     QString tmpDate = sDate;
     sId=tmpDate.remove(0,2)+"-A000";
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     QString sCmd = "SELECT Id FROM OrderData WHERE OrderDate='%1' ORDER BY Id DESC; ";
 
@@ -1146,7 +1166,7 @@ bool CSqlClass::lastOrderName(QString sOwnerSid, QString sDate, QString &sRe, QS
 {
     QString tmpDate = sDate;
     //sId=tmpDate.remove(0,2)+"-A000";
-    QSqlQuery query(m_db);
+    QSqlQuery query(db());
 
     QString sCmd = "SELECT Name FROM OrderData WHERE OrderDate='%1' AND Owner='%2' ORDER BY Id DESC; ";
 
@@ -1181,10 +1201,14 @@ bool CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 
         //  m_db.setHostName("206.189.185.20");
 
-        m_db.setHostName(sIp);
+        m_sIp = sIp;
+
+        m_sPort = sPort;
+
+        m_db.setHostName(m_sIp);
 
 
-        m_db.setPort(sPort.toInt());
+        m_db.setPort(m_sPort.toInt());
 
         m_db.setUserName("roger");
 

@@ -95,13 +95,13 @@ void LayerDayReport::refreshTb()
 
     m_listInto.clear();
 
-    int iTotal0=0;
+    qlonglong iTotal0=0;
 
 
-    int iTotal1=0;
+    qlonglong iTotal1=0;
 
 
-    int iTotal2=0;
+    qlonglong iTotal2=0;
 
     double iTotalBonus=0.0;
 
@@ -220,9 +220,9 @@ void LayerDayReport::refreshTb()
         //double payRate = ACTION.payTypeToNTDRate(data.PayType,primeRate,sPrimeRate);
 
         qDebug()<<"AAAAAAAAAAAA9";
-        int iNtdCost = data.Money.first().toInt();
+        qlonglong iNtdCost = data.Money.first().toLongLong();
 
-        int iNtdPrime = data.Money[1].toInt();
+        qlonglong iNtdPrime = data.Money[1].toLongLong();
 
         QStringList listNote = data.Note0;
 
@@ -271,7 +271,7 @@ void LayerDayReport::refreshTb()
             {
                 ACTION.setPrimeMoney(data);
 
-                iNtdPrime=data.Money[1].toInt();
+                iNtdPrime=data.Money[1].toLongLong();
             }
 
 
@@ -297,9 +297,12 @@ void LayerDayReport::refreshTb()
 
 
 
+        qDebug()<<"ntdcost : "<<iNtdCost<<" , "<<data.Step.toInt();
+
         if(data.Step.toInt()==5)
         {
             iTotal0 +=iNtdCost;
+            qDebug()<<"DDDD : "<<iTotal0;
             iTotal1 +=iNtdPrime;
 
             int iTmp = iNtdCost-iNtdPrime;
@@ -308,15 +311,13 @@ void LayerDayReport::refreshTb()
             iTotalBonus+=data.Bouns.toDouble();
         }
 
-        qDebug()<<"AAAAAAAAAAAA11";
-
         m_listInto.append(data);
 
 
     }
 
 
-
+    qDebug()<<"XGD : "<<iTotal0<<" , "<<QString::number(iTotal0);
     ui->lbTotal0->setText(QString::number(iTotal0));
     ui->lbTotal1->setText(QString::number(iTotal1));
     ui->lbTotal2->setText(QString::number(iTotal2));

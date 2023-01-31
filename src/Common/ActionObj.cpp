@@ -106,7 +106,7 @@ bool ActionObj::action(int act, QVariantMap data, QString &sError)
     return re.bOk;
 }
 
-bool ActionObj::action(int act, QVariantMap data, QVariantMap &out, QString &sError)
+bool ActionObj::action(int act, QVariantMap data, QVariantMap &out, QString &sError, bool bStrong)
 {
     CData input;
 
@@ -116,7 +116,7 @@ bool ActionObj::action(int act, QVariantMap data, QVariantMap &out, QString &sEr
 
     CData re;
 
-    re = query(input);
+    re = query(input,bStrong);
 
     // out = re.dData;
     if(re.listData.length()>0)
@@ -127,7 +127,7 @@ bool ActionObj::action(int act, QVariantMap data, QVariantMap &out, QString &sEr
     return re.bOk;
 }
 
-bool ActionObj::action(int act, QVariantMap data, QVariantList &listOut, QString &sError)
+bool ActionObj::action(int act, QVariantMap data, QVariantList &listOut, QString &sError, bool bStrong)
 {
     CData input;
 
@@ -137,7 +137,7 @@ bool ActionObj::action(int act, QVariantMap data, QVariantList &listOut, QString
 
     CData re;
 
-    re = query(input);
+    re = query(input,bStrong);
 
     listOut = re.listData;
 
@@ -166,7 +166,7 @@ bool ActionObj::action(int act, QVariantList listData, QVariantList &listOut, QS
     return re.bOk;
 }
 
-CData ActionObj::query(CData data)
+CData ActionObj::query(CData data, bool bStrong)
 {
 
     // data.sUser = m_currentUser.Id;
@@ -174,7 +174,7 @@ CData ActionObj::query(CData data)
 
     if(m_bDataFromServer)
     {
-        return callServer(data);
+        return callServer(data,bStrong);
     }
     else
         return m_queryObj.queryData(data);
@@ -182,7 +182,7 @@ CData ActionObj::query(CData data)
 
 
 
-CData ActionObj::callServer(CData data)
+CData ActionObj::callServer(CData data, bool bStrong)
 {
     //        if(m_bIsLock)
     //        {
@@ -281,6 +281,8 @@ CData ActionObj::callServer(CData data)
 
     bool bNeedFromeServer =isNeedFromServer(data.iAciton,data.dData);
 
+    if(bStrong)
+        bNeedFromeServer=true;
 
     qDebug()<<"trigger local:"<<m_dLocalTrigger[sGroup]<<", update:"<<m_dUpdateTrigger[sGroup];
     if(data.iAciton !=ACT::UPLOAD_PIC && data.iAciton !=ACT::QUERY_PIC)

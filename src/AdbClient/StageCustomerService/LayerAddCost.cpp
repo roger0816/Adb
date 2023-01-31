@@ -59,6 +59,20 @@ void LayerAddCost::setCustomer(QVariantMap data)
     ui->lbTime->setText(time.toString("yyyy/MM/dd hh:mm"));
 
 
+    QString sTotal= ACTION.getCustomerNowMoney(m_dataCustomer.Sid);
+    ui->lbCurrentCost->setText(sTotal);
+
+    ui->lbCurrentCost_2->setText(sTotal);
+
+    m_dataCost.Total=sTotal;
+    m_dataCost.OrderTime = time.toString("yyyyMMddhhmmss");
+    m_dataCost.Currency = m_dataCustomer.Currency;
+
+    m_dataCost.UserSid = ACTION.m_currentUser.Sid;
+
+    m_dataCost.CustomerSid = m_dataCustomer.Sid;
+
+    /*
     QList<CustomerCost> list =ACTION.getCustomerCost(m_dataCustomer.Sid,true);
 
     if(list.length()>0)
@@ -81,6 +95,7 @@ void LayerAddCost::setCustomer(QVariantMap data)
     m_lastCostData.UserSid = ACTION.m_currentUser.Sid;
 
     m_lastCostData.CustomerSid = m_dataCustomer.Sid;
+    */
 
     checkTotal();
 }
@@ -123,16 +138,16 @@ void LayerAddCost::checkTotal()
 
 
     QString sTmpChangeValue = QString::number(m_addValue,'f',2);
-    m_lastCostData.ChangeValue= sub(sTmpChangeValue,m_lastCostData.Currency);
+    m_dataCost.ChangeValue= sub(sTmpChangeValue,m_dataCustomer.Currency);
 
 
-    QString sTmpTotal= QString::number(m_lastCostData.ChangeValue.toDouble()+ ui->lbCurrentCost->text().toDouble(),'f',2);
+    QString sTmpTotal= QString::number(m_dataCost.ChangeValue.toDouble()+ ui->lbCurrentCost->text().toDouble(),'f',2);
 
-    m_lastCostData.Total =   sub(sTmpTotal,m_lastCostData.Currency);
+    m_dataCost.Total =   sub(sTmpTotal,m_dataCustomer.Currency);
 
-    ui->lbAdd->setText(m_lastCostData.ChangeValue);
+    ui->lbAdd->setText(m_dataCost.ChangeValue);
 
-    ui->lbAfAdd->setText(m_lastCostData.Total);
+    ui->lbAfAdd->setText(m_dataCost.Total);
 }
 
 void LayerAddCost::init()
@@ -320,35 +335,35 @@ void LayerAddCost::on_btnOk_clicked()
 
 
 
-    m_lastCostData.Sid="";
+    m_dataCost.Sid="";
 
-    m_lastCostData.IsAddCost=true;
+    m_dataCost.IsAddCost=true;
 
 
 
-    m_lastCostData.OrderId=getNewOrderId();
+    m_dataCost.OrderId=getNewOrderId();
 
-    m_lastCostData.Note0=ui->txNote0->toPlainText();
+    m_dataCost.Note0=ui->txNote0->toPlainText();
 
 
 
     QVariantMap debit = m_listDebit.at(qBound(0,ui->cbDebit->currentIndex(),m_listDebit.length()-1)).toMap();
 
 
-    m_lastCostData.DebitSid=debit["Sid"].toString();
-    m_lastCostData.DebitNote=ui->txDebitNote->text();
+    m_dataCost.DebitSid=debit["Sid"].toString();
+    m_dataCost.DebitNote=ui->txDebitNote->text();
 
-    m_lastCostData.AddRate = ui->sbAdd->text();
+    m_dataCost.AddRate = ui->sbAdd->text();
 
-    m_lastCostData.OriginCurrency=ui->cbCurrency->currentText();
+    m_dataCost.OriginCurrency=ui->cbCurrency->currentText();
 
-    m_lastCostData.OriginValue=ui->sb->text();
+    m_dataCost.OriginValue=ui->sb->text();
 
-    m_lastCostData.Rate = ACTION.primeRate("",true).Sid;
+    m_dataCost.Rate = ACTION.primeRate("",true).Sid;
 
 
 
-    QString sMsg = "請確認加值內容\n "+ui->lbCurrency->text()+": $"+m_lastCostData.ChangeValue+"\n確定要送出嗎?";
+    QString sMsg = "請確認加值內容\n "+ui->lbCurrency->text()+": $"+m_dataCost.ChangeValue+"\n確定要送出嗎?";
 
     int iRet = UI.showMsg("提醒!",sMsg,QStringList()<<"否"<<"是");
     if(iRet==1)
@@ -368,7 +383,7 @@ void LayerAddCost::on_btnOk_clicked()
             }
             else
             {
-                m_lastCostData.Pic0 = sMd5;
+                m_dataCost.Pic0 = sMd5;
             }
         }
         //
@@ -387,16 +402,16 @@ void LayerAddCost::on_btnOk_clicked()
             }
             else
             {
-                m_lastCostData.Pic1 = sMd5;
+                m_dataCost.Pic1 = sMd5;
             }
 
         }
 
-        bool bOk = ACTION.sendAddValue(m_dataCustomer,m_lastCostData,sError);
+        bool bOk = ACTION.sendAddValue(m_dataCustomer,m_dataCost,sError);
 
         if(bOk)
         {
-            m_dataCustomer.Money=m_lastCostData.Total;
+            m_dataCustomer.Money=m_dataCost.Total;
 
         }
 

@@ -27,7 +27,9 @@ private:
 
     CustomerData m_dataCustomer;
 
-    CustomerCost m_lastCostData;
+      CustomerCost m_dataCost;
+
+   // CustomerCost m_lastCostData;
 
     QVariantList m_listDebit;    //支付管道:篩選後填入comboBox的資料
 

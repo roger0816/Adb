@@ -34,13 +34,13 @@ public:
 
     bool action(int act, QVariantMap data, QString &sError);
 
-    bool action(int act, QVariantMap data, QVariantMap &out, QString &sError);
+    bool action(int act, QVariantMap data, QVariantMap &out, QString &sError,bool bStrong=false);
 
-    bool action(int act, QVariantMap data,QVariantList &listOut, QString &sError);
+    bool action(int act, QVariantMap data,QVariantList &listOut, QString &sError, bool bStrong=false);
 
     bool action(int act, QVariantList listData, QVariantList &listOut, QString &sError);
 
-    CData query(CData data);
+    CData query(CData data,bool bStrong=false);
 
     QueryObj m_queryObj;
 
@@ -53,7 +53,7 @@ public:
 
     QString m_sCurrentSession="";
 protected:
-    CData callServer(CData data);
+    CData callServer(CData data,bool bStrong=false);
 
     CData sendData(CData data);
 

@@ -81,10 +81,15 @@ private:
 
     QSqlDatabase m_db;
 
+    QSqlDatabase db();
+
     QSqlDatabase m_local;
 
     QStringList fieldNames(QSqlRecord record);
 
+
+    QString m_sIp;
+    QString m_sPort;
 
    // void loadTrigger();
 

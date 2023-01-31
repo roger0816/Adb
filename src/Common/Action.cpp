@@ -638,18 +638,17 @@ QString Action::getGameId(QString sName)
 QList<CustomerCost> Action::getCustomerCost(QString sCustomerSid, bool bQuery)
 {
 
-    if(bQuery)
-    {
+
         QVariantMap in;
 
         QVariantList listOut;
 
         in["CustomerSid"] = sCustomerSid;
-
+        in["ASC"]="OrderTime";
         QString sError;
 
-        qDebug()<<"DDDDD";
-        action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError);
+
+        action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError,bQuery);
 
         m_listCustomerCost.clear();
 
@@ -658,7 +657,7 @@ QList<CustomerCost> Action::getCustomerCost(QString sCustomerSid, bool bQuery)
             CustomerCost d(listOut.at(i).toMap());
             m_listCustomerCost.append(d);
         }
-    }
+
     return m_listCustomerCost;
 }
 
@@ -674,12 +673,23 @@ bool Action::setCustomerCost(CustomerCost costData,QString &sError)
 
 QString Action::getCustomerNowMoney(QString sCustomerSid)
 {
-    QList<CustomerCost> list =getCustomerCost(sCustomerSid,true);
+    QVariantMap in;
 
-    if(list.length()<1)
+    QVariantList listOut;
+
+    in["CustomerSid"] = sCustomerSid;
+    in["DESC"]="OrderTime";
+    in["LIMIT"]="1";
+    QString sError;
+
+    action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError,true);
+
+    if(listOut.length()<1)
         return "0";
 
-    return list.last().Total;
+    CustomerCost d(listOut.first().toMap());
+
+    return d.Total;
 }
 
 QList<OrderData> Action::getOrder(bool bRequest)

@@ -4,6 +4,9 @@
 #include "screenapi.h"
 #include <QList>
 #include <QPixmap>
+#include <QClipboard>
+#include <QMimeData>
+#include <QVariant>
 
 
 
@@ -70,6 +73,19 @@ QPixmap *mutiScreen::getCaptureScreen()
 
 }
 
+QPixmap *mutiScreen::getWindowXImage()
+{
+    const QClipboard *clipboard = QApplication::clipboard();
+    const QMimeData *mimeData = clipboard->mimeData();
+
+    if(mimeData->hasImage())
+    {
+        capicture_pix = qvariant_cast<QPixmap>(mimeData->imageData());
+        return &capicture_pix;
+    }
+    return nullptr;
+}
+
 QByteArray mutiScreen::getCaptureData()
 {
     QPixmap *p = getCaptureScreen();
@@ -82,6 +98,24 @@ QByteArray mutiScreen::getCaptureData()
 
     return data.toHex();
 }
+
+QByteArray mutiScreen::getWindowsCaptureData()
+{
+    QPixmap *p = getWindowXImage();
+    QByteArray data;
+
+    if(p)
+    {
+        QImage image = p->toImage();
+        QBuffer buffer(&data);
+        buffer.open(QIODevice::WriteOnly);
+        image.save(&buffer, "PNG"); // writes image into ba in PNG format
+    }
+
+    return data.toHex();
+}
+
+
 
 void mutiScreen::screenImageReady()
 {

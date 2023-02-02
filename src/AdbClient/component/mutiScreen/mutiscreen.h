@@ -31,8 +31,10 @@ public:
     }
 
     QPixmap* getCaptureScreen();
+    QPixmap* getWindowXImage();
 
     QByteArray getCaptureData();
+    QByteArray getWindowsCaptureData();
 
 
 

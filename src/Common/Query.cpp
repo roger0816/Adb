@@ -132,7 +132,24 @@ CData Query::implementRecall(CData data)
 
     else if(data.iAciton==ACT::ADD_GAME_LIST)
     {
+
+        DataGameList game(data.dData);
+
+        DataGameRate gameRate;
+
+        gameRate.Rate=QString::number(game.GameRate);
+
+        gameRate.GameSid = game.Sid;
+
+        gameRate.GameName = game.Name;
+
+        gameRate.UserSid = game.UserSid;
+
+        m_sql.insertTb(SQL_TABLE::GameRate(),gameRate.data(),sError);
+
         bOk = m_sql.insertTb(SQL_TABLE::GameList(),data.dData,sError);
+
+
         sOkMsg = "遊戲新增完成";
     }
 
@@ -140,7 +157,28 @@ CData Query::implementRecall(CData data)
     {
         QVariantMap d;
         d["Sid"] =data.dData["Sid"];
+
+
+        DataGameList game(data.dData);
+
+        DataGameRate gameRate;
+
+        gameRate.Rate=QString::number(game.GameRate);
+
+        gameRate.GameSid = game.Sid;
+
+        gameRate.GameName = game.Name;
+
+        gameRate.UserSid = game.UserSid;
+
+        m_sql.insertTb(SQL_TABLE::GameRate(),gameRate.data(),sError);
+
+
         bOk = m_sql.updateTb(SQL_TABLE::GameList(),d ,data.dData,sError);
+
+
+
+
         sOkMsg = "遊戲修改完成";
     }
 
@@ -161,6 +199,41 @@ CData Query::implementRecall(CData data)
         bOk = m_sql.queryTb(SQL_TABLE::GameList(),re.listData,sError);
 
 
+    }
+
+    else if(data.iAciton==ACT::QUERY_GAME_RATE)
+    {
+        bOk = m_sql.queryTb(SQL_TABLE::GameRate(),data.dData,re.listData,sError);
+
+        if(bOk && re.listData.length()<1)
+        {
+            QVariantMap d;
+            QVariantList tmpOut;
+            d["Sid"]=data.dData["GameSid"];
+            m_sql.queryTb(SQL_TABLE::GameList(),d,tmpOut,sError);
+
+            if(tmpOut.length()>0)
+            {
+                DataGameList game(tmpOut.first().toMap());
+
+
+                DataGameRate gameRate;
+
+                gameRate.Rate=game.GameRate;
+
+                gameRate.GameSid = game.Sid;
+
+                gameRate.GameName = game.Name;
+
+                gameRate.UserSid = game.UserSid;
+
+                m_sql.insertTb(SQL_TABLE::GameRate(),gameRate.data(),sError);
+
+                bOk = m_sql.queryTb(SQL_TABLE::GameRate(),data.dData,re.listData,sError);
+
+
+            }
+        }
     }
 
 
@@ -545,8 +618,30 @@ CData Query::implementRecall(CData data)
 
     else if(data.iAciton==ACT::REPLACE_ORDER)
     {
+        OrderData order(data.dData);
 
-        bOk = m_sql.insertTb(SQL_TABLE::OrderData(),data.dData,sError,true);
+        if(order.Step=="1")
+        {
+
+            QVariantMap in;
+            QVariantList tmpOut;
+            in["Sid"]=order.GameSid;
+            m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
+
+            if(tmpOut.length()>0)
+            {
+
+                DataGameList game(tmpOut.first().toMap());
+
+                order.GameRate = game.GameRate;
+            }
+
+
+        }
+
+
+
+        bOk = m_sql.insertTb(SQL_TABLE::OrderData(),order.data(),sError,true);
 
         sOkMsg="訂單送出";
 

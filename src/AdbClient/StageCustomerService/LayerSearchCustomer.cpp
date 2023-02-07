@@ -67,6 +67,16 @@ void LayerSearchCustomer::changePage(int iPage)
     QVariantList tmp;
     QString sError;
 
+    m_listCus=ACTION.getCustomerList();
+
+    if(m_listCus.length()<1 && m_iIdx>=m_listCus.length())
+    {
+        return;
+    }
+
+    int iIdx=qBound(0,m_iIdx,m_listCus.length()-1);
+
+            /*
     ACTION.action(ACT::QUERY_CUSTOMER,tmp,m_listData,sError);
 
 
@@ -76,7 +86,8 @@ void LayerSearchCustomer::changePage(int iPage)
     }
 
     CustomerData customer(m_listData.at(m_iIdx).toMap());
-
+*/
+    CustomerData customer = m_listCus.at(iIdx);
     OrderData order= ACTION.getOrderCustomerLast(customer.Sid,true);
 
     QString sLastGameSid=order.GameSid;
@@ -249,19 +260,28 @@ void LayerSearchCustomer::on_btnAddCost_clicked()
 
 void LayerSearchCustomer::on_btnHistory_clicked()
 {
+    if(m_listCus.length()<=0)
+        return;
     DialogCustomerCostHistory dialog;
-    CustomerData customer(m_listData.at(m_iIdx).toMap());
-    dialog.setCustomer(customer);
+
+
+    int iIdx=qBound(0,m_iIdx,m_listCus.length()-1);
+
+    dialog.setCustomer(m_listCus.at(iIdx));
     dialog.exec();
 }
 
 
 void LayerSearchCustomer::on_btnDetail_clicked()
 {
-    CustomerData customer(m_listData.at(m_iIdx).toMap());
+    if(m_listCus.length()<=0)
+        return;
+  //  CustomerData customer(m_listData.at(m_iIdx).toMap());
     DialogCustomerEdit dialog;
 
-    dialog.setData(customer.Sid);
+    int iIdx=qBound(0,m_iIdx,m_listCus.length()-1);
+
+    dialog.setData(m_listCus.at(iIdx).Sid);
 
     dialog.setReadOnly(true);
 

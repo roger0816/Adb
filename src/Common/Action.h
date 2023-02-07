@@ -55,6 +55,7 @@ public:
     QList<UserData> getUser(bool bQuery=false);
     UserData getUser(QString sSid, bool bQuery=false);
 
+      QList<CustomerData> getCustomerList();
     CustomerData getCustomer(QString sSid, bool bQuery=false);
     QList<DataCustomerClass> getCustomerClass(bool bQuery=false);
     DataCustomerClass getCustomerClass(QString sSid, bool bQuery=false);
@@ -163,6 +164,8 @@ public:
     bool sendPayOrder(CustomerData customerData,CustomerCost costData,QString &sError);
 
 
+
+    DataGameRate getGameRate(QString GameSid,QString sSid="");
 
 private:
     QList<UserData> m_listUser;

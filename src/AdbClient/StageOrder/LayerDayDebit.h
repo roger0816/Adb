@@ -21,7 +21,30 @@ public:
 private:
     Ui::LayerDayDebit *ui;
 
+    enum tbHeader
+    {
+        _OrderId=0,
+        _DebitSid,
 
+        _CusSid,
+        _CusName,
+        _CusCurrency,
+        _CusTotal,
+        _DebitNote,
+        _ChangeValue,
+        _OriValue,
+        _OriCurrency,
+
+        _Note0,
+        _OrderTime,
+        _UserName,
+        _Pic0,
+        _Pic1,
+
+        _Note1,
+        _ColCount
+
+    };
 
 
     QVariantList m_allDebit;

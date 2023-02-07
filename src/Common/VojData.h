@@ -11,6 +11,7 @@
 
 struct DataObj
 {
+public:
     DataObj(){}
 
     DataObj(QVariantMap data):DataObj(){setData(data);}
@@ -19,6 +20,8 @@ struct DataObj
     QString Id="";
 
     QString Name="";
+
+
 
     QString UpdateTime;
 
@@ -472,7 +475,7 @@ struct CustomerGameInfo :public DataObj
     QVariantMap data()
     {
         QVariantMap d = DataObj::data();
-            d["CustomerSid"] = CustomerSid;
+        d["CustomerSid"] = CustomerSid;
         d["CustomerId"] = CustomerId;
         d["GameSid"] = GameSid;
         d["LoginType"] = LoginType;
@@ -486,7 +489,7 @@ struct CustomerGameInfo :public DataObj
 
         return d;
     }
-        QString CustomerSid;
+    QString CustomerSid;
     QString CustomerId;
     QString GameSid;
     QString LoginType;
@@ -537,6 +540,7 @@ struct OrderData :public DataObj
         Bouns = data["Bouns"].toString();
         PayType = data["PayType"].toString();
         CanSelectPayType = data["CanSelectPayType"].toString();
+        GameRate=data["GameRate"].toString();
         ExRateSid = data["ExRateSid"].toString();
         PrimeRateSid = data["PrimeRateSid"].toString();
         Money = data["Money"].toString().split(";");
@@ -581,6 +585,7 @@ struct OrderData :public DataObj
         re["Bouns"] = Bouns;
         re["PayType"] = PayType;
         re["CanSelectPayType"] = CanSelectPayType;
+                re["GameRate"] = GameRate;
         re["ExRateSid"] = ExRateSid;
         re["PrimeRateSid"] = PrimeRateSid;
         re["Money"] = Money.join(";");
@@ -615,7 +620,7 @@ struct OrderData :public DataObj
     QString Item;
     QString Cost="0";
     QString Bouns="0";
-    // QString Rate="";
+    QString GameRate="";
     QString ExRateSid="";
     QString PrimeRateSid="";
     QStringList Money;
@@ -671,8 +676,8 @@ struct DataGameList :public DataObj
 {
     bool Enable;
 
-    double GameRate;
-
+    double GameRate;  //這個只存最新的， 獨立開一個table GameRate, 存歷史記錄
+    QString UserSid="";
     QString SellNote; //價目表
     DataGameList():DataObj(){};
     DataGameList(QVariantMap data){setData(data);}
@@ -684,6 +689,8 @@ struct DataGameList :public DataObj
         Enable = data["Enable"].toBool();
 
         GameRate=data["GameRate"].toDouble();
+
+        UserSid=data["UserSid"].toString();
 
         SellNote = data["SellNote"].toString();
 
@@ -697,13 +704,57 @@ struct DataGameList :public DataObj
 
         re["GameRate"] = QString::number(GameRate);
 
+        re["UserSid"] = UserSid;
+
         re["SellNote"] = SellNote;
 
         return re;
     }
 };
 
+struct DataGameRate
+{
+    DataGameRate(){}
+    DataGameRate(QVariantMap data){setData(data);}
 
+    void setData(QVariantMap data)
+    {
+        Sid =data["Sid"].toString();
+        GameSid =data["GameSid"].toString();
+        GameName =data["GameName"].toString();
+        Rate =data["Rate"].toString();
+        UserSid =data["UserSid"].toString();
+        UpdateTime =data["UpdateTime"].toString();
+
+    }
+
+    QVariantMap data()
+    {
+        QVariantMap re;
+
+        re["Sid"]=Sid;
+        re["GameSid"]=GameSid;
+        re["GameName"]=GameName;
+        re["Rate"]=Rate;
+        re["UserSid"]=UserSid;
+        re["UpdateTime"]=UpdateTime;
+
+
+        return re;
+    }
+
+    QString Sid="";
+
+    QString GameSid="";
+
+    QString GameName="";
+
+    QString Rate="";
+
+    QString UserSid="";
+
+    QString UpdateTime;
+};
 
 struct DataGameItem :public DataObj
 {

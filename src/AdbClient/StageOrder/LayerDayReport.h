@@ -57,7 +57,7 @@ enum tbHeader
     _Pic0,          //儲值圖
 
     _Note,
-
+    _Note1,
 
     _TB_COL_COUNT
 };

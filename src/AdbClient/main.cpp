@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
     QString st=argv[0];
 
 
-    ACTION.m_bTest = st.split("\\").last().trimmed()!="AdbClientWin.exe";
+    ACTION.m_bTest = st.split("\\").last().trimmed().mid(0,9).toUpper()
+            !="ADBCLIENT";
 
 
 

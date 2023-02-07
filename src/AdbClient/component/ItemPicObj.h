@@ -137,9 +137,12 @@ private slots:
     void showDetail();
 
 
+
 public slots:
     void slotClear();
     void slotClip();
+    void slotPase();
+
 
     void slotDownload();
 

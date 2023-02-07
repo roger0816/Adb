@@ -107,16 +107,16 @@ void LayerDayReport::refreshTb()
 
     for(int i=0;i<m_listOrder.length();i++)
     {
-        qDebug()<<"iiiiiiiiii-1"<<m_listOrder.length()<<"  ii : "<<i;
 
         OrderData data = m_listOrder.at(i);
 
-        qDebug()<<"iiiiiiiiii"<<data.UpdateTime;
+        //更新成本
+        ACTION.setPrimeMoney(data);
+
 
         if(!checkFilter(data))
             continue;
 
-        qDebug()<<"AAAAAAAAAAAA0";
 
         QVariantMap d;
         d["Sid"] = data.CustomerSid;
@@ -128,7 +128,6 @@ void LayerDayReport::refreshTb()
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
 
-        qDebug()<<"AAAAAAAAAAAA1";
         ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
         UserData owner =ACTION.getUser(data.Owner);
 
@@ -138,25 +137,25 @@ void LayerDayReport::refreshTb()
         ui->tb->setItem(iRow,_Name,UI.tbItem(data.Name,GlobalUi::_BUTTON));
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
         ui->tb->setItem(iRow,_DateTime,UI.tbItem(date.toString("hh:mm:ss")));
+        ui->tb->setItem(iRow,_Note1,UI.tbItem(data.Note1));
 
-        qDebug()<<"AAAAAAAAAAAA2";
 
         QString sUser="";
 
         if(data.User.length()>2)
         {
             UserData user = ACTION.getUser(data.User.at(2));
-            qDebug()<<"AAAAAAAAAAAA3";
+
 
             sUser = user.Name;
         }
 
-        qDebug()<<"AAAAAAAAAAAA4";
 
-        ui->tb->setItem(iRow,_User,UI.tbItem(sUser,GlobalUi::_TOOLTIP));
+
+        ui->tb->setItem(iRow,_User,UI.tbItem(sUser,GlobalUi::_BUTTON));
         ui->tb->setItem(iRow,_Customer,UI.tbItem(customer.Id));
 
-        qDebug()<<"AAAAAAAAAAAA5";
+
 
         QString sStatus = data.Step;
 
@@ -190,8 +189,6 @@ void LayerDayReport::refreshTb()
             sStatus="完成";
         }
 
-        qDebug()<<"check status";
-        qDebug()<<"AAAAAAAAAAAA6";
 
         ui->tb->setItem(iRow,_Status,UI.tbItem(sStatus));
         if(data.Step=="4")
@@ -202,7 +199,6 @@ void LayerDayReport::refreshTb()
 
         ui->tb->setItem(iRow,_GameName,UI.tbItem(sGameName));
 
-        qDebug()<<"AAAAAAAAAAAA7";
 
         ui->tb->setItem(iRow,_Currency,UI.tbItem(customer.Currency));
         ui->tb->setItem(iRow,_TodayCost,UI.tbItem(data.Cost));
@@ -210,7 +206,6 @@ void LayerDayReport::refreshTb()
 
         _LayerDayReport::OrderPayType orderPayType = getPayCount(data);
 
-        qDebug()<<"AAAAAAAAAAAA8";
         DataRate primeRate=ACTION.primeRate(data.PrimeRateSid,true);
 
         DataRate exRate=ACTION.costRate(data.ExRateSid,true);
@@ -219,7 +214,6 @@ void LayerDayReport::refreshTb()
 
         //double payRate = ACTION.payTypeToNTDRate(data.PayType,primeRate,sPrimeRate);
 
-        qDebug()<<"AAAAAAAAAAAA9";
         qlonglong iNtdCost = data.Money.first().toLongLong();
 
         qlonglong iNtdPrime = data.Money[1].toLongLong();
@@ -274,7 +268,7 @@ void LayerDayReport::refreshTb()
                 iNtdPrime=data.Money[1].toLongLong();
             }
 
-
+            qDebug()<<"AAX : "<<iNtdCost<<" , "<<iNtdPrime;
 
             //成本匯率是要看儲值方式的幣別
             QString sPayTypeCurrency= ACTION.getAddValueCurrency(data.PayType);
@@ -302,7 +296,7 @@ void LayerDayReport::refreshTb()
         if(data.Step.toInt()==5)
         {
             iTotal0 +=iNtdCost;
-            qDebug()<<"DDDD : "<<iTotal0;
+
             iTotal1 +=iNtdPrime;
 
             int iTmp = iNtdCost-iNtdPrime;
@@ -331,56 +325,49 @@ bool LayerDayReport::checkFilter(OrderData order)
     QString step = order.Step;
     QString sDate = order.OrderDate;
 
-    qDebug()<<"GGGGGGGGG "<<sDate;
 
     if(ui->dateEdit->date().toString("yyyyMMdd") != sDate)
     {
-        qDebug()<<"GGGGGGGGG1 ";
 
         return false;
     }
 
-    qDebug()<<"GGGGG2";
+
     if(step=="-1" && !ui->cbStep0_1->isChecked())
     {
-        qDebug()<<"GGGGGGGGG2 ";
+
         return false;
     }
 
-    qDebug()<<"GGGGG3";
 
     if(step=="0" && !ui->cbStep0->isChecked())
         return false;
 
 
-    qDebug()<<"GGGGG4";
+
 
     if(step=="1" && !ui->cbStep1->isChecked())
         return false;
 
-    qDebug()<<"GGGGG4";
+
     if(step=="2" && !ui->cbStep2->isChecked())
         return false;
 
 
-    qDebug()<<"GGGGG4";
+
     if(step=="3" && !ui->cbStep3->isChecked())
         return false;
 
 
-    qDebug()<<"GGGGG4";
+
     if(step=="4" && !ui->cbStep4->isChecked())
         return false;
 
 
-    qDebug()<<"GGGGG4";
     if(step=="5" && !ui->cbStep5->isChecked())
         return false;
 
 
-    qDebug()<<"GGGGG4";
-
-    qDebug()<<"iiiiii"<<true;
     return true;
 }
 
@@ -434,7 +421,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             listMoney.append(ui->tb->item(row,13)->text());
 
-            data.Money = listMoney;
+            //  data.Money = listMoney;
 
 
             bool bOk =ACTION.replaceOrder(data,sError);
@@ -502,7 +489,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             ACTION.setPrimeMoney(order);
 
-            ACTION.setSellMoney(order);
+            //ACTION.setSellMoney(order);
 
             bool bOk =ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
@@ -550,31 +537,54 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
     }
 
-    if(column==_Note)
+
+
+    if(column==_Note ||column==_User)
     {
-        //        QStringList list= data.Note0;
+
+        QString st="訂單編號:"+data.Id+"\n"
+                                   "報價:     %1\n"
+                                   "下單:     %2\n"
+                                   "接單/儲值: %3\n"
+                                   "回報:     %4\n"
+                                   "確認:     %5\n";
 
 
-        //        while(list.length()<5)
-        //            list.append("");
+        QStringList listName;
 
-        //        QString st="報價:    %1 \n"
-        //                   "下單:    %2 \n"
-        //                   "處理中:   %3 \n"
-        //                   "處理完成: %4 \n"
-        //                   "回報:    %5"   ;
-
-
-
-
-        // DMSG.showMsg("備註",st.arg(list.at(0)).arg(list.at(1)).arg(list.at(2)).arg(list.at(3)).arg(list.at(4)),"OK");
+        foreach(QString sUserSid,data.User)
+        {
+            listName.append(ACTION.getUser(sUserSid).Name);
+        }
 
 
         DialogNote dialog;
-
+        dialog.setUser(listName);
         dialog.setData(data.Note0);
 
         dialog.exec();
+
+    }
+
+    if(column==_Note1)
+    {
+        DialogInput dialog;
+
+        dialog.setTitle(data.Id+"    "+data.Name);
+
+        dialog.setText(data.Note1);
+
+        dialog.hideDelete();
+
+        int ret =dialog.exec();
+
+        if(ret==1)
+        {
+            QString sError;
+            data.Note1=dialog.text();
+            ACTION.action(ACT::REPLACE_ORDER,data.data(),sError);
+            refreshTb();
+        }
 
     }
 }
@@ -707,11 +717,12 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
     if(column==_User)
     {
         QString st="訂單編號:"+data.Id+"\n"
-                                   "報價: %1\n"
-                                   "下單: %2\n"
-                                   "接單: %3\n"
-                                   "儲值: %4\n"
-                                   "回報: %5\n";
+                                   "報價:     %1\n"
+                                   "下單:     %2\n"
+                                   "接單:     %3\n"
+                                   "儲值:     %4\n"
+                                   "回報:     %5\n"
+                                   "確認:     %6\n";
 
 
         QStringList listName;
@@ -728,7 +739,7 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
 
 
 
-        UI.toolTip(st.arg(listName.at(0),listName.at(1),listName.at(2),listName.at(4),listName.at(5)));
+        UI.toolTip(st.arg(listName.at(0),listName.at(1),listName.at(2),listName.at(3),listName.at(4),listName.at(5)));
 
 
     }

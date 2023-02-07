@@ -120,6 +120,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="btn3">
+                <property name="text">
+                 <string>貼上</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="btn1">
                 <property name="styleSheet">
                  <string notr="true"/>

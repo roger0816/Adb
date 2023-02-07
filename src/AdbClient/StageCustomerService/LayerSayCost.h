@@ -67,6 +67,8 @@ private:
 
     DataRate m_primeRate;
 
+    QString m_gameRate;
+
     bool m_bReadOnly = false;
 
     CListPair m_listPayType;

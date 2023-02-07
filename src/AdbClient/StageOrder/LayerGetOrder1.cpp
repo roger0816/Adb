@@ -351,6 +351,15 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
     {
         DialogNote dialogNote;
 
+        QStringList listName;
+
+        foreach(QString sUserSid,order.User)
+        {
+            listName.append(ACTION.getUser(sUserSid).Name);
+        }
+
+        dialogNote.setUser(listName);
+
         dialogNote.setData(order.Note0);
 
         dialogNote.exec();

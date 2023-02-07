@@ -40,8 +40,8 @@ private:
 
     void showEvent(QShowEvent *) override;
 
-    QVariantList m_listData;
-
+   // QVariantList m_listData;
+    QList<CustomerData> m_listCus;
 
 
     int m_iIdx=-1;

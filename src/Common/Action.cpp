@@ -303,6 +303,24 @@ UserData Action::getUser(QString sSid,bool bQuery)
     return re;
 }
 
+QList<CustomerData> Action::getCustomerList()
+{
+
+    QVariantList tmp;
+    QString sError;
+    QVariantList listOut;
+    action(ACT::QUERY_CUSTOMER,tmp,listOut,sError);
+    m_listCustomer.clear();
+    for(int i=0;i<listOut.length();i++)
+    {
+        CustomerData d(listOut.at(i).toMap());
+
+        m_listCustomer.append(d);
+    }
+
+    return m_listCustomer;
+}
+
 CustomerData Action::getCustomer(QString sSid,bool bQuery)
 {
     CustomerData data;
@@ -330,7 +348,7 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
             return vData;
         }
     }
-
+    data.Name="查無此人";
     return data;
 
 }
@@ -639,24 +657,24 @@ QList<CustomerCost> Action::getCustomerCost(QString sCustomerSid, bool bQuery)
 {
 
 
-        QVariantMap in;
+    QVariantMap in;
 
-        QVariantList listOut;
+    QVariantList listOut;
 
-        in["CustomerSid"] = sCustomerSid;
-        in["ASC"]="OrderTime";
-        QString sError;
+    in["CustomerSid"] = sCustomerSid;
+    in["ASC"]="OrderTime";
+    QString sError;
 
 
-        action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError,bQuery);
+    action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError,bQuery);
 
-        m_listCustomerCost.clear();
+    m_listCustomerCost.clear();
 
-        for(int i=0;i<listOut.length();i++)
-        {
-            CustomerCost d(listOut.at(i).toMap());
-            m_listCustomerCost.append(d);
-        }
+    for(int i=0;i<listOut.length();i++)
+    {
+        CustomerCost d(listOut.at(i).toMap());
+        m_listCustomerCost.append(d);
+    }
 
     return m_listCustomerCost;
 }
@@ -678,7 +696,7 @@ QString Action::getCustomerNowMoney(QString sCustomerSid)
     QVariantList listOut;
 
     in["CustomerSid"] = sCustomerSid;
-    in["DESC"]="OrderTime";
+    in["DESC"]="Sid";
     in["LIMIT"]="1";
     QString sError;
 
@@ -774,9 +792,9 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         setPrimeMoney(order);
     }
 
-//    else if(order.Step=="4") //回報 - 更新用戶餘額
-//        bToUpdateMoney=true;
-                                //確認 - 更新user bouns
+    //    else if(order.Step=="4") //回報 - 更新用戶餘額
+    //        bToUpdateMoney=true;
+    //確認 - 更新user bouns
     else if(order.Step=="-1")
     {
 
@@ -850,11 +868,11 @@ bool Action::replaceOrder(OrderData order, QString &sError)
         {
             bRe = true;
 
-//            CustomerData customerData = getCustomer(order.CustomerSid);
+            //            CustomerData customerData = getCustomer(order.CustomerSid);
 
-//            customerData.Money=data.Total;
+            //            customerData.Money=data.Total;
 
-//            bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);
+            //            bOk = action(ACT::EDIT_CUSTOMER,customerData.data(),sError);
 
 
         }
@@ -1092,6 +1110,7 @@ QString Action::setSellMoney(OrderData &order)
     int Money0=0;
 
 
+
     QStringList listItem = order.Item.split(SPLIT1);
 
     for(int i=0;i<listItem.length();i++)
@@ -1108,11 +1127,11 @@ QString Action::setSellMoney(OrderData &order)
 
         DataGameItem item = getGameItemFromSid(gameItemSid);
 
-         DataGameList game =getGameList(item.GameSid);
+        DataGameList game =getGameList(item.GameSid);
 
-         QString sCost = QString::number(item.Bonus.toDouble()*game.GameRate,'f',0);
+        QString sCost = QString::number(item.Bonus.toDouble()*game.GameRate,'f',0);
 
-         Money0+=sCost.toDouble()*iCount;
+        Money0+=sCost.toDouble()*iCount;
 
     }
 
@@ -1233,6 +1252,7 @@ QString Action::setPrimeMoney(OrderData &order)
     order.Money[1] = QString::number(ntdToInt(prime));    //換成台幣的成本
 
 
+
     return sRe;
 }
 
@@ -1350,13 +1370,13 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutR
             *data.Value[2].toDouble()*data.Value[3].toDouble()
             /data.SubValue.first().toDouble();
 
-//    if(data.Sid=="23")
-//    {
-//        qDebug()<<"r : "<<r;
-//        qDebug()<<"AAAAAAAAAAAAXX : "<<data.Value;
+    //    if(data.Sid=="23")
+    //    {
+    //        qDebug()<<"r : "<<r;
+    //        qDebug()<<"AAAAAAAAAAAAXX : "<<data.Value;
 
-//        qDebug()<<"RRRRRRRR "<<re;
-//    }
+    //        qDebug()<<"RRRRRRRR "<<re;
+    //    }
     return re;
 }
 
@@ -1692,4 +1712,27 @@ bool Action::sendPayOrder(CustomerData customerData, CustomerCost costData, QStr
 
     return action(ACT::PAY_ORDER,in,sError);
 }
+
+DataGameRate Action::getGameRate(QString GameSid, QString sSid)
+{
+    DataGameRate re;
+
+    QString sError;
+    QVariantMap in,out;
+
+    if(sSid.trimmed()!="")
+    {
+        in["Sid"]=sSid;
+    }
+    else
+    {
+        in["GameSid"]=GameSid;
+        in["DESC"]="Sid";
+        in["LIMIT"]="1";
+    }
+    action(ACT::QUERY_GAME_RATE,in,out,sError,true);
+
+    return re;
+}
+
 

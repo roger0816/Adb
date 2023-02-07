@@ -114,7 +114,7 @@ void LayerCustomer::refresh()
 
     QVariantList in;
 
-    ACTION.action(ACT::QUERY_CUSTOMER,in,m_listData,sError);
+    m_listCus=ACTION.getCustomerList();
 
 
     m_dIdxMapping.clear();
@@ -123,11 +123,10 @@ void LayerCustomer::refresh()
 
 
 
-    for(int i=0;i<m_listData.length();i++)
+    for(int i=0;i<m_listCus.length();i++)
     {
-        QVariantMap v = m_listData.at(i).toMap();
 
-        CustomerData data(v);
+        CustomerData data = m_listCus.at(i);
 
         bool bCheck = checkSearch(data);
 
@@ -278,9 +277,9 @@ void LayerCustomer::on_btnEdit_clicked()
 #else
 
     int iTmp = m_dIdxMapping.value(ui->tb->currentRow());
-    int iIdx= qBound(0,iTmp,m_listData.length()-1);
+    int iIdx= qBound(0,iTmp,m_listCus.length()-1);
 
-    CustomerData customerData(m_listData.at(iIdx).toMap());
+    CustomerData customerData=m_listCus.at(iIdx);
 
     dialog.setData(customerData.Sid);
 
@@ -335,13 +334,13 @@ void LayerCustomer::on_tb_cellClicked(int row, int column)
 {
     int iTmp = m_dIdxMapping.value(row);
 
-    if(row<0 || iTmp>=m_listData.length())
+    if(row<0 || iTmp>=m_listCus.length())
         return ;
 
     ui->btnEdit->setEnabled(true);
 
 
-    CustomerData data(m_listData.at(iTmp).toMap());
+    CustomerData data=m_listCus.at(iTmp);
 
 
     if(column==0)
@@ -377,18 +376,17 @@ void LayerCustomer::slotClearSearch()
 }
 
 
-void LayerCustomer::on_txSearch_textChanged(const QString &arg1)
-{
+//void LayerCustomer::on_txSearch_textChanged(const QString &arg1)
+//{
 
-}
+//}
 
 CustomerData LayerCustomer::checkSelect(QString sSid)
 {
     CustomerData re;
 
-    foreach(QVariant v,m_listData)
+    foreach(CustomerData data,m_listCus)
     {
-        CustomerData data(v.toMap());
 
         if(sSid==data.Sid)
             re = data;

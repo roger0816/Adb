@@ -5,6 +5,7 @@
 #include <QLineEdit>
 #include <QDebug>
 #include <QLabel>
+#include <QTextEdit>
 #include <QComboBox>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -47,16 +48,23 @@ class DialogInput : public QDialog
 public:
     explicit DialogInput(QWidget *parent = nullptr);
     ~DialogInput();
-
+    //a.  設標題
     void setTitle(QString sTitle);
+    //b1.  用法1 設文字
+    void setText(QString sText);
+    QString text();
 
+    //b2.  用法2 加元件
     void addComboBox(QString sLb, QVariantMap input);
 
     void addInput(QString sLb, QVariantMap input);
 
+    QVariantMap data();
+
+    //c. btn不要有delete
     void hideDelete();
 
-    QVariantMap data();
+
 
 private slots:
 
@@ -67,11 +75,15 @@ private slots:
     void on_btnDel_clicked();
 
 private:
+
+
     Ui::DialogInput *ui;
 
     QList<DialogInputItem*> m_listW;
 
     QVBoxLayout *lay;
+
+
 
 };
 

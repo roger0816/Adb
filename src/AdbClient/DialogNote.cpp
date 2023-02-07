@@ -18,8 +18,32 @@ DialogNote::~DialogNote()
     delete ui;
 }
 
-void DialogNote::setData(QStringList list)
+void DialogNote::setUser(QStringList list)
 {
+    QStringList userList=list;
+
+    while(userList.length()<6)
+    {
+        userList.append(" ");
+    }
+
+//    QObject::tr("<font color = red>%1</font>").arg("abc")+
+//                                  QObject::tr("<font color = blue>%1</font>").arg("efg");
+
+
+    ui->groupBox0->setTitle("報價                "+userList.at(0));
+    ui->groupBox1->setTitle("下單                "+userList.at(1));
+    ui->groupBox2->setTitle("接單                "+userList.at(2));
+    ui->groupBox3->setTitle("儲值                "+userList.at(3));
+    ui->groupBox4->setTitle("回報                "+userList.at(4));
+    if(userList.at(5).trimmed()!="")
+        ui->lbCheckUser->setText("  確認                "
+                                 +userList.at(5));
+}
+
+void DialogNote::setData( QStringList list)
+{
+
     QStringList listNote=list;
 
     while(listNote.length()<5)

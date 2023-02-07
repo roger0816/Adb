@@ -306,12 +306,12 @@
         </attribute>
         <column>
          <property name="text">
-          <string>支付管道</string>
+          <string>加值編號</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>加值編號</string>
+          <string>支付管道</string>
          </property>
         </column>
         <column>
@@ -346,6 +346,21 @@
         </column>
         <column>
          <property name="text">
+          <string>原始金額</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>原始幣別</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
+          <string>備註</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>時間</string>
          </property>
         </column>
@@ -362,11 +377,6 @@
         <column>
          <property name="text">
           <string>圖</string>
-         </property>
-        </column>
-        <column>
-         <property name="text">
-          <string>備註</string>
          </property>
         </column>
        </widget>

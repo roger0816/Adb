@@ -161,6 +161,11 @@
           <string>備註</string>
          </property>
         </column>
+        <column>
+         <property name="text">
+          <string>留言</string>
+         </property>
+        </column>
        </widget>
       </item>
       <item row="0" column="0">

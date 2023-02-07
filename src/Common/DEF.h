@@ -12,7 +12,7 @@
 
 
 
-#define ADP_VER "v1.08.0130"
+#define ADP_VER "v1.09.0208"
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;
@@ -22,6 +22,7 @@ struct SQL_TABLE
     static QString ExchangeRate(){return "ExchangeRate";}
     static QString PrimeCostRate(){return "PrimeCostRate";}
     static QString GameList(){return "GameList";}
+        static QString GameRate(){return "GameRate";}
     static QString GameItem(){return "GameItem";}
     static QString Bulletin(){return "Bulletin";}
       static QString CustomerMoney(){return "CustomerMoney";}
@@ -76,6 +77,7 @@ enum _KEY
     EDIT_GAME_LIST,
     DEL_GAME_LIST,
     QUERY_GAME_LIST=1431,
+    QUERY_GAME_RATE=1432,
 
     ADD_GAME_ITEM = 1501,
     EDIT_GAME_ITEM,

@@ -18,6 +18,18 @@ Widget::Widget(QWidget *parent)
 //qDebug()<<"SSSS : "<<s;
 
 
+    QByteArray aa="12345678";
+
+    for(int i=0;i<aa.length();i++)
+    {
+        const auto state = aa[i];
+
+        qDebug()<<"AAAAA";
+        qDebug()<<(state & 0x07);
+
+    }
+
+
     ui->lbTestName->hide();
 
     QFile file(":/style.qss");

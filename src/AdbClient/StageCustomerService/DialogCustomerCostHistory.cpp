@@ -99,12 +99,12 @@ void DialogCustomerCostHistory::refresh(int)
     QString sError;
 
 
-    ACTION.action(ACT::QUERY_CUSTOMER_COST,in,out,sError);
+    ACTION.action(ACT::QUERY_CUSTOMER_COST,in,out,sError,true);
 
     m_listAddCost = out;
 
 
-    ACTION.action(ACT::QUERY_ORDER,in,out,sError);
+    ACTION.action(ACT::QUERY_ORDER,in,out,sError,true);
 
     m_listOrder = out;
 
@@ -293,7 +293,7 @@ void DialogCustomerCostHistory::mergeData()
 
     qSort(m_listRowData.begin(),m_listRowData.end(),[=](const QVariant &v1, const QVariant &v2)
     {
-        return v1.toMap()["OrderTime"].toString() > v2.toMap()["OrderTime"].toString();
+        return v1.toMap()["UpdateTime"].toString() > v2.toMap()["UpdateTime"].toString();
     }
 
     );

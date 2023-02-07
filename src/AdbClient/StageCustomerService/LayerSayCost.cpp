@@ -11,14 +11,15 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
 
     ui->tbGameItem->setColumnWidth(0,60);
     ui->tbInfo->setColumnWidth(0,60);
-    ui->tbInfo->setColumnWidth(1,200);
-    ui->tbInfo->setColumnWidth(2,60);
+        ui->tbInfo->setColumnWidth(1,30);
+    ui->tbInfo->setColumnWidth(2,200);
+    ui->tbInfo->setColumnWidth(3,60);
 
     ui->wBottom->setCurrentIndex(0);
 
     ui->wSelect->hide();
 
-
+    ui->tbInfo->hideColumn(1);
     connect(ui->tbGameItem,&QTableWidget::cellClicked,this,&LayerSayCost::slotTbGameItemCellClicked);
 }
 
@@ -270,7 +271,9 @@ void LayerSayCost::refreshInfo()
         ui->tbInfo->setItem(iIdx,0,UI.tbItem("移除",GlobalUi::_BUTTON));
 
 
-        ui->tbInfo->setItem(iIdx,1,UI.tbItem(data["Name"]));
+        ui->tbInfo->setItem(iIdx,1,UI.tbItem(data["Sid"]));
+
+        ui->tbInfo->setItem(iIdx,2,UI.tbItem(data["Name"]));
 
         checkTbRow(data["Name"].toString());
 
@@ -279,7 +282,6 @@ void LayerSayCost::refreshInfo()
 
         QPair<qlonglong ,qlonglong > tmp =  ACTION.getItemCount(DataGameItem(data).Sid);
 
-        qDebug()<<"XXXXXXXXXXX : sid "<<DataGameItem(data).Sid<<" , "<<tmp;
         int iTotalItem = tmp.second-tmp.first;
 
         sp->setRange(1,iTotalItem);
@@ -294,7 +296,7 @@ void LayerSayCost::refreshInfo()
 
 
         QObject::connect(sp,SIGNAL(valueChanged(int)),this,SLOT(spValue(int)));
-        ui->tbInfo->setCellWidget(iIdx,2,sp);
+        ui->tbInfo->setCellWidget(iIdx,3,sp);
 
 
     }
@@ -328,7 +330,7 @@ double LayerSayCost::checkTotal()
 
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
-        QSpinBox *sp =dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,2));
+        QSpinBox *sp =dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3));
 
         double iPrice =sp->value();
 
@@ -388,7 +390,7 @@ double LayerSayCost::checkTotal()
 
 
         re=re+cost;
-        ui->tbInfo->setItem(i,3,UI.tbItem(cost));
+        ui->tbInfo->setItem(i,4,UI.tbItem(cost));
     }
     m_iTotal=re;
 
@@ -891,12 +893,12 @@ void LayerSayCost::on_btnCopy_clicked()
 
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
-        sCost+=ui->tbInfo->item(i,1)->text();
+        sCost+=ui->tbInfo->item(i,2)->text();
         sCost+="  x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,2))->text();
 
         if(!m_bOrderMode)
         {
-            sCost+="  "+ui->tbInfo->item(i,3)->text();
+            sCost+="  "+ui->tbInfo->item(i,4)->text();
         }
 
         sCost+="\n";
@@ -1025,7 +1027,7 @@ void LayerSayCost::on_btnSayOk_clicked()
         CPair p;
         p.first = m_listInto.at(i).toMap()["Sid"].toString();
 
-        int iCount = dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,2))->value();
+        int iCount = dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3))->value();
 
         p.second = QString::number(iCount);
 

@@ -27,9 +27,11 @@ LayerDayDebit::LayerDayDebit(QWidget *parent) :
     lay->addWidget(m_itemPic);
     m_dialogPic->setLayout(lay);
 
-    ui->tb->setColumnWidth(10,40);
+    ui->tb->setColumnWidth(_Pic0,40);
 
-    ui->tb->setColumnWidth(11,40);
+    ui->tb->setColumnWidth(_Pic1,40);
+
+    ui->tb->setColumnWidth(_OrderTime,90);
 
     connect(ui->btnDebitExport,&QPushButton::clicked,this,&LayerDayDebit::slotBtnDebitExport);
 
@@ -38,6 +40,8 @@ LayerDayDebit::LayerDayDebit(QWidget *parent) :
     });
 
 
+//    ui->tb->hideColumn(_OriValue);
+//       ui->tb->hideColumn(_OriCurrency);
 }
 
 LayerDayDebit::~LayerDayDebit()
@@ -89,10 +93,10 @@ void LayerDayDebit::refreshTb()
 
     m_listDisplayCustomerCost.clear();
 
-    ui->tb->hideColumn(0);
+    ui->tb->hideColumn(_DebitSid);
 
     if(ui->cbDebit->currentIndex()==0)
-        ui->tb->showColumn(0);
+        ui->tb->showColumn(_DebitSid);
 
     for(int i=0;i<m_listCustomerCost.length();i++)
     {
@@ -105,42 +109,57 @@ void LayerDayDebit::refreshTb()
 
         ui->tb->setRowCount(iRow+1);
 
-        ui->tb->setItem(iRow,0,UI.tbItem(getDebitName(data.DebitSid)));
+        ui->tb->setItem(iRow,_DebitSid,UI.tbItem(getDebitName(data.DebitSid)));
 
-        ui->tb->setItem(iRow,1,UI.tbItem(data.OrderId));
+        ui->tb->setItem(iRow,_OrderId,UI.tbItem(data.OrderId));
 
         CustomerData customer =ACTION.getCustomer(data.CustomerSid);
 
-        ui->tb->setItem(iRow,2,UI.tbItem(customer.Id));
+        ui->tb->setItem(iRow,_CusSid,UI.tbItem(customer.Id));
 
-        ui->tb->setItem(iRow,3,UI.tbItem(customer.Name));
-        ui->tb->setItem(iRow,4,UI.tbItem(customer.Currency));
+        ui->tb->setItem(iRow,_CusName,UI.tbItem(customer.Name));
+        ui->tb->setItem(iRow,_CusCurrency,UI.tbItem(customer.Currency));
 
-        ui->tb->setItem(iRow,5,UI.tbItem(data.Total));
-        ui->tb->setItem(iRow,6,UI.tbItem(data.DebitNote));
+        ui->tb->setItem(iRow,_CusTotal,UI.tbItem(data.Total));
+        ui->tb->setItem(iRow,_DebitNote,UI.tbItem(data.DebitNote));
 
-        ui->tb->setItem(iRow,7,UI.tbItem(data.OriginValue));
-        ui->tb->setItem(iRow,8,UI.tbItem(QDateTime::fromString(data.OrderTime,"yyyyMMddhhmmss")));
-        ui->tb->setItem(iRow,9,UI.tbItem(ACTION.getUser(data.UserSid).Name));
+        ui->tb->setItem(iRow,_ChangeValue,UI.tbItem(data.ChangeValue));
+
+        if(data.OriginCurrency!=data.Currency)
+        {
+            ui->tb->setItem(iRow,_OriValue,UI.tbItem(data.OriginValue));
+            ui->tb->setItem(iRow,_OriCurrency,UI.tbItem(data.OriginCurrency));
+        }
+
+
+        QString sData = QDateTime::fromString(data.OrderTime,"yyyyMMddhhmmss").toString("hh:mm:ss");
+        ui->tb->setItem(iRow,_OrderTime,UI.tbItem(sData));
+        ui->tb->setItem(iRow,_UserName,UI.tbItem(ACTION.getUser(data.UserSid).Name));
         if(data.Pic0.trimmed()!="")
         {
-            ui->tb->setItem(iRow,10,UI.tbItem("圖1",1));
+            ui->tb->setItem(iRow,_Pic0,UI.tbItem("圖1",1));
         }
 
         if(data.Pic1.trimmed()!="")
         {
-            ui->tb->setItem(iRow,11,UI.tbItem("圖2",1));
+            ui->tb->setItem(iRow,_Pic1,UI.tbItem("圖2",1));
         }
 
 
 
-        ui->tb->setItem(iRow,12,UI.tbItem(data.Note0));
+        ui->tb->setItem(iRow,_Note0,UI.tbItem(data.Note0));
         iTotal+=data.OriginValue.toDouble();
 
         m_listDisplayCustomerCost.append(data.data());
     }
 
+
     ui->lbTotal->setText(QString::number(iTotal));
+
+    ui->lbT->setVisible(ui->cbCurrency->currentIndex()!=0);
+
+
+    ui->lbTotal->setVisible(ui->cbCurrency->currentIndex()!=0);
 
     m_bLockRe = false;
 
@@ -298,15 +317,15 @@ void LayerDayDebit::on_cbDebit_currentIndexChanged(int index)
 
 void LayerDayDebit::on_dateEdit_userDateChanged(const QDate &date)
 {
-//    if(ui->dateEdit->property("lock").toBool())
-//        return;
-//    refreshTb();
+    //    if(ui->dateEdit->property("lock").toBool())
+    //        return;
+    //    refreshTb();
 }
 
 
 void LayerDayDebit::on_timeStart_userTimeChanged(const QTime &time)
 {
-   // refreshTb();
+    // refreshTb();
 }
 
 
@@ -321,7 +340,7 @@ void LayerDayDebit::on_tb_cellPressed(int row, int column)
     if(row<0 || row>=m_listDisplayCustomerCost.length())
         return ;
 
-    if(column!=10 && column!=11)
+    if(column!=_Pic0 && column!=_Pic1)
         return;
 
 
@@ -332,7 +351,7 @@ void LayerDayDebit::on_tb_cellPressed(int row, int column)
 
     QVariant sValue = data.Pic0;
 
-    if(column==11)
+    if(column==_Pic1)
         sValue = data.Pic1;
 
     if(sValue.toString().trimmed()=="")
@@ -345,14 +364,14 @@ void LayerDayDebit::on_tb_cellPressed(int row, int column)
     m_dialogPic->resize(480,360);
 
     m_itemPic->setFileName(
-                ui->tb->item(row,0)->text()+"_"+
-                ui->tb->item(row,1)->text()+"_"+
+                ui->tb->item(row,_DebitSid)->text()+"_"+
+                ui->tb->item(row,_OrderId)->text()+"_"+
                 sText);
 
     m_itemPic->setData(out["Data"].toByteArray());
 
     m_dialogPic->setWindowTitle("編號 : "+
-                                ui->tb->item(row,0)->text()+"          "
+                                ui->tb->item(row,_DebitSid)->text()+"          "
                                 +sText);
 
     QTimer::singleShot(50,this,[=](){ m_dialogPic->exec();});
@@ -394,7 +413,7 @@ void LayerDayDebit::slotBtnDebitExport()
         for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
         {
 
-            if(iCol==10 || iCol==11)
+            if(iCol==_Pic0 || iCol==_Pic1)
                 continue;
 
             iXlsxCol++;
@@ -411,7 +430,7 @@ void LayerDayDebit::slotBtnDebitExport()
 
             if(st.trimmed()!="")
             {
-                if(iCol!=5 && iCol!=7)
+                if(iCol!=_CusTotal && iCol!=_ChangeValue)
                     xlsx.write(iRow+2,iXlsxCol,st);
                 else
                     xlsx.write(iRow+2,iXlsxCol,st.toDouble());

@@ -229,7 +229,7 @@ void LayerCostTable::on_btnSaveText_clicked()
 {
     int iRow = ui->tbGame->currentRow();
 
-    qDebug()<<"AAAAAAAAAAAAA"<<iRow;
+
 
     if(iRow<0 || iRow>=m_listGameDisplay.length())
         return;

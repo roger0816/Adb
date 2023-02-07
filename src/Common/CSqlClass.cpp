@@ -13,13 +13,13 @@ void CSqlClass::openLocalDb(QString sDbName)
 
     if(!m_bLocalDbOpen)
     {
-    bool bOk = RPKCORE.database.openDb(sDbName);
+        bool bOk = RPKCORE.database.openDb(sDbName);
 
-    m_local = RPKCORE.database.getDb(0);
+        m_local = RPKCORE.database.getDb(0);
 
-    m_bLocalDbOpen =true;
+        m_bLocalDbOpen =true;
 
-    qDebug()<<"open local sql save"<<bOk;
+        qDebug()<<"open local sql save"<<bOk;
     }
 }
 
@@ -33,7 +33,7 @@ bool CSqlClass::insertTb(QString sTableName, QVariantMap input, QString &sError,
     QString sDateTime =currentDateTime().toString("yyyyMMddhhmmss");
 
     //if(data.keys().indexOf("UpdateTime")<0 || data["UpdateTime"].toString().trimmed()=="")
-        data["UpdateTime"] =sDateTime;
+    data["UpdateTime"] =sDateTime;
 
     QStringList listKey = data.keys();
 
@@ -416,6 +416,21 @@ void CSqlClass::createTableSqlite()
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
 
+
+    sql.clear();
+
+    sql.exec("CREATE TABLE 'GameRate' ( \
+             'Sid'	INTEGER, \
+             'GameSid'	TEXT, \
+             'GameName'	TEXT, \
+             'Rate'	TEXT, \
+          'UserSid'	TEXT, \
+             'UpdateTime'	TEXT, \
+             PRIMARY KEY('Sid') \
+             );");
+
+
+
     sql.clear();
 
     sql.exec("CREATE TABLE 'TriggerData' ( \
@@ -492,7 +507,7 @@ void CSqlClass::createTableSqlite()
              'Note'	TEXT,               \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
              );");
-  sql.clear();
+    sql.clear();
     sql.exec("CREATE TABLE 'CustomerMoney' ( \
              'Sid'	INTEGER, \
              'Id'	TEXT, \
@@ -511,8 +526,8 @@ void CSqlClass::createTableSqlite()
              'Name'	TEXT NOT NULL,              \
              'Type'	TEXT,              \
              'UpdateTime'	TEXT,               \
-            'Note1'	TEXT,              \
-            'Note2'	TEXT,              \
+             'Note1'	TEXT,              \
+             'Note2'	TEXT,              \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
              );");
 
@@ -524,8 +539,8 @@ void CSqlClass::createTableSqlite()
              'Name'	TEXT NOT NULL,              \
              'Currency'	TEXT,              \
              'UpdateTime'	TEXT,               \
-            'Note1'	TEXT,              \
-            'Note2'	TEXT,              \
+             'Note1'	TEXT,              \
+             'Note2'	TEXT,              \
              PRIMARY KEY('Sid' AUTOINCREMENT)   \
              );");
 
@@ -573,7 +588,7 @@ void CSqlClass::createTableSqlite()
              'PayInfo'	TEXT,                   \
              'UpdateTime'	TEXT,               \
              'UserSid'	TEXT,                   \
-           'Num5'	TEXT,                   \
+             'Num5'	TEXT,                   \
              'Note1'	TEXT,                       \
              'Note2'	TEXT,                       \
              PRIMARY KEY('Sid' AUTOINCREMENT)    \
@@ -582,7 +597,7 @@ void CSqlClass::createTableSqlite()
     sql.clear();
     sql.exec("CREATE TABLE 'CustomerGameInfo' (     \
              'Sid'	INTEGER,                            \
-            'CustomerSid'	TEXT,                           \
+             'CustomerSid'	TEXT,                           \
              'CustomerId'	TEXT,                           \
              'GameSid'	TEXT,                           \
              'LoginType'	TEXT,                           \
@@ -642,6 +657,7 @@ void CSqlClass::createTableSqlite()
              'Bouns'	TEXT,                   \
              'ExRateSid'	TEXT,                   \
              'PrimeRateSid'	TEXT,                   \
+             'GameRate'	TEXT,                   \
              'PayType'	TEXT,                   \
              'CanSelectPayType'	TEXT,                   \
              'Money'  TEXT, \
@@ -666,7 +682,7 @@ void CSqlClass::createTableSqlite()
              'Sort'	INTEGER,                    \
              'Name'	TEXT,                       \
              'Id'	TEXT,                       \
-            'Currency'	TEXT,                       \
+             'Currency'	TEXT,                       \
              'UpdateTime'	TEXT,               \
              'Value'	TEXT,                   \
              'SubValue'	TEXT,                   \
@@ -713,7 +729,7 @@ void CSqlClass::createTableSqlite()
     sql.clear();
     sql.exec("CREATE TABLE 'GameItemCount' ( \
              'Sid'	INTEGER, \
-              'Id'	TEXT, \
+             'Id'	TEXT, \
              'GameItemSid'	TEXT, \
              'GameRate'	TEXT, \
              'Name'	TEXT, \
@@ -722,8 +738,8 @@ void CSqlClass::createTableSqlite()
              'Total'	INTEGER, \
              'UpdateTime'	TEXT, \
              'Note'	TEXT, \
-            'Pic0'	TEXT, \
-            'Pic1'	TEXT, \
+             'Pic0'	TEXT, \
+             'Pic1'	TEXT, \
              PRIMARY KEY('Sid' AUTOINCREMENT) \
              );");
 
@@ -1118,7 +1134,7 @@ bool CSqlClass::lastCustomerAddCostId(QString sDate, QString &sId, QString &sErr
     QString tmpDate = sDate;
     sId=tmpDate.remove(0,2)+"-0000";
     QSqlQuery query(db());
-   // SELECT * FROM CustomerCost where OrderTime like "%202210%" ORDER BY OrderId DESC;
+    // SELECT * FROM CustomerCost where OrderTime like "%202210%" ORDER BY OrderId DESC;
     QString sCmd = "SELECT * FROM CustomerCost where OrderTime like '%%1%' ORDER BY OrderId DESC;";
 
     sCmd = sCmd.arg(sDate);

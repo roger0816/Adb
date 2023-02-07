@@ -20,6 +20,7 @@ SOURCES += \
     $$PWD/DataSync.cpp \
     $$PWD/Query.cpp \
     $$PWD/QueryObj.cpp \
+    $$PWD/VojData.cpp \
     $$PWD/common.cpp
 
 

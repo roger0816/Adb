@@ -44,13 +44,15 @@ void LayerCostSetting::on_btnGameAdd_clicked()
 
         data["Enable"] = dialog.m_bEnable;
 
-        data["GameRate"] = dialog.m_iGameRate;
+      //  data["GameRate"] = dialog.m_iGameRate;
 
         data["Id"] = dialog.m_sId;
 
         data["Name"] = dialog.m_sName;
 
         data["GameRate"] = QString::number(dialog.m_iGameRate);
+
+        data["UserSid"] = ACTION.m_currentUser.Sid;
 
         QString sError;
 
@@ -352,7 +354,7 @@ void LayerCostSetting::on_btnGameEdit_clicked()
         data["Name"] = dialog.m_sName;
 
         data["GameRate"] = QString::number(dialog.m_iGameRate);
-
+        data["UserSid"] = ACTION.m_currentUser.Sid;
         QString sError;
 
         ACTION.action(ACT::EDIT_GAME_LIST,data,sError);

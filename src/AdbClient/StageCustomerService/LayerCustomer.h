@@ -38,7 +38,7 @@ private slots:
 
     void slotClearSearch();
 
-    void on_txSearch_textChanged(const QString &arg1);
+   // void on_txSearch_textChanged(const QString &arg1);
 
     void on_btnInport_clicked();
 
@@ -47,7 +47,9 @@ private slots:
 private:
     Ui::LayerCustomer *ui;
 
-    QVariantList m_listData;
+  //  QVariantList m_listData;
+
+    QList<CustomerData> m_listCus;
 
     QMap<int ,int> m_dIdxMapping; //filter 後index會錯位，另外記index
 

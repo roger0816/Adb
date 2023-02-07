@@ -4,6 +4,9 @@
 #include <QWidget>
 #include <QShowEvent>
 
+
+#define HIDE_PIC 1
+
 namespace Ui {
 class StageHomePage;
 }
@@ -23,7 +26,7 @@ private slots:
 
     void slotSavePic();
 
-    void on_tabWidget_currentChanged(int index);
+    void on_tabWidget_currentChanged(int);
 
 
 

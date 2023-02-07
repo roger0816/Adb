@@ -15,6 +15,8 @@ public:
     explicit DialogNote(QWidget *parent = nullptr);
     ~DialogNote();
 
+    void setUser(QStringList list);
+
     void setData(QStringList list);
 
     void hideReport();

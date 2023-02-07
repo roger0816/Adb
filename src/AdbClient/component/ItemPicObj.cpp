@@ -18,7 +18,8 @@ ItemPicObj::ItemPicObj(QWidget *parent) :
     connect(ui->btnLbPicClear,&QPushButton::clicked,this,&ItemPicObj::slotClear);
 
     connect(ui->btnClip,&QPushButton::clicked,this,&ItemPicObj::slotClip);
-
+    connect(ui->btnPase,&QPushButton::clicked,this,&ItemPicObj::slotPase);
+    ui->btnPase->setToolTip("按下 win+shift+s ");
     connect(ui->btnDownload,&QPushButton::clicked,this,&ItemPicObj::slotDownload);
 
 
@@ -219,6 +220,15 @@ void ItemPicObj::slotClip()
 
 }
 
+void ItemPicObj::slotPase()
+{
+    QByteArray data = mutiScreen::Instance()->getWindowsCaptureData();
+
+
+    setData(data);
+}
+
+
 void ItemPicObj::slotDownload()
 {
     QString sDir =QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
@@ -229,6 +239,8 @@ void ItemPicObj::slotDownload()
 
     emit finishedSaveImage(sFileName,bOk);
 }
+
+
 
 
 

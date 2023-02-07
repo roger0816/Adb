@@ -11,6 +11,8 @@ DialogInput::DialogInput(QWidget *parent) :
 
     setWindowTitle("  ");
 
+    ui->stackedWidget->setCurrentIndex(0);
+
 }
 
 DialogInput::~DialogInput()
@@ -26,6 +28,7 @@ void DialogInput::setTitle(QString sTitle)
 
 void DialogInput::addComboBox(QString sLb, QVariantMap input)
 {
+
     DialogInputItem *item = new DialogInputItem(ui->wBody);
 
     item->setComboData(sLb,input);
@@ -49,6 +52,25 @@ void DialogInput::addInput(QString sLb, QVariantMap input)
 
     m_listW.append(item);
 
+}
+
+void DialogInput::setText(QString sText)
+{
+    ui->stackedWidget->setCurrentWidget(ui->pageText);
+
+    ui->text->setText(sText);
+}
+
+QString DialogInput::text()
+{
+    QString sRe="";
+
+    if(ui->stackedWidget->currentWidget()==ui->pageText)
+    {
+        sRe = ui->text->toPlainText();
+    }
+
+    return sRe;
 }
 
 void DialogInput::hideDelete()

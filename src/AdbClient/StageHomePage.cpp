@@ -18,12 +18,15 @@ StageHomePage::StageHomePage(QWidget *parent) :
     connect(ui->btn0,&QPushButton::clicked,ui->wPic,&ItemPic::slotSetPic);
     connect(ui->btn1,&QPushButton::clicked,ui->wPic,&ItemPic::slotClear);
     connect(ui->btn2,&QPushButton::clicked,ui->wPic,&ItemPic::slotClip);
+    connect(ui->btn3,&QPushButton::clicked,ui->wPic,&ItemPic::slotPase);
+
+    ui->btn3->setToolTip("按下 win+shift+s ");
 
     connect(ui->btnSend,&QPushButton::clicked,this,&StageHomePage::slotSavePic);
 
-
-
-
+#if HIDE_PIC
+    ui->wPic->hide();
+#endif
 }
 
 StageHomePage::~StageHomePage()
@@ -47,6 +50,9 @@ void StageHomePage::showEvent(QShowEvent *)
 
         m_bLock = true;
 
+
+#ifndef HIDE_PIC
+
         QVariantMap in;
         QVariantList listOut;
         in["Type"]=2;
@@ -66,7 +72,7 @@ void StageHomePage::showEvent(QShowEvent *)
             ui->wPic->setMd5(sPicMd5);
 
         }
-
+#endif
         ui->wBulletin->refresh(true);
 
         m_bLock = false;
@@ -81,6 +87,7 @@ void StageHomePage::on_btnFn_clicked()
     ui->wFn->setVisible(ui->btnFn->isChecked());
 
 }
+
 
 
 void StageHomePage::slotSavePic()
@@ -110,8 +117,14 @@ void StageHomePage::slotSavePic()
 }
 
 
-void StageHomePage::on_tabWidget_currentChanged(int index)
+void StageHomePage::on_tabWidget_currentChanged(int )
 {
-    ui->wPic->setVisible(index==0);
+
+#ifndef HIDE_PIC
+    ui->wPic->setVisible(ui->tabWidget->currentIndex()==0);
+#endif
 }
+
+
+
 

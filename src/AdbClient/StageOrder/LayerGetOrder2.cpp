@@ -224,7 +224,7 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
         }
         else
         {
-             tmpItem->setForeground(QColor(Qt::darkGray));
+            tmpItem->setForeground(QColor(Qt::darkGray));
         }
 
         ui->tbOrder->setItem(i,_CustomerId,tmpItem);
@@ -327,8 +327,9 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
                 order.PaddingUser=ACTION.m_currentUser.Sid;
                 order.Step="3";
 
-                ACTION.replaceOrder(order,sError);
-                //  UI.showMsg("",sError,"OK");
+                bool bRe = ACTION.replaceOrder(order,sError);
+                if(!bRe)
+                    UI.showMsg("",sError,"OK");
             }
             refreshUser();
         }
@@ -360,24 +361,22 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
     if(order.PaddingUser==ACTION.m_currentUser.Sid)
     {
-        QVariantMap tmp;
-        tmp["CustomerSid"]=order.CustomerSid;
-        QVariantList listOut;
-        QString sError;
-        ACTION.action(ACT::QUERY_CUSTOMER_COST,tmp,listOut,sError);
+
+
         QString sValue="0";
-        CustomerCost customerData;
-        if(listOut.length()>0)
+        CustomerCost costData = ACTION.getCustomerLastCost(order.CustomerSid);
+
+        if(costData.CustomerSid ==order.CustomerSid)
         {
-            customerData.setData(listOut.last().toMap());
-            sValue = customerData.Total;
+            sValue = costData.Total;
         }
+
 
         ui->lbOri->setText(sValue);
 
         ui->lbCost->setText(order.Cost);
 
-        ui->lbCurrency->setText(customerData.Currency);
+        ui->lbCurrency->setText(costData.Currency);
 
         QString sNote0;
         if(order.Note0.length()>4)
@@ -531,7 +530,7 @@ void LayerGetOrder2::refresh()
 
     //ui->cbAddValueType->clear();
 
-  m_bLockLoading = false;
+    m_bLockLoading = false;
 
     refreshUser();
 

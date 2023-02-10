@@ -620,7 +620,11 @@ CData Query::implementRecall(CData data)
     {
         OrderData order(data.dData);
 
-        if(order.Step=="1")
+        bool bHasIt = false;
+
+        if(order.Step=="0")
+        {}
+        else if(order.Step=="1")
         {
 
             QVariantMap in;
@@ -638,10 +642,59 @@ CData Query::implementRecall(CData data)
 
 
         }
+        else
+        {
+            QVariantMap inTmp;
+            QVariantList outTmp;
+            inTmp["Sid"] = order.Sid;
+            m_sql.queryTb(SQL_TABLE::OrderData(),inTmp,outTmp,sError);
+            OrderData current;
+            if(outTmp.length()>0)   //預防重複鎖定
+            {
+                current.setData(outTmp.first().toMap());
+
+                if(order.Step=="2")    //接單鎖定的請求
+                {
+                    if(current.Step =="2")
+                    {
+                        bHasIt = true;
+
+                        sError = getUser(current.User.at(2)).Name+" 已接單處理";
+                    }
+
+                    if(current.Step =="3")
+                    {
+                        bHasIt = true;
+
+                        sError = getUser(current.User.at(3)).Name+" 已儲值完成";
+                    }
+                }
+                else if(order.Step=="3" && order.PaddingUser.trimmed()!="") //回報鎖定的請求
+                {
+                    if(current.Step =="3" && current.PaddingUser.trimmed()!="")
+                    {
+                        bHasIt = true;
+
+                        sError = getUser(current.PaddingUser).Name+" 正在回報中";
+                    }
+
+                    if(current.Step =="4") //
+                    {
+                        bHasIt = true;
+
+                        sError = "此訂單 "+getUser(current.User.at(4)).Name+" 已回報";
+                    }
+                }
+
+            }
+
+        }
 
 
 
-        bOk = m_sql.insertTb(SQL_TABLE::OrderData(),order.data(),sError,true);
+
+        if(!bHasIt)
+            bOk = m_sql.insertTb(SQL_TABLE::OrderData(),order.data(),sError,true);
 
         sOkMsg="訂單送出";
 
@@ -1037,69 +1090,76 @@ CData Query::implementRecall(CData data)
             order.setData(data.dData);
             getCustomer(order.CustomerSid,cus);
 
+            //check has
+            QVariantMap tmpIn;
+            QVariantList tmpList;
+            tmpIn["OrderId"]=order.Id;
+            m_sql.queryTb(SQL_TABLE::CustomerCost(),tmpIn,tmpList,sError);
 
-            printTime("3");
+            if(tmpList.length()<1)
+            {
+                printTime("3");
 
-            bool b;
-            QVariantMap in;
-            QVariantList listOut;
-            in["CustomerSid"]=order.CustomerSid;
-            in["DESC"]="Sid";
+                bool b;
+                QVariantMap in;
+                QVariantList listOut;
+                in["CustomerSid"]=order.CustomerSid;
+                in["DESC"]="Sid";
 
-            double preTotal=0;
+                double preTotal=0;
 
-            listOut.clear();
-            b =m_sql.queryTb(SQL_TABLE::CustomerCost(),in,listOut,sError);
+                listOut.clear();
+                b =m_sql.queryTb(SQL_TABLE::CustomerCost(),in,listOut,sError);
 
-            if(b && listOut.length()>0)
-                preTotal=listOut.first().toMap()["Total"].toDouble();
+                if(b && listOut.length()>0)
+                    preTotal=listOut.first().toMap()["Total"].toDouble();
 
-            printTime("4");
+                printTime("4");
 
-            //   QString Error;
+                //   QString Error;
 
-            CustomerCost cost;
+                CustomerCost cost;
 
-            int iTmp =qBound(0,3,order.User.length()-1);
+                int iTmp =qBound(0,3,order.User.length()-1);
 
-            cost.UserSid = order.User.at(iTmp);
+                cost.UserSid = order.User.at(iTmp);
 
-            cost.Rate = order.ExRateSid;
+                cost.Rate = order.ExRateSid;
 
-            cost.CustomerSid=order.CustomerSid;
+                cost.CustomerSid=order.CustomerSid;
 
-            cost.IsAddCost=false;
+                cost.IsAddCost=false;
 
-            cost.Currency = cus.Currency;
+                cost.Currency = cus.Currency;
 
-            cost.ChangeValue=QString::number(order.Cost.toDouble()*-1);
+                cost.ChangeValue=QString::number(order.Cost.toDouble()*-1);
 
-            double tTotal =preTotal+cost.ChangeValue.toDouble();
+                double tTotal =preTotal+cost.ChangeValue.toDouble();
 
-            cost.Total = QString::number(tTotal);
+                cost.Total = QString::number(tTotal);
 
-            cost.OrderId = order.Id;
+                cost.OrderId = order.Id;
 
-            cost.OrderTime=order.OrderDate+order.OrderTime;
+                cost.OrderTime=order.OrderDate+order.OrderTime;
 
-            m_sql.insertTb(SQL_TABLE::CustomerCost(),cost.data(),sError);
-            printTime("5");
+                m_sql.insertTb(SQL_TABLE::CustomerCost(),cost.data(),sError);
+                printTime("5");
 
-            changeMoney(cus, cost.Total,sError);
+                changeMoney(cus, cost.Total,sError);
 
-            printTime("6");
-
-
-
-            checkUpdate(ACT::ADD_CUSTOMER_COST);
-            //   checkUpdate(ACT::REPLACE_ORDER);
-
-            printTime("7");
-
-            bOk=true;
-            sOkMsg="回報完成";
+                printTime("6");
 
 
+
+                checkUpdate(ACT::ADD_CUSTOMER_COST);
+                //   checkUpdate(ACT::REPLACE_ORDER);
+
+                printTime("7");
+
+                bOk=true;
+                sOkMsg="回報完成";
+
+            }
 
 
 
@@ -1165,6 +1225,9 @@ bool Query::changeMoney(QString sCustomerSid, QString sValue, QString &sError)
 bool Query::changeMoney(CustomerData cus, QString sValue, QString &sError)
 {
 
+
+
+
     QVariantMap in;
     in["Sid"]=cus.Sid;
     QVariantList listOut;
@@ -1221,6 +1284,22 @@ bool Query::getCustomer(QString sSid, CustomerData &data)
         data.setData(listOut.first().toMap());
 
     return bRe;
+}
+
+UserData Query::getUser(QString sSid)
+{
+    QString sError;
+    QVariantMap in;
+    QVariantList list;
+    in["Sid"]=sSid;
+    m_sql.queryTb(SQL_TABLE::UserData(),in,list,sError);
+
+    UserData re;
+
+    if(list.length()>0)
+        re.setData(list.first().toMap());
+
+    return re;
 }
 
 void Query::printTime(QString st)

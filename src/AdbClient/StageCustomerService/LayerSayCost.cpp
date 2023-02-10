@@ -894,7 +894,7 @@ void LayerSayCost::on_btnCopy_clicked()
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
         sCost+=ui->tbInfo->item(i,2)->text();
-        sCost+="  x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,2))->text();
+        sCost+="  x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3))->text();
 
         if(!m_bOrderMode)
         {

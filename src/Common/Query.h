@@ -26,6 +26,8 @@ public:
 
     bool getCustomer(QString sSid,CustomerData &data);
 
+    UserData getUser(QString sSid);
+
     void printTime(QString st="");
 
     void setPic(QVariantMap data);

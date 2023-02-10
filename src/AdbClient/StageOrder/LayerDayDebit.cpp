@@ -171,6 +171,8 @@ bool LayerDayDebit::checkData(CustomerCost data)
     if(data.Sid=="")
         return false;
 
+
+
     QDateTime date =QDateTime::fromString(data.OrderTime,"yyyyMMddhhmmss");
 
     if(date.time()<ui->timeStart->time() || date.time()>ui->timeEnd->time())

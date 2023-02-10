@@ -348,7 +348,19 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
             return vData;
         }
     }
-    data.Name="查無此人";
+
+    QVariantMap tmp;
+    tmp["Sid"];
+    QVariantList tmpList;
+    QString s;
+    action(ACT::QUERY_CUSTOMER,tmp,tmpList,s,true);
+
+    if(tmpList.length()>0)
+    {
+        data.setData(tmpList.first().toMap());
+    }
+    else
+        data.Name="查無此人";
     return data;
 
 }
@@ -689,7 +701,7 @@ bool Action::setCustomerCost(CustomerCost costData,QString &sError)
     return bRe;
 }
 
-QString Action::getCustomerNowMoney(QString sCustomerSid)
+CustomerCost Action::getCustomerLastCost(QString sCustomerSid)
 {
     QVariantMap in;
 
@@ -702,12 +714,20 @@ QString Action::getCustomerNowMoney(QString sCustomerSid)
 
     action(ACT::QUERY_CUSTOMER_COST,in,listOut,sError,true);
 
+
+    CustomerCost d;
     if(listOut.length()<1)
-        return "0";
+        return d;
 
-    CustomerCost d(listOut.first().toMap());
+    d.setData(listOut.first().toMap());
 
-    return d.Total;
+    return d;
+}
+
+QString Action::getCustomerNowMoney(QString sCustomerSid)
+{
+    return getCustomerLastCost(sCustomerSid).Total;
+
 }
 
 QList<OrderData> Action::getOrder(bool bRequest)
@@ -720,7 +740,7 @@ QList<OrderData> Action::getOrder(bool bRequest)
         in["OrderDate >="]=tDate.toString("yyyyMMdd");
 
         QString sError;
-        action(ACT::QUERY_ORDER,in,out,sError);
+        action(ACT::QUERY_ORDER,in,out,sError,true);
 
         m_listOrder.clear();
 
@@ -1666,28 +1686,28 @@ void Action::setNewCustomerId(QString sCustomerId)
     setKeyValue("CustomerId",sTmp);
 }
 
-QString Action::sendAddValue(QString sCustomerSid, QString sUserSid, QString sMoney)
-{
-    QVariantMap in,out;
+//QString Action::sendAddValue(QString sCustomerSid, QString sUserSid, QString sMoney)
+//{
+//    QVariantMap in,out;
 
-    in["CustomerSid"]=sCustomerSid;
-    in["UserSid"]=sUserSid;
-    in["Money"]=sMoney;
+//    in["CustomerSid"]=sCustomerSid;
+//    in["UserSid"]=sUserSid;
+//    in["Money"]=sMoney;
 
-    QString sError;
+//    QString sError;
 
-    action(ACT::PAY_ADD,in,out,sError);
+//    action(ACT::PAY_ADD,in,out,sError);
 
-    QString sRe="0";
+//    QString sRe="0";
 
-    if(out.keys().contains("Money"))
-    {
-        sRe = out["Money"].toString();
-    }
+//    if(out.keys().contains("Money"))
+//    {
+//        sRe = out["Money"].toString();
+//    }
 
-    return sRe;
+//    return sRe;
 
-}
+//}
 
 bool Action::sendAddValue(CustomerData customerData, CustomerCost costData, QString &sError)
 {

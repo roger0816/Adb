@@ -31,6 +31,7 @@ void StageOrder::init()
 {
     if(m_bFirst)
     {
+        m_bFirst = false;
         changePage(0);
     }
 }

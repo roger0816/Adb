@@ -117,19 +117,25 @@
           <widget class="QWidget" name="widget_3" native="true">
            <property name="minimumSize">
             <size>
-             <width>180</width>
+             <width>200</width>
              <height>0</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>180</width>
+             <width>220</width>
              <height>16777215</height>
             </size>
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
              <widget class="QTimeEdit" name="timeStart">
+              <property name="minimumSize">
+               <size>
+                <width>70</width>
+                <height>0</height>
+               </size>
+              </property>
               <property name="displayFormat">
                <string>hh:mm</string>
               </property>
@@ -160,6 +166,22 @@
             </item>
             <item>
              <widget class="QTimeEdit" name="timeEnd">
+              <property name="minimumSize">
+               <size>
+                <width>70</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="dateTime">
+               <datetime>
+                <hour>17</hour>
+                <minute>0</minute>
+                <second>59</second>
+                <year>2000</year>
+                <month>1</month>
+                <day>1</day>
+               </datetime>
+              </property>
               <property name="currentSection">
                <enum>QDateTimeEdit::HourSection</enum>
               </property>
@@ -170,7 +192,7 @@
                <time>
                 <hour>17</hour>
                 <minute>0</minute>
-                <second>0</second>
+                <second>59</second>
                </time>
               </property>
              </widget>

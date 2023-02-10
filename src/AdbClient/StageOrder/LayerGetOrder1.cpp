@@ -334,9 +334,10 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
                 order.User[2] = ACTION.m_currentUser.Sid;
                 order.StepTime[2]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
-
-                ACTION.replaceOrder(order,sError);
-                // UI.showMsg("",sError,"OK");
+                //接單(鎖定)
+                bool bRe = ACTION.replaceOrder(order,sError);
+                if(!bRe)
+                    UI.showMsg("",sError,"OK");
             }
 
             refreshUser();
@@ -470,7 +471,7 @@ void LayerGetOrder1::on_btnBackOrder_clicked()
 
 
         order.Step="1";
-
+        //解除鎖定
         ACTION.replaceOrder(order,sError);
 
         UI.showMsg("",sError,"OK");

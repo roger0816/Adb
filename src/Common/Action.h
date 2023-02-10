@@ -89,6 +89,8 @@ public:
 
     QString getCustomerNowMoney(QString sCustomerSid);
 
+      CustomerCost getCustomerLastCost(QString sCustomerSid);
+
     bool replaceOrder(OrderData order, QString &sError);
     QString setSellMoney(OrderData &order);
     QString setPrimeMoney(OrderData &order);
@@ -157,7 +159,7 @@ public:
 
 
     //api
-    QString sendAddValue(QString sCustomerSid,QString sUserSid,QString sMoney);
+  //  QString sendAddValue(QString sCustomerSid,QString sUserSid,QString sMoney);
 
     bool sendAddValue(CustomerData customerData, CustomerCost costData, QString &sError);
 

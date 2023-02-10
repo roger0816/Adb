@@ -128,7 +128,7 @@ background-color:gray;
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>0</number>
+            <number>3</number>
            </property>
            <widget class="StageHomePage" name="pageHome"/>
            <widget class="StageCustomerService" name="pageService">

@@ -506,6 +506,7 @@ bool LayerSayCost::checkPayType(CListPair &data)
 
 QString LayerSayCost::getNewOrderId()
 {
+    return "byServer";
     QVariantMap data,out;
 
     QString sError;
@@ -574,7 +575,7 @@ void LayerSayCost::spValue(int )
 void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 {
     m_sCurrentGameSid = ACTION.getGameId(arg1);
-
+    qDebug()<<"game sid : "<<m_sCurrentGameSid<<" ,name "<<arg1;
     ui->lbGameName->setText(arg1);
 
     QStringList cbAcc;
@@ -820,10 +821,9 @@ void LayerSayCost::on_tbInfo_cellPressed(int row, int column)
 
 
 
-
     if(column==0 && row>=0 && row<m_listInto.length())
     {
-        QString sName = ui->tbInfo->item(row,1)->text();
+        QString sName = ui->tbInfo->item(row,2)->text();
 
         int iTbRow = checkTbRow(sName);
 
@@ -993,11 +993,11 @@ void LayerSayCost::on_btnSayOk_clicked()
     }
 
 
-    QVariantMap d= m_listGameInfo.at(qBound(0,ui->cbGame->currentIndex(),m_listGameInfo.length()-1)).toMap();
+    //QVariantMap d= m_listGameInfo.at(qBound(0,ui->cbGame->currentIndex(),m_listGameInfo.length()-1)).toMap();
 
 
-    CustomerGameInfo info(d);
-    m_order.GameSid = info.GameSid;
+    //CustomerGameInfo info(d);
+    m_order.GameSid = m_sCurrentGameSid;
 
     QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+
             QString::number(ui->cbAccount->currentIndex())+","+

@@ -28,6 +28,8 @@ public:
 
     UserData getUser(QString sSid);
 
+    QString getNewOrderId();
+
     void printTime(QString st="");
 
     void setPic(QVariantMap data);

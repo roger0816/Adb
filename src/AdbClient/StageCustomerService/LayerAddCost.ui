@@ -284,13 +284,13 @@ border: 1px solid #5b5b5b; }</string>
                       <widget class="QDoubleSpinBox" name="sbAdd">
                        <property name="minimumSize">
                         <size>
-                         <width>80</width>
+                         <width>70</width>
                          <height>30</height>
                         </size>
                        </property>
                        <property name="maximumSize">
                         <size>
-                         <width>80</width>
+                         <width>70</width>
                          <height>16777215</height>
                         </size>
                        </property>
@@ -361,8 +361,8 @@ border: 1px solid #5b5b5b; }</string>
                        </property>
                        <property name="sizeHint" stdset="0">
                         <size>
-                         <width>40</width>
-                         <height>20</height>
+                         <width>20</width>
+                         <height>10</height>
                         </size>
                        </property>
                       </spacer>

@@ -1160,7 +1160,7 @@ bool CSqlClass::lastOrderId(QString sDate,QString &sId,QString &sError)
     sId=tmpDate.remove(0,2)+"-A000";
     QSqlQuery query(db());
 
-    QString sCmd = "SELECT Id FROM OrderData WHERE OrderDate='%1' AND Id!='' ORDER BY Id DESC; ";
+    QString sCmd = "SELECT Id FROM OrderData WHERE OrderDate='%1' AND Id!='' ORDER BY Id DESC LIMIT 1; ";
 
     sCmd = sCmd.arg(sDate);
 

@@ -28,7 +28,7 @@ public:
 
     UserData getUser(QString sSid);
 
-    QString getNewOrderId();
+    QString getNewOrderId(QString sOrderDate);
 
     void printTime(QString st="");
 

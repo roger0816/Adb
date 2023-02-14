@@ -626,7 +626,7 @@ CData Query::implementRecall(CData data)
         {}
         else if(order.Step=="1")
         {
-            order.Id=getNewOrderId();
+            order.Id=getNewOrderId(order.OrderDate);
             QVariantMap in;
             QVariantList tmpOut;
             in["Sid"]=order.GameSid;
@@ -1097,7 +1097,7 @@ CData Query::implementRecall(CData data)
             tmpIn["OrderId"]=order.Id;
             m_sql.queryTb(SQL_TABLE::CustomerCost(),tmpIn,tmpList,sError);
 
-            if(tmpList.length()<1)
+            // if(tmpList.length()<1)
             {
                 printTime("3");
 
@@ -1303,15 +1303,26 @@ UserData Query::getUser(QString sSid)
     return re;
 }
 
-QString Query::getNewOrderId()
+QString Query::getNewOrderId(QString sOrderDate)
 {
 
-    auto orderIdAdd=[=](QString last)
+
+    auto orderIdAdd=[=](QString sDate,QString last)
     {
+
+        QString date = sDate;
+
+        if(date.length()>6)
+        {
+            date = date.right(6);
+        }
+
         if(last=="")
         {
-            return QDate::currentDate().toString("yyyyMMdd").remove(0,2)+"-"+"A001";
+            return date+"-"+"A001";
         }
+
+
         QString sId="";
         if(last.length()>=4)
         {
@@ -1325,7 +1336,7 @@ QString Query::getNewOrderId()
             {
                 QString sNum = QString("%1").arg(sSecond.toInt()+1,3,10,QLatin1Char('0'));
 
-                sId = last.mid(0,last.length()-4)+sFirst+sNum;
+                sId = date+"-"+sFirst+sNum;
             }
             else
             {
@@ -1333,7 +1344,7 @@ QString Query::getNewOrderId()
 
                 sFirst=QChar::fromLatin1(sFirst.at(0).toLatin1()+1);
 
-                sId = last.mid(0,last.length()-4)+sFirst+"001";
+                sId = date+"-"+sFirst+"001";
             }
 
         }
@@ -1344,11 +1355,27 @@ QString Query::getNewOrderId()
 
     QString sTodayLast="";
     QString sError;
-    QString sDate = QDate::currentDate().toString("yyyyMMdd");
 
-    m_sql.lastOrderId(sDate,sTodayLast,sError);
+    m_sql.lastOrderId(sOrderDate,sTodayLast,sError);
 
-    return orderIdAdd(sTodayLast);
+    QString sRe = orderIdAdd(sOrderDate,sTodayLast);
+
+
+
+    QVariantList listout;
+    QVariantMap in;
+
+    in["Id"]= sRe;
+
+    bool b=m_sql.queryTb(SQL_TABLE::OrderData(),in,listout,sError);
+
+    if(b && listout.length()>0)
+    {
+        sRe = orderIdAdd(sOrderDate,sRe);
+    }
+
+
+    return sRe;
 
 
 }

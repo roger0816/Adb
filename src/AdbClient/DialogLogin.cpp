@@ -150,7 +150,8 @@ void DialogLogin::preload(bool bTrue)
     {
         m_bPreLock = true;
         m_iTimerCount =0;
-        ui->lbMsg->clear();
+        if(ui->lbMsg->text().contains("Preload"))
+            ui->lbMsg->clear();
     }
 
     ui->btnLogin->setDisabled(bTrue);

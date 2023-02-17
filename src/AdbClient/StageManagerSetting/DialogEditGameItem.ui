@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>794</width>
+    <width>870</width>
     <height>600</height>
    </rect>
   </property>
@@ -187,7 +187,7 @@
              </widget>
             </item>
             <item row="4" column="1">
-             <widget class="QDoubleSpinBox" name="sbOrderUSD">
+             <widget class="QDoubleSpinBox" name="sbOrderBouns">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
               </property>
@@ -196,6 +196,9 @@
               </property>
               <property name="maximum">
                <double>99999.000000000000000</double>
+              </property>
+              <property name="singleStep">
+               <double>0.010000000000000</double>
               </property>
              </widget>
             </item>
@@ -235,94 +238,7 @@
             <property name="rightMargin">
              <number>20</number>
             </property>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>港幣(HKD)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="0">
-             <widget class="QLabel" name="label_15">
-              <property name="text">
-               <string>人民幣(RMB)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="4" column="1">
-             <widget class="QDoubleSpinBox" name="sbRMB">
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-              <property name="buttonSymbols">
-               <enum>QAbstractSpinBox::NoButtons</enum>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="minimum">
-               <double>-99999.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="0">
-             <widget class="QLabel" name="label_20">
-              <property name="text">
-               <string>林吉特(MYR)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="5" column="1">
-             <widget class="QDoubleSpinBox" name="sbMYR">
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-              <property name="buttonSymbols">
-               <enum>QAbstractSpinBox::NoButtons</enum>
-              </property>
-              <property name="decimals">
-               <number>0</number>
-              </property>
-              <property name="minimum">
-               <double>-99999.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="6" column="1">
-             <widget class="QDoubleSpinBox" name="sbSGD">
-              <property name="alignment">
-               <set>Qt::AlignCenter</set>
-              </property>
-              <property name="readOnly">
-               <bool>true</bool>
-              </property>
-              <property name="buttonSymbols">
-               <enum>QAbstractSpinBox::NoButtons</enum>
-              </property>
-              <property name="decimals">
-               <number>1</number>
-              </property>
-              <property name="minimum">
-               <double>-99999.000000000000000</double>
-              </property>
-              <property name="maximum">
-               <double>99999.000000000000000</double>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
+            <item row="1" column="2">
              <widget class="QDoubleSpinBox" name="sbNTD">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -344,41 +260,36 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_7">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+            <item row="6" column="2">
+             <widget class="QDoubleSpinBox" name="sbSGD">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
-              <property name="text">
-               <string>代儲售價:</string>
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
-             </widget>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_4">
-              <property name="text">
-               <string>新台幣(NTD)</string>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
               </property>
-             </widget>
-            </item>
-            <item row="6" column="0">
-             <widget class="QLabel" name="label_12">
-              <property name="text">
-               <string>新加坡元(SGD)</string>
+              <property name="decimals">
+               <number>1</number>
+              </property>
+              <property name="minimum">
+               <double>-99999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>99999.000000000000000</double>
               </property>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="lbUSDtitle">
+            <item row="5" column="0">
+             <widget class="QLabel" name="label_20">
               <property name="text">
-               <string>美金(USD)</string>
+               <string>林吉特(MYR)</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="2" column="2">
              <widget class="QDoubleSpinBox" name="sbUSD">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -397,7 +308,63 @@
               </property>
              </widget>
             </item>
-            <item row="3" column="1">
+            <item row="7" column="0">
+             <spacer name="verticalSpacer">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>港幣(HKD)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="0">
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>新加坡元(SGD)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lbUSDtitle">
+              <property name="text">
+               <string>美金(USD)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="2">
+             <widget class="QDoubleSpinBox" name="sbRMB">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+              <property name="readOnly">
+               <bool>true</bool>
+              </property>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="decimals">
+               <number>0</number>
+              </property>
+              <property name="minimum">
+               <double>-99999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>99999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="2">
              <widget class="QDoubleSpinBox" name="sbHKD">
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -425,18 +392,96 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="0">
-             <spacer name="verticalSpacer">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
+            <item row="5" column="2">
+             <widget class="QDoubleSpinBox" name="sbMYR">
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
               </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>20</width>
-                <height>40</height>
-               </size>
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
-             </spacer>
+              <property name="buttonSymbols">
+               <enum>QAbstractSpinBox::NoButtons</enum>
+              </property>
+              <property name="decimals">
+               <number>0</number>
+              </property>
+              <property name="minimum">
+               <double>-99999.000000000000000</double>
+              </property>
+              <property name="maximum">
+               <double>99999.000000000000000</double>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_4">
+              <property name="text">
+               <string>新台幣(NTD)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="label_15">
+              <property name="text">
+               <string>人民幣(RMB)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_7">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="text">
+               <string>代儲售價:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLabel" name="lbRateNtd">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLabel" name="lbRateUsd">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLabel" name="lbRateHkd">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLabel" name="lbRateRmb">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="5" column="1">
+             <widget class="QLabel" name="lbRateMyr">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="6" column="1">
+             <widget class="QLabel" name="lbRateSgd">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
             </item>
            </layout>
           </widget>
@@ -704,7 +749,7 @@
   <tabstop>cbEnable</tabstop>
   <tabstop>txName</tabstop>
   <tabstop>sbOrderNTD</tabstop>
-  <tabstop>sbOrderUSD</tabstop>
+  <tabstop>sbOrderBouns</tabstop>
   <tabstop>btnCancel</tabstop>
   <tabstop>btnOk</tabstop>
   <tabstop>btnGameEditDel</tabstop>

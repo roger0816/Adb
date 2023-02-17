@@ -219,8 +219,9 @@ CData Query::implementRecall(CData data)
 
                 DataGameRate gameRate;
 
-                gameRate.Rate=game.GameRate;
+                gameRate.Rate=QString::number(game.GameRate);
 
+                qDebug()<<"AAAAAAAAAAAA : "<<gameRate.Rate;
                 gameRate.GameSid = game.Sid;
 
                 gameRate.GameName = game.Name;
@@ -638,7 +639,7 @@ CData Query::implementRecall(CData data)
 
                 DataGameList game(tmpOut.first().toMap());
 
-                order.GameRate = game.GameRate;
+                order.GameRate = QString::number(game.GameRate);
             }
 
 

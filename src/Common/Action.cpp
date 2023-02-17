@@ -1752,6 +1752,7 @@ DataGameRate Action::getGameRate(QString GameSid, QString sSid)
     }
     action(ACT::QUERY_GAME_RATE,in,out,sError,true);
 
+    re.setData(out);
     return re;
 }
 

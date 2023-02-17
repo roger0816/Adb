@@ -26,6 +26,8 @@ private slots:
 
     void on_btnTestPic_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::StageTest *ui;
 };

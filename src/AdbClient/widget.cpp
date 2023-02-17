@@ -11,23 +11,18 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-//  qlonglong i=1234567890.123;
+ double x=123456789.1;
 
-//  QString s=QString("%1").arg(i,12,10,QLatin1Char('0'));
+ qDebug()<<"AA1:"<<QString::number(x,'f',3);  // "123456789.123"
 
-//qDebug()<<"SSSS : "<<s;
+ double x1=QString::number(x,'f',3).toDouble();
+
+ qDebug()<<"AA2:"<<x1;
+
+ qDebug()<<"AA3"<<QString::number(x1,'f',3);
 
 
-    QByteArray aa="12345678";
 
-    for(int i=0;i<aa.length();i++)
-    {
-        const auto state = aa[i];
-
-        qDebug()<<"AAAAA";
-        qDebug()<<(state & 0x07);
-
-    }
 
 
     ui->lbTestName->hide();
@@ -223,10 +218,10 @@ void Widget::checkUserLv()
         ui->btn3->setEnabled(true);
     }
 
-    // if(iLv>=USER_LV::_ROOT)
+     if(iLv>=USER_LV::_ROOT)
     {
-        //ui->btnTest->setEnabled(true);
-        // ui->btnTest->show();
+        ui->btnTest->setEnabled(true);
+       ui->btnTest->show();
     }
 
     UI.m_loading->resize(this->size());

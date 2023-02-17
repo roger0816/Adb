@@ -64,6 +64,8 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     ui->lbCurrentCost_2->setText(sTotal);
 
+    m_dataCost.Pic0="";
+    m_dataCost.Pic1="";
     m_dataCost.Total=sTotal;
     m_dataCost.OrderTime = time.toString("yyyyMMddhhmmss");
     m_dataCost.Currency = m_dataCustomer.Currency;
@@ -155,6 +157,11 @@ void LayerAddCost::init()
     ui->txNote0->clear();
 
     ui->txDebitNote->clear();
+
+
+    ui->wPic0->m_bHasPic= false;
+
+    ui->wPic1->m_bHasPic = false;
 
     ui->lbTime->setText(GLOBAL.dateTimeUtc8().toString("yyyy/MM/dd hh:mm"));
 

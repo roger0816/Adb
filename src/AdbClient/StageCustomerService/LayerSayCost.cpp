@@ -11,7 +11,7 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
 
     ui->tbGameItem->setColumnWidth(0,60);
     ui->tbInfo->setColumnWidth(0,60);
-        ui->tbInfo->setColumnWidth(1,30);
+    ui->tbInfo->setColumnWidth(1,30);
     ui->tbInfo->setColumnWidth(2,200);
     ui->tbInfo->setColumnWidth(3,60);
 
@@ -21,6 +21,8 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
 
     ui->tbInfo->hideColumn(1);
     connect(ui->tbGameItem,&QTableWidget::cellClicked,this,&LayerSayCost::slotTbGameItemCellClicked);
+
+    ui->cbGame->setEnabled(false);
 }
 
 LayerSayCost::~LayerSayCost()
@@ -113,6 +115,11 @@ void LayerSayCost::orderMode()
 
     }
 
+    //    if(m_order.GameRate.trimmed()!="")
+    //        m_gameRate=m_order.GameRate;
+    //    else
+    //        m_gameRate = ACTION.getGameRate(m_order.GameSid).Rate;
+
     refreshInfo();
 
 }
@@ -182,10 +189,14 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
 
     if(m_bOrderMode)
+    {
         orderMode();
+    }
     else
+    {
+        ui->cbGame->setEnabled(true);
         m_order=OrderData();
-
+    }
     //    m_exRate = ACTION.listRate(m_order.ExRateSid,false,true).first();
 
     //    m_primeRate = ACTION.listRate(m_order.PrimeRateSid,false,false).first();
@@ -301,7 +312,7 @@ void LayerSayCost::refreshInfo()
 
     }
 
-    ui->cbGame->setEnabled(ui->tbInfo->rowCount()==0);
+    ui->cbGame->setEnabled(ui->tbInfo->rowCount()==0 && !m_bOrderMode);
     addPayTypeToCb();
     checkTotal();
 }
@@ -334,10 +345,9 @@ double LayerSayCost::checkTotal()
 
         double iPrice =sp->value();
 
-        double ntd = m_listInto.at(i).toMap()["NTD"].toDouble();
+        //double ntd = m_listInto.at(i).toMap()["NTD"].toDouble();
 
-        QString sCost = QString::number(ntd,'f',0);
-
+        // QString sCost = QString::number(ntd,'f',0);
 
         bouns+=m_listInto.at(i).toMap()["Bonus"].toDouble()*iPrice;
 
@@ -350,37 +360,38 @@ double LayerSayCost::checkTotal()
         qDebug()<<"customer currency : "<<m_dataCustomer.Currency;
 
 
+        double ntd = m_gameRate.toDouble()*bouns;
+        qDebug()<<"ABC : bound "<<bouns<<" game rate : "<<m_gameRate<<" ntd : "<<ntd;
+        QString sCost = QString::number(GLOBAL.addFlow(ntd));
+
+
         if(m_dataCustomer.Currency.toUpper().contains("USD"))
         {
-
-            sCost = QString::number(ntd/m_costRate.USD(),'f',2);
-
+            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.USD(),2));
 
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("HKD"))
         {
-            sCost = QString::number(ntd/m_costRate.HKD(),'f',0);
 
-
+            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.HKD()));
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("RMB"))
         {
-            sCost = QString::number(ntd/m_costRate.RMB(),'f',0);
 
+            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.RMB()));
 
         }
         else if(m_dataCustomer.Currency.toUpper().contains("MYR"))
         {
-            sCost = QString::number(ntd/m_costRate.MYR(),'f',0);
+            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.MYR()));
 
         }
         else if(m_dataCustomer.Currency.toUpper().contains("SGD"))
         {
-            sCost = QString::number(ntd/m_costRate.SGD(),'f',1);
 
-
+            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.SGD(),1));
 
         }
 
@@ -576,6 +587,18 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 {
     m_sCurrentGameSid = ACTION.getGameId(arg1);
     qDebug()<<"game sid : "<<m_sCurrentGameSid<<" ,name "<<arg1;
+
+
+    if(m_order.GameRate.trimmed()!="" && (m_bReadOnly || m_bOrderMode) ) //下單、讀取訂單內容時 ，且gamerate有資料
+    {
+        m_gameRate = m_order.GameRate;
+    }
+    else
+        m_gameRate=ACTION.getGameRate(m_sCurrentGameSid).Rate;
+
+
+    qDebug()<<"AAAAAAAA0 "<<m_gameRate;
+
     ui->lbGameName->setText(arg1);
 
     QStringList cbAcc;
@@ -998,6 +1021,8 @@ void LayerSayCost::on_btnSayOk_clicked()
 
     //CustomerGameInfo info(d);
     m_order.GameSid = m_sCurrentGameSid;
+   // m_order.GameRate=m_gameRate;  //game rate 報價時server會填上
+
 
     QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+
             QString::number(ui->cbAccount->currentIndex())+","+

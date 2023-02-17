@@ -153,7 +153,54 @@
               </spacer>
              </item>
              <item row="0" column="2" rowspan="4">
-              <widget class="ItemPic" name="wPicTest" native="true"/>
+              <widget class="ItemPic" name="wPicTest" native="true">
+               <widget class="QSpinBox" name="spinBox">
+                <property name="geometry">
+                 <rect>
+                  <x>90</x>
+                  <y>30</y>
+                  <width>42</width>
+                  <height>22</height>
+                 </rect>
+                </property>
+               </widget>
+               <widget class="QLineEdit" name="lineEdit">
+                <property name="geometry">
+                 <rect>
+                  <x>150</x>
+                  <y>30</y>
+                  <width>151</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+               </widget>
+               <widget class="QLabel" name="label">
+                <property name="geometry">
+                 <rect>
+                  <x>90</x>
+                  <y>70</y>
+                  <width>211</width>
+                  <height>21</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>TextLabel</string>
+                </property>
+               </widget>
+               <widget class="QPushButton" name="pushButton">
+                <property name="geometry">
+                 <rect>
+                  <x>220</x>
+                  <y>70</y>
+                  <width>75</width>
+                  <height>24</height>
+                 </rect>
+                </property>
+                <property name="text">
+                 <string>PushButton</string>
+                </property>
+               </widget>
+              </widget>
              </item>
             </layout>
            </widget>

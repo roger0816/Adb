@@ -544,7 +544,9 @@ struct OrderData :public DataObj
         ExRateSid = data["ExRateSid"].toString();
         PrimeRateSid = data["PrimeRateSid"].toString();
         Money = data["Money"].toString().split(";");
-        Note0 = data["Note0"].toString().split(",");
+        Note0 = data["Note0"].toString().split(";;");
+        if(data["Note0"].toString().split(";;").length()<6)
+            Note0 = data["Note0"].toString().split(","); //for before v1.09.0212
         Note1 = data["Note1"].toString();
         Note2 = data["Note2"].toString();
         Note3 = data["Note3"].toString();
@@ -589,7 +591,7 @@ struct OrderData :public DataObj
         re["ExRateSid"] = ExRateSid;
         re["PrimeRateSid"] = PrimeRateSid;
         re["Money"] = Money.join(";");
-        re["Note0"] = Note0.join(",");
+        re["Note0"] = Note0.join(";;");
         re["Note1"] = Note1;
         re["Note2"] = Note2;
         re["Note3"] = Note3;

@@ -163,7 +163,10 @@ void DialogCustomerCostHistory::refresh(int)
 
             ui->tableWidget->setItem(i,0,UI.tbItem(d.Id));
             ui->tableWidget->setItem(i,1,UI.tbItem("消費"));
-            ui->tableWidget->setItem(i,2,UI.tbItem(d.Cost));
+
+            QString sCost=QString::number(d.Cost.toDouble()*-1);
+
+            ui->tableWidget->setItem(i,2,UI.tbItem(sCost));
 
             QString sRate=QString::number(ACTION.primeRate(d.PrimeRateSid,false).findValue(m_cus.Currency));
 

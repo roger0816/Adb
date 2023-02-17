@@ -17,7 +17,7 @@ void Global::setServer(bool b, QString sIp, QString sPort)
 {
     m_action.setServer(b,sIp,sPort);
 
- //   m_dataSync.setServer(b,sIp,sPort);
+    //   m_dataSync.setServer(b,sIp,sPort);
 }
 
 QStringList Global::listMapToList(const QVariantList list, QString sKey)
@@ -147,6 +147,107 @@ QString Global::sidAdd(QString last)
     }
 
     return sId;
+}
+
+QString Global::addFlow(QString st, QString currency)
+{
+    int iFlowCount =0;
+    if(currency.toUpper().contains("USD"))
+        iFlowCount =2;
+    else if(currency.toUpper().contains("SGD"))
+        iFlowCount =1;
+
+    return addFlow(st,iFlowCount);
+}
+
+QString Global::addFlow(QString st, int flowCount)
+{
+
+    auto nSt=[=](QString st,int iN)
+    {
+        QString sRe="";
+
+        while(sRe.length()<iN)
+        {
+            sRe+=st;
+        }
+
+        return sRe;
+    };
+
+
+
+
+    int iInt = st.split(".").first().toInt();
+
+    QString sFlow="";
+    //切整數與浮店數
+    if(st.split(".").length()>=2)
+    {
+        sFlow = st.split(".").at(1);
+    }
+
+    //浮點數補0
+    while(sFlow.length()<flowCount+1)
+        sFlow+="0";
+
+    bool bAddInt = false; //是否進位到整數
+
+    if(flowCount==0)    //取整數情況
+    {
+
+        if(sFlow.mid(0,1)!="0")
+            bAddInt= true;
+        sFlow="";
+    }
+    else                //取指定浮點數位
+    {
+        QString sFlowL = sFlow.mid(0,flowCount); //固定數
+        QString sFlowR = sFlow.mid(flowCount,1); //辨視數
+
+        bool bIsMax =false;   //分辨是否為 99...
+
+        if(sFlowL==nSt("9",flowCount))
+            bIsMax = true;
+
+        if(sFlowR=="0")     //不需進位
+        {
+            sFlow = sFlowL;
+
+        }
+        else                //無條件進位
+        {
+            if(bIsMax)          //進位到整數
+            {
+                bAddInt = true;
+
+                sFlow=nSt("0",flowCount);
+            }
+            else
+                sFlow=QString::number(sFlowL.toInt()+1);
+        }
+
+
+
+    }
+
+
+    if(bAddInt)
+        iInt++;
+
+    QString sRe= QString::number(iInt);
+
+    if(sFlow!="")
+        sRe=sRe+"."+sFlow;
+
+    return sRe;
+}
+
+double Global::addFlow(double value, int flowCount)
+{
+    QString st = QString::number(value,'f',flowCount+1);
+
+    return addFlow(st,flowCount).toDouble();
 }
 
 QVariantList Global::reData(QVariantList data, QStringList listKey)

@@ -56,7 +56,7 @@ private slots:
 
     double valueToUp(double d, int decimals);
 
-    void on_sbOrderUSD_valueChanged(double arg1);
+    void on_sbOrderBouns_valueChanged(double arg1);
 
     void on_btnCopy_clicked();
 

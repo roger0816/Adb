@@ -12,7 +12,7 @@
 
 
 
-#define ADP_VER "v1.09.0213"
+#define ADP_VER "v1.10.0217"
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;

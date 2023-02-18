@@ -756,7 +756,7 @@ QList<OrderData> Action::getOrder(bool bRequest)
     return m_listOrder;
 }
 
-QList<OrderData> Action::getOrderByDate(QDate date)
+QList<OrderData> Action::getOrderByDate(QDate date,bool bStrong)
 {
     QList<OrderData> re;
     QVariantMap in;
@@ -764,7 +764,7 @@ QList<OrderData> Action::getOrderByDate(QDate date)
     QDate tDate=date;
     in["OrderDate >="]=tDate.toString("yyyyMMdd");
     QString sError;
-    action(ACT::QUERY_ORDER,in,out,sError);
+    action(ACT::QUERY_ORDER,in,out,sError,bStrong);
 
 
     for(int i=0;i<out.length();i++)

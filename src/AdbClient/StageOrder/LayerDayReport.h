@@ -78,7 +78,7 @@ public:
 
     bool checkFilter(OrderData order);
 
-    void refreshTb();
+    void refreshTb(bool bRequery=true);
 private slots:
     void on_tb_cellPressed(int row, int column);
 
@@ -134,6 +134,8 @@ private:
     void changeVisable();
 
     bool m_bLockLoading=false;
+
+    void updateOrderData(bool bUpdate,bool bStrong=false);
 
 };
 

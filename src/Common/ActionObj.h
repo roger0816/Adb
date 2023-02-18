@@ -108,6 +108,9 @@ private :
     QEventLoop m_lockLoop;
 
 
+    QString m_sUpdateSid;
+
+
 
 };
 

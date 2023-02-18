@@ -591,6 +591,13 @@ struct OrderData :public DataObj
         re["ExRateSid"] = ExRateSid;
         re["PrimeRateSid"] = PrimeRateSid;
         re["Money"] = Money.join(";");
+
+        for(int i=0;i<Note0.length();i++)
+        {
+            QString sNote = Note0.at(i);
+            Note0[i] = sNote.replace(";;","");
+        }
+
         re["Note0"] = Note0.join(";;");
         re["Note1"] = Note1;
         re["Note2"] = Note2;

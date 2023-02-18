@@ -93,7 +93,7 @@ private:
     QMap<QString,QVariant> m_config;
 
 
-    DataSync m_dataSync;
+  //  DataSync m_dataSync;
 
 
 

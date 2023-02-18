@@ -85,10 +85,11 @@ void LayerDayReport::init()
     delayRefresh();
 }
 
-void LayerDayReport::refreshTb()
+void LayerDayReport::refreshTb(bool bRequery)
 {
 
-    m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date());
+
+    updateOrderData(bRequery,true);
 
     ui->tb->setRowCount(0);
     QString sError;
@@ -591,43 +592,43 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
 void LayerDayReport::on_cbStep0_1_clicked()
 {
-    refreshTb();
+    refreshTb(false);
 }
 
 
 void LayerDayReport::on_cbStep0_clicked()
 {
-    refreshTb();
+    refreshTb(false);
 }
 
 
 void LayerDayReport::on_cbStep1_clicked()
 {
-    refreshTb();
+    refreshTb(false);
 }
 
 
 void LayerDayReport::on_cbStep2_clicked()
 {
-    refreshTb();
+    refreshTb(false);
 }
 
 
 void LayerDayReport::on_cbStep3_clicked()
 {
-    refreshTb();
+    refreshTb(false);
 }
 
 
 void LayerDayReport::on_cbStep4_clicked()
 {
-    refreshTb();
+    refreshTb(false);
 }
 
 
 void LayerDayReport::on_cbStep5_clicked()
 {
-    refreshTb();
+    refreshTb(false);
 }
 
 
@@ -795,6 +796,23 @@ void LayerDayReport::changeVisable()
 
     ui->tb->setColumnHidden(_Pic0,bHidePic);
     ui->tb->setColumnHidden(_Pic1,bHidePic);
+}
+
+void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
+{
+
+    if(bUpdate)
+    {
+
+        if(bStrong)
+        {
+            if(ui->dateEdit->date()!=GLOBAL.dateTimeUtc8().date() && ui->dateEdit->date()!=GLOBAL.dateTimeUtc8().date().addDays(-1))
+                bStrong=false;
+        }
+
+
+        m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date(),bStrong);
+    }
 }
 
 

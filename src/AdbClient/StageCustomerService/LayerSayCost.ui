@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>960</width>
-    <height>600</height>
+    <width>1160</width>
+    <height>707</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -550,6 +550,15 @@ background-color:#3c78b4;
             <item>
              <widget class="QWidget" name="widget_11" native="true">
               <layout class="QFormLayout" name="formLayout_3">
+               <property name="verticalSpacing">
+                <number>2</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
                <item row="0" column="0">
                 <widget class="QLabel" name="tTime">
                  <property name="text">
@@ -674,6 +683,15 @@ background-color:#3c78b4;
                </size>
               </property>
               <layout class="QGridLayout" name="gridLayout_6">
+               <property name="topMargin">
+                <number>2</number>
+               </property>
+               <property name="bottomMargin">
+                <number>2</number>
+               </property>
+               <property name="verticalSpacing">
+                <number>2</number>
+               </property>
                <item row="0" column="0" colspan="2">
                 <widget class="QLabel" name="tNote">
                  <property name="text">
@@ -684,7 +702,8 @@ background-color:#3c78b4;
                <item row="1" column="0" colspan="2">
                 <widget class="QTextEdit" name="txNote1">
                  <property name="styleSheet">
-                  <string notr="true">font: 16px &quot;Microsoft JhengHei UI&quot;;</string>
+                  <string notr="true">font: 16px &quot;Microsoft JhengHei UI&quot;;
+background-color: rgb(255, 255, 255);</string>
                  </property>
                 </widget>
                </item>
@@ -696,7 +715,7 @@ background-color:#3c78b4;
               <property name="minimumSize">
                <size>
                 <width>0</width>
-                <height>40</height>
+                <height>36</height>
                </size>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_6">

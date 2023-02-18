@@ -13,7 +13,7 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
     ui->tbInfo->setColumnWidth(0,60);
     ui->tbInfo->setColumnWidth(1,30);
     ui->tbInfo->setColumnWidth(2,200);
-    ui->tbInfo->setColumnWidth(3,60);
+    ui->tbInfo->setColumnWidth(3,70);
 
     ui->wBottom->setCurrentIndex(0);
 
@@ -68,6 +68,9 @@ void LayerSayCost::orderMode()
         }
         else
             ui->lbTitle->setText(m_order.Id+"    "+m_order.Name);
+
+        if(m_order.Note0.length()>1)
+            ui->txNote1->setText(m_order.Note0.at(1));
     }
 
     QStringList tmpRecord = m_order.UiRecord.split(",");
@@ -337,7 +340,7 @@ double LayerSayCost::checkTotal()
 
     //  DataExchange::Rate rate = ACTION.rate(m_sLoadOrderSid);
 
-    double bouns=0;
+    double totalBouns=0;
 
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
@@ -349,8 +352,9 @@ double LayerSayCost::checkTotal()
 
         // QString sCost = QString::number(ntd,'f',0);
 
-        bouns+=m_listInto.at(i).toMap()["Bonus"].toDouble()*iPrice;
+        totalBouns+=m_listInto.at(i).toMap()["Bonus"].toDouble()*iPrice;
 
+        double bouns = m_listInto.at(i).toMap()["Bonus"].toDouble();
         int iIdx = m_costRate.listKey().indexOf(m_dataCustomer.Currency);
 
         if(iIdx<0)
@@ -397,6 +401,7 @@ double LayerSayCost::checkTotal()
 
         double cost = sCost.toDouble()* iPrice;
 
+
         //   QString sTmp = QString::number(iNTD/rate2.USD(),'f',2);
 
 
@@ -405,7 +410,7 @@ double LayerSayCost::checkTotal()
     }
     m_iTotal=re;
 
-    m_iBouns = bouns;
+    m_iBouns = totalBouns;
 
 
     if(re<0)
@@ -534,6 +539,8 @@ QString LayerSayCost::getNewOrderId()
 
 QString LayerSayCost::getNewOrderName()
 {
+
+    return "byServer";
     QVariantMap data,out;
 
     QString sError;
@@ -589,15 +596,23 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
     qDebug()<<"game sid : "<<m_sCurrentGameSid<<" ,name "<<arg1;
 
 
-    if(m_order.GameRate.trimmed()!="" && (m_bReadOnly || m_bOrderMode) ) //下單、讀取訂單內容時 ，且gamerate有資料
+    if(m_order.OrderDate.toInt()<=20230216)
+    {
+        m_gameRate=ACTION.getGameRate(m_sCurrentGameSid).Rate;
+        qDebug()<<"game rate by old query : "<<m_gameRate;
+    }
+
+    else if(m_order.GameRate.trimmed()!="" && (m_bReadOnly || m_bOrderMode) ) //下單、讀取訂單內容時 ，且gamerate有資料
     {
         m_gameRate = m_order.GameRate;
+        qDebug()<<"game rate by order : "<<m_gameRate;
     }
     else
+    {
         m_gameRate=ACTION.getGameRate(m_sCurrentGameSid).Rate;
+        qDebug()<<"game rate by query : "<<m_gameRate;
+    }
 
-
-    qDebug()<<"AAAAAAAA0 "<<m_gameRate;
 
     ui->lbGameName->setText(arg1);
 
@@ -1009,11 +1024,11 @@ void LayerSayCost::on_btnSayOk_clicked()
 
     }
 
-    if( m_order.Sid=="")
-    {
-        m_order.OrderDate = m_date.toString("yyyyMMdd");
-        m_order.OrderTime = m_date.toString("hhmmss");
-    }
+    //  if( m_order.Sid=="")
+    //  {
+    m_order.OrderDate = m_date.toString("yyyyMMdd");
+    m_order.OrderTime = m_date.toString("hhmmss");
+    //  }
 
 
     //QVariantMap d= m_listGameInfo.at(qBound(0,ui->cbGame->currentIndex(),m_listGameInfo.length()-1)).toMap();
@@ -1021,7 +1036,7 @@ void LayerSayCost::on_btnSayOk_clicked()
 
     //CustomerGameInfo info(d);
     m_order.GameSid = m_sCurrentGameSid;
-   // m_order.GameRate=m_gameRate;  //game rate 報價時server會填上
+    // m_order.GameRate=m_gameRate;  //game rate 報價時server會填上
 
 
     QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+

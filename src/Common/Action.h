@@ -97,7 +97,7 @@ public:
 
     QList<OrderData> getOrder(bool bRequest = false);
 
-    QList<OrderData> getOrderByDate(QDate date);
+    QList<OrderData> getOrderByDate(QDate date, bool bStrong=false);
 
 
     OrderData getOrder(QString sSid, bool bRequest = false);

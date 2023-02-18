@@ -404,7 +404,6 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
         };
 
         DataFactory currentFac = getFac();
-        qDebug()<<"AAAAAAD : "<<currentFac.data();
 
         QStringList listCb;
 

@@ -31,6 +31,8 @@ public:
 
     QVariant sHeartBeat;
 
+    QVariantMap dSendSync;
+    QVariantMap dRecSync;
 
     bool bOk =false;
 

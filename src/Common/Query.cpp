@@ -221,7 +221,7 @@ CData Query::implementRecall(CData data)
 
                 gameRate.Rate=QString::number(game.GameRate);
 
-                qDebug()<<"AAAAAAAAAAAA : "<<gameRate.Rate;
+
                 gameRate.GameSid = game.Sid;
 
                 gameRate.GameName = game.Name;
@@ -641,6 +641,37 @@ CData Query::implementRecall(CData data)
 
                 order.GameRate = QString::number(game.GameRate);
             }
+
+            if(order.Owner.trimmed()=="")
+                order.Owner="None";
+
+            QVariantMap in2;
+            QVariantList listOut2;
+            in2["Name like"] ="%"+order.Owner+"%";
+            in2["OrderDate"]=order.OrderDate;
+            in2["DESC"]="OrderTime";
+            in2["LIMIT"]="1";
+            m_sql.queryTb(SQL_TABLE::OrderData(),in2,listOut2,sError);
+
+            int iSeq=1;
+
+            if(listOut2.length()>0)
+            {
+                OrderData tmp(listOut2.first().toMap());
+
+                QString sName = tmp.Name;
+
+                qDebug()<<"AAAAAAAAAAAAA : "<<sName;
+                iSeq = sName.replace(order.Owner,"").replace("-","").toInt()+1;
+                qDebug()<<"AAAAAAAAAAAAA1 : "<<iSeq;
+            }
+
+            QString sDash="";
+
+            if(order.Owner.right(1)!="-")
+                sDash="-";
+
+            order.Name=order.Owner+sDash+QString::number(iSeq);
 
 
         }
@@ -1396,6 +1427,71 @@ void Query::setPic(QVariantMap data)
         printTime("insert Pic OK: ");
     });
 
+}
+
+bool Query::checkItemCount(OrderData orderData,QStringList &sErrorGameItemSid)
+{
+    bool bRe =true;
+
+    sErrorGameItemSid.clear();
+
+    QStringList listItem = orderData.Item.split(";;");
+
+    for(int i=0;i<listItem.length();i++)
+    {
+        QString item = listItem.at(i);
+        QString gameItemSid = item.split(",,").first();
+        double iCount =item.split(",,").last().toDouble();
+        QVariantMap in;
+        QVariantList out;
+        QString sError;
+        in["GameItemSid"]=gameItemSid;
+        in["DESC"]="Sid";
+        in["LIMIT"]="1";
+
+        m_sql.queryTb(SQL_TABLE::GameItemCount(),in,out,sError);
+
+        if(out.length()>0)
+        {
+            DataItemCount d(out.first().toMap());
+
+            int iNowCount = d.TotalCount-d.TotalSell;
+
+            if(iCount>iNowCount)
+            {
+                sErrorGameItemSid.append(gameItemSid);
+                bRe = false;
+            }
+        }
+        else
+        {
+            bRe = false;
+            sErrorGameItemSid.append(gameItemSid);
+        }
+
+    }
+
+
+    return bRe;
+}
+
+bool Query::changeItemCount(OrderData orderData, bool bIsAdd,QString &sErrorMsg)
+{
+
+    if(!bIsAdd)
+    {
+        QStringList listErrorItemSid;
+        bool b=checkItemCount(orderData,listErrorItemSid);
+
+        if(!b)
+        {
+            sErrorMsg = listErrorItemSid.join(",");
+            return false;
+        }
+    }
+
+
+    return true;
 }
 
 

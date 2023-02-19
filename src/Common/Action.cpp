@@ -765,6 +765,7 @@ QList<OrderData> Action::getOrderByDate(QDate date,bool bStrong)
     QVariantList out;
     QDate tDate=date;
     in["OrderDate >="]=tDate.toString("yyyyMMdd");
+    in["ASC"]="OrderTime";
     QString sError;
     action(ACT::QUERY_ORDER,in,out,sError,bStrong);
 

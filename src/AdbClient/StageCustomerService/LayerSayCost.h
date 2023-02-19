@@ -57,7 +57,9 @@ private:
     QDateTime m_date;
 
 
-    double m_iTotal=0.0;
+    double m_iTotal=0.0;  //客戶幣值，消費金額
+
+    double m_iNtdTotal=0.0; //換成台幣金額(報表要使用)
 
     double m_iBouns=0.0;
 

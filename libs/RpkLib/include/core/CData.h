@@ -70,6 +70,10 @@ public:
 
         d.insert("trigger",sTrigger);
 
+        d.insert("sendSync",dSendSync);
+
+        d.insert("recSync",dRecSync);
+
 
         QJsonObject obj;
 
@@ -119,6 +123,9 @@ public:
 
         sTrigger = map["trigger"].toString();
 
+        dSendSync = map["sendSync"].toMap();
+
+        dRecSync = map["recSync"].toMap();
 
         return true;
 

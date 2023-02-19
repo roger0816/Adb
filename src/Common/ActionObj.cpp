@@ -13,6 +13,7 @@ ActionObj::ActionObj(QObject *parent)
 
         m_iWaitHeart++;
 
+
         if(m_iWaitHeart>=4 && !m_bIsLock)
         {
 
@@ -24,6 +25,8 @@ ActionObj::ActionObj(QObject *parent)
             data.dData["UserSid"] = m_sCurrentUserId;
 
             data.dData["Session"]=m_sCurrentSession;
+
+            data.dSendSync=syncData();
 
             RPKCORE.network.connectHost("getTrigger",m_ip,m_port,data.enCodeJson());
 
@@ -301,7 +304,11 @@ CData ActionObj::callServer(CData data, bool bStrong)
     }
 
 
+
     m_bIsLock= true;
+
+    data.dSendSync=syncData();
+
 
     qDebug()<<"api lock "<<data.iAciton;
 

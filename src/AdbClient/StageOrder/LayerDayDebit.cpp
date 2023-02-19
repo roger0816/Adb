@@ -40,8 +40,8 @@ LayerDayDebit::LayerDayDebit(QWidget *parent) :
     });
 
 
-//    ui->tb->hideColumn(_OriValue);
-//       ui->tb->hideColumn(_OriCurrency);
+    //    ui->tb->hideColumn(_OriValue);
+    //       ui->tb->hideColumn(_OriCurrency);
 }
 
 LayerDayDebit::~LayerDayDebit()
@@ -59,9 +59,44 @@ void LayerDayDebit::init()
 }
 
 
-void LayerDayDebit::refresh(bool bRe)
+void LayerDayDebit::updateTbData(bool bRequery)
+{
+    if(m_bLockRe)
+        return;
+
+    m_bLockRe = true;
+
+
+    m_listDebit.clear();
+
+    ACTION.action(ACT::QUERY_DEBIT_CLASS,QVariantMap(),m_allDebit);
+
+
+    bool bStrong = false;
+
+    if(ui->dateEdit->date()==GLOBAL.dateTimeUtc8().date())
+        bStrong = true;
+
+    if(bRequery)
+    {
+        QString sError;
+        QVariantMap in;
+        in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
+        in["IsAddCost"]="1";
+
+        ACTION.action(ACT::QUERY_CUSTOMER_COST,in,m_listCustomerCost,sError,bStrong);
+    }
+
+
+    m_bLockRe = false;
+
+}
+
+
+void LayerDayDebit::refresh(bool bRequery)
 {
 
+    updateTbData(bRequery);
 
 
     setCb();
@@ -76,16 +111,7 @@ void LayerDayDebit::refresh(bool bRe)
 void LayerDayDebit::refreshTb()
 {
 
-    if(m_bLockRe)
-        return;
 
-    m_bLockRe = true;
-
-    QVariantMap in;
-    in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
-    in["IsAddCost"]="1";
-
-    ACTION.action(ACT::QUERY_CUSTOMER_COST,in,m_listCustomerCost);
 
     long int iTotal=0;
 
@@ -161,7 +187,7 @@ void LayerDayDebit::refreshTb()
 
     ui->lbTotal->setVisible(ui->cbCurrency->currentIndex()!=0);
 
-    m_bLockRe = false;
+
 
 }
 
@@ -239,10 +265,6 @@ void LayerDayDebit::setCb(bool bRe)
         return;
     m_bLockRe = true;
 
-
-    m_listDebit.clear();
-
-    ACTION.action(ACT::QUERY_DEBIT_CLASS,QVariantMap(),m_allDebit);
 
     QStringList listCbName;
 

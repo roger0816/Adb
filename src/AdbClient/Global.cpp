@@ -160,8 +160,25 @@ QString Global::addFlow(QString st, QString currency)
     return addFlow(st,iFlowCount);
 }
 
-QString Global::addFlow(QString st, int flowCount)
+QString Global::addFlow(QString sDouble, int flowCount)
 {
+    QString st =sDouble;
+
+    if(st.length()<=0)
+        return "";
+
+    bool bArrow0 = true;
+
+    if(st.toDouble()<0)
+    {
+        bArrow0 = false;
+
+        st.replace("-","");
+    }
+
+
+
+
 
     auto nSt=[=](QString st,int iN)
     {
@@ -190,6 +207,19 @@ QString Global::addFlow(QString st, int flowCount)
     //浮點數補0
     while(sFlow.length()<flowCount+1)
         sFlow+="0";
+
+
+//    if(!bArrow0)  //負數
+//    {
+//        if(flowCount==0)
+//            return "-"+QString::number(iInt);
+//        else
+//        {
+//             return "-"+QString::number(iInt)+sFlow.mid(0,flowCount);
+//        }
+
+//    }
+
 
     bool bAddInt = false; //是否進位到整數
 
@@ -240,6 +270,8 @@ QString Global::addFlow(QString st, int flowCount)
     if(sFlow!="")
         sRe=sRe+"."+sFlow;
 
+    if(!bArrow0)
+        sRe="-"+sRe;
     return sRe;
 }
 

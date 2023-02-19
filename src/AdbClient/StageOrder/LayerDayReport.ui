@@ -63,12 +63,12 @@
         </column>
         <column>
          <property name="text">
-          <string>成立時間</string>
+          <string>下單時間</string>
          </property>
         </column>
         <column>
          <property name="text">
-          <string>專員代碼</string>
+          <string>儲值人員</string>
          </property>
         </column>
         <column>

@@ -118,13 +118,21 @@ void LayerDayReport::refreshTb(bool bRequery)
         if(!checkFilter(data))
             continue;
 
-
+        CustomerData customer;
+#if 0
         QVariantMap d;
         d["Sid"] = data.CustomerSid;
         QVariantList listCustomer;
         ACTION.action(ACT::QUERY_CUSTOMER,d,listCustomer,sError);
         if(listCustomer.length()<1)
             continue;
+
+        customer.setData(listCustomer.first().toMap());
+#else
+        customer =ACTION.getCustomer(data.CustomerSid);
+#endif
+
+
 
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
@@ -133,7 +141,7 @@ void LayerDayReport::refreshTb(bool bRequery)
         UserData owner =ACTION.getUser(data.Owner);
 
 
-        CustomerData customer(listCustomer.first().toMap());
+
         QString sDate=data.OrderDate+data.OrderTime;
         ui->tb->setItem(iRow,_Name,UI.tbItem(data.Name,GlobalUi::_BUTTON));
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
@@ -232,19 +240,19 @@ void LayerDayReport::refreshTb(bool bRequery)
             ui->tb->setItem(iRow,_PayType,UI.tbItem(orderPayType.sPayName,true));
 
 
-            ui->tb->setItem(iRow,_PayCount,UI.tbItem(orderPayType.iTotalCount));
+            ui->tb->setItem(iRow,_PayCount,UI.tbItem(""));
 
             // ui->tb->setItem(iRow,_PayRate,UI.tbItem(payRate));
         }
 
         if(data.Step.toInt()>=1)
         {
-            if(iNtdCost==0 && data.Cost!="0")
-            {
-                QString sExRate =ACTION.setSellMoney(data);
+            //            if(iNtdCost==0 && data.Cost!="0")
+            //            {
+            //                QString sExRate =ACTION.setSellMoney(data);
 
-                iNtdCost=data.Money.first().toInt();
-            }
+            //                iNtdCost=data.Money.first().toInt();
+            //            }
 
 
             QString sExRate="1";
@@ -274,6 +282,7 @@ void LayerDayReport::refreshTb(bool bRequery)
             //成本匯率是要看儲值方式的幣別
             QString sPayTypeCurrency= ACTION.getAddValueCurrency(data.PayType);
             sPrimeRate = primeRate.listData.findValue(sPayTypeCurrency);
+            ui->tb->setItem(iRow,_PayCount,UI.tbItem(orderPayType.iTotalCount));
 
             ui->tb->setItem(iRow,_PayRate,UI.tbItem(ACTION.getPayRate(data.PayType)));
             ui->tb->setItem(iRow,_PrimeRate,UI.tbItem(sPrimeRate));

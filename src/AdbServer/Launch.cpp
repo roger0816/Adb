@@ -31,7 +31,7 @@ void Launch::startServer(QString sIp)
 void Launch::getData(QByteArray dData, uintptr_t handleId)
 {
 
-
+    qDebug()<<"dddddd : "<<dData.toStdString().c_str();
 
     CData data;
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>508</width>
-    <height>623</height>
+    <width>527</width>
+    <height>712</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,6 +32,15 @@
    <item row="0" column="0">
     <widget class="QWidget" name="wBg" native="true">
      <layout class="QVBoxLayout" name="verticalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
       <item>
        <widget class="QWidget" name="wTop" native="true">
         <property name="minimumSize">
@@ -75,10 +84,22 @@
             <string>報價</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_4">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="lb0">
-              <property name="text">
-               <string/>
+             <widget class="QTextEdit" name="lb0">
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -91,10 +112,22 @@
             <string>下單</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_5">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="lb1">
-              <property name="text">
-               <string/>
+             <widget class="QTextEdit" name="lb1">
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -107,10 +140,22 @@
             <string>接單</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_6">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="lb2">
-              <property name="text">
-               <string/>
+             <widget class="QTextEdit" name="lb2">
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -123,10 +168,22 @@
             <string>儲值</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_7">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="lb3">
-              <property name="text">
-               <string/>
+             <widget class="QTextEdit" name="lb3">
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -139,10 +196,22 @@
             <string>回報</string>
            </property>
            <layout class="QGridLayout" name="gridLayout_8">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
             <item row="0" column="0">
-             <widget class="QLabel" name="lb4">
-              <property name="text">
-               <string/>
+             <widget class="QTextEdit" name="lb4">
+              <property name="readOnly">
+               <bool>true</bool>
               </property>
              </widget>
             </item>

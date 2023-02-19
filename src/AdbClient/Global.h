@@ -48,7 +48,7 @@ public:
 
     QString addFlow(QString st,QString currency);
 
-    QString addFlow(QString st,int flowCount);
+    QString addFlow(QString sDouble,int flowCount);
 
     double addFlow(double value, int flowCount=0);
 

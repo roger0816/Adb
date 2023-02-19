@@ -624,7 +624,22 @@ CData Query::implementRecall(CData data)
         bool bHasIt = false;
 
         if(order.Step=="0")
-        {}
+        {
+            QVariantMap in;
+            QVariantList tmpOut;
+            in["Sid"]=order.GameSid;
+
+            m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
+
+            if(tmpOut.length()>0)
+            {
+
+                DataGameList game(tmpOut.first().toMap());
+
+                order.GameRate = QString::number(game.GameRate);
+            }
+
+        }
         else if(order.Step=="1")
         {
             order.Id=getNewOrderId(order.OrderDate);
@@ -661,9 +676,9 @@ CData Query::implementRecall(CData data)
 
                 QString sName = tmp.Name;
 
-                qDebug()<<"AAAAAAAAAAAAA : "<<sName;
+
                 iSeq = sName.replace(order.Owner,"").replace("-","").toInt()+1;
-                qDebug()<<"AAAAAAAAAAAAA1 : "<<iSeq;
+
             }
 
             QString sDash="";

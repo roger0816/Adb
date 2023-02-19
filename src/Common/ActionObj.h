@@ -87,6 +87,8 @@ protected:
 
     void clearCache(int iApi);
 
+    virtual QVariantMap syncData(){return QVariantMap();}
+
 signals:
 
     void lockLoading(bool b);
@@ -109,6 +111,8 @@ private :
 
 
     QString m_sUpdateSid;
+
+
 
 
 

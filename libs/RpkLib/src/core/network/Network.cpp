@@ -55,6 +55,7 @@ int Network::connectHost(QString sIp, QString sPort, QByteArray arrInput, QByteA
 
 int Network::connectHost(QString sId,QString sIp, QString sPort, QByteArray arrInput, int iWaitTimer)
 {
+
   return g_tcpClient->connectHost(sId,sIp,sPort,arrInput,iWaitTimer);
 }
 

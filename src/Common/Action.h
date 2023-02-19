@@ -198,6 +198,8 @@ private:
     QVariantList m_exRate;
 
 
+     QVariantMap syncData() override;
+
 };
 
 #endif // ACTION_H

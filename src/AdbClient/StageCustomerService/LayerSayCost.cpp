@@ -62,6 +62,8 @@ void LayerSayCost::orderMode()
 
     if(m_bReadOnly)
     {
+        m_gameRate = m_order.GameRate;
+
         if(m_order.Name.trimmed()=="")
         {
             ui->lbTitle->setText("已報價狀態");
@@ -78,7 +80,7 @@ void LayerSayCost::orderMode()
     while(tmpRecord.length()<4)
         tmpRecord.append("0");
 
-    qDebug()<<"m_order UI :"<<tmpRecord;
+
     ui->cbGame->setCurrentIndex(qBound(0,tmpRecord.first().toInt(),ui->cbGame->count()-1));
     ui->cbAccount->setCurrentIndex(qBound(0,tmpRecord[1].toInt(),ui->cbAccount->count()-1));
     ui->cbServer->setCurrentIndex(qBound(0,tmpRecord[2].toInt(),ui->cbServer->count()-1));
@@ -129,7 +131,7 @@ void LayerSayCost::orderMode()
 
 void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 {
-    qDebug()<<"set customer : "<<data<<" ,orderSid : "<<sOrderSid;
+
     m_listInto.clear();
 
     ui->tbInfo->setRowCount(0);
@@ -189,6 +191,9 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
     ui->cbGame->addItems(cbName);
 
+    m_costRate = ACTION.costRate(m_order.ExRateSid,true);
+
+    m_primeRate = ACTION.primeRate(m_order.PrimeRateSid,true);
 
 
     if(m_bOrderMode)
@@ -205,9 +210,6 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     //    m_primeRate = ACTION.listRate(m_order.PrimeRateSid,false,false).first();
 
 
-    m_costRate = ACTION.costRate(m_order.ExRateSid,true);
-    qDebug()<<"set rate : "<<m_costRate.USD();
-    m_primeRate = ACTION.primeRate(m_order.PrimeRateSid,true);
 
 
 
@@ -249,7 +251,7 @@ void LayerSayCost::setReadOnly()
 void LayerSayCost::refreshInfo()
 {
 
-    qDebug()<<"refresh Into ";
+
     ui->tbInfo->setRowCount(0);
 
     auto checkTbRow = [=](QString sName)
@@ -281,7 +283,6 @@ void LayerSayCost::refreshInfo()
 
 
 
-        qDebug()<<"into target : "<<data;
         ui->tbInfo->setItem(iIdx,0,UI.tbItem("移除",GlobalUi::_BUTTON));
 
 
@@ -339,8 +340,9 @@ double LayerSayCost::checkTotal()
 
 
     //  DataExchange::Rate rate = ACTION.rate(m_sLoadOrderSid);
-
+    m_iNtdTotal=0;
     double totalBouns=0;
+
 
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
@@ -357,15 +359,19 @@ double LayerSayCost::checkTotal()
         double bouns = m_listInto.at(i).toMap()["Bonus"].toDouble();
         int iIdx = m_costRate.listKey().indexOf(m_dataCustomer.Currency);
 
-        if(iIdx<0)
-            continue;
-        //  double target= pRate.listData.at(iIdx).second.toDouble();
 
-        qDebug()<<"customer currency : "<<m_dataCustomer.Currency;
+
+        if(iIdx<0)
+        {
+
+            continue;
+        }
+        //  double target= pRate.listData.at(iIdx).second.toDouble();
 
 
         double ntd = m_gameRate.toDouble()*bouns;
-        qDebug()<<"ABC : bound "<<bouns<<" game rate : "<<m_gameRate<<" ntd : "<<ntd;
+
+        QString sNtd=QString::number(GLOBAL.addFlow(ntd));
         QString sCost = QString::number(GLOBAL.addFlow(ntd));
 
 
@@ -404,7 +410,7 @@ double LayerSayCost::checkTotal()
 
         //   QString sTmp = QString::number(iNTD/rate2.USD(),'f',2);
 
-
+        m_iNtdTotal=m_iNtdTotal+sNtd.toDouble();
         re=re+cost;
         ui->tbInfo->setItem(i,4,UI.tbItem(cost));
     }
@@ -436,7 +442,6 @@ void LayerSayCost::addPayTypeToCb()
 
     m_order.CanSelectPayType = GLOBAL.toString(tmp.listFirst());
 
-    qDebug()<<"canselect pay type : "<<m_order.CanSelectPayType;
 
     auto factoryPaySid =[=](QStringList list)
     {
@@ -1049,6 +1054,8 @@ void LayerSayCost::on_btnSayOk_clicked()
 
     m_order.CustomerSid = m_dataCustomer.Sid;
     m_order.Cost=QString::number(m_iTotal,'f',2);
+
+    m_order.Money[0]=QString::number(m_iNtdTotal);
 
 
     CListPair list;

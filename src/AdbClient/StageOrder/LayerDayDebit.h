@@ -21,6 +21,8 @@ public:
 private:
     Ui::LayerDayDebit *ui;
 
+    void updateTbData(bool bRequery= true);
+
     enum tbHeader
     {
         _OrderId=0,
@@ -70,7 +72,7 @@ private:
     QString getDebitName(QString debitSid);
 
 private slots:
-    void refresh(bool bRe=true);
+    void refresh(bool bRequery=true);
 
     void refreshTb();
 

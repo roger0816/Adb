@@ -329,7 +329,7 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
     {
         QVariantMap in;
         QVariantList listOut;
-
+        m_listCustomer.clear();
         QString sError;
         if(action(ACT::QUERY_CUSTOMER,in,listOut,sError))
         {
@@ -358,6 +358,8 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
     if(tmpList.length()>0)
     {
         data.setData(tmpList.first().toMap());
+
+        m_listCustomer.append(data);
     }
     else
         data.Name="查無此人";
@@ -804,7 +806,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
     }
     else if(order.Step=="1")  //下單- 計算應收
     {
-        setSellMoney(order);
+        //  setSellMoney(order);
 
     }
     else if(order.Step=="3") //儲值 - 計算成本
@@ -1120,8 +1122,14 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
         }
     }
 
+
+
     if(re.length()<1)
         re.append(DataRate());
+
+
+    qDebug()<<"cost rate list "<<m_exRate.length()<< "re len : "<<re.length();
+
     return re;
 }
 
@@ -1753,6 +1761,23 @@ DataGameRate Action::getGameRate(QString GameSid, QString sSid)
     action(ACT::QUERY_GAME_RATE,in,out,sError,true);
 
     re.setData(out);
+    return re;
+}
+
+QVariantMap Action::syncData()
+{
+    QVariantMap re;
+
+    QVariantMap user;
+
+    if(m_currentUser.Sid.trimmed()!="")
+    {
+        user["Sid"]=m_currentUser.Sid;
+        user["Name"] = m_currentUser.Name;
+    }
+    else
+        re["User"] = user;
+
     return re;
 }
 

@@ -23,6 +23,13 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
     connect(ui->tbGameItem,&QTableWidget::cellClicked,this,&LayerSayCost::slotTbGameItemCellClicked);
 
     ui->cbGame->setEnabled(false);
+
+
+
+//    // ^(-?\d+)(\.\d+)?$
+//    QRegExp ex("^(-?\d+)(\.\d+)?$");
+//    ui->txNote2->setValidator(new QRegExpValidator(ex,this));
+
 }
 
 LayerSayCost::~LayerSayCost()
@@ -414,11 +421,11 @@ double LayerSayCost::checkTotal()
 
 
         //   QString sTmp = QString::number(iNTD/rate2.USD(),'f',2);
-
+        m_listCost.append(QString::number(cost));
         m_iNtdTotal=m_iNtdTotal+sNtd.toDouble();
         re=re+cost;
 
-        m_listCost.append(QString::number(re));
+
 
 
         if(m_bReadOnly)
@@ -1092,7 +1099,7 @@ void LayerSayCost::on_btnSayOk_clicked()
         m_order.Money[0]=m_order.Cost.toInt();
     }
 
-    m_order.Note2 = ui->txNote2->text();
+    m_order.Note2 = ui->txNote2->text().replace(",","");
 
 
     CListPair list;

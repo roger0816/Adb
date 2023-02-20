@@ -34,7 +34,7 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
             <<ui->btn6<<ui->btn7<<ui->btn8<<ui->btn9;
 
 
-
+    // ^(-?\d+)(\.\d+)?$
     QRegExp ex("[0-9.]{1,6}");
     ui->txt->setValidator(new QRegExpValidator(ex,this));
 

@@ -152,7 +152,9 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
         ui->tb->setItem(iRow,_Sid,UI.tbItem(data.Sid));
+
         ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
+
         //        UserData owner =ACTION.getUser(data.Owner);
 
 
@@ -182,12 +184,28 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         QString sStatus =statusString(data.Step);
 
+        QTableWidgetItem *tmpItem;
 
-
-
-        ui->tb->setItem(iRow,_Status,UI.tbItem(sStatus));
         if(data.Step=="4")
-            ui->tb->setItem(iRow,_Status,UI.tbItem(sStatus,GlobalUi::_BUTTON));
+            tmpItem= UI.tbItem(sStatus,GlobalUi::_BUTTON);
+        else
+            tmpItem= UI.tbItem(sStatus);
+
+
+        if(data.Note2.trimmed()!="")
+        {
+            double note2 = data.Note2.toDouble();
+
+            if(data.Cost.toDouble()!=note2)
+            {
+                tmpItem->setForeground(QColor(255,0,0));
+
+            }
+        }
+
+
+        ui->tb->setItem(iRow,_Status,tmpItem);
+
         ui->tb->setItem(iRow,_Bonus,UI.tbItem(data.Bouns));
 
         QString sGameName = ACTION.getGameName( data.GameSid);

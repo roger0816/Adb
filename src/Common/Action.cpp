@@ -936,8 +936,22 @@ OrderData Action::getOrder(QString sSid, bool bRequest)
 
 OrderData Action::getOrderCustomerLast(QString sCustomerSid, bool bRequest)
 {
+
+//    OrderData reOrder;
+//    QVariantMap in;
+//    QVariantList out;
+//    QDate tDate=QDate::currentDate().addDays(-1);
+//    in["OrderDate >="]=tDate.toString("yyyyMMdd");
+//    in["CustomerSid"] = sCustomerSid;
+//    in["Step"]=QString::number(iStep);
+//    QString sError;
+//    action(ACT::QUERY_ORDER,in,out,sError,true);
+
+//    return reOrder;
+
     if(bRequest)
         getOrder(bRequest);
+
 
     OrderData re;
     re.Sid="";
@@ -954,6 +968,7 @@ OrderData Action::getOrderCustomerLast(QString sCustomerSid, bool bRequest)
     }
 
     return re;
+
 }
 
 

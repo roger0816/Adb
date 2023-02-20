@@ -9,6 +9,8 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->tb->setSortingEnabled(true);
+
     ui->wShowArea->hide();
 
     ui->tb->hideColumn(_Bonus);
@@ -20,6 +22,8 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
     ui->tb->hideColumn(_Pic0);
 
     ui->tb->setColumnCount(_TB_COL_COUNT);
+
+    ui->tb->hideColumn(_Sid);
 
     m_itemPic->setReadOnly(true);
 
@@ -62,6 +66,10 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
     ui->tb->setColumnWidth(_Pic1,60);
 
     ui->btnExcel->hide();
+
+//    ui->btnFilter->hide();
+
+//    ui->btnFilterClear->hide();
 }
 
 LayerDayReport::~LayerDayReport()
@@ -85,17 +93,15 @@ void LayerDayReport::init()
     delayRefresh();
 }
 
-void LayerDayReport::refreshTb(bool bRequery)
+void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 {
 
 
     updateOrderData(bRequery,true);
 
     ui->tb->setRowCount(0);
-    QString sError;
 
-    m_listInto.clear();
-
+    m_mappingData.clear();
     qlonglong iTotal0=0;
 
 
@@ -106,6 +112,9 @@ void LayerDayReport::refreshTb(bool bRequery)
 
     double iTotalBonus=0.0;
 
+    QStringList listCbFilter;
+    listCbFilter.append(m_sFilterKey);
+
     for(int i=0;i<m_listOrder.length();i++)
     {
 
@@ -115,11 +124,17 @@ void LayerDayReport::refreshTb(bool bRequery)
         ACTION.setPrimeMoney(data);
 
 
+        if(!listCbFilter.contains(data.Owner))
+            listCbFilter.append(data.Owner);
+
+
         if(!checkFilter(data))
             continue;
 
         CustomerData customer;
 #if 0
+        QString sError;
+
         QVariantMap d;
         d["Sid"] = data.CustomerSid;
         QVariantList listCustomer;
@@ -136,10 +151,9 @@ void LayerDayReport::refreshTb(bool bRequery)
 
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
-
+        ui->tb->setItem(iRow,_Sid,UI.tbItem(data.Sid));
         ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
-        UserData owner =ACTION.getUser(data.Owner);
-
+        //        UserData owner =ACTION.getUser(data.Owner);
 
 
         QString sDate=data.OrderDate+data.OrderTime;
@@ -166,37 +180,9 @@ void LayerDayReport::refreshTb(bool bRequery)
 
 
 
-        QString sStatus = data.Step;
+        QString sStatus =statusString(data.Step);
 
-        if(sStatus=="-1")
-        {
-            sStatus+="取消";
-        }
 
-        if(sStatus=="0")
-        {
-            sStatus+="報價";
-        }
-        if(sStatus=="1")
-        {
-            sStatus+="下單";
-        }
-        if(sStatus=="2")
-        {
-            sStatus+="接單";
-        }
-        if(sStatus=="3")
-        {
-            sStatus+="儲值";
-        }
-        if(sStatus=="4")
-        {
-            sStatus+="回報";
-        }
-        if(sStatus=="5")
-        {
-            sStatus="完成";
-        }
 
 
         ui->tb->setItem(iRow,_Status,UI.tbItem(sStatus));
@@ -277,7 +263,6 @@ void LayerDayReport::refreshTb(bool bRequery)
                 iNtdPrime=data.Money[1].toLongLong();
             }
 
-            qDebug()<<"AAX : "<<iNtdCost<<" , "<<iNtdPrime;
 
             //成本匯率是要看儲值方式的幣別
             QString sPayTypeCurrency= ACTION.getAddValueCurrency(data.PayType);
@@ -315,17 +300,32 @@ void LayerDayReport::refreshTb(bool bRequery)
             iTotalBonus+=data.Bouns.toDouble();
         }
 
-        m_listInto.append(data);
 
+        m_mappingData[data.Sid]=data.data();
 
     }
 
 
-    qDebug()<<"XGD : "<<iTotal0<<" , "<<QString::number(iTotal0);
     ui->lbTotal0->setText(QString::number(iTotal0));
     ui->lbTotal1->setText(QString::number(iTotal1));
     ui->lbTotal2->setText(QString::number(iTotal2));
     ui->lbTotalBonus->setText(QString::number(iTotalBonus));
+
+    if(bResetCb)
+    {
+        ui->cbFilter->setProperty("lock",true);
+        ui->cbFilter->clear();
+
+        ui->cbFilter->addItems(listCbFilter);
+
+            ui->cbFilter->setEditable(true);
+
+            QCompleter *completer=new QCompleter(ui->cbFilter->model(),this);
+            //    //        completer->setCompletionMode(QCompleter::PopupCompletion);
+            ui->cbFilter->setCompleter(completer);
+
+        ui->cbFilter->setProperty("lock",false);
+    }
 
 
 }
@@ -378,15 +378,56 @@ bool LayerDayReport::checkFilter(OrderData order)
         return false;
 
 
+
+    QString st = ui->cbFilter->currentText().toUpper();
+
+    if(st.trimmed()!="")
+    {
+
+        bool b = false;
+        QString sDate=order.OrderDate+order.OrderTime;
+        QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
+
+        CustomerData cus=ACTION.getCustomer(order.CustomerSid);
+
+
+        QStringList target;
+        target<<order.Owner
+        <<order.Id<<order.Name
+          <<cus.Id<<cus.Currency
+                <<ACTION.getGameName(order.GameSid);
+        //        <<date.toString("hh:mm:ss");
+
+
+
+        foreach(QString tmp,target)
+        {
+
+            if(tmp.contains(st.toUpper()))
+            {
+
+                b = true;
+                break;
+            }
+        }
+
+
+        return b;
+
+    }
+
     return true;
 }
 
 void LayerDayReport::on_tb_cellPressed(int row, int column)
 {
-    if(row<0 || row>=m_listInto.length())
+    if(row<0 || row>=m_mappingData.keys().length())
         return;
-    OrderData data = m_listInto.at(row);
 
+
+    QString orderSid= ui->tb->item(row,0)->text();
+
+    OrderData data(m_mappingData[orderSid].toMap());
 
     if(column==_OderId || column==_Name)
     {
@@ -641,6 +682,19 @@ void LayerDayReport::on_cbStep5_clicked()
 }
 
 
+void LayerDayReport::on_btnFilter_clicked()
+{
+    m_sFilterKey=ui->cbFilter->currentText();
+    refreshTb(false);
+}
+
+void LayerDayReport::on_btnFilterClear_clicked()
+{
+    m_sFilterKey="";
+    ui->cbFilter->clear();
+    refreshTb(false);
+}
+
 
 
 void LayerDayReport::delayRefresh()
@@ -721,9 +775,13 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
 {
 
 
-    if(row<0 || row>=m_listInto.length())
+    if(row<0 || row>=m_mappingData.keys().length())
         return;
-    OrderData data = m_listInto.at(row);
+
+    QString orderSid= ui->tb->item(row,0)->text();
+
+    OrderData data(m_mappingData[orderSid].toMap());
+
     if(column==_User)
     {
         QString st="訂單編號:"+data.Id+"\n"
@@ -822,6 +880,43 @@ void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
 
         m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date(),bStrong);
     }
+}
+
+QString LayerDayReport::statusString(QString sStep)
+{
+    QString sStatus = sStep;
+
+    if(sStatus=="-1")
+    {
+        sStatus+="取消";
+    }
+
+    if(sStatus=="0")
+    {
+        sStatus+="報價";
+    }
+    if(sStatus=="1")
+    {
+        sStatus+="下單";
+    }
+    if(sStatus=="2")
+    {
+        sStatus+="接單";
+    }
+    if(sStatus=="3")
+    {
+        sStatus+="儲值";
+    }
+    if(sStatus=="4")
+    {
+        sStatus+="回報";
+    }
+    if(sStatus=="5")
+    {
+        sStatus="完成";
+    }
+
+    return sStatus;
 }
 
 
@@ -948,5 +1043,20 @@ void LayerDayReport::on_btnChangeDate_clicked()
 {
     delayRefresh();
 
+}
+
+
+
+
+
+
+void LayerDayReport::on_cbFilter_currentIndexChanged(int index)
+{
+//    if(ui->cbFilter->property("lock").toBool())
+//        return ;
+
+//    ui->cbFilter->setProperty("lock",true);
+//    refreshTb(false,false);
+//    ui->cbFilter->setProperty("lock",false);
 }
 

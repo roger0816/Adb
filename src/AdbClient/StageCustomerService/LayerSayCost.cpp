@@ -60,9 +60,10 @@ void LayerSayCost::orderMode()
         m_order.setData(out);
     }
 
+    ui->txNote2->setText(m_order.Note2);
+
     if(m_bReadOnly)
     {
-        m_gameRate = m_order.GameRate;
 
         if(m_order.Name.trimmed()=="")
         {
@@ -74,6 +75,9 @@ void LayerSayCost::orderMode()
         if(m_order.Note0.length()>1)
             ui->txNote1->setText(m_order.Note0.at(1));
     }
+
+
+    m_gameRate = m_order.GameRate;
 
     QStringList tmpRecord = m_order.UiRecord.split(",");
 
@@ -133,6 +137,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 {
 
     m_listInto.clear();
+
 
     ui->tbInfo->setRowCount(0);
 
@@ -211,7 +216,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
 
 
-
+    ui->lbGameRate->setText(m_gameRate);
 
 }
 
@@ -343,7 +348,7 @@ double LayerSayCost::checkTotal()
     m_iNtdTotal=0;
     double totalBouns=0;
 
-
+    m_listCost.clear();
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
         QSpinBox *sp =dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3));
@@ -412,7 +417,22 @@ double LayerSayCost::checkTotal()
 
         m_iNtdTotal=m_iNtdTotal+sNtd.toDouble();
         re=re+cost;
-        ui->tbInfo->setItem(i,4,UI.tbItem(cost));
+
+        m_listCost.append(QString::number(re));
+
+
+        if(m_bReadOnly)
+        {
+            if(m_order.ListCost.length()>i && m_order.ListCost.at(i).trimmed()!="")
+            {
+                ui->tbInfo->setItem(i,4,UI.tbItem(m_order.ListCost.at(i)));
+            }
+
+        }
+        else
+        {
+            ui->tbInfo->setItem(i,4,UI.tbItem(cost));
+        }
     }
     m_iTotal=re;
 
@@ -422,7 +442,15 @@ double LayerSayCost::checkTotal()
     if(re<0)
         re=0.00;
 
-    ui->lbTotal->setText(QString::number(re,'f',2));
+    if(m_bReadOnly)
+    {
+
+        m_iTotal = m_order.Cost.toDouble();
+    }
+
+    qDebug()<<"m_bReadOnly : "<<m_bReadOnly<<" , "<<m_iTotal;
+
+    ui->lbTotal->setText(QString::number(m_iTotal,'f',2));
     //    DATA.rate()
 
 
@@ -1055,7 +1083,16 @@ void LayerSayCost::on_btnSayOk_clicked()
     m_order.CustomerSid = m_dataCustomer.Sid;
     m_order.Cost=QString::number(m_iTotal,'f',2);
 
+    m_order.ListCost = m_listCost;
     m_order.Money[0]=QString::number(m_iNtdTotal);
+
+    if(m_dataCustomer.Currency.toUpper().contains("NTD")
+            &&m_order.Cost.toDouble() != m_order.Money[0].toDouble())
+    {
+        m_order.Money[0]=m_order.Cost.toInt();
+    }
+
+    m_order.Note2 = ui->txNote2->text();
 
 
     CListPair list;
@@ -1085,6 +1122,7 @@ void LayerSayCost::on_btnSayOk_clicked()
     m_order.Item = list.toString();
     m_order.UpdateTime = m_date.toString("yyyyMMddhhmmss");
 
+    qDebug()<<"AAAAAAAAAAAAA : "<<m_order.data();
     QString sError;
     bool bOk = ACTION.replaceOrder(m_order,sError);
 

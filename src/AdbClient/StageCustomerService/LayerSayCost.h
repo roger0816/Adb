@@ -45,6 +45,8 @@ private:
 
     QVariantList m_listInto;
 
+
+
     QList<QSpinBox*> m_listSp;
 
     double checkTotal();
@@ -82,6 +84,8 @@ private:
     bool checkPayType(CListPair &data);
 
     CListPair m_mappingPayType;
+
+    QStringList m_listCost; //訂單內容的歷史價格
 protected:
 
 

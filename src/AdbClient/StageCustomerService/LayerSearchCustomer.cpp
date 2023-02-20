@@ -176,7 +176,7 @@ void LayerSearchCustomer::changePage(int iPage)
     else if(iPage==4)
     {
 
-
+        qDebug()<<"AAAAAAAAA : "<<order.Sid;
         if(order.Step!="0" || order.Sid=="")
         {
             UI.showMsg("","沒預先報價流程，請先進行報價",QStringList()<<"OK");

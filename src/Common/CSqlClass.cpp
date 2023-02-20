@@ -654,6 +654,7 @@ void CSqlClass::createTableSqlite()
              'GameSid'	TEXT,                   \
              'Item'	TEXT,                   \
              'Cost'	TEXT,                   \
+            'ListCost'	TEXT,                   \
              'Bouns'	TEXT,                   \
              'ExRateSid'	TEXT,                   \
              'PrimeRateSid'	TEXT,                   \

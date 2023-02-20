@@ -518,6 +518,8 @@ struct OrderData :public DataObj
             Money.append("");
 
 
+
+
     }
     OrderData(QVariantMap data):DataObj(){OrderData();setData(data);}
 
@@ -547,6 +549,14 @@ struct OrderData :public DataObj
         Note0 = data["Note0"].toString().split(";;");
         if(data["Note0"].toString().split(";;").length()<6)
             Note0 = data["Note0"].toString().split(","); //for before v1.09.0212
+
+        ListCost = data["ListCost"].toString().split(";;");
+
+        while(ListCost.length()<Item.split(";;").length())
+        {
+            ListCost.append("");
+        }
+
         Note1 = data["Note1"].toString();
         Note2 = data["Note2"].toString();
         Note3 = data["Note3"].toString();
@@ -610,7 +620,12 @@ struct OrderData :public DataObj
         re["OrderTime"] = OrderTime;
 
 
+        while(ListCost.length()<Item.split(";;").length())
+        {
+            ListCost.append("");
+        }
 
+        re["ListCost"] =ListCost.join(";;");
 
         return re;
 
@@ -627,15 +642,16 @@ struct OrderData :public DataObj
     QString CanSelectPayType;
     QString GameSid;
     QString Item;
+    QStringList ListCost;
     QString Cost="0";
     QString Bouns="0";
     QString GameRate="";
     QString ExRateSid="";
     QString PrimeRateSid="";
     QStringList Money;
-    QStringList Note0;
-    QString Note1;
-    QString Note2;
+    QStringList Note0;          //訂單流程備註
+    QString Note1;              //訂單留言
+    QString Note2;              //備註總金額
     QString Note3;
     QString Note4;
     QString Note5;

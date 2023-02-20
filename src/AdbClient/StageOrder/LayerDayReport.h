@@ -33,8 +33,9 @@ struct OrderPayType{
 
 enum tbHeader
 {
-    _OderId=0,      //訂單編號
-    _Name=1,        //序號
+    _Sid=0,
+    _OderId=1,      //訂單編號
+    _Name,        //序號
     _CheckNum,      //核對單位
     _DateTime,    //成立時間
     _User,        //專員代碼
@@ -78,7 +79,7 @@ public:
 
     bool checkFilter(OrderData order);
 
-    void refreshTb(bool bRequery=true);
+    void refreshTb(bool bRequery=true,bool bResetCb=true);
 private slots:
     void on_tb_cellPressed(int row, int column);
 
@@ -97,6 +98,9 @@ private slots:
 
     void on_cbStep5_clicked();
 
+    void on_btnFilter_clicked();
+    void on_btnFilterClear_clicked();
+
 
     void delayRefresh();
 
@@ -114,12 +118,19 @@ private slots:
 
     void on_btnChangeDate_clicked();
 
+
+
+
+    void on_cbFilter_currentIndexChanged(int index);
+
 private:
     Ui::LayerDayReport *ui;
 
     QList<OrderData> m_listOrder;
 
-    QList<OrderData> m_listInto; //after fitler , display of m_listOrder
+   // QList<OrderData> m_listInto; //after fitler , display of m_listOrder
+
+        QVariantMap m_mappingData;
 
     LayerSayCost *m_detialOrder = nullptr;
 
@@ -136,6 +147,10 @@ private:
     bool m_bLockLoading=false;
 
     void updateOrderData(bool bUpdate,bool bStrong=false);
+
+    QString m_sFilterKey="";
+
+    QString statusString(QString sStep);
 
 };
 

@@ -625,6 +625,14 @@ CData Query::implementRecall(CData data)
 
         if(order.Step=="0")
         {
+            CustomerData cus;
+
+            getCustomer(order.CustomerSid,cus);
+
+            order.Currency = order.Currency;
+
+            order.CustomerName = cus.Name;
+
             QVariantMap in;
             QVariantList tmpOut;
             in["Sid"]=order.GameSid;
@@ -687,6 +695,11 @@ CData Query::implementRecall(CData data)
                 sDash="-";
 
             order.Name=order.Owner+sDash+QString::number(iSeq);
+
+            if(order.Currency.toUpper().contains("NTD"))
+            {
+                order.Money[0] = order.Cost;
+            }
 
 
         }

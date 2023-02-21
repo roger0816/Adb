@@ -567,6 +567,8 @@ struct OrderData :public DataObj
         UpdateTime = data["UpdateTime"].toString();
         OrderDate = data["OrderDate"].toString();
         OrderTime = data["OrderTime"].toString();
+        CustomerName = data["CustomerName"].toString();
+        Currency = data["Currency"].toString();
 
         while(Note0.length()<6)
             Note0.append("");
@@ -618,6 +620,8 @@ struct OrderData :public DataObj
         re["Pic1"] = Pic1;
         re["OrderDate"] = OrderDate;
         re["OrderTime"] = OrderTime;
+        re["CustomerName"] = CustomerName;
+        re["Currency"] = Currency;
 
 
         while(ListCost.length()<Item.split(";;").length())
@@ -632,6 +636,7 @@ struct OrderData :public DataObj
     }
 
     QString CustomerSid;
+    QString CustomerName;
     QString Step;
     QString UiRecord;
     QStringList StepTime;
@@ -644,6 +649,7 @@ struct OrderData :public DataObj
     QString Item;
     QStringList ListCost;
     QString Cost="0";
+    QString Currency;
     QString Bouns="0";
     QString GameRate="";
     QString ExRateSid="";

@@ -254,6 +254,8 @@ void LayerSayCost::setReadOnly()
 
     ui->cbChr->setEnabled(false);
 
+    ui->txNote2->setReadOnly(true);
+
     setWindowTitle("訂單詳細內容");
 
     //  ui->wBottom->hide();

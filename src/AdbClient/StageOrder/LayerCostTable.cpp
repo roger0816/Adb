@@ -107,10 +107,6 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
     m_currentItems =ACTION.getGameItem(sGameSid,true);
 
 
-    auto fn=[=](double d,int f=0)
-    {
-        return QString::number(d,'f',f);
-    };
 
 
     ui->tbGameItem->setRowCount(0);
@@ -123,30 +119,35 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
         DataGameItem item = m_currentItems.at(i);
 
 
-        double iNtd = item.Bonus.toDouble()*iGameRate;
 
-        double iUsd = iNtd/rate.USD();
-        double iHkd = iNtd/rate.HKD();
-        double iRmb = iNtd/rate.RMB();
-        double iMyr = iNtd/rate.MYR();
-        double iSgd = iNtd/rate.SGD();
+
+
+        double iOriNtd = item.Bonus.toDouble()*iGameRate;
+
+        double iNtd =GLOBAL.addFlow(iOriNtd);
+
+        double iUsd = GLOBAL.addFlow(iOriNtd/rate.USD(),2);
+        double iHkd = GLOBAL.addFlow(iOriNtd/rate.HKD());
+        double iRmb = GLOBAL.addFlow(iOriNtd/rate.RMB());
+        double iMyr = GLOBAL.addFlow(iOriNtd/rate.MYR());
+        double iSgd = GLOBAL.addFlow(iOriNtd/rate.SGD(),1);
 
 
         ui->tbGameItem->setRowCount(iRow+1);
 
         ui->tbGameItem->setItem(iRow,0,UI.tbItem(item.Name));
 
-        ui->tbGameItem->setItem(iRow,1,UI.tbItem(fn(iNtd)));
+        ui->tbGameItem->setItem(iRow,1,UI.tbItem(iNtd));
 
-        ui->tbGameItem->setItem(iRow,2,UI.tbItem(fn(iUsd,2)));
+        ui->tbGameItem->setItem(iRow,2,UI.tbItem(iUsd));
 
-        ui->tbGameItem->setItem(iRow,3,UI.tbItem(fn(iHkd)));
+        ui->tbGameItem->setItem(iRow,3,UI.tbItem(iHkd));
 
-        ui->tbGameItem->setItem(iRow,4,UI.tbItem(fn(iRmb)));
+        ui->tbGameItem->setItem(iRow,4,UI.tbItem(iRmb));
 
-        ui->tbGameItem->setItem(iRow,5,UI.tbItem(fn(iMyr)));
+        ui->tbGameItem->setItem(iRow,5,UI.tbItem(iMyr));
 
-        ui->tbGameItem->setItem(iRow,6,UI.tbItem(fn(iSgd,1)));
+        ui->tbGameItem->setItem(iRow,6,UI.tbItem(iSgd));
     }
 
 

@@ -1072,7 +1072,7 @@ bool Action::addRate(QVariantMap data,QString &sError,bool bExchangeType)
 
 }
 
-QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
+QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType,bool bStrong)
 {
     QList<DataRate> re  ;
 
@@ -1087,13 +1087,13 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType)
 
         if(!bExchangeType)
         {
-            action(ACT::QUERY_PRIMERATE,in,out,sError);
+            action(ACT::QUERY_PRIMERATE,in,out,sError,bStrong);
 
             m_primeRate = out;
         }
         else
         {
-            action(ACT::QUERY_EXCHANGE,in,out,sError);
+            action(ACT::QUERY_EXCHANGE,in,out,sError,bStrong);
 
             m_exRate=out;
         }
@@ -1236,19 +1236,20 @@ QString Action::setSellMoney(OrderData &order)
 QString Action::setPrimeMoney(OrderData &order)
 {
 
-    auto ntdToInt=[=](double iCost)
-    {
-        QStringList listTmp = QString::number(iCost).split(".");
+//    auto ntdToInt=[=](double iCost)
+//    {
 
-        int cost = listTmp.first().toInt();
+//        QStringList listTmp = QString::number(iCost).split(".");
 
-        if(listTmp.length()>1 && listTmp.last().toInt()>0)
-        {
-            cost+=1;
-        }
+//        int cost = listTmp.first().toInt();
 
-        return cost;
-    };
+//        if(listTmp.length()>1 && listTmp.last().toInt()>0)
+//        {
+//            cost+=1;
+//        }
+
+//        return cost;
+//    };
 
 
     DataRate rate=primeRate(order.PrimeRateSid,true);
@@ -1266,6 +1267,12 @@ QString Action::setPrimeMoney(OrderData &order)
     CListPair listItem(order.Item);
 
     double prime=0.000;
+
+    bool bCheck= false;
+    if(order.Id=="230222-A004")
+    {
+        bCheck = true;
+    }
 
     QString sRe="";
 
@@ -1288,14 +1295,24 @@ QString Action::setPrimeMoney(OrderData &order)
 
         prime =prime+(itemCount*iOneItemPrice);
 
+        if(bCheck)
+        {
+            qDebug()<<"AAAAA: ItemSid: "<<sItemSid<<" ,count : "<<itemCount<<" , orderPayType : "<<sValue
+                   <<" oneItemPrice : "<<iOneItemPrice;
+        }
 
 
     }
 
 
-    order.Money[1] = QString::number(ntdToInt(prime));    //換成台幣的成本
 
 
+    order.Money[1] = QString::number(prime,'f',2);    //換成台幣的成本
+
+    if(bCheck)
+    {
+        qDebug()<<"AAAAA: "<<"prime : "<<prime<<" , "<<order.Money[1];
+        }
 
     return sRe;
 }
@@ -1414,13 +1431,7 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutR
             *data.Value[2].toDouble()*data.Value[3].toDouble()
             /data.SubValue.first().toDouble();
 
-    //    if(data.Sid=="23")
-    //    {
-    //        qDebug()<<"r : "<<r;
-    //        qDebug()<<"AAAAAAAAAAAAXX : "<<data.Value;
 
-    //        qDebug()<<"RRRRRRRR "<<re;
-    //    }
     return re;
 }
 

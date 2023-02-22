@@ -376,7 +376,19 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
         ui->lbCost->setText(order.Cost);
 
-        ui->lbCurrency->setText(costData.Currency);
+        QString sCurrency=order.Currency;
+        if(sCurrency=="")
+        {
+            sCurrency =costData.Currency;
+        }
+
+        if(sCurrency =="")
+        {
+            sCurrency = ACTION.getCustomer(order.CustomerSid).Currency;
+        }
+
+
+        ui->lbCurrency->setText(sCurrency);
 
         QString sNote0;
         if(order.Note0.length()>4)

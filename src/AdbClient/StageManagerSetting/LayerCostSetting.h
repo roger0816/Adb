@@ -37,7 +37,7 @@ private slots:
 
     void on_btnItemEdit_clicked();
 
-    void on_tbGame_cellDoubleClicked(int row, int);
+   // void on_tbGame_cellDoubleClicked(int row, int);
 
     void on_tbGameItem_cellDoubleClicked(int row, int);
 

@@ -25,7 +25,7 @@ struct OrderPayType{
 
     QString sPaySid;
     QString sPayName;
-    int iTotalCount=0;
+    double iTotalCount=0.00;
 
     QList<int> m_iListCount;
 

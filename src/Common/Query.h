@@ -34,7 +34,7 @@ public:
 
     void setPic(QVariantMap data);
 
-    bool checkItemCount(OrderData orderData, QStringList &sErrorGameItemSid);
+    bool checkItemCount(OrderData orderData,DataItemCount &last ,QStringList &sErrorGameItemSid);
 
     bool changeItemCount(OrderData orderData, bool bIsAdd, QString &sErrorMsg);
 

@@ -12,8 +12,8 @@ LayerPrimeCostRate::LayerPrimeCostRate(QWidget *parent) :
 
     ui->tb1->setMouseTracking(true);
 
-//    QRegExp p("^([1-9][0-9]*)+(.[0-9]{1,3})?$");
-//   QRegExpValidator *r =new QRegExpValidator(p,this);
+    //    QRegExp p("^([1-9][0-9]*)+(.[0-9]{1,3})?$");
+    //   QRegExpValidator *r =new QRegExpValidator(p,this);
     ui->txUSD->setValidator(UI.regRate);
 
     ui->txHKD->setValidator(UI.regRate);
@@ -58,11 +58,11 @@ void LayerPrimeCostRate::on_btnAdd_clicked()
 
     ui->tb0->setCellWidget(iRowCount-1,0,txt);
 
-//    QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
-//    sb->setAlignment(Qt::AlignCenter);
-//    sb->setDecimals(3);
-//    sb->setRange(0,99999);
-//      ui->tb0->setCellWidget(iRowCount-1,1,sb);
+    //    QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
+    //    sb->setAlignment(Qt::AlignCenter);
+    //    sb->setDecimals(3);
+    //    sb->setRange(0,99999);
+    //      ui->tb0->setCellWidget(iRowCount-1,1,sb);
     QLineEdit *rate=new QLineEdit(ui->tb0);
     rate->setAlignment(Qt::AlignCenter);
     rate->setValidator(UI.regRate);
@@ -97,11 +97,11 @@ void LayerPrimeCostRate::refreshRate()
         txt->setText(list.at(i).first);
         ui->tb0->setCellWidget(iRowCount-1,0,txt);
 
-//        QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
-//        sb->setAlignment(Qt::AlignCenter);
-//        sb->setDecimals(3);
-//        sb->setRange(0,99999);
-//        sb->setValue(list.at(i).second.toDouble());
+        //        QDoubleSpinBox *sb = new QDoubleSpinBox(ui->tb0);
+        //        sb->setAlignment(Qt::AlignCenter);
+        //        sb->setDecimals(3);
+        //        sb->setRange(0,99999);
+        //        sb->setValue(list.at(i).second.toDouble());
 
         QLineEdit *rate=new QLineEdit(ui->tb0);
         rate->setAlignment(Qt::AlignCenter);
@@ -127,7 +127,7 @@ void LayerPrimeCostRate::refreshTbDetail()
 
         ui->tb1->setItem(iRow,0,UI.tbItem(rate.Sid));
 
-       // QStringList list=rate.data()["Name"].toString().split(";");
+        // QStringList list=rate.data()["Name"].toString().split(";");
 
         CListPair listData = rate.listData;
 
@@ -206,21 +206,28 @@ void LayerPrimeCostRate::on_btnSave_clicked()
 
 void LayerPrimeCostRate::reLineEdit()
 {
-    m_listRate =ACTION.listRate("",true,m_bExchangeType);
+    //    m_listRate =ACTION.listRate("",true,m_bExchangeType);
 
-    if(m_listRate.length()>0)
-    {
-        DataRate rate = m_listRate.last();
-
-        ui->txUSD->setText(QString::number(rate.USD()));
-        ui->txHKD->setText(QString::number(rate.HKD()));
-
-        ui->txRMB->setText(QString::number(rate.RMB()));
-        ui->txMYR->setText(QString::number(rate.MYR()));
-        ui->txSGD->setText(QString::number(rate.SGD()));
+    //    if(m_listRate.length()>0)
+    //    {
 
 
-    }
+
+
+    DataRate rate = ACTION.primeRate("",true);
+
+    if(m_bExchangeType)
+        rate = ACTION.costRate("",true);
+
+    ui->txUSD->setText(QString::number(rate.USD()));
+    ui->txHKD->setText(QString::number(rate.HKD()));
+
+    ui->txRMB->setText(QString::number(rate.RMB()));
+    ui->txMYR->setText(QString::number(rate.MYR()));
+    ui->txSGD->setText(QString::number(rate.SGD()));
+
+
+    //  }
 
 }
 
@@ -246,7 +253,7 @@ void LayerPrimeCostRate::on_tb1_itemEntered(QTableWidgetItem *item)
     }
     else
     {
-       // QToolTip::hideText();
+        // QToolTip::hideText();
     }
 
 }

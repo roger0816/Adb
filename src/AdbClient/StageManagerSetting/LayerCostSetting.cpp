@@ -188,15 +188,15 @@ void LayerCostSetting::refreshItemList()
         return;
     }
 
-    // DataExchange::Rate rate = ACTION.rate();
+//    QList<DataRate> tmp = ACTION.listRate("",true,true);
 
-    QList<DataRate> tmp = ACTION.listRate("",true,true);
+//    DataRate rate2;
 
-    DataRate rate2;
+//    if(tmp.length()>0)
+//        rate2 = tmp.last();
 
-    if(tmp.length()>0)
-        rate2 = tmp.last();
 
+    DataRate rate2=ACTION.costRate("",true);
 
 
     m_listTipData.clear();
@@ -412,10 +412,10 @@ void LayerCostSetting::on_btnItemAdd_clicked()
     double iGameRate = gameData.GameRate;
 
 
-    DataRate rate;
+    DataRate rate = ACTION.costRate("",true);
 
-    if(ACTION.listRate("",true,true).length()>0)
-        rate=ACTION.listRate("",true,true).last();
+//    if(ACTION.listRate("",true,true).length()>0)
+//        rate=ACTION.listRate("",true,true).last();
 
     dialog.setRate(sGameName+" : 新增商品",rate);
     QVariantMap dat;
@@ -493,12 +493,8 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     double gameRate=gameData.GameRate;
 
-    DataRate rate;
+    DataRate rate= ACTION.costRate("",true);
 
-    QList<DataRate> listTmp =ACTION.listRate("",true,true);
-
-    if(listTmp.length()>0)
-        rate = listTmp.last();
 
     dialog.setRate(sGameName+" : 修改商品",rate);
 
@@ -566,10 +562,10 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 }
 
 
-void LayerCostSetting::on_tbGame_cellDoubleClicked(int , int )
-{
-    on_btnGameEdit_clicked();
-}
+//void LayerCostSetting::on_tbGame_cellDoubleClicked(int , int )
+//{
+//    on_btnGameEdit_clicked();
+//}
 
 
 void LayerCostSetting::on_tbGameItem_cellDoubleClicked(int , int )

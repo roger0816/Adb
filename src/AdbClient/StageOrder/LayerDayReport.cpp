@@ -67,9 +67,9 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 
     ui->btnExcel->hide();
 
-//    ui->btnFilter->hide();
+    //    ui->btnFilter->hide();
 
-//    ui->btnFilterClear->hide();
+    //    ui->btnFilterClear->hide();
 }
 
 LayerDayReport::~LayerDayReport()
@@ -120,8 +120,6 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         OrderData data = m_listOrder.at(i);
 
-        //更新成本
-        ACTION.setPrimeMoney(data);
 
 
         if(!listCbFilter.contains(data.Owner))
@@ -229,8 +227,6 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         qlonglong iNtdCost = data.Money.first().toLongLong();
 
-        qlonglong iNtdPrime = data.Money[1].toLongLong();
-
         QStringList listNote = data.Note0;
 
         if(listNote.length()>4)
@@ -272,14 +268,12 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         }
 
+        QString sNtdPrime;// = data.Money[1];
         if(data.Step.toInt()>=3)
         {
-            if(iNtdPrime<=0)
-            {
-                ACTION.setPrimeMoney(data);
 
-                iNtdPrime=data.Money[1].toLongLong();
-            }
+
+
 
 
             //成本匯率是要看儲值方式的幣別
@@ -289,16 +283,30 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
             ui->tb->setItem(iRow,_PayRate,UI.tbItem(ACTION.getPayRate(data.PayType)));
             ui->tb->setItem(iRow,_PrimeRate,UI.tbItem(sPrimeRate));
-            ui->tb->setItem(iRow,_Prime,UI.tbItem(iNtdPrime));
-            ui->tb->setItem(iRow,_Profit,UI.tbItem(iNtdCost-iNtdPrime));
+
+
+            //成本
+            // ACTION.setPrimeMoney(data);
+            // sNtdPrime=data.Money[1];
+            double iNtdPrime=sPrimeRate.toDouble()*orderPayType.iTotalCount*ACTION.getPayRate(data.PayType).toDouble();
+            sNtdPrime=QString::number(iNtdPrime,'f',2);
+
+
+            ui->tb->setItem(iRow,_Prime,UI.tbItem(sNtdPrime));
+            ui->tb->setItem(iRow,_Profit,UI.tbItem(iNtdCost-sNtdPrime.toDouble()));
             double dTmp = 0.00;
-            dTmp = (double)(iNtdCost-iNtdPrime) / data.Bouns.toDouble();
+            dTmp = (double)(iNtdCost-sNtdPrime.toDouble()) / data.Bouns.toDouble();
             ui->tb->setItem(iRow,_ProfitForOne,UI.tbItem(dTmp));
 
             if(data.Pic0.length()>0)
                 ui->tb->setItem(iRow,_Pic0,UI.tbItem("儲值",1));
             if(data.Pic1.length()>0)
                 ui->tb->setItem(iRow,_Pic1,UI.tbItem("回報",1));
+
+
+
+
+
 
         }
 
@@ -308,11 +316,12 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         if(data.Step.toInt()==5)
         {
+
             iTotal0 +=iNtdCost;
 
-            iTotal1 +=iNtdPrime;
+            iTotal1 =iTotal1+sNtdPrime.toDouble();
 
-            int iTmp = iNtdCost-iNtdPrime;
+            int iTmp = iNtdCost-sNtdPrime.toDouble();
             iTotal2 +=iTmp;
 
             iTotalBonus+=data.Bouns.toDouble();
@@ -336,11 +345,11 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         ui->cbFilter->addItems(listCbFilter);
 
-            ui->cbFilter->setEditable(true);
+        ui->cbFilter->setEditable(true);
 
-            QCompleter *completer=new QCompleter(ui->cbFilter->model(),this);
-            //    //        completer->setCompletionMode(QCompleter::PopupCompletion);
-            ui->cbFilter->setCompleter(completer);
+        QCompleter *completer=new QCompleter(ui->cbFilter->model(),this);
+        //    //        completer->setCompletionMode(QCompleter::PopupCompletion);
+        ui->cbFilter->setCompleter(completer);
 
         ui->cbFilter->setProperty("lock",false);
     }
@@ -411,9 +420,9 @@ bool LayerDayReport::checkFilter(OrderData order)
 
         QStringList target;
         target<<order.Owner
-        <<order.Id<<order.Name
-          <<cus.Id<<cus.Currency
-                <<ACTION.getGameName(order.GameSid);
+             <<order.Id<<order.Name
+            <<cus.Id<<cus.Currency
+           <<ACTION.getGameName(order.GameSid);
         //        <<date.toString("hh:mm:ss");
 
 
@@ -523,7 +532,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
                 ACTION.action(ACT::ADD_BOUNS,in,sError);
 
-                ACTION.orderUpdateCount(data.Sid,user.Sid,data.Item);
+             //   ACTION.orderUpdateCount(data.Sid,user.Sid,data.Item);
 
             }
 
@@ -749,6 +758,9 @@ void LayerDayReport::delayRefresh()
         ui->tb->showColumn(_Prime);
         ui->tb->showColumn(_Profit);
 
+        if(ui->cbShowCost->isChecked())
+            ui->tb->showColumn(_Cost);
+
         ui->tb->showColumn(_ProfitForOne);
         ui->tb->showColumn(_PayRate);
         ui->wTotal->show();
@@ -967,7 +979,7 @@ void LayerDayReport::on_btnExcel_clicked()
         {
             qDebug()<<"col : "<<iCol<<" row: "<<iRow;
 
-            if(iCol==_Pic0 || iCol==_Pic1 || iCol==_CheckNum)
+            if(iCol==_Sid || iCol==_Pic0 || iCol==_Pic1 || iCol==_CheckNum)
                 continue;
             iXlsxCol++;
 
@@ -1070,11 +1082,11 @@ void LayerDayReport::on_btnChangeDate_clicked()
 
 void LayerDayReport::on_cbFilter_currentIndexChanged(int index)
 {
-//    if(ui->cbFilter->property("lock").toBool())
-//        return ;
+    //    if(ui->cbFilter->property("lock").toBool())
+    //        return ;
 
-//    ui->cbFilter->setProperty("lock",true);
-//    refreshTb(false,false);
-//    ui->cbFilter->setProperty("lock",false);
+    //    ui->cbFilter->setProperty("lock",true);
+    //    refreshTb(false,false);
+    //    ui->cbFilter->setProperty("lock",false);
 }
 

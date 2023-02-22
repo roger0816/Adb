@@ -161,7 +161,7 @@ void LayerSearchCustomer::changePage(int iPage)
     {
         ui->pageSayCost->setCustomer(customer.data());
 
-        ui->pageSayCost->init();
+
 
     }
 
@@ -176,7 +176,7 @@ void LayerSearchCustomer::changePage(int iPage)
     else if(iPage==4)
     {
 
-        qDebug()<<"AAAAAAAAA : "<<order.Sid;
+
         if(order.Step!="0" || order.Sid=="")
         {
             UI.showMsg("","沒預先報價流程，請先進行報價",QStringList()<<"OK");
@@ -187,7 +187,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
         ui->pageOrder->setCustomer(customer.data());
 
-        ui->pageOrder->init();
+
 
 
     }

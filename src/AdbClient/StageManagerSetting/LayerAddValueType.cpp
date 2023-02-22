@@ -33,9 +33,8 @@ void LayerAddValueType::refresh()
     ui->tb->setRowCount(0);
 
 
-    QList<DataRate> list =ACTION.listRate("",true,false);
-    if(list.length()<1)
-        return;
+    DataRate primeRate =ACTION.primeRate("",true);
+
 
     for(int i=0;i<m_listData.length();i++)
     {
@@ -48,9 +47,9 @@ void LayerAddValueType::refresh()
 
         ui->tb->setItem(i,2,UI.tbItem(data.Currency));
 
-        QString primeRate = QString::number(list.last().findValue(data.Currency),'f',3);
+        QString sPrimeRate = QString::number(primeRate.findValue(data.Currency),'f',3);
 
-        ui->tb->setItem(i,3,UI.tbItem(primeRate));
+        ui->tb->setItem(i,3,UI.tbItem(sPrimeRate));
 
         ui->tb->setItem(i,5,UI.tbItem(data.SubValue.first()));
 
@@ -59,7 +58,7 @@ void LayerAddValueType::refresh()
         ui->tb->setItem(i,8,UI.tbItem(data.Value[2]));
         ui->tb->setItem(i,9,UI.tbItem(data.Value[3]));
 
-        double total = list.last().findValue(data.Currency)
+        double total = primeRate.findValue(data.Currency)
                 *data.Value[0].toDouble()*data.Value[1].toDouble()
                 *data.Value[2].toDouble()*data.Value[3].toDouble()
                 /data.SubValue.first().toDouble();
@@ -75,17 +74,17 @@ void LayerAddValueType::on_btnAdd_clicked()
 {
     DialogAddValueTypeEdit dialog;
 
-    QList<DataRate> list =ACTION.listRate("",true,false);
+    DataRate rate =ACTION.primeRate("",true);
 
-    if(list.length()<1)
-    {
-        DMSG.showMsg("","讀取不到成本匯率","OK");
+//    if(list.length()<1)
+//    {
+//        DMSG.showMsg("","讀取不到成本匯率","OK");
 
-        return;
+//        return;
 
-    }
+//    }
 
-    DataRate rate =list.last();
+   // DataRate rate =list.last();
 
     dialog.setRate(rate.listKey(),rate.listValue());
 
@@ -120,17 +119,17 @@ void LayerAddValueType::on_btnEdit_clicked()
 
     DialogAddValueTypeEdit dialog;
 
-    QList<DataRate> list =ACTION.listRate("",true,false);
+    DataRate rate =ACTION.primeRate("",true);
 
-    if(list.length()<1)
-    {
-        DMSG.showMsg("","讀取不到成本匯率","OK");
+//    if(list.length()<1)
+//    {
+//        DMSG.showMsg("","讀取不到成本匯率","OK");
 
-        return;
+//        return;
 
-    }
+//    }
 
-    DataRate rate =list.last();
+//    DataRate rate =list.last();
 
     dialog.setRate(rate.listKey(),rate.listValue());
 

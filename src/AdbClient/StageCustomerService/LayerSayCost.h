@@ -23,7 +23,7 @@ public:
         void orderMode();
 
      void setCustomer(QVariantMap data,QString sOrderSid="");
-     void init();
+
      void setReadOnly();
 
     // void showEvent(QShowEvent *) override;
@@ -32,7 +32,7 @@ public:
      bool m_bOrderMode = false;
 
 private:
-
+         void init();
     CustomerData m_dataCustomer;
 
     QVariantList m_listGameInfo;
@@ -75,7 +75,7 @@ private:
 
     bool m_bReadOnly = false;
 
-    CListPair m_listPayType;
+   // CListPair m_listPayType;
 
     QList<DataFactory> m_listCbItem;
 

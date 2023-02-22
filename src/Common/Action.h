@@ -116,14 +116,13 @@ public:
 
     bool addRate(QVariantMap data, QString &sError, bool bExchangeType=false);
 
-    QList<DataRate> listRate(QString sSid="", bool bRequest=true, bool bExchangeType=false);
 
 
-    DataRate costRate(QString sSid="", bool bRequest=true)
-    {return listRate(sSid,bRequest,true).last();}
+    DataRate costRate(QString sSid="",bool bStrong=true)
+    {return listRate(sSid,true,true,bStrong).last();}
 
-    DataRate primeRate(QString sSid="", bool bRequest=true)
-    {return listRate(sSid,bRequest,false).last();}
+    DataRate primeRate(QString sSid="",bool bStrong=true)
+    {return listRate(sSid,true,false,bStrong).last();}
 
     QList<DataUserBonus> listBouns(QString sUserSid);
 
@@ -170,6 +169,8 @@ public:
     DataGameRate getGameRate(QString GameSid,QString sSid="");
 
 private:
+    QList<DataRate> listRate(QString sSid="", bool bRequest=true, bool bExchangeType=false, bool bStrong=false);
+
     QList<UserData> m_listUser;
 
     QList<DataCustomerClass> m_listCustomerClass;

@@ -253,7 +253,7 @@ border: 1px solid #aaaaaa;
            </property>
            <property name="minimumSize">
             <size>
-             <width>300</width>
+             <width>250</width>
              <height>100</height>
             </size>
            </property>
@@ -433,6 +433,12 @@ border: 1px solid #aaaaaa;
          </item>
          <item>
           <widget class="QGroupBox" name="groupBox_8">
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>0</height>
+            </size>
+           </property>
            <property name="styleSheet">
             <string notr="true"/>
            </property>
@@ -554,7 +560,7 @@ border: 1px solid #aaaaaa;
            </property>
            <property name="minimumSize">
             <size>
-             <width>300</width>
+             <width>250</width>
              <height>0</height>
             </size>
            </property>
@@ -830,7 +836,7 @@ background-color:#3c78b4;
 }</string>
                  </property>
                  <property name="text">
-                  <string>複製文字內容</string>
+                  <string>複製文字</string>
                  </property>
                 </widget>
                </item>

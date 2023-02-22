@@ -62,7 +62,7 @@ void LayerSayCost::orderMode()
         QString sError;
 
         inTmp["Sid"] = m_sLoadOrderSid;
-        ACTION.action(ACT::QUERY_ORDER,inTmp,out,sError);
+        ACTION.action(ACT::QUERY_ORDER,inTmp,out,sError,true);
 
         m_order.setData(out);
     }
@@ -85,6 +85,7 @@ void LayerSayCost::orderMode()
 
 
     m_gameRate = m_order.GameRate;
+       ui->lbGameRate->setText(m_gameRate);
 
     QStringList tmpRecord = m_order.UiRecord.split(",");
 
@@ -136,7 +137,7 @@ void LayerSayCost::orderMode()
     //    else
     //        m_gameRate = ACTION.getGameRate(m_order.GameSid).Rate;
 
-    refreshInfo();
+  //  refreshInfo();
 
 }
 
@@ -144,7 +145,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 {
 
     m_listInto.clear();
-
+    m_gameRate.clear();
 
     ui->tbInfo->setRowCount(0);
 
@@ -154,7 +155,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     QVariantMap dIn;
     dIn["Sid"] =data["Sid"];
     QString sError;
-    ACTION.action(ACT::QUERY_CUSTOMER,dIn,listOut,sError);
+    ACTION.action(ACT::QUERY_CUSTOMER,dIn,listOut,sError,true);
 
     m_sLoadOrderSid = sOrderSid;
 
@@ -180,7 +181,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     d["CustomerSid"] = m_dataCustomer.Sid;
 
 
-    ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,m_listGameInfo,sError);
+    ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,m_listGameInfo,sError,true);
 
 
     QStringList cbName;
@@ -215,6 +216,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     else
     {
         ui->cbGame->setEnabled(true);
+        ui->txNote2->clear();
         m_order=OrderData();
     }
     //    m_exRate = ACTION.listRate(m_order.ExRateSid,false,true).first();
@@ -223,7 +225,9 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
 
 
-    ui->lbGameRate->setText(m_gameRate);
+   // ui->lbGameRate->setText(m_gameRate);
+
+    init();
 
 }
 
@@ -351,7 +355,12 @@ double LayerSayCost::checkTotal()
 {
 
     double re = 0;
-
+    if(m_gameRate.trimmed()=="")
+    {
+        DMSG.showMsg("ERROR 401","金額讀取錯誤，請重新再操作一次",QStringList()<<"OK");
+          emit back(1);
+        return 0;
+    }
 
     //  DataExchange::Rate rate = ACTION.rate(m_sLoadOrderSid);
     m_iNtdTotal=0;
@@ -377,45 +386,45 @@ double LayerSayCost::checkTotal()
 
         if(iIdx<0)
         {
-
-            continue;
+            DMSG.showMsg("ERROR 402","金額讀取錯誤，請重新再操作一次",QStringList()<<"OK");
+              emit back(1);
+            return 0;
         }
         //  double target= pRate.listData.at(iIdx).second.toDouble();
 
+        double iOriNtd = m_gameRate.toDouble()*bouns;
 
-        double ntd = m_gameRate.toDouble()*bouns;
-
-        QString sNtd=QString::number(GLOBAL.addFlow(ntd));
-        QString sCost = QString::number(GLOBAL.addFlow(ntd));
+        double iNtd=GLOBAL.addFlow(iOriNtd);
+        QString sCost = QString::number(GLOBAL.addFlow(iOriNtd));
 
 
         if(m_dataCustomer.Currency.toUpper().contains("USD"))
         {
-            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.USD(),2));
+            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.USD(),2));
 
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("HKD"))
         {
 
-            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.HKD()));
+            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.HKD()));
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("RMB"))
         {
 
-            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.RMB()));
+            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.RMB()));
 
         }
         else if(m_dataCustomer.Currency.toUpper().contains("MYR"))
         {
-            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.MYR()));
+            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.MYR()));
 
         }
         else if(m_dataCustomer.Currency.toUpper().contains("SGD"))
         {
 
-            sCost = QString::number(GLOBAL.addFlow(ntd/m_costRate.SGD(),1));
+            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.SGD(),1));
 
         }
 
@@ -424,7 +433,8 @@ double LayerSayCost::checkTotal()
 
         //   QString sTmp = QString::number(iNTD/rate2.USD(),'f',2);
         m_listCost.append(QString::number(cost));
-        m_iNtdTotal=m_iNtdTotal+sNtd.toDouble();
+        m_iNtdTotal=m_iNtdTotal+iNtd*iPrice;
+
         re=re+cost;
 
 
@@ -655,7 +665,7 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
         qDebug()<<"game rate by query : "<<m_gameRate;
     }
 
-
+       ui->lbGameRate->setText(m_gameRate);
     ui->lbGameName->setText(arg1);
 
     QStringList cbAcc;
@@ -1154,7 +1164,7 @@ void LayerSayCost::on_btnSayClose_clicked()
 void LayerSayCost::delayShowEvent()
 {
     qDebug()<<"show Event ";
-    m_listPayType = ACTION.getAddValueType();
+   // m_listPayType = ACTION.getAddValueType();
 
 
     m_date = GLOBAL.dateTimeUtc8();
@@ -1165,7 +1175,15 @@ void LayerSayCost::delayShowEvent()
     QString sError;
 
     QVariantMap v;
-    ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError);
+    ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError,true);
+
+    if(m_listGameItem.length()<1)
+    {
+        DMSG.showMsg("ERROR 403","錯誤，無商品資料，再重新操作一次。",QStringList()<<"OK");
+        emit back(1);
+        return ;
+    }
+
 
     refreshInfo();
 }

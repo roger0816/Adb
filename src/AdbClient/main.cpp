@@ -1,12 +1,13 @@
 #include "widget.h"
 
 #include <QApplication>
-#include "DialogLogin.h"
-#include <QDebug>
-#include "Global.h"
-#include "GlobalUi.h"
-#include "StageTest.h"
-#include "LayerCustomer.h"
+//#include "DialogLogin.h"
+//#include <QDebug>
+//#include "Global.h"
+//#include "GlobalUi.h"
+//#include "StageTest.h"
+
+#include <QFileDialog>
 typedef enum
 {
     _RELEASE=1,
@@ -24,14 +25,15 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+//    QWidget ww;
 
-    LayerCustomer cus;
+//    ww.show();
 
-//    ACTION.setServer(true,"167.99.66.45");
-//    cus.exportXml("D:/work/q_project/Adb/doc/客戶編號.xlsx");
+//    QString sPath = QFileDialog::getExistingDirectory(&ww,"選擇存檔位置","D:/aa");
+
 //    return a.exec();
 
-
+#if 1
     //
 
     QString st=argv[0];
@@ -166,6 +168,6 @@ int main(int argc, char *argv[])
 
 
     return a.exec();
-
+#endif
 
 }

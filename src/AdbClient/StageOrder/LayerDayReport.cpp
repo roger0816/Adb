@@ -9,7 +9,7 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->tb->setSortingEnabled(true);
+   // ui->tb->setSortingEnabled(true);
 
     ui->wShowArea->hide();
 
@@ -102,13 +102,13 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
     ui->tb->setRowCount(0);
 
     m_mappingData.clear();
-    qlonglong iTotal0=0;
+    double iTotal0=0;
 
 
-    qlonglong iTotal1=0;
+    double iTotal1=0;
 
 
-    qlonglong iTotal2=0;
+    double iTotal2=0;
 
     double iTotalBonus=0.0;
 
@@ -146,7 +146,6 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 #endif
 
 
-
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
         ui->tb->setItem(iRow,_Sid,UI.tbItem(data.Sid));
@@ -165,9 +164,9 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         QString sUser="";
 
-        if(data.User.length()>2)
+        if(data.User.length()>3)
         {
-            UserData user = ACTION.getUser(data.User.at(2));
+            UserData user = ACTION.getUser(data.User.at(3));
 
 
             sUser = user.Name;
@@ -177,7 +176,6 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         ui->tb->setItem(iRow,_User,UI.tbItem(sUser,GlobalUi::_BUTTON));
         ui->tb->setItem(iRow,_Customer,UI.tbItem(customer.Id));
-
 
 
         QString sStatus =statusString(data.Step);
@@ -217,15 +215,15 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         _LayerDayReport::OrderPayType orderPayType = getPayCount(data);
 
-        DataRate primeRate=ACTION.primeRate(data.PrimeRateSid,true);
+        DataRate primeRate=ACTION.primeRate(data.PrimeRateSid,iRow==0);
 
-        DataRate exRate=ACTION.costRate(data.ExRateSid,true);
+        DataRate exRate=ACTION.costRate(data.ExRateSid,iRow==0);
 
         QString sPrimeRate="";
 
         //double payRate = ACTION.payTypeToNTDRate(data.PayType,primeRate,sPrimeRate);
 
-        qlonglong iNtdCost = data.Money.first().toLongLong();
+        double iNtdCost = data.Money.first().toDouble();
 
         QStringList listNote = data.Note0;
 
@@ -430,7 +428,7 @@ bool LayerDayReport::checkFilter(OrderData order)
         foreach(QString tmp,target)
         {
 
-            if(tmp.contains(st.toUpper()))
+            if(tmp.toUpper().contains(st.toUpper()))
             {
 
                 b = true;
@@ -958,11 +956,23 @@ void LayerDayReport::on_btnExcel_clicked()
 
         return ;
     }
+
+    qDebug()<<"AAAAAA:1";
+
     QString sPath = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
+
+
+
+
+    qDebug()<<"AAAAAA:2";
 
     if(sPath.trimmed()=="")
         return ;
 
+
+
+    return ;
+    //
 
     QString sFileName = sPath+"/"+"DayReport_"+ui->dateEdit->date().toString("yyyy_MMdd");
     qDebug()<<"sFileName : "<<sFileName;
@@ -1007,6 +1017,9 @@ void LayerDayReport::on_btnExcel_clicked()
                 }
                 else
                 {
+//                    if(iCol==_Note)
+//                        st=st.replace("\n","");
+
                     bOk = xlsx.write(iRow+2,iXlsxCol,st);
 
                 }

@@ -9,6 +9,7 @@
 #include "DialogCommon.h"
 #include <QShowEvent>
 #include "DialogDayReportEdit.h"
+
 #include "CExcelExport.h"
 #include "CObjectExcel.h"
 #include "xlsxdocument.h"

@@ -287,12 +287,7 @@ bool QueryObj::checkAppVersion(QString sVersion)
     int iDate=listTmp.at(2).mid(0,4).toInt();
     if(iVersion>=SERVER_MIN_VER)
     {
-        if(iVersion==11)
-        {
-            QString sT="0220";
-            if(iDate<sT.toInt())
-                return false;
-        }
+
         return true;
     }
 

@@ -289,6 +289,73 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
     return bOk;
 }
 
+int CSqlClass::queryCount(QString sTableName, QVariantMap conditions)
+{
+    int iRe = 0;
+
+    QSqlQuery query(db());
+
+    QString sCmd = "SELECT COUNT(*) FROM " +sTableName;
+    QString sSub = "";
+
+    QStringList listKey = conditions.keys();
+
+    int iCount=0;
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        QString sKey = listKey.at(i);
+        if(iCount==0)
+            sSub+="  WHERE ";
+        else
+            sSub+=" AND ";
+        if(sKey.split(" ").length()<=1)
+            sSub+= sKey+" =? ";
+        else
+            sSub+= sKey+" ?";   //處理自帶 >= <= 或like
+        iCount++;
+
+    }
+
+        query.prepare(sCmd+sSub);
+
+    QVariantList listTmp;
+
+    iCount =0;
+    for(int j=0;j<listKey.length();j++)
+    {
+        QString sKey =listKey.at(j);
+        if(sKey.toUpper()=="ASC" || sKey.toUpper()=="DESC"
+                ||sKey.toUpper()=="LIMIT")
+            continue;
+
+        query.bindValue(iCount,conditions[sKey]);
+        listTmp.append(conditions[sKey]);
+
+        iCount++;
+    }
+
+
+
+
+
+    bool bOk = query.exec();
+
+    qDebug()<<"cmd : "<<sCmd+sSub;
+
+    qDebug()<<"query count: "<<listTmp<<" : "<<bOk;
+
+
+    if(bOk&& query.next())
+    {
+        iRe=query.value(0).toInt();
+    }
+
+    return iRe;
+
+
+}
+
 bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap data, QString &sError)
 {
     QString sCmd="UPDATE "+sTableName+" SET ";
@@ -424,7 +491,7 @@ void CSqlClass::createTableSqlite()
              'GameSid'	TEXT, \
              'GameName'	TEXT, \
              'Rate'	TEXT, \
-          'UserSid'	TEXT, \
+             'UserSid'	TEXT, \
              'UpdateTime'	TEXT, \
              PRIMARY KEY('Sid') \
              );");
@@ -654,7 +721,7 @@ void CSqlClass::createTableSqlite()
              'GameSid'	TEXT,                   \
              'Item'	TEXT,                   \
              'Cost'	TEXT,                   \
-            'ListCost'	TEXT,                   \
+             'ListCost'	TEXT,                   \
              'Bouns'	TEXT,                   \
              'ExRateSid'	TEXT,                   \
              'PrimeRateSid'	TEXT,                   \

@@ -635,15 +635,32 @@ QString Action::getGameName(QString sId)
 {
     QString sRe="";
 
-    for(int i=0;i<m_listGameList.length();i++)
+    auto fnGameName= [=](QString sId,QList<DataGameList> list)
     {
-        if(sId==m_listGameList.at(i).Sid)
+        QString r="";
+        for(int i=0;i<list.length();i++)
         {
+            if(sId==list.at(i).Sid)
+            {
 
-            sRe =m_listGameList.at(i).Name;
+                r =list.at(i).Name;
 
-            break;
+                break;
+            }
         }
+
+        return r;
+    };
+
+
+    sRe = fnGameName(sId,m_listGameList);
+
+    if(sRe=="")
+    {
+        //retry
+        getGameList(true);
+
+        sRe = fnGameName(sId,m_listGameList);
     }
 
     return sRe;
@@ -937,17 +954,17 @@ OrderData Action::getOrder(QString sSid, bool bRequest)
 OrderData Action::getOrderCustomerLast(QString sCustomerSid, bool bRequest)
 {
 
-//    OrderData reOrder;
-//    QVariantMap in;
-//    QVariantList out;
-//    QDate tDate=QDate::currentDate().addDays(-1);
-//    in["OrderDate >="]=tDate.toString("yyyyMMdd");
-//    in["CustomerSid"] = sCustomerSid;
-//    in["Step"]=QString::number(iStep);
-//    QString sError;
-//    action(ACT::QUERY_ORDER,in,out,sError,true);
+    //    OrderData reOrder;
+    //    QVariantMap in;
+    //    QVariantList out;
+    //    QDate tDate=QDate::currentDate().addDays(-1);
+    //    in["OrderDate >="]=tDate.toString("yyyyMMdd");
+    //    in["CustomerSid"] = sCustomerSid;
+    //    in["Step"]=QString::number(iStep);
+    //    QString sError;
+    //    action(ACT::QUERY_ORDER,in,out,sError,true);
 
-//    return reOrder;
+    //    return reOrder;
 
     if(bRequest)
         getOrder(bRequest);
@@ -1236,20 +1253,20 @@ QString Action::setSellMoney(OrderData &order)
 QString Action::setPrimeMoney(OrderData &order)
 {
 
-//    auto ntdToInt=[=](double iCost)
-//    {
+    //    auto ntdToInt=[=](double iCost)
+    //    {
 
-//        QStringList listTmp = QString::number(iCost).split(".");
+    //        QStringList listTmp = QString::number(iCost).split(".");
 
-//        int cost = listTmp.first().toInt();
+    //        int cost = listTmp.first().toInt();
 
-//        if(listTmp.length()>1 && listTmp.last().toInt()>0)
-//        {
-//            cost+=1;
-//        }
+    //        if(listTmp.length()>1 && listTmp.last().toInt()>0)
+    //        {
+    //            cost+=1;
+    //        }
 
-//        return cost;
-//    };
+    //        return cost;
+    //    };
 
 
     DataRate rate=primeRate(order.PrimeRateSid,true);
@@ -1312,7 +1329,7 @@ QString Action::setPrimeMoney(OrderData &order)
     if(bCheck)
     {
         qDebug()<<"AAAAA: "<<"prime : "<<prime<<" , "<<order.Money[1];
-        }
+    }
 
     return sRe;
 }

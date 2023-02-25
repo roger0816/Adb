@@ -27,6 +27,8 @@ public:
 
     bool queryTb(QString sTableName, QVariantMap conditions, QVariantList &listOut, QString &sError);
 
+    int queryCount(QString sTableName,QVariantMap conditions);
+
     bool updateTb(QString sTableName, QVariantMap conditions, QVariantMap data, QString &sError);
 
 

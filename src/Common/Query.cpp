@@ -625,12 +625,12 @@ CData Query::implementRecall(CData data)
 
         if(order.Step=="-1")
         {
-             QString sCountError;
+            QString sCountError;
             changeItemCount(order,true,sCountError);
-               checkUpdate(ACT::ADD_ITEM_COUNT);
+            checkUpdate(ACT::ADD_ITEM_COUNT);
         }
 
-        if(order.Step=="0")
+        else if(order.Step=="0")
         {
             CustomerData cus;
 
@@ -666,7 +666,7 @@ CData Query::implementRecall(CData data)
             }
             else
             {
-                 checkUpdate(ACT::ADD_ITEM_COUNT);
+                checkUpdate(ACT::ADD_ITEM_COUNT);
                 order.Id=getNewOrderId(order.OrderDate);
                 QVariantMap in;
                 QVariantList tmpOut;
@@ -684,7 +684,8 @@ CData Query::implementRecall(CData data)
 
                 if(order.Owner.trimmed()=="")
                     order.Owner="None";
-
+                int iSeq=1;
+#if 0
                 QVariantMap in2;
                 QVariantList listOut2;
                 in2["Name like"] ="%"+order.Owner+"%";
@@ -693,7 +694,7 @@ CData Query::implementRecall(CData data)
                 in2["LIMIT"]="1";
                 m_sql.queryTb(SQL_TABLE::OrderData(),in2,listOut2,sError);
 
-                int iSeq=1;
+
 
                 if(listOut2.length()>0)
                 {
@@ -705,13 +706,24 @@ CData Query::implementRecall(CData data)
                     iSeq = sName.replace(order.Owner,"").replace("-","").toInt()+1;
 
                 }
+#else
+                QVariantMap in3;
+                in3["Owner"]=order.Owner;
+                in3["OrderDate"]=order.OrderDate;
+                iSeq =m_sql.queryCount(SQL_TABLE::OrderData(),in3);
+
+
+
+#endif
 
                 QString sDash="";
 
                 if(order.Owner.right(1)!="-")
                     sDash="-";
 
-                order.Name=order.Owner+sDash+QString::number(iSeq);
+               // order.Name=order.Owner+sDash+QString("%1").arg(iSeq+1,2,10,QLatin1Char('0'));
+                order.Name=order.Owner+sDash+QString::number(iSeq+1);
+
 
                 if(order.Currency.toUpper().contains("NTD"))
                 {

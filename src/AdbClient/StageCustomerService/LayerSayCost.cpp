@@ -147,6 +147,9 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     m_listInto.clear();
     m_gameRate.clear();
 
+    ui->txNote1->clear();
+
+
     ui->tbInfo->setRowCount(0);
 
     ui->tbGameItem->setRowCount(0);
@@ -233,7 +236,6 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
 void LayerSayCost::init()
 {
-    ui->txNote1->clear();
 
     delayShowEvent();
 }
@@ -983,7 +985,7 @@ void LayerSayCost::on_btnCopy_clicked()
 
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
-        sCost+=ui->tbInfo->item(i,2)->text();
+        sCost+=ui->tbInfo->item(i,2)->text().split("_").first();
         sCost+="  x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3))->text();
 
         if(!m_bOrderMode)
@@ -1141,7 +1143,7 @@ void LayerSayCost::on_btnSayOk_clicked()
     m_order.Item = list.toString();
     m_order.UpdateTime = m_date.toString("yyyyMMddhhmmss");
 
-    qDebug()<<"AAAAAAAAAAAAA : "<<m_order.data();
+
     QString sError;
     bool bOk = ACTION.replaceOrder(m_order,sError);
 

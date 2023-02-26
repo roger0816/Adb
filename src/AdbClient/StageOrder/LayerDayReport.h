@@ -2,6 +2,8 @@
 #define LAYERDAYREPORT_H
 
 #include <QWidget>
+#include <QDir>
+#include <QDesktopServices>
 #include "DialogNote.h"
 #include "Global.h"
 #include "GlobalUi.h"

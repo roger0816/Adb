@@ -410,18 +410,22 @@ void LayerDayDebit::slotBtnDebitExport()
 
         return ;
     }
-    QString sPath = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
+    QString sPath;// = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
+    sPath = QApplication::applicationDirPath()+"/out/report";
 
-    if(sPath.trimmed()=="")
-        return ;
+    QDir dir(sPath);
+    if (!dir.exists())
+    {
+        dir.mkdir(".");
+    }
 
     QString sDebitText="all";
 
     if(ui->cbDebit->currentIndex()!=0)
         sDebitText = ui->cbDebit->currentText();
 
+    QString sFileName = sPath+"/"+ui->dateEdit->date().toString("MMdd")+"_每日入帳_"+GLOBAL.dateTimeUtc8().toString("MMddhhmmss");
 
-    QString sFileName = sPath+"/"+"DayDebit_"+sDebitText+"_"+ui->dateEdit->date().toString("yyyy_MMdd");
     qDebug()<<"sFileName : "<<sFileName;
 
     QTXLSX_USE_NAMESPACE
@@ -469,7 +473,22 @@ void LayerDayDebit::slotBtnDebitExport()
 
     xlsx.saveAs(sFileName+".xls");
 
-    DMSG.showMsg("",sFileName.split("/").last()+"\n\n匯出完成","OK");
+
+    QString sMsg="存檔位置 : 程式路徑/out/report/\n"
+            "檔名 : "+sFileName.split("/").last()+"\n"
+            "\n匯出完成";
+
+
+    int iRet= DMSG.showMsg("",sMsg,QStringList()<<"打開資料夾"<<"OK");
+
+    if(iRet==0)
+    {
+        QString folderPath = sPath;
+        QUrl folderUrl = QUrl::fromLocalFile(folderPath);
+        QDesktopServices::openUrl(folderUrl);
+    }
+
+   // DMSG.showMsg("",sFileName.split("/").last()+"\n\n匯出完成","OK");
 }
 
 

@@ -6,6 +6,8 @@
 #include "Global.h"
 #include "ItemPic.h"
 #include "xlsxdocument.h"
+#include <QDir>
+#include <QDesktopServices>
 namespace Ui {
 class LayerDayDebit;
 }

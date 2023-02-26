@@ -9,7 +9,7 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 {
     ui->setupUi(this);
 
-   // ui->tb->setSortingEnabled(true);
+    // ui->tb->setSortingEnabled(true);
 
     ui->wShowArea->hide();
 
@@ -530,7 +530,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
                 ACTION.action(ACT::ADD_BOUNS,in,sError);
 
-             //   ACTION.orderUpdateCount(data.Sid,user.Sid,data.Item);
+                //   ACTION.orderUpdateCount(data.Sid,user.Sid,data.Item);
 
             }
 
@@ -957,24 +957,28 @@ void LayerDayReport::on_btnExcel_clicked()
         return ;
     }
 
-    qDebug()<<"AAAAAA:1";
+    QString sPath;
 
-    QString sPath = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
-
-
-
-
-    qDebug()<<"AAAAAA:2";
-
+#if 0
+    sPath = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
     if(sPath.trimmed()=="")
         return ;
+#else
+
+    sPath = QApplication::applicationDirPath()+"/out/report";
+    QDir dir(sPath);
+    if (!dir.exists())
+    {
+        dir.mkdir(".");
+    }
 
 
 
-    return ;
+#endif
+
     //
 
-    QString sFileName = sPath+"/"+"DayReport_"+ui->dateEdit->date().toString("yyyy_MMdd");
+    QString sFileName = sPath+"/"+ui->dateEdit->date().toString("MMdd")+"_每日報表_"+GLOBAL.dateTimeUtc8().toString("MMddhhmmss");
     qDebug()<<"sFileName : "<<sFileName;
     QTXLSX_USE_NAMESPACE
 
@@ -985,6 +989,8 @@ void LayerDayReport::on_btnExcel_clicked()
     for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
     {
         int iXlsxCol =0;
+        int iH = xlsx.rowHeight(iRow);
+
         for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
         {
             qDebug()<<"col : "<<iCol<<" row: "<<iRow;
@@ -1005,6 +1011,8 @@ void LayerDayReport::on_btnExcel_clicked()
             if(ui->tb->item(iRow,iCol)!=nullptr)
                 st = ui->tb->item(iRow,iCol)->text();
 
+           // int iLineCount =1;
+
             if(st.trimmed()!="")
             {
 
@@ -1017,9 +1025,11 @@ void LayerDayReport::on_btnExcel_clicked()
                 }
                 else
                 {
-//                    if(iCol==_Note)
-//                        st=st.replace("\n","");
+                    if(iCol==_Note)
+                    {
+                           st=st.replace("\n","");
 
+                    }
                     bOk = xlsx.write(iRow+2,iXlsxCol,st);
 
                 }
@@ -1031,6 +1041,7 @@ void LayerDayReport::on_btnExcel_clicked()
 
             }
             xlsx.setColumnWidth(iXlsxCol,iXlsxCol,16);
+
         }
     }
 
@@ -1042,7 +1053,21 @@ void LayerDayReport::on_btnExcel_clicked()
 
     xlsx.saveAs(sFileName+".xls");
 
-    DMSG.showMsg("",sFileName.split("/").last()+"\n\n匯出完成","OK");
+
+    QString sMsg="存檔位置 : 程式路徑/out/report/\n"
+            "檔名 : "+sFileName.split("/").last()+"\n"
+            "\n匯出完成";
+
+
+    int iRet= DMSG.showMsg("",sMsg,QStringList()<<"打開資料夾"<<"OK");
+
+    if(iRet==0)
+    {
+        QString folderPath = sPath;
+        QUrl folderUrl = QUrl::fromLocalFile(folderPath);
+        QDesktopServices::openUrl(folderUrl);
+    }
+
     /*
     CObjectExcel excel;
 

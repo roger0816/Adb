@@ -123,6 +123,40 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     m_listCustomerInfo =listCustomerInfo;
 
+    for(int i=0;i<m_listCustomerInfo.length();i++)
+    {
+        QVariantMap d = m_listCustomerInfo[i].toMap();
+        if(d["LastTime"].toString().trimmed()=="")
+        {
+            d["LastTime"]="20230227000000";  //for old version
+        }
+          d["UpdateTime"] = d["LastTime"];
+        m_listCustomerInfo[i] = d;
+    }
+
+
+
+    if(m_sCustomerSid!="")
+    {
+        QVariantMap in;
+        QVariantList out;
+        QString sError;
+        in["CustomerSid"]=m_sCustomerSid;
+
+        QString sDate=GLOBAL.dateTimeUtc8().addDays(-3).toString("yyyyMMdd");
+        in["OrderDate >"]=sDate;
+        in["ASC"]="OrderDate";
+
+        ACTION.action(ACT::QUERY_ORDER,in,out,sError,true);
+
+        if(out.length()>0)
+        {
+            m_bHasHistoryOrder = true;
+            OrderData order(out.last().toMap());
+            m_lastOrderDate=order.OrderDate+order.OrderTime;
+        }
+
+    }
     refresh();
 
     if(ui->tbGameList->rowCount()>0)
@@ -240,6 +274,9 @@ QVariantList DialogCustomerEdit::dataGameInfo(QString sCustomerSid)
         QVariantMap d =m_listCustomerInfo[i].toMap();
 
         d["CustomerSid"]=sCustomerSid;
+
+        if(d["UpdateTime"].toString().trimmed()=="")
+            d["LastTime"] = GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
         m_listCustomerInfo[i] = d;
 
@@ -368,6 +405,8 @@ void DialogCustomerEdit::refresh()
 {
     ui->tbGameList->setRowCount(0);
 
+    bool bHasCantRemove = false;
+
     for(int i=0;i<m_listCustomerInfo.length();i++)
     {
         QVariantMap data = m_listCustomerInfo.at(i).toMap();
@@ -387,8 +426,18 @@ void DialogCustomerEdit::refresh()
 
 
         QString sGameName =gameToName(data["GameSid"].toString());
-        ui->tbGameList->setItem(iIdx,0,UI.tbItem("移除"));
+        qDebug()<<"last : "<<m_lastOrderDate<<", creat date : "<<data["UpdateTime"].toString();
+        if(data["UpdateTime"].toString().trimmed()!="" &&
+                m_bHasHistoryOrder && data["UpdateTime"].toString()<=m_lastOrderDate)
+        {
 
+            ui->tbGameList->setItem(iIdx,0,UI.tbItem("*"));
+            bHasCantRemove = true;
+        }
+        else
+        {
+            ui->tbGameList->setItem(iIdx,0,UI.tbItem("移除"));
+        }
         ui->tbGameList->setItem(iIdx,1,UI.tbItem(sGameName));
 
         ui->tbGameList->setItem(iIdx,2,UI.tbItem(data["LoginAccount"].toString()));
@@ -403,6 +452,13 @@ void DialogCustomerEdit::refresh()
 
 
     }
+
+    if(bHasCantRemove)
+    {
+        ui->lbMsg->setText(" * 客戶三天內有訂單，無法移除下單前的遊戲資料。");
+    }
+    else
+        ui->lbMsg->clear();
 
 
 }
@@ -493,14 +549,17 @@ void DialogCustomerEdit::on_tbGameList_cellClicked(int row, int col)
 
     if(col==0)
     {
-        QVariantMap d = m_listCustomerInfo.at(row).toMap();
+        if( ui->tbGameList->item(row,0)->text()=="移除")
+        {
+            QVariantMap d = m_listCustomerInfo.at(row).toMap();
 
-        if(d["Sid"]!="")
-            m_listDeleteInfo.append(d);
+            if(d["Sid"]!="")
+                m_listDeleteInfo.append(d);
 
-        m_listCustomerInfo.removeAt(row);
-        qDebug()<<m_listCustomerInfo.length();
-        refresh();
+            m_listCustomerInfo.removeAt(row);
+            qDebug()<<m_listCustomerInfo.length();
+            refresh();
+        }
 
     }
     else

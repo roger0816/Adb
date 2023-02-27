@@ -359,7 +359,7 @@ double LayerSayCost::checkTotal()
     double re = 0;
     if(m_gameRate.trimmed()=="")
     {
-        DMSG.showMsg("ERROR 401","金額讀取錯誤，請重新再操作一次",QStringList()<<"OK");
+        DMSG.showMsg("ERROR 401","售價參數錯誤，請重新再操作一次",QStringList()<<"OK");
           emit back(1);
         return 0;
     }
@@ -388,7 +388,7 @@ double LayerSayCost::checkTotal()
 
         if(iIdx<0)
         {
-            DMSG.showMsg("ERROR 402","金額讀取錯誤，請重新再操作一次",QStringList()<<"OK");
+            DMSG.showMsg("ERROR 402","售價匯率錯誤，請重新再操作一次",QStringList()<<"OK");
               emit back(1);
             return 0;
         }
@@ -1181,7 +1181,7 @@ void LayerSayCost::delayShowEvent()
 
     if(m_listGameItem.length()<1)
     {
-        DMSG.showMsg("ERROR 403","錯誤，無商品資料，再重新操作一次。",QStringList()<<"OK");
+        DMSG.showMsg("ERROR 403","無商品資料錯誤，再重新操作一次。",QStringList()<<"OK");
         emit back(1);
         return ;
     }

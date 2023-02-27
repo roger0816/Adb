@@ -67,7 +67,7 @@ public:
     QList<DataGameList> getGameList(bool bQuery=true);
     DataGameList getGameList(QString sSid, bool bQuery=true);
 
-    QList<DataGameItem> getGameItem(bool bQuery = true);
+    QList<DataGameItem> getGameItem(bool bQuery = true, bool bStrong=false);
 
     QList<DataGameItem> getGameItem(QString sGameSid, bool bQuery=true);
 
@@ -167,9 +167,9 @@ public:
 
 
     DataGameRate getGameRate(QString GameSid,QString sSid="");
+    QList<DataRate> listRate(QString sSid="", bool bRequest=true, bool bExchangeType=false, bool bStrong=false);
 
 private:
-    QList<DataRate> listRate(QString sSid="", bool bRequest=true, bool bExchangeType=false, bool bStrong=false);
 
     QList<UserData> m_listUser;
 

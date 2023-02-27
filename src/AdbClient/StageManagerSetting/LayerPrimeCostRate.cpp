@@ -206,28 +206,25 @@ void LayerPrimeCostRate::on_btnSave_clicked()
 
 void LayerPrimeCostRate::reLineEdit()
 {
-    //    m_listRate =ACTION.listRate("",true,m_bExchangeType);
+    m_listRate =ACTION.listRate("",true,m_bExchangeType);
 
-    //    if(m_listRate.length()>0)
-    //    {
+    if(m_listRate.length()>0)
+    {
 
-
-
-
-    DataRate rate = ACTION.primeRate("",true);
-
-    if(m_bExchangeType)
-        rate = ACTION.costRate("",true);
-
-    ui->txUSD->setText(QString::number(rate.USD()));
-    ui->txHKD->setText(QString::number(rate.HKD()));
-
-    ui->txRMB->setText(QString::number(rate.RMB()));
-    ui->txMYR->setText(QString::number(rate.MYR()));
-    ui->txSGD->setText(QString::number(rate.SGD()));
+        DataRate rate = m_listRate.last();
 
 
-    //  }
+
+
+        ui->txUSD->setText(QString::number(rate.USD()));
+        ui->txHKD->setText(QString::number(rate.HKD()));
+
+        ui->txRMB->setText(QString::number(rate.RMB()));
+        ui->txMYR->setText(QString::number(rate.MYR()));
+        ui->txSGD->setText(QString::number(rate.SGD()));
+
+
+    }
 
 }
 

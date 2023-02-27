@@ -68,6 +68,9 @@ private:
 
     QVariantMap m_data;
 
+    bool m_bHasHistoryOrder = false;
+    QString m_lastOrderDate="";
+
     QVariantList m_listClass;
 
     QVariantList m_listGame;

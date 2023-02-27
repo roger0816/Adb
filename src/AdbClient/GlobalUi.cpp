@@ -138,6 +138,9 @@ QTableWidgetItem *GlobalUi::tbItem(QVariant var, int iType, int iPixSize)
 
     item->setTextAlignment(Qt::AlignCenter);
 
+
+
+
     return item;
 
 }

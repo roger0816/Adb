@@ -657,79 +657,62 @@ CData Query::implementRecall(CData data)
         }
         else if(order.Step=="1")
         {
-            QString sCountError;
-            if(!changeItemCount(order,false,sCountError))
+
+            if(!isBackSayCost(order))
             {
-                bHasIt = true;
+                QString sCountError;
+                if(!changeItemCount(order,false,sCountError))
+                {
+                    bHasIt = true;
 
-                sError = "下單失敗, 商品庫存數量不足。";
-            }
-            else
-            {
-                checkUpdate(ACT::ADD_ITEM_COUNT);
-                order.Id=getNewOrderId(order.OrderDate);
-                QVariantMap in;
-                QVariantList tmpOut;
-                in["Sid"]=order.GameSid;
-
-                m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
-
-                if(tmpOut.length()>0)
+                    sError = "下單失敗, 商品庫存數量不足。";
+                }
+                else
                 {
 
-                    DataGameList game(tmpOut.first().toMap());
 
-                    order.GameRate = QString::number(game.GameRate);
+                    checkUpdate(ACT::ADD_ITEM_COUNT);
+
+                    order.Id=getNewOrderId(order.OrderDate);
+
+                    QVariantMap in;
+                    QVariantList tmpOut;
+                    in["Sid"]=order.GameSid;
+
+                    m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
+
+                    if(tmpOut.length()>0)
+                    {
+
+                        DataGameList game(tmpOut.first().toMap());
+
+                        order.GameRate = QString::number(game.GameRate);
+                    }
+
+                    if(order.Owner.trimmed()=="")
+                        order.Owner="None";
+                    int iSeq=1;
+
+                    QVariantMap in3;
+                    in3["Owner"]=order.Owner;
+                    in3["OrderDate"]=order.OrderDate;
+                    iSeq =m_sql.queryCount(SQL_TABLE::OrderData(),in3);
+
+                    QString sDash="";
+
+                    if(order.Owner.right(1)!="-")
+                        sDash="-";
+
+                    // order.Name=order.Owner+sDash+QString("%1").arg(iSeq+1,2,10,QLatin1Char('0'));
+                    order.Name=order.Owner+sDash+QString::number(iSeq+1);
+
+
+                    if(order.Currency.toUpper().contains("NTD"))
+                    {
+                        order.Money[0] = order.Cost;
+                    }
+
                 }
-
-                if(order.Owner.trimmed()=="")
-                    order.Owner="None";
-                int iSeq=1;
-#if 0
-                QVariantMap in2;
-                QVariantList listOut2;
-                in2["Name like"] ="%"+order.Owner+"%";
-                in2["OrderDate"]=order.OrderDate;
-                in2["DESC"]="OrderTime";
-                in2["LIMIT"]="1";
-                m_sql.queryTb(SQL_TABLE::OrderData(),in2,listOut2,sError);
-
-
-
-                if(listOut2.length()>0)
-                {
-                    OrderData tmp(listOut2.first().toMap());
-
-                    QString sName = tmp.Name;
-
-
-                    iSeq = sName.replace(order.Owner,"").replace("-","").toInt()+1;
-
-                }
-#else
-                QVariantMap in3;
-                in3["Owner"]=order.Owner;
-                in3["OrderDate"]=order.OrderDate;
-                iSeq =m_sql.queryCount(SQL_TABLE::OrderData(),in3);
-
-
-
-#endif
-
-                QString sDash="";
-
-                if(order.Owner.right(1)!="-")
-                    sDash="-";
-
-               // order.Name=order.Owner+sDash+QString("%1").arg(iSeq+1,2,10,QLatin1Char('0'));
-                order.Name=order.Owner+sDash+QString::number(iSeq+1);
-
-
-                if(order.Currency.toUpper().contains("NTD"))
-                {
-                    order.Money[0] = order.Cost;
-                }
-
             }
         }
         else
@@ -1523,6 +1506,20 @@ bool Query::checkItemCount(OrderData orderData, DataItemCount &last, QStringList
 
 
     return bRe;
+}
+
+bool Query::isBackSayCost(OrderData orderData)
+{
+    //排除返回未處理
+    QVariantMap tmp0;
+    QVariantList listTmp;
+    QString sError;
+    tmp0["Sid"]=orderData.Sid;
+    tmp0["Step"]="2";
+    m_sql.queryTb(SQL_TABLE::OrderData(),tmp0,listTmp,sError);
+
+
+    return listTmp.length()>0;
 }
 
 bool Query::changeItemCount(OrderData orderData, bool bIsAdd,QString &sErrorMsg)

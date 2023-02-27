@@ -455,7 +455,7 @@
                         </sizepolicy>
                        </property>
                        <property name="styleSheet">
-                        <string notr="true">color: rgb(255, 0, 0);</string>
+                        <string notr="true">color: rgb(13, 13, 13);</string>
                        </property>
                        <property name="text">
                         <string/>

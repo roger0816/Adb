@@ -98,6 +98,11 @@
         </column>
         <column>
          <property name="text">
+          <string>訂單項目</string>
+         </property>
+        </column>
+        <column>
+         <property name="text">
           <string>儲值方式</string>
          </property>
         </column>
@@ -427,21 +432,28 @@
             <item>
              <widget class="QCheckBox" name="cbShowBonus">
               <property name="text">
-               <string>顯示&quot;業績&quot;</string>
+               <string>業績</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="cbShowPic">
+             <widget class="QCheckBox" name="cbShowGameItem">
               <property name="text">
-               <string>顯示&quot;圖檔&quot;</string>
+               <string>訂單項目</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QCheckBox" name="cbShowCost">
               <property name="text">
-               <string>顯示&quot;應收(台幣)&quot;</string>
+               <string>應收(台幣)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="cbShowPic">
+              <property name="text">
+               <string>圖檔</string>
               </property>
              </widget>
             </item>

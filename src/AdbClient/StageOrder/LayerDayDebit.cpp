@@ -411,13 +411,21 @@ void LayerDayDebit::slotBtnDebitExport()
         return ;
     }
     QString sPath;// = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
-    sPath = QApplication::applicationDirPath()+"/out/report";
 
+    sPath = QApplication::applicationDirPath()+"/out";
     QDir dir(sPath);
     if (!dir.exists())
     {
         dir.mkdir(".");
     }
+
+    sPath = QApplication::applicationDirPath()+"/out/report";
+    QDir dir2(sPath);
+    if (!dir2.exists())
+    {
+        dir2.mkdir(".");
+    }
+
 
     QString sDebitText="all";
 
@@ -474,8 +482,8 @@ void LayerDayDebit::slotBtnDebitExport()
     xlsx.saveAs(sFileName+".xls");
 
 
-    QString sMsg="存檔位置 : 程式路徑/out/report/\n"
-            "檔名 : "+sFileName.split("/").last()+"\n"
+        QString sMsg="存檔位置 : "+sPath+
+            "\n檔名 : "+sFileName.split("/").last()+"\n"
             "\n匯出完成";
 
 

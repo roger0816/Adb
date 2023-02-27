@@ -36,6 +36,8 @@ public:
 
     bool checkItemCount(OrderData orderData,DataItemCount &last ,QStringList &sErrorGameItemSid);
 
+    bool isBackSayCost(OrderData orderData);
+
     bool changeItemCount(OrderData orderData, bool bIsAdd, QString &sErrorMsg);
 
 signals:

@@ -15,6 +15,8 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 
     ui->tb->hideColumn(_Bonus);
 
+    ui->tb->hideColumn(_GameItem);
+
     ui->tb->hideColumn(_Cost);
 
     ui->tb->hideColumn(_Pic1);
@@ -99,6 +101,8 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
     updateOrderData(bRequery,true);
 
+  //  ACTION.getGameItemFromGameSid()
+
     ui->tb->setRowCount(0);
 
     m_mappingData.clear();
@@ -129,6 +133,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         if(!checkFilter(data))
             continue;
 
+
         CustomerData customer;
 #if 0
         QString sError;
@@ -148,6 +153,8 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         int iRow = ui->tb->rowCount();
         ui->tb->setRowCount(iRow+1);
+        int rowHeight = ui->tb->rowHeight(iRow);
+
         ui->tb->setItem(iRow,_Sid,UI.tbItem(data.Sid));
 
         ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
@@ -207,6 +214,17 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         QString sGameName = ACTION.getGameName( data.GameSid);
 
         ui->tb->setItem(iRow,_GameName,UI.tbItem(sGameName));
+
+        QTableWidgetItem *gameItem = UI.tbItem(getGameItemStr(data.Item));
+        ui->tb->setItem(iRow,_GameItem,gameItem);
+
+//        QFontMetrics fm(gameItem->font());
+//        QSize size(fm.width(gameItem->text()), fm.height());
+//        size = QSize(size.width() + 10, size.height() + 5);
+//        if (size.height() > rowHeight)
+//        {
+//            ui->tb->setRowHeight(iRow, size.height());
+//        }
 
 
         ui->tb->setItem(iRow,_Currency,UI.tbItem(customer.Currency));
@@ -884,6 +902,7 @@ void LayerDayReport::changeVisable()
 {
     ui->tb->setColumnHidden(_Bonus,!ui->cbShowBonus->isChecked());
 
+    ui->tb->setColumnHidden(_GameItem,!ui->cbShowGameItem->isChecked());
 
     ui->tb->setColumnHidden(_Cost,!ui->cbShowCost->isChecked());
 
@@ -947,6 +966,25 @@ QString LayerDayReport::statusString(QString sStep)
     return sStatus;
 }
 
+QString LayerDayReport::getGameItemStr(QString items)
+{
+    QString sRe="";
+    QStringList listItem=items.split(";;");
+
+    foreach(QString v,listItem)
+    {
+        QString sSid =v.split(",,").first();
+        QString sCount = v.split(",,").last();
+
+           sRe+= ACTION.getGameItemFromSid(sSid).Name+"*"+sCount+" ";
+
+    }
+
+
+
+    return sRe;
+}
+
 
 void LayerDayReport::on_btnExcel_clicked()
 {
@@ -965,12 +1003,22 @@ void LayerDayReport::on_btnExcel_clicked()
         return ;
 #else
 
-    sPath = QApplication::applicationDirPath()+"/out/report";
+    sPath = QApplication::applicationDirPath()+"/out";
     QDir dir(sPath);
     if (!dir.exists())
     {
         dir.mkdir(".");
     }
+
+    sPath = QApplication::applicationDirPath()+"/out/report";
+    QDir dir2(sPath);
+    if (!dir2.exists())
+    {
+        dir2.mkdir(".");
+    }
+
+
+
 
 
 
@@ -989,7 +1037,7 @@ void LayerDayReport::on_btnExcel_clicked()
     for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
     {
         int iXlsxCol =0;
-        int iH = xlsx.rowHeight(iRow);
+//        int iH = xlsx.rowHeight(iRow);
 
         for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
         {
@@ -1054,8 +1102,8 @@ void LayerDayReport::on_btnExcel_clicked()
     xlsx.saveAs(sFileName+".xls");
 
 
-    QString sMsg="存檔位置 : 程式路徑/out/report/\n"
-            "檔名 : "+sFileName.split("/").last()+"\n"
+    QString sMsg="存檔位置 : "+sPath+
+            "\n檔名 : "+sFileName.split("/").last()+"\n"
             "\n匯出完成";
 
 
@@ -1065,6 +1113,8 @@ void LayerDayReport::on_btnExcel_clicked()
     {
         QString folderPath = sPath;
         QUrl folderUrl = QUrl::fromLocalFile(folderPath);
+        QString sCmd="start explorer " +sPath.replace("/","\\");
+        //system(sCmd.toStdString().c_str());
         QDesktopServices::openUrl(folderUrl);
     }
 
@@ -1126,5 +1176,11 @@ void LayerDayReport::on_cbFilter_currentIndexChanged(int index)
     //    ui->cbFilter->setProperty("lock",true);
     //    refreshTb(false,false);
     //    ui->cbFilter->setProperty("lock",false);
+}
+
+
+void LayerDayReport::on_cbShowGameItem_clicked()
+{
+     changeVisable();
 }
 

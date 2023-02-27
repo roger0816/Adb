@@ -498,7 +498,7 @@ DataGameList Action::getGameList(QString sSid, bool bQuery)
     return re;
 }
 
-QList<DataGameItem> Action::getGameItem(bool bQuery)
+QList<DataGameItem> Action::getGameItem(bool bQuery,bool bStrong)
 {
     if(!bQuery)
         return m_listGameItem;
@@ -512,7 +512,7 @@ QList<DataGameItem> Action::getGameItem(bool bQuery)
 
     QString sError;
 
-    action(ACT::QUERY_GAME_ITEM,d,listOut,sError);
+    action(ACT::QUERY_GAME_ITEM,d,listOut,sError,bStrong);
 
     m_listGameItem.clear();
 
@@ -528,18 +528,33 @@ QList<DataGameItem> Action::getGameItem(bool bQuery)
 
 QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
 {
-    getGameItem(bQuery);
 
     QList<DataGameItem> listRe;
+    getGameItem(bQuery);
 
-
-    for(int i=0;i<m_listGameItem.length();i++)
+    auto fnGet=[=]()
     {
-        DataGameItem data = m_listGameItem.at(i);
-        if(data.GameSid == sGameSid)
+        QList<DataGameItem> list;
+        for(int i=0;i<m_listGameItem.length();i++)
         {
-            listRe.append(data);
+            DataGameItem data = m_listGameItem.at(i);
+            if(data.GameSid == sGameSid)
+            {
+                list.append(data);
+            }
         }
+
+        return list;
+    };
+
+
+    listRe = fnGet();
+
+    if(listRe.length()<1)
+    {
+        getGameItem(true,true);
+
+        listRe =fnGet();
     }
 
     return listRe;
@@ -571,21 +586,43 @@ void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
 
 }
 
-DataGameItem Action::getGameItemFromSid(QString sSid, bool bQuery)
+DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
 {
     DataGameItem re;
 
-    QList<DataGameItem> list = getGameItem(bQuery);
+    getGameItem(bQuery);
 
-    foreach(DataGameItem v, list)
+    auto fnGet=[=]()
     {
-        if(v.Sid==sSid)
-        {
-            re =v;
+        QList<DataGameItem> item;
 
-            break;
+        foreach(DataGameItem v, m_listGameItem)
+        {
+            if(v.Sid==sSid)
+            {
+                item .append(v);
+
+                break;
+            }
         }
-    }
+        return item;
+    };
+
+
+     QList<DataGameItem> list = fnGet();
+
+     if(list.length()<1)
+     {
+
+         getGameItem(true,true);
+
+         list = fnGet();
+
+     }
+
+     if(list.length()>0)
+         re = list.first();
+
 
     return re;
 }
@@ -757,7 +794,7 @@ QList<OrderData> Action::getOrder(bool bRequest)
         QVariantList out;
         QDate tDate=QDate::currentDate().addDays(-1);
         in["OrderDate >="]=tDate.toString("yyyyMMdd");
-
+        in["ASC"]="OrderTime";
         QString sError;
         action(ACT::QUERY_ORDER,in,out,sError,true);
 
@@ -896,7 +933,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
         double cost =iCurrentTotal+data.ChangeValue.toDouble();
 
-        data.Total = QString::number(cost);
+        data.Total = QString::number(cost,'f',2);
 
         data.OrderId = sOrderSid;
 

@@ -46,6 +46,7 @@ enum tbHeader
     _Status,        //訂單狀態
     _Bonus,         //業績
     _GameName,      //遊戲名稱
+    _GameItem,    //訂單項目
     _PayType,    //儲值方式
     _PayCount,  //單位
     _Currency,      //幣別
@@ -126,6 +127,8 @@ private slots:
 
     void on_cbFilter_currentIndexChanged(int index);
 
+    void on_cbShowGameItem_clicked();
+
 private:
     Ui::LayerDayReport *ui;
 
@@ -154,6 +157,8 @@ private:
     QString m_sFilterKey="";
 
     QString statusString(QString sStep);
+
+    QString getGameItemStr(QString items);
 
 };
 

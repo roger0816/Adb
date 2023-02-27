@@ -142,10 +142,11 @@ void LayerAddCost::checkTotal()
     QString sTmpChangeValue = QString::number(m_addValue,'f',2);
     m_dataCost.ChangeValue= sub(sTmpChangeValue,m_dataCustomer.Currency);
 
-
     QString sTmpTotal= QString::number(m_dataCost.ChangeValue.toDouble()+ ui->lbCurrentCost->text().toDouble(),'f',2);
 
     m_dataCost.Total =   sub(sTmpTotal,m_dataCustomer.Currency);
+
+    qDebug()<<"BBBB :"<<sTmpChangeValue<<" , "<<sTmpTotal;
 
     ui->lbAdd->setText(m_dataCost.ChangeValue);
 

@@ -794,7 +794,7 @@ QList<OrderData> Action::getOrder(bool bRequest)
         QVariantList out;
         QDate tDate=QDate::currentDate().addDays(-1);
         in["OrderDate >="]=tDate.toString("yyyyMMdd");
-        in["ASC"]="OrderTime";
+        //in["ASC"]="OrderTime";  //不能改顺序，依sid排，因为報價/下單要用
         QString sError;
         action(ACT::QUERY_ORDER,in,out,sError,true);
 
@@ -1023,6 +1023,30 @@ OrderData Action::getOrderCustomerLast(QString sCustomerSid, bool bRequest)
 
     return re;
 
+}
+
+QList<OrderData> Action::waitOrder(QString sCustomerSid)
+{
+    QList<OrderData> re;
+
+    QVariantMap in;
+    QVariantList out;
+    QDate tDate=QDate::currentDate().addDays(-1);
+    in["CustomerSid"]=sCustomerSid;
+    in["OrderDate >="]=tDate.toString("yyyyMMdd");
+    in["DESC"]="Sid";
+    in["Step"]="0";
+    QString sError;
+    action(ACT::QUERY_ORDER,in,out,sError,true);
+
+    foreach(QVariant v,out)
+    {
+        OrderData order(v.toMap());
+
+        re.append(order);
+    }
+
+    return re;
 }
 
 

@@ -47,8 +47,8 @@ void LayerSayCost::orderMode()
 
     if(m_sLoadOrderSid=="")
     {
-        tmp= ACTION.getOrderCustomerLast(m_dataCustomer.Sid,true);
-
+        //tmp= ACTION.getOrderCustomerLast(m_dataCustomer.Sid,true);
+        tmp = ACTION.waitOrder(m_dataCustomer.Sid).first();
 
         if(tmp.Step=="0")
         {

@@ -103,6 +103,8 @@ public:
     OrderData getOrder(QString sSid, bool bRequest = false);
     OrderData getOrderCustomerLast(QString sCustomerSid, bool bRequest = false);
 
+    QList<OrderData> waitOrder(QString sCustomerSid);
+
 
 
     QVariant trKey(QVariantList list,QVariantMap info,QString sTargetKey);

@@ -146,7 +146,7 @@ void LayerAddCost::checkTotal()
 
     m_dataCost.Total =   sub(sTmpTotal,m_dataCustomer.Currency);
 
-    qDebug()<<"BBBB :"<<sTmpChangeValue<<" , "<<sTmpTotal;
+
 
     ui->lbAdd->setText(m_dataCost.ChangeValue);
 
@@ -286,6 +286,10 @@ void LayerAddCost::on_btnCopy_clicked()
 {
     QString sMsg="客戶編號: "+ui->lbId->text()+
             "\n客戶名稱: "+ui->lbName->text();
+
+
+
+
 
     sMsg+="\n"+ui->lb0->text()+ui->lbCurrency_2->text()+
             "\n支付管道:"+ui->cbDebit->currentText()+

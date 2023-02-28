@@ -209,16 +209,16 @@ QString Global::addFlow(QString sDouble, int flowCount)
         sFlow+="0";
 
 
-//    if(!bArrow0)  //負數
-//    {
-//        if(flowCount==0)
-//            return "-"+QString::number(iInt);
-//        else
-//        {
-//             return "-"+QString::number(iInt)+sFlow.mid(0,flowCount);
-//        }
+    //    if(!bArrow0)  //負數
+    //    {
+    //        if(flowCount==0)
+    //            return "-"+QString::number(iInt);
+    //        else
+    //        {
+    //             return "-"+QString::number(iInt)+sFlow.mid(0,flowCount);
+    //        }
 
-//    }
+    //    }
 
 
     bool bAddInt = false; //是否進位到整數
@@ -565,6 +565,52 @@ bool Global::checkSearch(QString sFilterStr, QVariantMap dTarget, bool caseNeedD
 
     return bRe;
 }
+
+QString Global::currencyStr(QString st)
+{
+
+    return st;  //to do 未完成
+    QString sInt=st.split(".").first();
+    QString sFlot="";
+
+    if(st.split(".").length()>1)
+        sFlot = st.split(".").at(1);
+
+    QString sReInt="";
+
+    int len=st.length();
+
+    if(len>3)
+    {
+        int iTmp = st.length()%3;
+        if(iTmp!=0)
+        {
+            sReInt=st.insert(iTmp,',');
+            iTmp+=1;
+        }
+        if(len>=6)
+        {
+            sReInt=st.insert(iTmp+3,',');
+            iTmp+=1;
+        }
+        if(len>=9)
+        {
+            sReInt=st.insert(iTmp+6,',');
+        }
+    }
+    else
+    {
+        return st;
+    }
+
+    if(sFlot!="")
+    {
+        return sReInt+"."+sFlot;
+    }
+
+    return sReInt;
+}
+
 
 QString Global::strNumber(double number)
 {

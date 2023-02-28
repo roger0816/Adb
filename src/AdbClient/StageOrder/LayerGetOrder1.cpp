@@ -69,6 +69,15 @@ void LayerGetOrder1::refreshUser(bool bRe)
 
     QList<OrderData> listOrder = ACTION.getOrder(bRe);
 
+    qSort(listOrder.begin(),listOrder.end(),[=](const OrderData &v1, const OrderData &v2)
+    {
+        QString st1 =v1.OrderDate+v1.OrderTime;
+        QString st2 =v2.OrderDate+v2.OrderTime;
+
+        return st1<st2;
+
+    });
+
     for(int i=0;i<listOrder.length();i++)
     {
         QStringList listKeyUser = m_data.keys();

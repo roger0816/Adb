@@ -206,6 +206,13 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
             }
         }
 
+        if(data.Step.toInt()<4 && data.Note0.at(2).contains("[訂單延誤]"))
+        {
+
+                tmpItem->setForeground(QColor("#ef9f00"));
+
+        }
+
 
         ui->tb->setItem(iRow,_Status,tmpItem);
 

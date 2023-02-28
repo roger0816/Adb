@@ -53,7 +53,7 @@ void CTcpServerSubHandler::readyRead()
 
 void CTcpServerSubHandler::disconnected()
 {
-  //  qDebug() << descriptor << " Disconnected";
+    qDebug() << descriptor << " Disconnected";
 
     socket->deleteLater();
 

@@ -84,6 +84,8 @@ public:
 
     QVariantMap m_copyGameItem;
 
+    QString currencyStr(QString st);
+
 private:
     static Global *m_pInstance;
 

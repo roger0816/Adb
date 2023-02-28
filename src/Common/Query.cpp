@@ -730,9 +730,12 @@ CData Query::implementRecall(CData data)
                 {
                     if(current.Step =="2")
                     {
-                        bHasIt = true;
+                        if(order.PaddingUser.trimmed()!="" && current.User.at(2)!=order.PaddingUser)
+                        {
+                            bHasIt = true;
 
-                        sError = getUser(current.User.at(2)).Name+" 已接單處理";
+                            sError = getUser(current.User.at(2)).Name+" 已接單處理";
+                        }
                     }
 
                     if(current.Step =="3")
@@ -1087,7 +1090,7 @@ CData Query::implementRecall(CData data)
 
         double iNewTotal = oldTotal.toDouble()+costData.ChangeValue.toDouble();
 
-        costData.Total=QString::number(iNewTotal);
+        costData.Total=QString::number(iNewTotal,'f',2);
 
 
         //    cus.Money = costData.Total;
@@ -1205,11 +1208,11 @@ CData Query::implementRecall(CData data)
 
                 cost.Currency = cus.Currency;
 
-                cost.ChangeValue=QString::number(order.Cost.toDouble()*-1);
+                cost.ChangeValue=QString::number(order.Cost.toDouble()*-1,'f',2);
 
                 double tTotal =preTotal+cost.ChangeValue.toDouble();
 
-                cost.Total = QString::number(tTotal);
+                cost.Total = QString::number(tTotal,'f',2);
 
                 cost.OrderId = order.Id;
 

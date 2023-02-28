@@ -62,6 +62,14 @@ void LayerGetOrder2::refreshUser(bool bRe)
     }
 
     QList<OrderData> listOrder = ACTION.getOrder(bRe);
+    qSort(listOrder.begin(),listOrder.end(),[=](const OrderData &v1, const OrderData &v2)
+    {
+        QString st1 =v1.OrderDate+v1.OrderTime;
+        QString st2 =v2.OrderDate+v2.OrderTime;
+
+        return st1<st2;
+
+    });
 
     for(int i=0;i<listOrder.length();i++)
     {
@@ -401,7 +409,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
         double d = sValue.toDouble()-order.Cost.toDouble();
 
-        ui->lbFinal->setText(QString::number(d));
+        ui->lbFinal->setText(QString::number(d,'f',2));
 
         ui->wBottom->setCurrentIndex(1);
 

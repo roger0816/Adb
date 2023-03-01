@@ -552,10 +552,14 @@ struct OrderData :public DataObj
 
         ListCost = data["ListCost"].toString().split(";;");
 
+        ListBouns=data["ListBouns"].toString().split(";;");
+
         while(ListCost.length()<Item.split(";;").length())
         {
             ListCost.append("");
         }
+
+        ItemInfo = data["ItemInfo"].toString().split(";;");
 
         Note1 = data["Note1"].toString();
         Note2 = data["Note2"].toString();
@@ -631,6 +635,20 @@ struct OrderData :public DataObj
 
         re["ListCost"] =ListCost.join(";;");
 
+        while(ListBouns.length()<Item.split(";;").length())
+        {
+            ListBouns.append("");
+        }
+
+        re["ListBouns"] =ListBouns.join(";;");
+
+        while(ItemInfo.length()<6)
+        {
+            ItemInfo.append("");
+        }
+
+        re["ItemInfo"] =ItemInfo.join(";;");
+
         return re;
 
     }
@@ -639,6 +657,7 @@ struct OrderData :public DataObj
     QString CustomerName;
     QString Step;
     QString UiRecord;
+    QStringList ItemInfo;
     QStringList StepTime;
     QStringList User;
     QString Owner;
@@ -651,6 +670,7 @@ struct OrderData :public DataObj
     QString Cost="0";
     QString Currency;
     QString Bouns="0";
+    QStringList ListBouns;
     QString GameRate="";
     QString ExRateSid="";
     QString PrimeRateSid="";

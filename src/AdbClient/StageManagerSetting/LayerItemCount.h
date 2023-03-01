@@ -27,7 +27,7 @@ private slots:
 private:
     void showEvent(QShowEvent *) override;
 
-    QPair<int,int> checkCount(QString itemSid);
+    DataItemCount checkCount(QString itemSid);
 
     void updateTb();
 

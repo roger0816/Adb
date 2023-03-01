@@ -276,7 +276,9 @@ QString LayerCostTable::trText()
 
     foreach(QString v,listKey)
     {
+        qDebug()<<"BBBBB: "<<st<<" , "<<v<<" , "<<d[v];
         st=st.replace(v,d[v].toString());
+
     }
 
 

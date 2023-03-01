@@ -12,7 +12,7 @@
 
 
 
-#define ADP_VER "v1.12.0227"
+#define ADP_VER "v1.12.0301"
 static int SERVER_MIN_VER = 12;
 
 static QString SPLIT1 =";;" ;

@@ -86,6 +86,7 @@ private:
     CListPair m_mappingPayType;
 
     QStringList m_listCost; //訂單內容的歷史價格
+    QStringList m_listBouns;
 protected:
 
 

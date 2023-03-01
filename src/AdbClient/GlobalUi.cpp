@@ -121,10 +121,11 @@ QTableWidgetItem *GlobalUi::tbItem(QVariant var, int iType, int iPixSize)
     {
         item->setForeground(QColor(77,77,77));
     }
-    else //_TXT
+    else if(type==_HTML)
     {
-
+        //to do
     }
+    else{}
 
     item->setText(st);
 

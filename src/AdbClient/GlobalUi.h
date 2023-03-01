@@ -36,7 +36,7 @@ public:
 
     void setTbData(QTableWidget *tb, QVariantList data, QStringList listHeader, bool reTb=false, QList<int> listType=QList<int>());
 
-    enum _tbItemType{_AUTO=0,_BUTTON,_TXT,_BOOL,_DOUBLE,_TOOLTIP,_DATE,_DATETIME};
+    enum _tbItemType{_AUTO=0,_BUTTON,_TXT,_BOOL,_DOUBLE,_TOOLTIP,_DATE,_DATETIME,_HTML};
     QTableWidgetItem * tbItem(QVariant var,int iType=0,int iPixSize=PX_SIZE);
 
 

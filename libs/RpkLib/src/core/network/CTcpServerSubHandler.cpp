@@ -7,7 +7,7 @@ CTcpServerSubHandler::CTcpServerSubHandler(qintptr ID, QObject *parent) : QThrea
     this->descriptor = ID;
     packager.clear();
 
-    this->socket = new QTcpSocket();
+    this->socket = new QTcpSocket(this);
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(readyRead()), Qt::DirectConnection);
     connect(socket, SIGNAL(disconnected()), this, SLOT(disconnected()));
@@ -53,7 +53,9 @@ void CTcpServerSubHandler::readyRead()
 
 void CTcpServerSubHandler::disconnected()
 {
-    qDebug() << descriptor << " Disconnected";
+
+    socket->close();
+
 
     socket->deleteLater();
 

@@ -78,7 +78,10 @@
              <height>40</height>
             </size>
            </property>
-           <widget class="QWidget" name="pageComponent" native="true">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="pageComponent">
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
               <widget class="QWidget" name="wBody" native="true">

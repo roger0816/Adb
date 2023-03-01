@@ -16,7 +16,7 @@ Widget::Widget(QWidget *parent)
  qDebug()<<"AA1:"<<QString::number(x,'f',3);  // "123456789.123"
 
  double x1=QString::number(x,'f',3).toDouble();
-
+ x1=QString("-1.02675e+06").toDouble();
  qDebug()<<"AA2:"<<x1;
 
  qDebug()<<"AA3"<<QString::number(x1,'f',3);

@@ -80,10 +80,16 @@ void LayerSysSetting::refreshBulletin()
 
         ui->tbBulletin->setItem(iRow,1,UI.tbItem(QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss")));
 
-        ui->tbBulletin->setItem(iRow,2,UI.tbItem(data["Title"]));
+      //  ui->tbBulletin->setItem(iRow,2,UI.tbItem(data["Title"]));
+        QLabel *lb0 = new QLabel(ui->tbBulletin);
+        lb0->setText(data["Title"].toString());
 
-        ui->tbBulletin->setItem(iRow,3,UI.tbItem(data["Content"]));
+        ui->tbBulletin->setCellWidget(iRow,2,lb0);
 
+        QLabel *lb = new QLabel(ui->tbBulletin);
+        lb->setText(data["Content"].toString());
+
+        ui->tbBulletin->setCellWidget(iRow,3,lb);
 
     }
 }

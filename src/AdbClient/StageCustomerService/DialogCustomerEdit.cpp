@@ -427,14 +427,14 @@ void DialogCustomerEdit::refresh()
 
         QString sGameName =gameToName(data["GameSid"].toString());
         qDebug()<<"last : "<<m_lastOrderDate<<", creat date : "<<data["UpdateTime"].toString();
-        if(data["UpdateTime"].toString().trimmed()!="" &&
-                m_bHasHistoryOrder && data["UpdateTime"].toString()<=m_lastOrderDate)
-        {
+//        if(data["UpdateTime"].toString().trimmed()!="" &&
+//                m_bHasHistoryOrder && data["UpdateTime"].toString()<=m_lastOrderDate)
+//        {
 
-            ui->tbGameList->setItem(iIdx,0,UI.tbItem("*"));
-            bHasCantRemove = true;
-        }
-        else
+//            ui->tbGameList->setItem(iIdx,0,UI.tbItem("*"));
+//            bHasCantRemove = true;
+//        }
+//        else
         {
             ui->tbGameList->setItem(iIdx,0,UI.tbItem("移除"));
         }
@@ -453,11 +453,11 @@ void DialogCustomerEdit::refresh()
 
     }
 
-    if(bHasCantRemove)
-    {
-        ui->lbMsg->setText(" * 客戶三天內有訂單，無法移除下單前的遊戲資料。");
-    }
-    else
+//    if(bHasCantRemove)
+//    {
+//        ui->lbMsg->setText(" * 客戶三天內有訂單，無法移除下單前的遊戲資料。");
+//    }
+//    else
         ui->lbMsg->clear();
 
 

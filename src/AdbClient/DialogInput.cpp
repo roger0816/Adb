@@ -54,6 +54,23 @@ void DialogInput::addInput(QString sLb, QVariantMap input)
 
 }
 
+void DialogInput::addSpinBox(QString sLb, double iMin, double iMax,double iValue)
+{
+    DialogInputItem *item = new DialogInputItem(ui->wBody);
+
+    item->setSp(sLb,iMin,iMax,iValue);
+
+    lay->addWidget(item);
+
+    ui->wBody->setLayout(lay);
+
+    m_listW.append(item);
+
+
+
+
+}
+
 void DialogInput::setText(QString sText)
 {
     ui->stackedWidget->setCurrentWidget(ui->pageText);
@@ -91,6 +108,20 @@ QVariantMap DialogInput::data()
     }
 
     return re;
+}
+
+QVariantList DialogInput::datas()
+{
+    QVariantList listRe;
+    foreach(DialogInputItem *item ,m_listW)
+    {
+        if(!item->isHidden())
+        {
+            listRe.append(item->data().first());
+        }
+    }
+
+    return listRe;
 }
 
 
@@ -202,6 +233,34 @@ void DialogInputItem::setComboData(QString title,QVariantMap data)
     cb->addItems(m_data.first().toStringList());
 }
 
+void DialogInputItem::setSp(QString title, double iMin, double iMax, double iValue)
+{
+    lb = new QLabel(this);
+
+    lb->setMinimumWidth(100);
+
+    lb->setMaximumWidth(100);
+
+    lb->setText(title);
+
+    sp = new QSpinBox(this);
+
+    //  QSizePolicy policy()
+
+    sp->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+
+    sp->setRange(iMin,iMax);
+    sp->setValue(iValue);
+    m_data[title]=iValue;
+    QHBoxLayout *lay = new QHBoxLayout(this);
+
+    lay->setMargin(6);
+
+    lay->addWidget(lb);
+
+    lay->addWidget(sp);
+}
+
 QVariantMap DialogInputItem::data()
 {
     QString sKey=  m_data.firstKey();
@@ -214,6 +273,11 @@ QVariantMap DialogInputItem::data()
     {
         m_data[sKey] = txt->text().trimmed();
     }
+    if(sp!=nullptr)
+    {
+        m_data[sKey] = sp->value();
+    }
+
     return m_data;
 }
 

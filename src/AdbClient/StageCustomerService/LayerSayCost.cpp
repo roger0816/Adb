@@ -26,9 +26,9 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
 
 
 
-//    // ^(-?\d+)(\.\d+)?$
-//    QRegExp ex("^(-?\d+)(\.\d+)?$");
-//    ui->txNote2->setValidator(new QRegExpValidator(ex,this));
+    //    // ^(-?\d+)(\.\d+)?$
+    //    QRegExp ex("^(-?\d+)(\.\d+)?$");
+    //    ui->txNote2->setValidator(new QRegExpValidator(ex,this));
 
 }
 
@@ -85,7 +85,7 @@ void LayerSayCost::orderMode()
 
 
     m_gameRate = m_order.GameRate;
-       ui->lbGameRate->setText(m_gameRate);
+    ui->lbGameRate->setText(m_gameRate);
 
     QStringList tmpRecord = m_order.UiRecord.split(",");
 
@@ -137,7 +137,7 @@ void LayerSayCost::orderMode()
     //    else
     //        m_gameRate = ACTION.getGameRate(m_order.GameSid).Rate;
 
-  //  refreshInfo();
+    //  refreshInfo();
 
 }
 
@@ -228,7 +228,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
 
 
-   // ui->lbGameRate->setText(m_gameRate);
+    // ui->lbGameRate->setText(m_gameRate);
 
     init();
 
@@ -360,7 +360,7 @@ double LayerSayCost::checkTotal()
     if(m_gameRate.trimmed()=="")
     {
         DMSG.showMsg("ERROR 401","售價參數錯誤，請重新再操作一次",QStringList()<<"OK");
-          emit back(1);
+        emit back(1);
         return 0;
     }
 
@@ -369,6 +369,7 @@ double LayerSayCost::checkTotal()
     double totalBouns=0;
 
     m_listCost.clear();
+    m_listBouns.clear();
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
         QSpinBox *sp =dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3));
@@ -379,9 +380,9 @@ double LayerSayCost::checkTotal()
 
         // QString sCost = QString::number(ntd,'f',0);
 
-        totalBouns+=m_listInto.at(i).toMap()["Bonus"].toDouble()*iPrice;
-
         double bouns = m_listInto.at(i).toMap()["Bonus"].toDouble();
+        totalBouns+=bouns*iPrice;
+
         int iIdx = m_costRate.listKey().indexOf(m_dataCustomer.Currency);
 
 
@@ -389,7 +390,7 @@ double LayerSayCost::checkTotal()
         if(iIdx<0)
         {
             DMSG.showMsg("ERROR 402","售價匯率錯誤，請重新再操作一次",QStringList()<<"OK");
-              emit back(1);
+            emit back(1);
             return 0;
         }
         //  double target= pRate.listData.at(iIdx).second.toDouble();
@@ -435,6 +436,8 @@ double LayerSayCost::checkTotal()
 
         //   QString sTmp = QString::number(iNTD/rate2.USD(),'f',2);
         m_listCost.append(QString::number(cost));
+
+        m_listBouns.append(QString::number(bouns,'f',2)+"*"+QString::number(iPrice));
         m_iNtdTotal=m_iNtdTotal+iNtd*iPrice;
 
         re=re+cost;
@@ -667,7 +670,7 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
         qDebug()<<"game rate by query : "<<m_gameRate;
     }
 
-       ui->lbGameRate->setText(m_gameRate);
+    ui->lbGameRate->setText(m_gameRate);
     ui->lbGameName->setText(arg1);
 
     QStringList cbAcc;
@@ -1058,6 +1061,28 @@ void LayerSayCost::on_btnSayOk_clicked()
         m_order.User[0] = ACTION.m_currentUser.Sid;
         m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
         m_order.Step="0";
+
+        QStringList info;
+        info.append(ui->lbGameName->text());
+        info.append(ui->lbLoginType->text());
+        info.append(ui->lbGameAccount->text());
+        info.append(ui->lbGamePassword->text());
+        info.append(ui->lbServer->text());
+        info.append(ui->lbChr->text());
+
+        m_order.ItemInfo=info;
+
+        m_order.Cost=QString::number(m_iTotal,'f',2);
+
+        m_order.ListCost = m_listCost;
+        m_order.ListBouns=m_listBouns;
+        m_order.Money[0]=QString::number(m_iNtdTotal);
+
+        if(m_dataCustomer.Currency.toUpper().contains("NTD")
+                &&m_order.Cost.toDouble() != m_order.Money[0].toDouble())
+        {
+            m_order.Money[0]=m_order.Cost.toInt();
+        }
     }
     else
     {
@@ -1076,22 +1101,16 @@ void LayerSayCost::on_btnSayOk_clicked()
 
         m_order.Name = getNewOrderName();
 
+
+
     }
 
-    //  if( m_order.Sid=="")
-    //  {
+
     m_order.OrderDate = m_date.toString("yyyyMMdd");
     m_order.OrderTime = m_date.toString("hhmmss");
-    //  }
 
-
-    //QVariantMap d= m_listGameInfo.at(qBound(0,ui->cbGame->currentIndex(),m_listGameInfo.length()-1)).toMap();
-
-
-    //CustomerGameInfo info(d);
     m_order.GameSid = m_sCurrentGameSid;
     // m_order.GameRate=m_gameRate;  //game rate 報價時server會填上
-
 
     QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+
             QString::number(ui->cbAccount->currentIndex())+","+
@@ -1102,16 +1121,7 @@ void LayerSayCost::on_btnSayOk_clicked()
 
 
     m_order.CustomerSid = m_dataCustomer.Sid;
-    m_order.Cost=QString::number(m_iTotal,'f',2);
 
-    m_order.ListCost = m_listCost;
-    m_order.Money[0]=QString::number(m_iNtdTotal);
-
-    if(m_dataCustomer.Currency.toUpper().contains("NTD")
-            &&m_order.Cost.toDouble() != m_order.Money[0].toDouble())
-    {
-        m_order.Money[0]=m_order.Cost.toInt();
-    }
 
     m_order.Note2 = ui->txNote2->text().replace(",","");
 
@@ -1166,7 +1176,7 @@ void LayerSayCost::on_btnSayClose_clicked()
 void LayerSayCost::delayShowEvent()
 {
     qDebug()<<"show Event ";
-   // m_listPayType = ACTION.getAddValueType();
+    // m_listPayType = ACTION.getAddValueType();
 
 
     m_date = GLOBAL.dateTimeUtc8();

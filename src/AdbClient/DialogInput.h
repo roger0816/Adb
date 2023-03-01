@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QFormLayout>
+#include <QSpinBox>
 #include "DialogMsg.h"
 #include <QRegExpValidator>
 
@@ -29,13 +30,17 @@ public:
     void setInputData(QString title,QVariantMap data);
     void initComboBox();
     void setComboData(QString title,QVariantMap data);
-    virtual QVariantMap data();
+
+    void setSp(QString title, double iMin, double iMax, double iValue);
+     QVariantMap data();
 private:
     QLabel *lb;
 
     QComboBox *cb=nullptr;
 
     QLineEdit *txt=nullptr;
+
+    QSpinBox *sp =nullptr;
 
     QVariantMap m_data;
 };
@@ -59,7 +64,11 @@ public:
 
     void addInput(QString sLb, QVariantMap input);
 
+    void addSpinBox(QString sLb, double iMin, double iMax, double iValue=0);
+
     QVariantMap data();
+
+    QVariantList datas();
 
     //c. btn不要有delete
     void hideDelete();

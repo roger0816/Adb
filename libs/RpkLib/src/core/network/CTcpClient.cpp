@@ -10,6 +10,7 @@ namespace  CTcp{
 const char *id= "id";
 const char *inputData ="input";
 const char *outputData ="output";
+const char *ppKey ="ppKey";
 }
 
 bool bSendSignal = true;
@@ -125,6 +126,12 @@ int CTcpClient::connectHost(QString sId, QString sIp, QString sPort, QByteArray 
 
     tcp->setProperty(CTcp::id,sId);
 
+    QString sPpKey=QDateTime::currentDateTime().toString("MMddhhmmsszzz");
+    Packager pp;
+    m_kPackger.insert(sPpKey,pp);
+
+    tcp->setProperty(CTcp::ppKey,sPpKey);
+
     tcp->setProperty(CTcp::inputData,arrInput);
 
     tcp->setProperty(CTcp::outputData,QByteArray());
@@ -211,16 +218,11 @@ void CTcpClient::slotReadyRead()
     QString sId = tcp->property(CTcp::id).toString();
 
     QByteArray readData = tcp->readAll();
-   // qDebug()<<"ready read len : "<<readData.length();
+    // qDebug()<<"ready read len : "<<readData.length();
     bool bOk = false;
 
-    /*
-    Packager *pp=&m_kPackger[sId];
 
-    pp->insert(readData);
 
-    bOk =pp->isPackageComplete();
-    */
 
     QByteArray out= tcp->property(CTcp::outputData).toByteArray();
 
@@ -228,26 +230,34 @@ void CTcpClient::slotReadyRead()
 
     tcp->setProperty(CTcp::outputData,out);
 
-    Packager check(out);
 
-    bOk = check.isPackageComplete();
+    QString sPpKey =tcp->property(CTcp::ppKey).toString();
+
+    Packager *pp=&m_kPackger[sPpKey];
+
+    pp->insert(readData);
+
+    bOk =pp->isPackageComplete();
+
 
     if(bOk)
     {
         tcp->close();
 
-        QByteArray re =check.unPackage();
+        QByteArray re =pp->unPackage();
 
-      //  qDebug()<<"send len : "<<re.length();
+        //  qDebug()<<"send len : "<<re.length();
 
         if(bSendSignal)
         {
-           // qDebug()<<"rpk lib send siganl : "<<sId<<" , "<<re;
+            // qDebug()<<"rpk lib send siganl : "<<sId<<" , "<<re;
             emit signalReply(sId,re,1);
         }
         else
             emit finished(sId,re,1);
 
+
+        m_kPackger.remove(sPpKey);
     }
 }
 

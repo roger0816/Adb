@@ -686,7 +686,7 @@ CData Query::implementRecall(CData data)
 
                         DataGameList game(tmpOut.first().toMap());
 
-                        order.GameRate = QString::number(game.GameRate);
+                        //order.GameRate = QString::number(game.GameRate);//by step 0 order
                     }
 
                     if(order.Owner.trimmed()=="")

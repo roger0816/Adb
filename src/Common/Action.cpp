@@ -1600,6 +1600,7 @@ QPair<qlonglong,qlonglong> Action::getItemCount(QString sGameItemSid,bool bQuery
     {
         if(v.GameItemSid == sGameItemSid)
         {
+            qDebug()<<"AAAAA : game item Sid : "<<v.GameItemSid<<" ,total: "<<v.TotalCount<<" , sell: "<<v.TotalSell;
             re.first=v.TotalSell;
 
             re.second=v.TotalCount;

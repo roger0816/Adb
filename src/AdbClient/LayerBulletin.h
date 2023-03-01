@@ -38,6 +38,10 @@ private:
 
     QVariantList m_listData;
 
+    QVariantList m_listTop;
+
+    QVariantList m_listSys;
+
     void intoTopTb(QVariantMap data);
 
      void intoSysTb(QVariantMap data);

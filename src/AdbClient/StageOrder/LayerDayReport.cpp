@@ -166,7 +166,10 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         ui->tb->setItem(iRow,_Name,UI.tbItem(data.Name,GlobalUi::_BUTTON));
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
         ui->tb->setItem(iRow,_DateTime,UI.tbItem(date.toString("hh:mm:ss")));
-        ui->tb->setItem(iRow,_Note1,UI.tbItem(data.Note1));
+
+        QLabel *lbNote1 = new QLabel(ui->tb);
+        lbNote1->setText(data.Note1);
+        ui->tb->setCellWidget(iRow,_Note1,lbNote1);
 
 
         QString sUser="";

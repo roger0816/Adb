@@ -6,6 +6,7 @@
 #include <QVariantMap>
 #include <QDebug>
 #include <QDateTime>
+#include <QTabBar>
 namespace Ui {
 class DialogBulletinEdit;
 }
@@ -33,6 +34,10 @@ private slots:
     void on_btnClose_clicked();
 
     void on_btnCancel_clicked();
+
+    void on_txContentSrc_textChanged();
+
+    void on_txTitle_textChanged(const QString &arg1);
 
 private:
     Ui::DialogBulletinEdit *ui;

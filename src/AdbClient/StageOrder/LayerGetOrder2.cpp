@@ -7,9 +7,8 @@ LayerGetOrder2::LayerGetOrder2(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    m_layerCost = new LayerSayCost;
+    m_layerCost = new LayerOrder;
 
-    m_layerCost->m_bOrderMode = true;
     m_layerCost->setReadOnly();
     m_layerCost->hide();
 
@@ -300,9 +299,8 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
     if(column==_Id)
     {
 
-        QVariantMap d;
-        d["Sid"] = order.CustomerSid;
-        m_layerCost->setCustomer(d,order.Sid);
+
+        m_layerCost->setData(order);
 
         m_layerCost->show();
 

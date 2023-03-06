@@ -18,14 +18,19 @@ Launch::Launch(QObject *parent)
 
 }
 
-void Launch::startServer(QString sIp)
+void Launch::setDb(QString sDbIp, QString sDbName)
+{
+    queryObj.setDataBase(true,sDbName,sDbIp);
+
+}
+
+void Launch::startServer(QString sListenPort)
 {
     qDebug()<<"version : "<<ADP_VER;
 
-  queryObj.setDataBase(true,sIp);
 
 
-  RPKCORE.network.runTcpServer("6000");
+  RPKCORE.network.runTcpServer(sListenPort);
 }
 
 void Launch::getData(QByteArray dData, uintptr_t handleId)

@@ -6,15 +6,31 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
+    QString sListenPort ="6000";
     QString sDbIp="127.0.0.1";
-    if(argc>=2)
+    QString sDbName ="adp";
+    if(argc>1)
     {
-        sDbIp =QString(argv[1]).toLower();
+        sListenPort = argv[1];
+    }
+
+
+    if(argc>2)
+    {
+        sDbIp =QString(argv[2]).toLower();
+
+    }
+
+    if(argc>3)
+    {
+        sDbName =argv[3];
 
     }
     Launch l;
 
-    l.startServer(sDbIp);
+    l.setDb(sDbIp);
+
+    l.startServer(sListenPort);
 
     return a.exec();
 }

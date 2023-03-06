@@ -52,7 +52,7 @@ font: 20px &quot;Microsoft JhengHei UI&quot;;
       <item row="0" column="0">
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>4</number>
         </property>
         <widget class="LayerCustomer" name="page0"/>
         <widget class="QWidget" name="page1">
@@ -737,7 +737,7 @@ background-color:#3c78b4;
         </widget>
         <widget class="LayerSayCost" name="pageSayCost"/>
         <widget class="LayerAddCost" name="pageAddCost"/>
-        <widget class="LayerSayCost" name="pageOrder"/>
+        <widget class="LayerOrder" name="pageOrder"/>
        </widget>
       </item>
      </layout>
@@ -762,6 +762,12 @@ background-color:#3c78b4;
    <class>LayerCustomer</class>
    <extends>QWidget</extends>
    <header>LayerCustomer.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerOrder</class>
+   <extends>QWidget</extends>
+   <header>LayerOrder.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

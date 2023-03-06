@@ -34,11 +34,18 @@ public:
 
     void setPic(QVariantMap data);
 
-    bool checkItemCount(OrderData orderData,DataItemCount &last ,QStringList &sErrorGameItemSid);
+    bool checkItemCount(OrderData orderData, QList<DataItemCount> &listLast , QStringList &sErrorGameItemSid);
 
     bool isBackSayCost(OrderData orderData);
 
     bool changeItemCount(OrderData orderData, bool bIsAdd, QString &sErrorMsg);
+
+        bool orderStep0(OrderData &order,QString &sError);
+    bool orderStep1(OrderData &order,OrderData current,QString &sError);
+    bool orderStep2(OrderData &order,OrderData current,QString &sError);
+    bool orderStep3(OrderData &order,OrderData current,QString &sError);
+    bool orderStep4(OrderData &order,OrderData current,QString &sError);
+
 
 signals:
 

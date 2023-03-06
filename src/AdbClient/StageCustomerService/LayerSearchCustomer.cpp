@@ -15,7 +15,6 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
 
     connect(ui->pageOrder,SIGNAL(back(int)),this,SLOT(slotBack(int)));
 
-    ui->pageOrder->m_bOrderMode=true;
 
     connect(ui->page0,&LayerCustomer::into,[=](int iIdx)
     {
@@ -91,11 +90,6 @@ void LayerSearchCustomer::changePage(int iPage)
     OrderData order= ACTION.getOrderCustomerLast(customer.Sid,true);
 
     QString sLastGameSid=order.GameSid;
-    qDebug()<<"lastGameSid : "<<sLastGameSid;
-
-    qDebug()<<"page "<<iPage;
-
-
 
 
 
@@ -175,17 +169,25 @@ void LayerSearchCustomer::changePage(int iPage)
 
     else if(iPage==4)
     {
-      //  QList<OrderData> list = ACTION.waitOrder(customer.Sid);
 
-        if(ACTION.waitOrder(customer.Sid).length()<1)
+
+
+
+        if(order.Step!="0")
         {
             UI.showMsg("","沒預先報價流程，請先進行報價",QStringList()<<"OK");
 
             return ;
         }
+        else
+        {
 
 
-        ui->pageOrder->setCustomer(customer.data());
+            ui->pageOrder->setData(order,customer);
+
+
+        }
+
 
 
 

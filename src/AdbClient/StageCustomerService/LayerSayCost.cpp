@@ -10,8 +10,8 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
     setWindowTitle(" ");
 
     ui->tbGameItem->setColumnWidth(0,60);
-    ui->tbInfo->setColumnWidth(0,60);
-    ui->tbInfo->setColumnWidth(1,30);
+    ui->tbInfo->setColumnWidth(0,40);
+    ui->tbInfo->setColumnWidth(1,50);
     ui->tbInfo->setColumnWidth(2,200);
     ui->tbInfo->setColumnWidth(3,70);
 
@@ -19,7 +19,7 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
 
     ui->wSelect->hide();
 
-    ui->tbInfo->hideColumn(1);
+   // ui->tbInfo->hideColumn(1);
     connect(ui->tbGameItem,&QTableWidget::cellClicked,this,&LayerSayCost::slotTbGameItemCellClicked);
 
     ui->cbGame->setEnabled(false);
@@ -577,6 +577,105 @@ bool LayerSayCost::checkPayType(CListPair &data)
 
 }
 
+void LayerSayCost::sayCostData()
+{
+    m_order.Owner="";
+    // m_order.Sid="";
+    m_order.Note0[0] = ui->txNote1->toPlainText();
+
+    m_order.Bouns = QString::number(m_iBouns,'f',2);
+    m_order.User[0] = ACTION.m_currentUser.Sid;
+    m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
+    m_order.Step="0";
+
+    QStringList info;
+    info.append(ui->lbGameName->text());
+    info.append(ui->lbLoginType->text());
+    info.append(ui->lbGameAccount->text());
+    info.append(ui->lbGamePassword->text());
+    info.append(ui->lbServer->text());
+    info.append(ui->lbChr->text());
+
+    m_order.ItemInfo=info;
+
+    m_order.Cost=QString::number(m_iTotal,'f',2);
+
+    m_order.ListCost = m_listCost;
+    m_order.ListBouns=m_listBouns;
+    m_order.Money[0]=QString::number(m_iNtdTotal);
+    if(m_iTotal==0)
+    {
+        m_order.Money[0]="0";
+    }
+
+    if(m_dataCustomer.Currency.toUpper().contains("NTD")
+            &&m_order.Cost.toDouble() != m_order.Money[0].toDouble())
+    {
+        m_order.Money[0]=m_order.Cost.toInt();
+    }
+
+    m_order.GameSid = m_sCurrentGameSid;
+
+    QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+
+            QString::number(ui->cbAccount->currentIndex())+","+
+            QString::number(ui->cbServer->currentIndex())+","+
+            QString::number(ui->cbChr->currentIndex());
+
+    m_order.UiRecord=sUiRecord;
+
+
+    m_order.CustomerSid = m_dataCustomer.Sid;
+
+
+
+
+    CListPair list;
+
+    for(int i=0;i<m_listInto.length();i++)
+    {
+        //        QString sTmp="";
+        //        sTmp+=m_listInto.at(i).toMap()["Sid"].toString();
+        //        sTmp+=","+m_listInto.at(i).toMap()["Count"].toString();
+
+        //        if(i!=0)
+        //            sItem+=";";
+
+        //        sItem+=sTmp;
+
+        CPair p;
+        p.first = m_listInto.at(i).toMap()["Sid"].toString();
+
+        int iCount = dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3))->value();
+
+        p.second = QString::number(iCount);
+
+        list.append(p);
+
+    }
+
+    m_order.Item = list.toString();
+}
+
+void LayerSayCost::orderData()
+{
+    //  m_order.Sid="";
+    // m_order.ExRateSid = m_exRateSid;
+    m_order.Note0[1] = ui->txNote1->toPlainText();
+    m_order.User[1] = ACTION.m_currentUser.Sid;
+    m_order.StepTime[1] = m_date.toString("yyyyMMddhhmmss");
+    //        m_order.OrderDate = m_date.toString("yyyyMMdd");
+    //        m_order.OrderTime = m_date.toString("hhmmss");
+    m_order.Step="1";
+    m_order.Bouns = QString::number(m_iBouns,'f',2);
+    // m_order.Owner = m_listOwnerUser.at(ui->cbSelect->currentIndex()).Sid;
+    m_order.Owner = ui->cbSelect->currentText();
+    m_order.Id = getNewOrderId();
+
+    m_order.Name = getNewOrderName();
+
+
+}
+
 QString LayerSayCost::getNewOrderId()
 {
     return "byServer";
@@ -1053,104 +1152,18 @@ void LayerSayCost::on_btnSayOk_clicked()
     }
     if(!m_bOrderMode)
     {
-        m_order.Owner="";
-        // m_order.Sid="";
-        m_order.Note0[0] = ui->txNote1->toPlainText();
-
-        m_order.Bouns = QString::number(m_iBouns,'f',2);
-        m_order.User[0] = ACTION.m_currentUser.Sid;
-        m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
-        m_order.Step="0";
-
-        QStringList info;
-        info.append(ui->lbGameName->text());
-        info.append(ui->lbLoginType->text());
-        info.append(ui->lbGameAccount->text());
-        info.append(ui->lbGamePassword->text());
-        info.append(ui->lbServer->text());
-        info.append(ui->lbChr->text());
-
-        m_order.ItemInfo=info;
-
-        m_order.Cost=QString::number(m_iTotal,'f',2);
-
-        m_order.ListCost = m_listCost;
-        m_order.ListBouns=m_listBouns;
-        m_order.Money[0]=QString::number(m_iNtdTotal);
-
-        if(m_dataCustomer.Currency.toUpper().contains("NTD")
-                &&m_order.Cost.toDouble() != m_order.Money[0].toDouble())
-        {
-            m_order.Money[0]=m_order.Cost.toInt();
-        }
+        sayCostData();
     }
     else
     {
-        //  m_order.Sid="";
-        // m_order.ExRateSid = m_exRateSid;
-        m_order.Note0[1] = ui->txNote1->toPlainText();
-        m_order.User[1] = ACTION.m_currentUser.Sid;
-        m_order.StepTime[1] = m_date.toString("yyyyMMddhhmmss");
-        //        m_order.OrderDate = m_date.toString("yyyyMMdd");
-        //        m_order.OrderTime = m_date.toString("hhmmss");
-        m_order.Step="1";
-        m_order.Bouns = QString::number(m_iBouns,'f',2);
-        // m_order.Owner = m_listOwnerUser.at(ui->cbSelect->currentIndex()).Sid;
-        m_order.Owner = ui->cbSelect->currentText();
-        m_order.Id = getNewOrderId();
-
-        m_order.Name = getNewOrderName();
-
-
+        orderData();
 
     }
-
 
     m_order.OrderDate = m_date.toString("yyyyMMdd");
     m_order.OrderTime = m_date.toString("hhmmss");
-
-    m_order.GameSid = m_sCurrentGameSid;
-    // m_order.GameRate=m_gameRate;  //game rate 報價時server會填上
-
-    QString sUiRecord=QString::number(ui->cbGame->currentIndex())+","+
-            QString::number(ui->cbAccount->currentIndex())+","+
-            QString::number(ui->cbServer->currentIndex())+","+
-            QString::number(ui->cbChr->currentIndex());
-
-    m_order.UiRecord=sUiRecord;
-
-
-    m_order.CustomerSid = m_dataCustomer.Sid;
-
-
     m_order.Note2 = ui->txNote2->text().replace(",","");
 
-
-    CListPair list;
-
-    for(int i=0;i<m_listInto.length();i++)
-    {
-        //        QString sTmp="";
-        //        sTmp+=m_listInto.at(i).toMap()["Sid"].toString();
-        //        sTmp+=","+m_listInto.at(i).toMap()["Count"].toString();
-
-        //        if(i!=0)
-        //            sItem+=";";
-
-        //        sItem+=sTmp;
-
-        CPair p;
-        p.first = m_listInto.at(i).toMap()["Sid"].toString();
-
-        int iCount = dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3))->value();
-
-        p.second = QString::number(iCount);
-
-        list.append(p);
-
-    }
-
-    m_order.Item = list.toString();
     m_order.UpdateTime = m_date.toString("yyyyMMddhhmmss");
 
 

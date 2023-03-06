@@ -106,7 +106,10 @@ QVariantMap DialogEditGameItem::data()
 
         QDoubleSpinBox *sp =dynamic_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(i,1));
 
-        QString cost = QString::number(sp->value(),'f',2);
+        //QString cost = QString::number(sp->value(),'f',2);
+
+        QString cost = QString::number(sp->value());
+
 
         listAddValueType.append(CPair(data.first,cost));
 
@@ -160,7 +163,18 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
 
 void DialogEditGameItem::on_btnCostAdd_clicked()
 {
+
+    if(ui->tableWidget->rowCount()>=18)
+    {
+        DMSG.showMsg("","超過上限","OK");
+
+        return ;
+    }
+
+
     appendCb();
+
+
 }
 
 

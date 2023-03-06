@@ -9,9 +9,8 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
 
     connect(ui->btnCancel,&QPushButton::clicked,this,&LayerGetOrder1::slotCancel);
 
-    m_layerCost = new LayerSayCost;
+    m_layerCost = new LayerOrder;
 
-    m_layerCost->m_bOrderMode = true;
     m_layerCost->setReadOnly();
     m_layerCost->hide();
 
@@ -306,9 +305,8 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
     if(column==_Id)
     {
 
-        QVariantMap d;
-        d["Sid"] = order.CustomerSid;
-        m_layerCost->setCustomer(d,order.Sid);
+
+        m_layerCost->setData(order);
 
         m_layerCost->show();
 

@@ -5,7 +5,7 @@
 #include "Global.h"
 #include "GlobalUi.h"
 #include "DialogNote.h"
-#include "LayerSayCost.h"
+#include "LayerOrder.h"
 
 namespace Ui {
 class LayerGetOrder2;
@@ -65,7 +65,7 @@ private:
 
     QString  m_currentDataKey="";
 
-    LayerSayCost *m_layerCost  = nullptr;
+    LayerOrder *m_layerCost  = nullptr;
     int m_iPreUserRow=-1;
     int m_iPreUserCol=-1;
 

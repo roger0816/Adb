@@ -25,6 +25,7 @@ INCLUDEPATH+= \
 SOURCES += \
     DialogNote.cpp \
     StageCustomerService/DialogCustomerCostHistory.cpp \
+    StageCustomerService/LayerOrder.cpp \
     StageManagerSetting/LayerItemCount.cpp \
     StageOrder/DialogDayReportEdit.cpp \
     StageOrder/ItemOrderSelector.cpp \
@@ -54,7 +55,6 @@ SOURCES += \
     component/ItemPicObj.cpp \
     component/Label3.cpp \
     LayerBulletin.cpp \
-    LayerOrder.cpp \
     StageAccount.cpp \
     StageCustomerService/LayerSayCost.cpp \
     StageCustomerService/LayerSearchCustomer.cpp \
@@ -94,6 +94,7 @@ SOURCES += \
 HEADERS += \
     DialogNote.h \
     StageCustomerService/DialogCustomerCostHistory.h \
+    StageCustomerService/LayerOrder.h \
     StageManagerSetting/LayerItemCount.h \
     StageOrder/DialogDayReportEdit.h \
     StageOrder/ItemOrderSelector.h \
@@ -123,7 +124,6 @@ HEADERS += \
     component/ItemPicObj.h \
     component/Label3.h \
     LayerBulletin.h \
-    LayerOrder.h \
     StageAccount.h \
     StageCustomerService/LayerSayCost.h \
     StageCustomerService/LayerSearchCustomer.h \
@@ -162,6 +162,7 @@ HEADERS += \
 FORMS += \
     DialogNote.ui \
     StageCustomerService/DialogCustomerCostHistory.ui \
+    StageCustomerService/LayerOrder.ui \
     StageManagerSetting/LayerItemCount.ui \
     StageOrder/DialogDayReportEdit.ui \
     StageOrder/ItemOrderSelector.ui \
@@ -177,7 +178,6 @@ FORMS += \
     DialogMsg.ui \
     component/ItemMiniLoadbar.ui \
     LayerBulletin.ui \
-    LayerOrder.ui \
     StageAccount.ui \
     StageCustomerService/LayerSayCost.ui \
     StageCustomerService/LayerSearchCustomer.ui \

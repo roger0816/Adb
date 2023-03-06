@@ -53,7 +53,7 @@ public:
 
     QVariant keyValue(QString sKey);
 
-    void setDataBase(bool bMysql, QString sIp="127.0.0.1", QString sPort="3306");
+    void setDataBase(bool bMysql,QString sDbName="adp", QString sIp="127.0.0.1", QString sPort="3306");
 
     CData queryData(CData data);
 

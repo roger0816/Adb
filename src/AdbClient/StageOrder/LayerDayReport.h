@@ -7,7 +7,7 @@
 #include "DialogNote.h"
 #include "Global.h"
 #include "GlobalUi.h"
-#include "LayerSayCost.h"
+#include "LayerOrder.h"
 #include "DialogCommon.h"
 #include <QShowEvent>
 #include "DialogDayReportEdit.h"
@@ -138,7 +138,7 @@ private:
 
         QVariantMap m_mappingData;
 
-    LayerSayCost *m_detialOrder = nullptr;
+    LayerOrder *m_detialOrder = nullptr;
 
 
     _LayerDayReport::OrderPayType getPayCount(OrderData data);

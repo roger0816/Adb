@@ -256,6 +256,12 @@ void Action::reQuerty()
 
     getGameList(true);
 
+    getGameItem(true,true);
+
+    getFactoryClass("",true);
+
+    getCustomerList();
+
     getCustomerClass(true);
 
     costRate("",true);
@@ -274,9 +280,11 @@ void Action::reQuerty()
     in["Type"]=2;
     action(ACT::QUERY_BULLETIN,in,out,sError);
 
+    /*
     in.clear();
     in["Md5"]=out["Content"].toString();
     action(ACT::QUERY_PIC,in,out,sError);
+    */
     //pre load make cache data
 }
 
@@ -441,6 +449,7 @@ QList<DataFactory> Action::getFactoryClass(QString sSid, bool bQuery)
                 listRe.append(m_listFactoryClass.at(i));
             }
         }
+
 
     }
     else

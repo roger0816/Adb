@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LayerSayCost</class>
- <widget class="QWidget" name="LayerSayCost">
+ <class>LayerOrder</class>
+ <widget class="QWidget" name="LayerOrder">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1160</width>
-    <height>707</height>
+    <width>964</width>
+    <height>567</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,9 +24,6 @@
     <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>0</number>
-   </property>
-   <property name="spacing">
     <number>0</number>
    </property>
    <item row="0" column="0">
@@ -70,7 +67,7 @@
           <widget class="QWidget" name="widget_4" native="true">
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <item>
-             <widget class="QPushButton" name="btnSayCostBack">
+             <widget class="QPushButton" name="btnOrderBack">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -146,7 +143,7 @@ background-color:#3c78b4;
             <string notr="true">font: 24px &quot;Microsoft JhengHei UI&quot;;</string>
            </property>
            <property name="text">
-            <string>報價</string>
+            <string>下單</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -242,197 +239,9 @@ border-radius:2px;
 border: 1px solid #aaaaaa;
 }</string>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="0,1,1">
+        <layout class="QHBoxLayout" name="horizontalLayout_3" stretch="1,1">
          <item>
-          <widget class="QGroupBox" name="groupBox_6">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>250</width>
-             <height>100</height>
-            </size>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_9">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <property name="horizontalSpacing">
-             <number>0</number>
-            </property>
-            <item row="0" column="0">
-             <widget class="QWidget" name="widget_6" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <layout class="QFormLayout" name="formLayout">
-               <item row="0" column="0">
-                <widget class="QLabel" name="lb_2">
-                 <property name="text">
-                  <string>選擇遊戲:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="0" column="1">
-                <widget class="QComboBox" name="cbGame"/>
-               </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="lb_3">
-                 <property name="text">
-                  <string>選擇帳密:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="1">
-                <widget class="QComboBox" name="cbAccount"/>
-               </item>
-               <item row="2" column="0">
-                <widget class="QLabel" name="lbServerT">
-                 <property name="text">
-                  <string>伺服器:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="2" column="1">
-                <widget class="QComboBox" name="cbServer"/>
-               </item>
-               <item row="3" column="0">
-                <widget class="QLabel" name="lbCHrT">
-                 <property name="text">
-                  <string>角色:</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="3" column="1">
-                <widget class="QComboBox" name="cbChr"/>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="0" column="1">
-             <widget class="QWidget" name="widget_12" native="true">
-              <property name="minimumSize">
-               <size>
-                <width>40</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>40</width>
-                <height>16777215</height>
-               </size>
-              </property>
-              <layout class="QGridLayout" name="gridLayout_10">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>10</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <item row="0" column="0">
-                <widget class="QLabel" name="lbGameRate">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="text">
-                  <string/>
-                 </property>
-                </widget>
-               </item>
-               <item row="1" column="0">
-                <widget class="QWidget" name="widget_13" native="true"/>
-               </item>
-              </layout>
-             </widget>
-            </item>
-            <item row="1" column="0" colspan="2">
-             <widget class="Line" name="line_2">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0" colspan="2">
-             <widget class="QWidget" name="widget_10" native="true">
-              <layout class="QGridLayout" name="gridLayout_3">
-               <property name="leftMargin">
-                <number>0</number>
-               </property>
-               <property name="topMargin">
-                <number>0</number>
-               </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item row="0" column="0">
-                <widget class="QTableWidget" name="tbGameItem">
-                 <property name="editTriggers">
-                  <set>QAbstractItemView::NoEditTriggers</set>
-                 </property>
-                 <property name="selectionBehavior">
-                  <enum>QAbstractItemView::SelectRows</enum>
-                 </property>
-                 <attribute name="horizontalHeaderDefaultSectionSize">
-                  <number>90</number>
-                 </attribute>
-                 <attribute name="horizontalHeaderStretchLastSection">
-                  <bool>true</bool>
-                 </attribute>
-                 <attribute name="verticalHeaderVisible">
-                  <bool>false</bool>
-                 </attribute>
-                 <column>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </column>
-                 <column>
-                  <property name="text">
-                   <string>商品名稱</string>
-                  </property>
-                 </column>
-                </widget>
-               </item>
-              </layout>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_8">
+          <widget class="QGroupBox" name="groupBox_9">
            <property name="minimumSize">
             <size>
              <width>250</width>
@@ -471,11 +280,6 @@ border: 1px solid #aaaaaa;
               </attribute>
               <column>
                <property name="text">
-                <string/>
-               </property>
-              </column>
-              <column>
-               <property name="text">
                 <string>編號</string>
                </property>
               </column>
@@ -494,6 +298,16 @@ border: 1px solid #aaaaaa;
                 <string>小計</string>
                </property>
               </column>
+              <column>
+               <property name="text">
+                <string>業績點數</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>折合新台幣</string>
+               </property>
+              </column>
              </widget>
             </item>
             <item row="1" column="0">
@@ -508,6 +322,64 @@ border: 1px solid #aaaaaa;
                <string notr="true">font: 22px &quot;Microsoft JhengHei UI&quot;;</string>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QWidget" name="widget_6" native="true">
+                 <property name="minimumSize">
+                  <size>
+                   <width>240</width>
+                   <height>0</height>
+                  </size>
+                 </property>
+                 <layout class="QFormLayout" name="formLayout">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="label">
+                    <property name="text">
+                     <string>售價匯率(編號):</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="tGaemRate">
+                    <property name="minimumSize">
+                     <size>
+                      <width>60</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="text">
+                     <string>售價參數:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLabel" name="lbRate">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="lbGameRate">
+                    <property name="text">
+                     <string/>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </widget>
+               </item>
                <item>
                 <spacer name="horizontalSpacer_2">
                  <property name="orientation">
@@ -536,8 +408,11 @@ border: 1px solid #aaaaaa;
                    <height>0</height>
                   </size>
                  </property>
+                 <property name="styleSheet">
+                  <string notr="true">color: rgb(0, 0, 255);</string>
+                 </property>
                  <property name="text">
-                  <string/>
+                  <string>0.00</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignCenter</set>
@@ -864,7 +739,7 @@ background-color:#3c78b4;
          </size>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="wBottomPage1">
          <layout class="QGridLayout" name="gridLayout_5">
@@ -877,6 +752,19 @@ background-color:#3c78b4;
           <property name="horizontalSpacing">
            <number>40</number>
           </property>
+          <item row="0" column="0">
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item row="0" column="1">
            <widget class="QWidget" name="wSelect" native="true">
             <property name="minimumSize">
@@ -911,21 +799,8 @@ background-color:#3c78b4;
             </layout>
            </widget>
           </item>
-          <item row="0" column="0">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="2">
-           <widget class="QPushButton" name="btnSayOk">
+           <widget class="QPushButton" name="btnOrderSend">
             <property name="minimumSize">
              <size>
               <width>62</width>
@@ -973,7 +848,7 @@ background-color:#3c78b4;
         <widget class="QWidget" name="page">
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="0" column="0">
-           <widget class="QPushButton" name="btnSayClose">
+           <widget class="QPushButton" name="btnClose">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
               <horstretch>0</horstretch>

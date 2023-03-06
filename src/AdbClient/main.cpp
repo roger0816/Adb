@@ -25,13 +25,6 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
-//    QWidget ww;
-
-//    ww.show();
-
-//    QString sPath = QFileDialog::getExistingDirectory(&ww,"選擇存檔位置","D:/aa");
-
-//    return a.exec();
 
 #if 1
     //
@@ -39,16 +32,24 @@ int main(int argc, char *argv[])
     QString st=argv[0];
 
 
-    ACTION.m_bTest = st.split("\\").last().trimmed().mid(0,9).toUpper()
-            !="ADBCLIENT";
+    RUN_MODE mode = _RELEASE;
 
+    QString sArg=st.split("\\").last().trimmed().mid(0,9).toUpper();
+
+    if(sArg =="ADBCLIENT")
+    {
+        ACTION.m_bTest = true;
+         mode = _TEST;
+    }
+
+    if(sArg=="ADBLOCAL")
+    {
+        mode=_LOCAL_SERVER;
+    }
 
 
     qDebug()<<"test mode : "<<ACTION.m_bTest;
 
-
-
-    RUN_MODE mode = _RELEASE;
 
    // mode = _LOCAL_SERVER;
 

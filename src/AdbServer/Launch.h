@@ -12,7 +12,9 @@ class Launch : public QObject
 public:
     explicit Launch(QObject *parent = nullptr);
 
-    void startServer(QString sDbIp);
+    void setDb(QString sDbIp,QString sDbName="adp");
+
+    void startServer(QString sListenPort="6000");
 private:
     Query queryObj;
 signals:

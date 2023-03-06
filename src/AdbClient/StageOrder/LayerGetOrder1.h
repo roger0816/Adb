@@ -7,7 +7,7 @@
 #include "DialogNote.h"
 #include <QCompleter>
 #include <QStringListModel>
-#include "LayerSayCost.h"
+#include "LayerOrder.h"
 
 namespace Ui {
 class LayerGetOrder1;
@@ -74,7 +74,7 @@ private:
 
     QString  m_currentDataKey="";
 
-    LayerSayCost *m_layerCost  = nullptr;
+    LayerOrder *m_layerCost  = nullptr;
 
 private:
 

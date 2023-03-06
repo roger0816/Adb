@@ -619,101 +619,18 @@ CData Query::implementRecall(CData data)
 
     else if(data.iAciton==ACT::REPLACE_ORDER)
     {
+
+        bOk =true;
+
         OrderData order(data.dData);
 
-        bool bHasIt = false;
+        OrderData current;
 
-        if(order.Step=="-1")
+        if(order.Step=="0")
         {
-            QString sCountError;
-            changeItemCount(order,true,sCountError);
-            checkUpdate(ACT::ADD_ITEM_COUNT);
-        }
+            bOk = orderStep0(order,sError);
+            current = order;
 
-        else if(order.Step=="0")
-        {
-            CustomerData cus;
-
-            getCustomer(order.CustomerSid,cus);
-
-            order.Currency = cus.Currency;
-
-            order.CustomerName = cus.Name;
-
-            QVariantMap in;
-            QVariantList tmpOut;
-            in["Sid"]=order.GameSid;
-
-            m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
-
-            if(tmpOut.length()>0)
-            {
-
-                DataGameList game(tmpOut.first().toMap());
-
-                order.GameRate = QString::number(game.GameRate);
-            }
-
-        }
-        else if(order.Step=="1")
-        {
-
-            if(!isBackSayCost(order))
-            {
-                QString sCountError;
-                if(!changeItemCount(order,false,sCountError))
-                {
-                    bHasIt = true;
-
-                    sError = "下單失敗, 商品庫存數量不足。";
-                }
-                else
-                {
-
-
-                    checkUpdate(ACT::ADD_ITEM_COUNT);
-
-                    order.Id=getNewOrderId(order.OrderDate);
-
-                    QVariantMap in;
-                    QVariantList tmpOut;
-                    in["Sid"]=order.GameSid;
-
-                    m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
-
-                    if(tmpOut.length()>0)
-                    {
-
-                        DataGameList game(tmpOut.first().toMap());
-
-                        //order.GameRate = QString::number(game.GameRate);//by step 0 order
-                    }
-
-                    if(order.Owner.trimmed()=="")
-                        order.Owner="None";
-                    int iSeq=1;
-
-                    QVariantMap in3;
-                    in3["Owner"]=order.Owner;
-                    in3["OrderDate"]=order.OrderDate;
-                    iSeq =m_sql.queryCount(SQL_TABLE::OrderData(),in3);
-
-                    QString sDash="";
-
-                    if(order.Owner.right(1)!="-")
-                        sDash="-";
-
-                    // order.Name=order.Owner+sDash+QString("%1").arg(iSeq+1,2,10,QLatin1Char('0'));
-                    order.Name=order.Owner+sDash+QString::number(iSeq+1);
-
-
-                    if(order.Currency.toUpper().contains("NTD"))
-                    {
-                        order.Money[0] = order.Cost;
-                    }
-
-                }
-            }
         }
         else
         {
@@ -721,55 +638,69 @@ CData Query::implementRecall(CData data)
             QVariantList outTmp;
             inTmp["Sid"] = order.Sid;
             m_sql.queryTb(SQL_TABLE::OrderData(),inTmp,outTmp,sError);
-            OrderData current;
-            if(outTmp.length()>0)   //預防重複鎖定
+
+            if(outTmp.length()<1)
+            {
+                sError="報價失敗，查詢不到該訂單";
+                bOk = false;
+            }
+            else
             {
                 current.setData(outTmp.first().toMap());
+            }
+        }
 
-                if(order.Step=="2")    //接單鎖定的請求
-                {
-                    if(current.Step =="2")
-                    {
-                        if(order.PaddingUser.trimmed()!="" && current.User.at(2)!=order.PaddingUser)
-                        {
-                            bHasIt = true;
+        //
 
-                            sError = getUser(current.User.at(2)).Name+" 已接單處理";
-                        }
-                    }
 
-                    if(current.Step =="3")
-                    {
-                        bHasIt = true;
+        if(bOk && order.Step!="0")  //能查詢到當前訂單狀態
+        {
+            if(order.Step=="-1")
+            {
+                QString sCountError;
+                changeItemCount(order,true,sCountError);
+                checkUpdate(ACT::ADD_ITEM_COUNT);
+            }
 
-                        sError = getUser(current.User.at(3)).Name+" 已儲值完成";
-                    }
-                }
-                else if(order.Step=="3" && order.PaddingUser.trimmed()!="") //回報鎖定的請求
-                {
-                    if(current.Step =="3" && current.PaddingUser.trimmed()!="")
-                    {
-                        bHasIt = true;
+            else if(order.Step=="1")
+            {
 
-                        sError = getUser(current.PaddingUser).Name+" 正在回報中";
-                    }
-
-                    if(current.Step =="4") //
-                    {
-                        bHasIt = true;
-
-                        sError = "此訂單 "+getUser(current.User.at(4)).Name+" 已回報";
-                    }
-                }
+                bOk = orderStep1(order,current,sError);
 
             }
+            else if(order.Step=="2")
+            {
+                bOk = orderStep2(order,current,sError);
+            }
+            else if(order.Step=="3")
+            {
+                bOk = orderStep3(order,current,sError);
+            }
+            else if(order.Step=="4")
+            {
+
+
+                bOk =true;
+                //0         報價 送出
+                //1         下單 送出
+                //2         接單儲值 鎖定
+                //3         接單儲值 送出
+                //3+padding 回報 鎖定
+                //4         回報 送出
+                //5         確認 送出
+                //10        報價+下單
+            }
+            //只為了拆開fn， 羅輯比較好讀
+
+
 
         }
 
 
 
 
-        if(!bHasIt)
+
+        if(bOk)
             bOk = m_sql.insertTb(SQL_TABLE::OrderData(),order.data(),sError,true);
 
         sOkMsg="訂單送出";
@@ -1350,7 +1281,10 @@ bool Query::getCustomer(QString sSid, CustomerData &data)
     m_sql.queryTb(SQL_TABLE::CustomerData(),in,listOut,sError);
 
     if(listOut.length()>0)
+    {
         data.setData(listOut.first().toMap());
+        bRe = true;
+    }
 
     return bRe;
 }
@@ -1465,11 +1399,13 @@ void Query::setPic(QVariantMap data)
 
 }
 
-bool Query::checkItemCount(OrderData orderData, DataItemCount &last, QStringList &sErrorGameItemSid)
+bool Query::checkItemCount(OrderData orderData, QList<DataItemCount> &listLast, QStringList &sErrorGameItemSid)
 {
     bool bRe =true;
 
     sErrorGameItemSid.clear();
+
+    listLast.clear();
 
     QStringList listItem = orderData.Item.split(";;");
 
@@ -1486,23 +1422,26 @@ bool Query::checkItemCount(OrderData orderData, DataItemCount &last, QStringList
         in["LIMIT"]="1";
 
         m_sql.queryTb(SQL_TABLE::GameItemCount(),in,out,sError);
+        DataItemCount itemCount;
+        itemCount.GameItemSid=gameItemSid;
+        itemCount.ChangeValue=0;
+        itemCount.TotalCount=0;
+        itemCount.TotalSell=0;
 
         if(out.length()>0)
         {
-            last.setData(out.first().toMap());
 
-            int iNowCount = last.TotalCount-last.TotalSell;
-
-            if(iCount>iNowCount)
-            {
-                sErrorGameItemSid.append(gameItemSid);
-                bRe = false;
-            }
+            itemCount.setData(out.first().toMap());
         }
-        else
+
+        listLast.append(itemCount);
+
+        int iNowCount = itemCount.TotalCount-itemCount.TotalSell;
+
+        if(iCount>iNowCount)
         {
-            bRe = false;
             sErrorGameItemSid.append(gameItemSid);
+            bRe = false;
         }
 
     }
@@ -1527,10 +1466,10 @@ bool Query::isBackSayCost(OrderData orderData)
 
 bool Query::changeItemCount(OrderData orderData, bool bIsAdd,QString &sErrorMsg)
 {
-    DataItemCount itemLast;
+    QList<DataItemCount> listLast;
     QStringList listErrorItemSid;
 
-    bool bHasOne=checkItemCount(orderData,itemLast,listErrorItemSid);
+    bool bHasOne=checkItemCount(orderData,listLast,listErrorItemSid);
 
 
     if(!bIsAdd)
@@ -1564,14 +1503,193 @@ bool Query::changeItemCount(OrderData orderData, bool bIsAdd,QString &sErrorMsg)
         if(orderData.User.length()>1)
             item.UserSid = orderData.User.at(1);
 
-        item.TotalSell= itemLast.TotalSell+(item.ChangeValue*-1);
+        int iTmpIdx = qBound(0,i,listLast.length()-1);
 
-        item.TotalCount = itemLast.TotalCount;
+
+        item.TotalSell= listLast.at(iTmpIdx).TotalSell+(item.ChangeValue*-1);
+
+        item.TotalCount = listLast.at(iTmpIdx).TotalCount;
         QString sError;
         m_sql.insertTb(SQL_TABLE::GameItemCount(),item.data(),sError,false);
 
     }
 
+
+    return true;
+}
+
+bool Query::orderStep0(OrderData &order, QString &sError)
+{
+    CustomerData cus;
+
+    bool bOk = false;
+    bOk = getCustomer(order.CustomerSid,cus);
+
+    if(!bOk)
+    {
+        sError ="報價失敗，查詢客戶資料錯誤。";
+        return false;
+    }
+
+    order.Currency = cus.Currency;
+
+    order.CustomerName = cus.Name;
+
+    QVariantMap in;
+    QVariantList tmpOut;
+    in["Sid"]=order.GameSid;
+
+    m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
+
+    if(tmpOut.length()>0)
+    {
+
+        DataGameList game(tmpOut.first().toMap());
+
+        order.GameRate = QString::number(game.GameRate);
+    }
+    else
+    {
+        sError="報價失敗，查詢遊戲資料錯誤";
+        return false;
+    }
+
+
+    if(order.Currency.toUpper().contains("NTD"))
+    {
+        order.Money[0] = order.Cost;
+    }
+
+    if(order.Cost.toDouble()==0)
+    {
+        order.Money[0]="0";
+    }
+
+
+
+    return true;
+}
+
+bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
+{
+
+
+    if(!isBackSayCost(order))
+    {
+        QString sCountError;
+        if(!changeItemCount(order,false,sCountError))
+        {
+
+            sError = "下單失敗, 商品庫存數量不足。";
+
+            return false;
+
+        }
+
+        else if(current.Note1==order.Note1 &&  current.Step!="0")
+        {
+            sError ="下單失敗，目標訂單不處於報價狀態。";
+
+            return false;
+        }
+        else
+        {
+
+
+            checkUpdate(ACT::ADD_ITEM_COUNT);
+
+            order.Id=getNewOrderId(order.OrderDate);
+
+            QVariantMap in;
+            QVariantList tmpOut;
+            in["Sid"]=order.GameSid;
+
+            m_sql.queryTb(SQL_TABLE::GameList(),in,tmpOut,sError);
+
+            if(tmpOut.length()>0)
+            {
+
+                DataGameList game(tmpOut.first().toMap());
+
+                //order.GameRate = QString::number(game.GameRate);//by step 0 order
+            }
+
+            if(order.Owner.trimmed()=="")
+                order.Owner="None";
+            int iSeq=1;
+
+            QVariantMap in3;
+            in3["Owner"]=order.Owner;
+            in3["OrderDate"]=order.OrderDate;
+            iSeq =m_sql.queryCount(SQL_TABLE::OrderData(),in3);
+
+            QString sDash="";
+
+            if(order.Owner.right(1)!="-")
+                sDash="-";
+
+            // order.Name=order.Owner+sDash+QString("%1").arg(iSeq+1,2,10,QLatin1Char('0'));
+            order.Name=order.Owner+sDash+QString::number(iSeq+1);
+
+
+
+        }
+    }
+
+    return true;
+}
+
+bool Query::orderStep2(OrderData &order, OrderData current, QString &sError)
+{
+
+
+
+    if(current.Step =="2")
+    {
+        if(order.PaddingUser.trimmed()!="" && current.User.at(2)!=order.PaddingUser)
+        {
+
+            sError = getUser(current.User.at(2)).Name+" 已接單處理";
+
+            return false;
+        }
+    }
+
+    if(current.Step =="3")
+    {
+
+        sError = getUser(current.User.at(3)).Name+" 已儲值完成";
+
+        return false;
+    }
+
+
+    return true;
+}
+
+bool Query::orderStep3(OrderData &order, OrderData current, QString &sError)
+{
+
+
+    if(order.Step=="3" && order.PaddingUser.trimmed()!="") //回報鎖定的請求
+    {
+        if(current.Step =="3" && current.PaddingUser.trimmed()!="")
+        {
+
+
+            sError = getUser(current.PaddingUser).Name+" 正在回報中";
+
+            return false;
+        }
+
+        if(current.Step =="4") //
+        {
+
+            sError = "此訂單 "+getUser(current.User.at(4)).Name+" 已回報";
+
+            return false;
+        }
+    }
 
     return true;
 }

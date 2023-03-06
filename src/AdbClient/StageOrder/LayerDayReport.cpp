@@ -49,8 +49,8 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 
     ui->tb->setMouseTracking(true);
 
-    m_detialOrder = new LayerSayCost;
-    m_detialOrder->m_bOrderMode = true;
+    m_detialOrder = new LayerOrder;
+
     m_detialOrder->setReadOnly();
     m_detialOrder->hide();
 
@@ -101,7 +101,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
     updateOrderData(bRequery,true);
 
-  //  ACTION.getGameItemFromGameSid()
+    //  ACTION.getGameItemFromGameSid()
 
     ui->tb->setRowCount(0);
 
@@ -212,7 +212,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         if(data.Step.toInt()<4 && data.Note0.at(2).contains("[訂單延誤]"))
         {
 
-                tmpItem->setForeground(QColor("#ef9f00"));
+            tmpItem->setForeground(QColor("#ef9f00"));
 
         }
 
@@ -228,13 +228,13 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         QTableWidgetItem *gameItem = UI.tbItem(getGameItemStr(data.Item));
         ui->tb->setItem(iRow,_GameItem,gameItem);
 
-//        QFontMetrics fm(gameItem->font());
-//        QSize size(fm.width(gameItem->text()), fm.height());
-//        size = QSize(size.width() + 10, size.height() + 5);
-//        if (size.height() > rowHeight)
-//        {
-//            ui->tb->setRowHeight(iRow, size.height());
-//        }
+        //        QFontMetrics fm(gameItem->font());
+        //        QSize size(fm.width(gameItem->text()), fm.height());
+        //        size = QSize(size.width() + 10, size.height() + 5);
+        //        if (size.height() > rowHeight)
+        //        {
+        //            ui->tb->setRowHeight(iRow, size.height());
+        //        }
 
 
         ui->tb->setItem(iRow,_Currency,UI.tbItem(customer.Currency));
@@ -490,7 +490,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
         d["Sid"] = data.CustomerSid;
 
 
-        m_detialOrder->setCustomer(d,data.Sid);
+        m_detialOrder->setData(data);
 
         //   m_detialOrder->refreshInfo();
         m_detialOrder->raise();
@@ -986,7 +986,7 @@ QString LayerDayReport::getGameItemStr(QString items)
         QString sSid =v.split(",,").first();
         QString sCount = v.split(",,").last();
 
-           sRe+= ACTION.getGameItemFromSid(sSid).Name+"*"+sCount+" ";
+        sRe+= ACTION.getGameItemFromSid(sSid).Name+"*"+sCount+" ";
 
     }
 
@@ -1047,7 +1047,7 @@ void LayerDayReport::on_btnExcel_clicked()
     for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
     {
         int iXlsxCol =0;
-//        int iH = xlsx.rowHeight(iRow);
+        //        int iH = xlsx.rowHeight(iRow);
 
         for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
         {
@@ -1066,10 +1066,16 @@ void LayerDayReport::on_btnExcel_clicked()
 
             QString st ="";
 
-            if(ui->tb->item(iRow,iCol)!=nullptr)
-                st = ui->tb->item(iRow,iCol)->text();
 
-           // int iLineCount =1;
+            if(iCol==_Note1)
+                st = dynamic_cast<QLabel*>(ui->tb->cellWidget(iRow,iCol))->text();
+            else
+            {
+                if(ui->tb->item(iRow,iCol)!=nullptr)
+                    st = ui->tb->item(iRow,iCol)->text();
+            }
+
+            // int iLineCount =1;
 
             if(st.trimmed()!="")
             {
@@ -1085,7 +1091,7 @@ void LayerDayReport::on_btnExcel_clicked()
                 {
                     if(iCol==_Note)
                     {
-                           st=st.replace("\n","");
+                        st=st.replace("\n","");
 
                     }
                     bOk = xlsx.write(iRow+2,iXlsxCol,st);
@@ -1114,7 +1120,7 @@ void LayerDayReport::on_btnExcel_clicked()
 
     QString sMsg="存檔位置 : "+sPath+
             "\n檔名 : "+sFileName.split("/").last()+"\n"
-            "\n匯出完成";
+                                                  "\n匯出完成";
 
 
     int iRet= DMSG.showMsg("",sMsg,QStringList()<<"打開資料夾"<<"OK");
@@ -1191,6 +1197,6 @@ void LayerDayReport::on_cbFilter_currentIndexChanged(int index)
 
 void LayerDayReport::on_cbShowGameItem_clicked()
 {
-     changeVisable();
+    changeVisable();
 }
 

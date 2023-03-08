@@ -69,7 +69,7 @@ private:
 
     DataRate m_costRate;
 
-    DataRate m_primeRate;
+  //  DataRate m_primeRate;
 
     QString m_gameRate;
 

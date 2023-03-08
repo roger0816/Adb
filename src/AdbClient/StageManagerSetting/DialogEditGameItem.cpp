@@ -23,11 +23,11 @@ DialogEditGameItem::DialogEditGameItem(QWidget *parent) :
 
 
 
-    ui->tableWidget->hideColumn(2);
-    ui->tableWidget->hideColumn(3);
+    ui->tableWidget->hideColumn(_Sort);
+   // ui->tableWidget->hideColumn(_Sid);
 
 
-    ui->tableWidget->setColumnWidth(1,150);
+    ui->tableWidget->setColumnWidth(_Name,150);
 
     ui->cbEnable->setChecked(true);
 }
@@ -90,7 +90,7 @@ QVariantMap DialogEditGameItem::data()
 
     for(int i=0;i<ui->tableWidget->rowCount();i++)
     {
-        QComboBox *cb=dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(i,0));
+        QComboBox *cb=dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(i,_Name));
 
        QStringList listItem =cb->property("items").toStringList();
         if(cb->currentIndex()<0 || cb->currentIndex()>=listItem.length())
@@ -104,7 +104,7 @@ QVariantMap DialogEditGameItem::data()
 
         CPair data =listCurrentType.at(iTypeIdx);
 
-        QDoubleSpinBox *sp =dynamic_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(i,1));
+        QDoubleSpinBox *sp =dynamic_cast<QDoubleSpinBox*>(ui->tableWidget->cellWidget(i,_PrimeCount));
 
         //QString cost = QString::number(sp->value(),'f',2);
 
@@ -146,7 +146,7 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
 
     cb->setCurrentIndex(idx);
 
-    ui->tableWidget->setCellWidget(iRowCount,0,cb);
+    ui->tableWidget->setCellWidget(iRowCount,_Name,cb);
 
     QDoubleSpinBox *sp = new QDoubleSpinBox(ui->tableWidget);
 
@@ -158,7 +158,7 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
 
     sp->setValue(cost);
 
-    ui->tableWidget->setCellWidget(iRowCount,1,sp);
+    ui->tableWidget->setCellWidget(iRowCount,_PrimeCount,sp);
 }
 
 void DialogEditGameItem::on_btnCostAdd_clicked()

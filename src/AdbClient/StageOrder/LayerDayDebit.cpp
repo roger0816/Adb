@@ -81,7 +81,10 @@ void LayerDayDebit::updateTbData(bool bRequery)
     {
         QString sError;
         QVariantMap in;
-        in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
+        //in["OrderTime like"]="%"+ui->dateEdit->date().toString("yyyyMMdd")+"%";
+        // 烏龍錯值， 20230220230307 ，被視為2023/03/07
+        in["OrderTime >="] =ui->dateEdit->date().toString("yyyyMMdd")+"000000";
+
         in["IsAddCost"]="1";
 
         ACTION.action(ACT::QUERY_CUSTOMER_COST,in,m_listCustomerCost,sError,bStrong);

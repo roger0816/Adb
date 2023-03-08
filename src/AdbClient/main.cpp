@@ -36,16 +36,19 @@ int main(int argc, char *argv[])
 
     QString sArg=st.split("\\").last().trimmed().mid(0,9).toUpper();
 
-    if(sArg =="ADBCLIENT")
+
+    if(sArg.contains("ADBLOCAL"))
+    {
+        mode=_LOCAL_SERVER;
+    }
+    else if(sArg.contains("ADBTEST"))
     {
         ACTION.m_bTest = true;
          mode = _TEST;
     }
 
-    if(sArg=="ADBLOCAL")
-    {
-        mode=_LOCAL_SERVER;
-    }
+
+
 
 
     qDebug()<<"test mode : "<<ACTION.m_bTest;
@@ -53,7 +56,7 @@ int main(int argc, char *argv[])
 
    // mode = _LOCAL_SERVER;
 
-    if(argc>=2)
+    if(argc>1)
     {
         QString st=QString(argv[1]).toLower();
 
@@ -79,6 +82,14 @@ int main(int argc, char *argv[])
         }
 
         else{}
+    }
+
+    QString sPort="6000";
+
+
+    if(argc>2)
+    {
+        sPort=argv[2];
     }
 
 
@@ -118,9 +129,9 @@ int main(int argc, char *argv[])
     default:
     {
         if(!ACTION.m_bTest)
-            GLOBAL.setServer(b,sServerIp,sServerPort);
+            GLOBAL.setServer(b,sServerIp,sPort);
         else
-            GLOBAL.setServer(b,sTestIp,sTestPort);
+            GLOBAL.setServer(b,sTestIp,sPort);
 
 
         break;

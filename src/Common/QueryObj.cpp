@@ -8,6 +8,14 @@ QueryObj::QueryObj(QObject *parent)
 {
     //  connect(&m_sql,&CSqlClass::tbUpdate,this,&QueryObj::updateTrigger);
 
+
+    m_lastSync.Sid="1";
+    m_lastSync.TableName="";
+    m_lastSync.ItemSid.clear();
+    m_lastSync.Date="20230308";  //yyyy MM dd
+    m_lastSync.Time="000000000"; //hh mm ss zzz
+
+
     m_timer.connect(&m_timer,&QTimer::timeout,[=]()
     {
         QStringList listKey = m_dLogingUser.keys();
@@ -31,6 +39,9 @@ QueryObj::QueryObj(QObject *parent)
         }
 
     });
+
+
+    readSync();
 
     m_timer.start(1000);
 
@@ -69,7 +80,7 @@ void QueryObj::setKeyValue(QString sKey, QVariant value)
     d["svalue"]=value;
 
     QString sError;
-     m_sql.insertTb("Settings",d,sError,true);
+    m_sql.insertTb("Settings",d,sError,true);
 }
 
 QVariant QueryObj::keyValue(QString sKey)
@@ -163,7 +174,7 @@ CData QueryObj::queryData(CData data)
             {
                 sMsg ="登入成功";
 
-                QString str=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+                QString str=dateUtcStr();
 
                 QByteArray s=QCryptographicHash::hash(str.toLatin1(),QCryptographicHash::Md5);
 
@@ -234,6 +245,16 @@ bool QueryObj::isQueryApi(int iApi)
 
 }
 
+QDateTime QueryObj::dateUtc()
+{
+    return QDateTime::currentDateTimeUtc().addSecs(60*60*8);
+}
+
+QString QueryObj::dateUtcStr()
+{
+    return dateUtc().toString("yyyyMMddhhmmss");
+}
+
 
 
 QString QueryObj::checkUpdate(int iApi)
@@ -259,7 +280,7 @@ QString QueryObj::checkUpdate(int iApi)
     }
     else
     {
-        QString sUpdateTime = QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
+        QString sUpdateTime = dateUtcStr();
 
         m_dTrigger[sGroup] = sUpdateTime;
 
@@ -323,6 +344,40 @@ bool QueryObj::checkSesison(QString sUserSid, QString sSession)
     m_dLogingUser[sUserSid] =d;
 
     return true;
+}
+
+void QueryObj::readSync()
+{
+    QString sRe="";
+    QVariantMap in;
+    in["DESC"]="Sid";
+    in["LIMIT"]="1";
+    QVariantList outs;
+    QString sError;
+    m_sql.queryTb("SyncData",in,outs,sError);
+
+
+    if(outs.length()>0)
+    {
+        m_lastSync = outs.first().toMap();
+
+    }
+
+}
+
+void QueryObj::writeSync(QString sTableName, QStringList listItemSid)
+{
+    QUERY_OBJ::SyncObj data;
+
+    data.TableName=sTableName;
+
+    data.ItemSid = listItemSid;
+
+    data.Date =  dateUtc().toString("yyyyMMdd");
+     data.Time =  dateUtc().toString("hhmmsszzz");
+    QVariantMap in;
+
+
 }
 
 

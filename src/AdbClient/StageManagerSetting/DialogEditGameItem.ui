@@ -528,22 +528,22 @@
               </attribute>
               <column>
                <property name="text">
+                <string>排序</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>編號</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
                 <string>名稱</string>
                </property>
               </column>
               <column>
                <property name="text">
                 <string>單位</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>每單位成本</string>
-               </property>
-              </column>
-              <column>
-               <property name="text">
-                <string>商品成本</string>
                </property>
               </column>
              </widget>

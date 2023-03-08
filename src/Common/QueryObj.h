@@ -37,6 +37,51 @@
  */
 
 
+namespace QUERY_OBJ
+{
+    struct SyncObj
+    {
+        SyncObj(){}
+        SyncObj(QVariantMap data){setData(data);}
+
+
+        void setData(QVariantMap data)
+        {
+            Sid=data["Sid"].toString();
+            TableName=data["TableName"].toString();
+            ItemSid=data["ItemSid"].toStringList();
+            Date=data["Date"].toString();
+            Time=data["Time"].toString();
+            UpdateTime=data["UpdateTime"].toString();
+
+
+        }
+
+        QVariantMap data()
+        {
+            QVariantMap re;
+
+            re["Sid"] = Sid;
+            re["TableName"]=TableName;
+            re["ItemSid"]=ItemSid;
+            re["Date"] = Date;
+            re["Time"] = Time;
+            re["UpdateTime"] = UpdateTime;
+
+            return re;
+        }
+
+        QString Sid;
+        QString TableName;
+        QStringList ItemSid;
+        QString Date;
+        QString Time;
+        QString UpdateTime;
+    };
+}
+
+
+
 
 class QueryObj : public QObject
 {
@@ -64,6 +109,10 @@ public:
 
     bool isQueryApi(int iApi);
 
+    QDateTime dateUtc();
+
+    QString dateUtcStr();
+
 protected:
     virtual CData implementRecall(CData){CData re; return re;}
 
@@ -90,6 +139,14 @@ protected:
 
     QTimer m_timer;
 
+
+    void readSync();
+
+    void writeSync(QString sTableName,QStringList  listItemSid);
+
+
+
+    QUERY_OBJ::SyncObj m_lastSync;
 signals:
 
 };

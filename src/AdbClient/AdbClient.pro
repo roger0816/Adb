@@ -30,6 +30,7 @@ SOURCES += \
     StageOrder/DialogDayReportEdit.cpp \
     StageOrder/ItemOrderSelector.cpp \
     StageOrder/LayerDayDebit.cpp \
+    StageReport/LayerCostReport.cpp \
     StageReport/LayerGameReport.cpp \
     StageReport/LayerUserReport.cpp \
     StageReport/ModelGameReport.cpp \
@@ -99,6 +100,7 @@ HEADERS += \
     StageOrder/DialogDayReportEdit.h \
     StageOrder/ItemOrderSelector.h \
     StageOrder/LayerDayDebit.h \
+    StageReport/LayerCostReport.h \
     StageReport/LayerGameReport.h \
     StageReport/LayerUserReport.h \
     StageReport/ModelGameReport.h \
@@ -167,6 +169,7 @@ FORMS += \
     StageOrder/DialogDayReportEdit.ui \
     StageOrder/ItemOrderSelector.ui \
     StageOrder/LayerDayDebit.ui \
+    StageReport/LayerCostReport.ui \
     StageReport/LayerGameReport.ui \
     StageReport/LayerUserReport.ui \
     component/CSideMenu.ui \

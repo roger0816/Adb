@@ -38,6 +38,8 @@ private :
     double m_iGameRate=1.00;
 
     void appendCb(int iCbIdx=0, double cost=1.00);
+
+    enum{_Sort=0,_Sid,_Name,_PrimeCount};
 private slots:
     void on_btnCostAdd_clicked();
 

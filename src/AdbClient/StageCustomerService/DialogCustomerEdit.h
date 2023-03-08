@@ -35,6 +35,7 @@ public:
 
     void setData(QString sCustomerSid);
 
+
     void setReadOnly(bool bReadOnly=true);
     QVariantMap data();
 

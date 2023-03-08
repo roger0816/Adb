@@ -17,6 +17,8 @@ StageOrder::StageOrder(QWidget *parent) :
 
     m_btns.addButton(ui->btn4,4);
 
+        m_btns.addButton(ui->btn5,5);
+
     connect(&m_btns,SIGNAL(buttonClicked(int)),this,SLOT(changePage(int)));
 
     ui->stackedWidget->setCurrentIndex(0);
@@ -60,6 +62,12 @@ void StageOrder::changePage(int iPage)
     {
         ui->pageDayDebit->init();
     }
+
+    else if(iPage==5)
+    {
+        ui->pageCostReport->init();
+    }
+
 
 
     ui->stackedWidget->setCurrentIndex(iPage);

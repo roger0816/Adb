@@ -19,7 +19,7 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
 
     ui->wSelect->hide();
 
-   // ui->tbInfo->hideColumn(1);
+    // ui->tbInfo->hideColumn(1);
     connect(ui->tbGameItem,&QTableWidget::cellClicked,this,&LayerSayCost::slotTbGameItemCellClicked);
 
     ui->cbGame->setEnabled(false);
@@ -143,7 +143,7 @@ void LayerSayCost::orderMode()
 
 void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 {
-
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , setCus ";
     m_listInto.clear();
     m_gameRate.clear();
 
@@ -158,6 +158,8 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     QVariantMap dIn;
     dIn["Sid"] =data["Sid"];
     QString sError;
+
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query cus ";
     ACTION.action(ACT::QUERY_CUSTOMER,dIn,listOut,sError,true);
 
     m_sLoadOrderSid = sOrderSid;
@@ -184,11 +186,13 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     d["CustomerSid"] = m_dataCustomer.Sid;
 
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query cus game info ";
     ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,m_listGameInfo,sError,true);
 
 
     QStringList cbName;
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , game name ";
     for(int i=0;i<m_listGameInfo.length();i++)
     {
         QVariantMap tmp = m_listGameInfo.at(i).toMap();
@@ -204,12 +208,28 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
     ui->cbGame->clear();
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , game name OK ";
+
+
+    ui->cbGame->setProperty("lock",true);
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add cb game";
+
 
     ui->cbGame->addItems(cbName);
 
-    m_costRate = ACTION.costRate(m_order.ExRateSid,true);
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add cb game ok";
 
-    m_primeRate = ACTION.primeRate(m_order.PrimeRateSid,true);
+
+
+    ui->cbGame->setProperty("lock",false);
+
+    on_cbGame_currentTextChanged(ui->cbGame->currentText());
+
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change cbName item ";
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query rate";
+    m_costRate = ACTION.costRate(m_order.ExRateSid,true);
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query rate OK";
+    // m_primeRate = ACTION.primeRate(m_order.PrimeRateSid,true);
 
 
     if(m_bOrderMode)
@@ -220,6 +240,8 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     {
         ui->cbGame->setEnabled(true);
         ui->txNote2->clear();
+
+        qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , new ORDER ";
         m_order=OrderData();
     }
     //    m_exRate = ACTION.listRate(m_order.ExRateSid,false,true).first();
@@ -272,6 +294,7 @@ void LayerSayCost::refreshInfo()
 {
 
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , refresh";
     ui->tbInfo->setRowCount(0);
 
     auto checkTbRow = [=](QString sName)
@@ -314,10 +337,12 @@ void LayerSayCost::refreshInfo()
 
 
         QSpinBox *sp = new QSpinBox(this);
-
+        int iTotalItem=99999;
+#if 0
         QPair<qlonglong ,qlonglong > tmp =  ACTION.getItemCount(DataGameItem(data).Sid);
 
-        int iTotalItem = tmp.second-tmp.first;
+        iTotalItem= tmp.second-tmp.first;
+#endif
 
         sp->setRange(1,iTotalItem);
 
@@ -356,6 +381,7 @@ bool LayerSayCost::checkHasInto(QString gameItemSid)
 double LayerSayCost::checkTotal()
 {
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" ,checkTotal ";
     double re = 0;
     if(m_gameRate.trimmed()=="")
     {
@@ -477,6 +503,7 @@ double LayerSayCost::checkTotal()
     ui->lbTotal->setText(QString::number(m_iTotal,'f',2));
     //    DATA.rate()
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , checkok ";
 
     return re;
 }
@@ -484,6 +511,8 @@ double LayerSayCost::checkTotal()
 void LayerSayCost::addPayTypeToCb()
 {
     qDebug()<<"add pay type to cb";
+
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add paytype ";
     if(m_listInto.length()<1)
         return;
 
@@ -541,6 +570,7 @@ void LayerSayCost::addPayTypeToCb()
     ui->cbSelect->addItems(cbData);
 
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" add type ok ";
 
 }
 
@@ -748,10 +778,15 @@ void LayerSayCost::spValue(int )
 
 void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 {
+    if(ui->cbGame->property("lock").toBool())
+        return ;
+
+    ui->cbGame->setProperty("lock",true);
+
     m_sCurrentGameSid = ACTION.getGameId(arg1);
     qDebug()<<"game sid : "<<m_sCurrentGameSid<<" ,name "<<arg1;
 
-
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change cb Game";
     if(m_order.OrderDate.toInt()<=20230216)
     {
         m_gameRate=ACTION.getGameRate(m_sCurrentGameSid).Rate;
@@ -765,10 +800,11 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
     }
     else
     {
+
         m_gameRate=ACTION.getGameRate(m_sCurrentGameSid).Rate;
         qDebug()<<"game rate by query : "<<m_gameRate;
     }
-
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" ,getGameRate";
     ui->lbGameRate->setText(m_gameRate);
     ui->lbGameName->setText(arg1);
 
@@ -786,7 +822,7 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
     }
 
     ui->cbAccount->clear();
-
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add accuont";
     ui->cbAccount->addItems(cbAcc);
 
     QVariantMap v;
@@ -797,21 +833,23 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 
 
     QString sError;
-
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query m_listGameItem";
     ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError);
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query m_listGameItem OK";
     ui->tbGameItem->setRowCount(0);
 
     for(int i=0;i<m_listGameItem.length();i++)
     {
         int iRow = ui->tbGameItem->rowCount();
 
+
         ui->tbGameItem->setRowCount(iRow+1);
 
         DataGameItem item (m_listGameItem.at(i).toMap());
 
         ui->tbGameItem->setItem(iRow,1,UI.tbItem(item.Name));
-
+#if 0
 
         if(m_bReadOnly || checkHasInto(item.Sid))
         {
@@ -829,15 +867,24 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
             else
                 ui->tbGameItem->setItem(iRow,0,UI.tbItem("完售"));
         }
+#else
+
+        ui->tbGameItem->setItem(iRow,0,UI.tbItem("加入",GlobalUi::_BUTTON));
+
+#endif
 
 
     }
+
+    ui->cbGame->setProperty("lock",false);
+
 
 }
 
 
 void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 {
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change accuont";
     ui->lbGameAccount->setText(arg1);
 
     ui->cbServer->clear();
@@ -867,6 +914,7 @@ void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 
     }
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change accuont OK";
     ui->cbServer->addItems(server);
 
 }
@@ -874,7 +922,7 @@ void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 
 void LayerSayCost::on_cbServer_currentTextChanged(const QString &arg1)
 {
-
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change server";
     ui->lbServer->setText(arg1);
 
     QStringList chr;
@@ -899,7 +947,7 @@ void LayerSayCost::on_cbServer_currentTextChanged(const QString &arg1)
     }
 
     ui->cbChr->clear();
-
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change server ok";
     ui->cbChr->addItems(chr);
 
 
@@ -908,6 +956,7 @@ void LayerSayCost::on_cbServer_currentTextChanged(const QString &arg1)
 
 void LayerSayCost::on_cbChr_currentTextChanged(const QString &arg1)
 {
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change chr";
     ui->lbChr->setText(arg1);
 
     for(int i=0;i<m_listGameInfo.length();i++)
@@ -931,6 +980,8 @@ void LayerSayCost::on_cbChr_currentTextChanged(const QString &arg1)
 
         }
     }
+
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change chr ok";
 }
 
 
@@ -1191,6 +1242,7 @@ void LayerSayCost::delayShowEvent()
     qDebug()<<"show Event ";
     // m_listPayType = ACTION.getAddValueType();
 
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , show ";
 
     m_date = GLOBAL.dateTimeUtc8();
 
@@ -1200,6 +1252,8 @@ void LayerSayCost::delayShowEvent()
     QString sError;
 
     QVariantMap v;
+
+    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<"query GAME ITEM ";
     ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError,true);
 
     if(m_listGameItem.length()<1)

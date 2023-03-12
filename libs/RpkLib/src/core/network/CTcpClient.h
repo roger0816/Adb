@@ -10,7 +10,7 @@ class CTcpClient : public QObject
     Q_OBJECT
 public:
     explicit CTcpClient(QObject *parent = 0);
-    QTcpSocket *m_socket;
+
     int connectHost(QString sIp,QString sPort,QByteArray arrInput,QByteArray &arrOutput,int iWaitMsec=3000);
 
     int connectHost(QString sId,QString sIp, QString sPort, QByteArray arrInput, int iWaitMsec=3000);

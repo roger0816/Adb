@@ -4,7 +4,7 @@
 #include <QTimer>
 #include <QEventLoop>
 
-QMap<QString,Packager > m_kPackger;
+static QMap<QString,Packager > m_kPackger;
 
 namespace  CTcp{
 const char *id= "id";
@@ -17,7 +17,7 @@ bool bSendSignal = true;
 
 CTcpClient::CTcpClient(QObject *parent) : QObject(parent)
 {
-    m_socket=NULL;
+
 }
 
 
@@ -41,8 +41,6 @@ int CTcpClient::connectHost(QString sIp, QString sPort, QByteArray arrInput, QBy
         {
             loop->quit();
 
-            loop->deleteLater();
-
             arrOutput =data;
 
             iRe = error;
@@ -52,6 +50,10 @@ int CTcpClient::connectHost(QString sIp, QString sPort, QByteArray arrInput, QBy
 
 
     loop->exec();
+
+
+    loop->deleteLater();
+
 
 
     return iRe;
@@ -147,10 +149,15 @@ int CTcpClient::connectHost(QString sId, QString sIp, QString sPort, QByteArray 
 
     connect(&timer,&QTimer::timeout,[=]
     {
+
+        this->error(QAbstractSocket::SocketTimeoutError);
+
         if(tcp && tcp->isOpen())
             tcp->close();
 
-        this->error(QAbstractSocket::SocketTimeoutError);
+        tcp->disconnect();
+
+        tcp->deleteLater();
     });
 
     timer.start(iWaitMsec);
@@ -178,6 +185,8 @@ int CTcpClient::connectHost(QString sId, QString sIp, QString sPort, QByteArray 
 void CTcpClient::error(QAbstractSocket::SocketError error)
 {
     qDebug()<<"error : "<<error;
+    if(qobject_cast<QTcpSocket*>(sender())==0)
+        return;
     QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
 
 
@@ -187,11 +196,19 @@ void CTcpClient::error(QAbstractSocket::SocketError error)
         emit signalReply(sId,QByteArray(),error);
     else
         emit finished(sId,QByteArray(),error);
+
+    if(tcp && tcp->isOpen())
+        tcp->close();
+
+    tcp->disconnect();
+
+    tcp->deleteLater();
 }
 
 void CTcpClient::slotConnected()
 {
-
+    if(qobject_cast<QTcpSocket*>(sender())==0)
+        return;
     QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
 
     QByteArray data = tcp->property(CTcp::inputData).toByteArray();
@@ -205,14 +222,18 @@ void CTcpClient::slotConnected()
 
 void CTcpClient::slotDisconnected()
 {
-
+    if(qobject_cast<QTcpSocket*>(sender())==0)
+        return;
     QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
     tcp->disconnect();
+    tcp->close();
     tcp->deleteLater();
 }
 
 void CTcpClient::slotReadyRead()
 {
+    if(qobject_cast<QTcpSocket*>(sender())==0)
+        return;
     QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
 
     QString sId = tcp->property(CTcp::id).toString();
@@ -258,6 +279,13 @@ void CTcpClient::slotReadyRead()
 
 
         m_kPackger.remove(sPpKey);
+
+        if(tcp && tcp->isOpen())
+            tcp->close();
+
+        tcp->disconnect();
+
+        tcp->deleteLater();
     }
 }
 

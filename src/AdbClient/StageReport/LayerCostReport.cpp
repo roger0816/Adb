@@ -7,11 +7,27 @@ LayerCostReport::LayerCostReport(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_detialOrder = new LayerOrder;
+
+    m_detialOrder->setReadOnly();
+    m_detialOrder->hide();
+
+
     ui->dateEdit->setDateTime(GLOBAL.dateTimeUtc8());
+
+    ui->tb->hideColumn(_Sid);
+
+    ui->tb->hideColumn(_Note1);
 }
 
 LayerCostReport::~LayerCostReport()
 {
+    if(m_detialOrder!=nullptr)
+    {
+        m_detialOrder->hide();
+        delete m_detialOrder;
+    }
+
     delete ui;
 }
 
@@ -32,7 +48,7 @@ void LayerCostReport::refresh(bool bRequest)
 
         in["OrderTime >="]=ui->dateEdit->dateTime().toString("yyyyMMdd")+"000000";
         in["OrderTime <"]=ui->dateEdit->dateTime().addDays(1).toString("yyyyMMdd")+"000000";
-        in["ASC"]="OrderTime";
+        in["ASC"]="Sid";
 
         bool bStrong = ui->dateEdit->date()==QDateTime::currentDateTime().date()
                 || ui->dateEdit->date()==QDateTime::currentDateTime().date().addDays(-1) ;
@@ -66,13 +82,25 @@ void LayerCostReport::refresh(bool bRequest)
 
 
         ui->tb->setItem(iRow, _Sid,UI.tbItem(costData.Sid));
+
         ui->tb->setItem(iRow, _OrderId,UI.tbItem(costData.OrderId));
-        ui->tb->setItem(iRow, _CusId,UI.tbItem(cus.Id));
+
+        if(!costData.IsAddCost &&
+                (ui->dateEdit->date()==GLOBAL.dateTimeUtc8().date() || ui->dateEdit->date()==GLOBAL.dateTimeUtc8().addDays(-1).date()))
+            ui->tb->setItem(iRow, _OrderId,UI.tbItem(costData.OrderId,UI._BUTTON));
+
+        ui->tb->setItem(iRow, _CusId,UI.tbItem(cus.Id,UI._BUTTON));
         ui->tb->setItem(iRow, _CusName,UI.tbItem(cus.Name));
         ui->tb->setItem(iRow, _Currency,UI.tbItem(cus.Currency));
         ui->tb->setItem(iRow, _Cost,UI.tbItem(costData.Total,UI._BUTTON));
-        ui->tb->setItem(iRow, _User,UI.tbItem(costData.UserSid));
-        ui->tb->setItem(iRow, _Note1,UI.tbItem(costData.Note1));
+        ui->tb->setItem(iRow, _User,UI.tbItem(ACTION.getUser(costData.UserSid).Name));
+        //  ui->tb->setItem(iRow, _Note1,UI.tbItem(costData.Note1));
+
+        QLabel *lbNote1 = new QLabel(ui->tb);
+        lbNote1->setText(costData.Note1);
+        ui->tb->setCellWidget(iRow,_Note1,lbNote1);
+
+
 
     }
 }
@@ -104,7 +132,8 @@ bool LayerCostReport::checkFilter(CustomerData cus, CustomerCost cos)
 
     QString searchKey = ui->txSearch->text();
 
-    //if(cus.Id)
+    if(cus.Id.contains(searchKey))
+        return true;
 
 
 
@@ -184,7 +213,19 @@ void LayerCostReport::reMix()
             listSortUser.removeOne(costData.CustomerSid);
         }
 
+        if(costData.CustomerSid=="137")
+        {
+            qDebug()<<"GGGGG :"<<costData.data()["Total"]<<" , " <<dUser[costData.CustomerSid].toMap()["Total"];
+        }
+
         dUser[costData.CustomerSid] = costData.data();
+
+        if(costData.CustomerSid=="137")
+        {
+            qDebug()<<"GGGGG1 :"<<dUser[costData.CustomerSid].toMap()["Total"];
+        }
+
+
         listSortUser.append(costData.CustomerSid);
 
 
@@ -253,6 +294,53 @@ void LayerCostReport::on_tb_cellClicked(int row, int column)
         dialog.exec();
 
     }
+
+    else if(column == _OrderId)
+    {
+        if(!cos.IsAddCost)
+        {
+
+
+            OrderData orderData=ACTION.getOrderByOrderId(cos.OrderId,true);
+
+            if(orderData.Sid!="")
+            {
+                m_detialOrder->setData(orderData);
+
+                //   m_detialOrder->refreshInfo();
+                m_detialOrder->raise();
+
+                m_detialOrder->show();
+            }
+        }
+    }
+    else if(column== _Note1)
+    {
+//        if(column==_Note1)
+//        {
+//            DialogInput dialog;
+
+//            dialog.setTitle(cos.Id+"    "+cus.Name);
+
+//            dialog.setText(cus.Note1);
+
+//            dialog.hideDelete();
+
+//            int ret =dialog.exec();
+
+//            if(ret==1)
+//            {
+//                QString sError;
+//                QVariantMap in;
+//                in["Sid"]=cos.Sid;
+//                in["Note1"]=dialog.text();
+
+//                ACTION.action(ACT::REPLACE_ORDER,in,sError);
+//                refresh();
+//            }
+
+//        }
+    }
 }
 
 
@@ -267,5 +355,165 @@ void LayerCostReport::on_btnFilterClear_clicked()
     ui->txSearch->clear();
 
     refresh();
+}
+
+
+void LayerCostReport::on_btnExcel_clicked()
+{
+
+    if(ui->tb->rowCount()<1)
+    {
+        DMSG.showMsg("","沒有資料","OK");
+
+        return ;
+    }
+
+    QString sPath;
+
+#if 0
+    sPath = QFileDialog::getExistingDirectory(this,"選擇存檔位置",".");
+    if(sPath.trimmed()=="")
+        return ;
+#else
+
+    sPath = QApplication::applicationDirPath()+"/out";
+    QDir dir(sPath);
+    if (!dir.exists())
+    {
+        dir.mkdir(".");
+    }
+
+    sPath = QApplication::applicationDirPath()+"/out/report";
+    QDir dir2(sPath);
+    if (!dir2.exists())
+    {
+        dir2.mkdir(".");
+    }
+
+
+
+
+
+
+#endif
+
+    //
+
+    QString sFileName = sPath+"/"+ui->dateEdit->date().toString("MMdd")+"_消費明細表_"+GLOBAL.dateTimeUtc8().toString("MMddhhmmss");
+    qDebug()<<"sFileName : "<<sFileName;
+    QTXLSX_USE_NAMESPACE
+
+            Document xlsx;
+
+    //  xlsx.addSheet();
+
+    for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
+    {
+        int iXlsxCol =0;
+        //        int iH = xlsx.rowHeight(iRow);
+
+        for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
+        {
+            qDebug()<<"col : "<<iCol<<" row: "<<iRow;
+
+            if(iCol==_Sid)
+                continue;
+            iXlsxCol++;
+
+            if(iRow==0)
+            {
+                QString sHeader= ui->tb->horizontalHeaderItem(iCol)->text();
+                xlsx.write(iRow+1,iXlsxCol,sHeader);
+            }
+
+
+            QString st ="";
+
+
+            if(iCol==_Note1)
+                st = dynamic_cast<QLabel*>(ui->tb->cellWidget(iRow,iCol))->text();
+            else
+            {
+                if(ui->tb->item(iRow,iCol)!=nullptr)
+                    st = ui->tb->item(iRow,iCol)->text();
+            }
+
+            // int iLineCount =1;
+
+            if(st.trimmed()!="")
+            {
+
+                bool bOk = false;
+                if(iCol==_Cost)
+                {
+                    bOk=xlsx.write(iRow+2,iXlsxCol,st.toDouble());
+
+                }
+                else
+                {
+                    if(iCol==_Note1)
+                    {
+                        st=st.replace("\n","");
+
+                    }
+                    bOk = xlsx.write(iRow+2,iXlsxCol,st);
+
+                }
+
+                if(!bOk)
+                {
+                    qDebug()<<"st : "<<st;
+                }
+
+            }
+            xlsx.setColumnWidth(iXlsxCol,iXlsxCol,16);
+
+        }
+    }
+
+    //        xlsx.write("A"+QString::number(ui->tb->rowCount()+3),ui->lbT->text());
+    //        xlsx.write("G"+QString::number(ui->tb->rowCount()+3),ui->lbTotalBonus->text().toDouble());
+    //        xlsx.write("K"+QString::number(ui->tb->rowCount()+3),ui->lbTotal0->text().toDouble());
+    //        xlsx.write("L"+QString::number(ui->tb->rowCount()+3),ui->lbTotal1->text().toDouble());
+    //        xlsx.write("M"+QString::number(ui->tb->rowCount()+3),ui->lbTotal2->text().toDouble());
+
+    xlsx.saveAs(sFileName+".xls");
+
+
+    QString sMsg="存檔位置 : "+sPath+
+            "\n檔名 : "+sFileName.split("/").last()+"\n"
+                                                  "\n匯出完成";
+
+
+    int iRet= DMSG.showMsg("",sMsg,QStringList()<<"打開資料夾"<<"OK");
+
+    if(iRet==0)
+    {
+        QString folderPath = sPath;
+        QUrl folderUrl = QUrl::fromLocalFile(folderPath);
+        QString sCmd="start explorer " +sPath.replace("/","\\");
+        //system(sCmd.toStdString().c_str());
+        QDesktopServices::openUrl(folderUrl);
+    }
+
+    /*
+        CObjectExcel excel;
+
+        excel.open(sFileName+"_2.xls");
+
+        for(int iRow=0;iRow<ui->tb->rowCount();iRow++)
+        {
+            for(int iCol=0;iCol<ui->tb->columnCount();iCol++)
+                excel.setCell(iRow,iCol,ui->tb->item(iRow,iCol)->text());
+        }
+
+        excel.save();
+
+        excel.close();
+        */
+
+
+
+
 }
 

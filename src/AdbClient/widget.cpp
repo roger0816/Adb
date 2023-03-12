@@ -23,6 +23,28 @@ Widget::Widget(QWidget *parent)
 
 
 
+QByteArray m_data="AAAA";
+
+m_data.resize(3);
+
+qDebug()<<"SSSSS : "<<m_data.mid(8,4);
+
+
+QByteArray tag = m_data.mid(8+12,4-20);
+quint32 value;
+QDataStream s(&tag,QIODevice::ReadWrite);
+s >> value;
+
+m_data.remove(0,100);
+
+
+//        uint datavlen = ByteArrayToUint32(m_data.mid(8,4));
+
+//        if(datavlen == uint(m_data.length()-sp))
+//        {
+//            //qDebug() << "Package is Complete";
+
+//        }
 
 
     ui->lbTestName->hide();

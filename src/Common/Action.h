@@ -101,6 +101,8 @@ public:
 
 
     OrderData getOrder(QString sSid, bool bRequest = false);
+
+        OrderData getOrderByOrderId(QString sOrderId, bool bRequest = false);
     OrderData getOrderCustomerLast(QString sCustomerSid, bool bRequest = false);
 
     QList<OrderData> waitOrder(QString sCustomerSid);

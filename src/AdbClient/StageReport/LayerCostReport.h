@@ -4,8 +4,15 @@
 #include <QWidget>
 #include "Global.h"
 #include "GlobalUi.h"
+#include "LayerOrder.h"
 #include "DialogCustomerCostHistory.h"
 #include "DialogCustomerEdit.h"
+#include "CExcelExport.h"
+#include "CObjectExcel.h"
+#include "xlsxdocument.h"
+#include "ItemPic.h"
+#include <QFileDialog>
+#include <QDesktopServices>
 
 namespace Ui {
 class LayerCostReport;
@@ -38,6 +45,8 @@ private slots:
 
     void on_btnFilterClear_clicked();
 
+    void on_btnExcel_clicked();
+
 private:
     Ui::LayerCostReport *ui;
 
@@ -53,7 +62,7 @@ private:
 
     void reMix();
 
-
+   LayerOrder *m_detialOrder = nullptr;
 
 };
 

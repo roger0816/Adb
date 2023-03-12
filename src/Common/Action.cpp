@@ -997,6 +997,22 @@ OrderData Action::getOrder(QString sSid, bool bRequest)
     return re;
 }
 
+OrderData Action::getOrderByOrderId(QString sOrderId, bool bRequest)
+{
+    if(bRequest)
+        getOrder(bRequest);
+
+    OrderData re;
+
+    for(int i=0;i<m_listOrder.length();i++)
+    {
+        if(m_listOrder.at(i).Id==sOrderId)
+            re = m_listOrder.at(i);
+    }
+
+    return re;
+}
+
 OrderData Action::getOrderCustomerLast(QString sCustomerSid, bool bRequest)
 {
 

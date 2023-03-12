@@ -485,9 +485,9 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
     if(column==_OderId || column==_Name)
     {
 
-        QVariantMap d;
+//        QVariantMap d;
 
-        d["Sid"] = data.CustomerSid;
+//        d["Sid"] = data.CustomerSid;
 
 
         m_detialOrder->setData(data);

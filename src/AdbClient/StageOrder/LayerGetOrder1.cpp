@@ -520,7 +520,8 @@ void LayerGetOrder1::on_btnFinish_clicked()
         return ;
     }
 
-
+//166;;165;;154;;158;;181;;151;;149;;152;;155;;153;;167;;156
+    //171;;180;;181;;150
 
     int iRet= UI.showMsg("",QString("請再確認訂單(%1) \n已完成儲值處理？").arg(order.Id),QStringList()<<"否"<<"是");
 

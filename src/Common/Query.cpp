@@ -1531,6 +1531,15 @@ bool Query::orderStep0(OrderData &order, QString &sError)
         return false;
     }
 
+    if(!changeItemCount(order,false,sError))
+    {
+
+        sError = "報價失敗, 商品庫存數量不足。";
+
+        return false;
+
+    }
+
     order.Currency = cus.Currency;
 
     order.CustomerName = cus.Name;

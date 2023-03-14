@@ -1531,7 +1531,9 @@ bool Query::orderStep0(OrderData &order, QString &sError)
         return false;
     }
 
-    if(!changeItemCount(order,false,sError))
+    QList<DataItemCount> listLast;
+    QStringList listSt;
+    if(!checkItemCount(order,listLast,listSt))
     {
 
         sError = "報價失敗, 商品庫存數量不足。";

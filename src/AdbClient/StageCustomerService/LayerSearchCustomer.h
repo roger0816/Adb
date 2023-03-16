@@ -55,6 +55,7 @@ private slots:
 
     void on_btnHistory_clicked();
     void on_btnDetail_clicked();
+    void on_btnBACK_clicked();
 };
 
 #endif // LAYERSEARCHCUSTOMER_H

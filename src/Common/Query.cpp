@@ -1640,7 +1640,13 @@ bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
                 sDash="-";
 
             // order.Name=order.Owner+sDash+QString("%1").arg(iSeq+1,2,10,QLatin1Char('0'));
-            order.Name=order.Owner+sDash+QString::number(iSeq+1);
+
+            if(current.Sid==order.Sid && current.Step=="1")
+            {
+                //改留言，不重新給與編號
+            }
+            else
+                order.Name=order.Owner+sDash+QString::number(iSeq+1);
 
 
 

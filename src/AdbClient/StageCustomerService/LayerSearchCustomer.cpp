@@ -290,3 +290,9 @@ void LayerSearchCustomer::on_btnDetail_clicked()
     dialog.exec();
 }
 
+
+void LayerSearchCustomer::on_btnBACK_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(1);
+}
+

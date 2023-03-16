@@ -25,6 +25,7 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
     ui->cbGame->setEnabled(false);
 
 
+    ui->btnCopy->hide();
 
     //    // ^(-?\d+)(\.\d+)?$
     //    QRegExp ex("^(-?\d+)(\.\d+)?$");
@@ -1226,7 +1227,7 @@ void LayerSayCost::on_btnSayOk_clicked()
 
     UI.showMsg("",sError,"OK");
 
-    emit back();
+    emit back(5);
 
 
 }

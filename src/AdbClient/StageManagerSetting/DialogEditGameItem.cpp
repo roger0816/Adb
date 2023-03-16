@@ -24,9 +24,10 @@ DialogEditGameItem::DialogEditGameItem(QWidget *parent) :
 
 
     ui->tableWidget->hideColumn(_Sort);
-   // ui->tableWidget->hideColumn(_Sid);
+    ui->tableWidget->hideColumn(_Sid);
 
-
+    ui->tableWidget->setColumnWidth(_Sort,60);
+    ui->tableWidget->setColumnWidth(_Sid,60);
     ui->tableWidget->setColumnWidth(_Name,150);
 
     ui->cbEnable->setChecked(true);

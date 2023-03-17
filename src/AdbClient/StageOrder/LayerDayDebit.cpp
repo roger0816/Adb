@@ -77,6 +77,9 @@ void LayerDayDebit::updateTbData(bool bRequery)
     if(ui->dateEdit->date()==GLOBAL.dateTimeUtc8().date())
         bStrong = true;
 
+    if(ui->dateEdit->date()==GLOBAL.dateTimeUtc8().date().addDays(-1))
+        bStrong = true;
+
     if(bRequery)
     {
         QString sError;
@@ -204,7 +207,7 @@ bool LayerDayDebit::checkData(CustomerCost data)
 
     QDateTime date =QDateTime::fromString(data.OrderTime,"yyyyMMddhhmmss");
 
-    if(date.time()<ui->timeStart->time() || date.time()>ui->timeEnd->time())
+    if(date.time()<ui->timeStart->time() || date.time()>ui->timeEnd->time() || date.date()!=ui->dateEdit->date())
     {
 
         return false;

@@ -315,6 +315,11 @@
            </attribute>
            <column>
             <property name="text">
+             <string>編號</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
              <string>商品名稱</string>
             </property>
            </column>

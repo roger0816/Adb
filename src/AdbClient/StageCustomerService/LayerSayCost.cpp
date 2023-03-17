@@ -367,6 +367,14 @@ void LayerSayCost::refreshInfo()
     checkTotal();
 }
 
+bool LayerSayCost::checkOk(QString &sMsg, QStringList listCopy)
+{
+  //  bool bReIsChickOk = false;
+
+    //to do
+    return true;
+}
+
 bool LayerSayCost::checkHasInto(QString gameItemSid)
 {
 
@@ -1222,12 +1230,19 @@ void LayerSayCost::on_btnSayOk_clicked()
     QString sError;
     bool bOk = ACTION.replaceOrder(m_order,sError);
 
-    if(bOk && !m_bOrderMode)
-        sError="報價送出完成";
+//    if(bOk && !m_bOrderMode)
+//    {
+//        sError="報價送出完成";
+//        m_sMsg = sError;
+//        emit back(5);
+//    }
+//    else
+    {
+        UI.showMsg("",sError,"OK");
+               emit back(1);
+    }
 
-    UI.showMsg("",sError,"OK");
 
-    emit back(5);
 
 
 }

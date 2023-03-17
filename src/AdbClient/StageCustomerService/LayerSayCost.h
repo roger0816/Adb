@@ -31,8 +31,11 @@ public:
      Ui::LayerSayCost *ui;
      bool m_bOrderMode = false;
 
+     bool checkOk(QString &sMsg,QStringList listCopy);
+
 private:
-         void init();
+
+    void init();
     CustomerData m_dataCustomer;
 
     QVariantList m_listGameInfo;
@@ -45,6 +48,9 @@ private:
 
     QVariantList m_listInto;
 
+    QString m_sMsg;
+
+    QStringList m_listCopy;
 
 
     QList<QSpinBox*> m_listSp;

@@ -7,8 +7,9 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->tbGameItem->setColumnWidth(0,160);
-    ui->tbGameItem->setColumnWidth(1,40);
+    ui->tbGameItem->setColumnWidth(0,60);
+    ui->tbGameItem->setColumnWidth(1,160);
+    ui->tbGameItem->setColumnWidth(2,40);
 
     ui->lbItemTitle0->hide();
 
@@ -211,17 +212,19 @@ void LayerCostSetting::refreshItemList()
 
         ui->tbGameItem->setRowCount(i+1);
 
-        ui->tbGameItem->setItem(i,0,UI.tbItem(data.Name));
+        ui->tbGameItem->setItem(i,0,UI.tbItem(data.Sid));
 
-        ui->tbGameItem->setItem(i,1,UI.tbItem(data.Enable));
+        ui->tbGameItem->setItem(i,1,UI.tbItem(data.Name));
 
-        ui->tbGameItem->setItem(i,2,UI.tbItem(data.OrderNTD));
+        ui->tbGameItem->setItem(i,2,UI.tbItem(data.Enable));
 
-        ui->tbGameItem->setItem(i,3,UI.tbItem(data.Bonus));
+        ui->tbGameItem->setItem(i,3,UI.tbItem(data.OrderNTD));
+
+        ui->tbGameItem->setItem(i,4,UI.tbItem(data.Bonus));
 
         double iNTD = GameRate*data.Bonus.toDouble();
 
-        ui->tbGameItem->setItem(i,4,UI.tbItem(GLOBAL.addFlow(iNTD)));
+        ui->tbGameItem->setItem(i,5,UI.tbItem(GLOBAL.addFlow(iNTD)));
 
         //  ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
 
@@ -252,7 +255,7 @@ void LayerCostSetting::refreshItemList()
 
         m_listTipData.append(toolData);
 
-        ui->tbGameItem->setItem(i,5,UI.tbItem(listData.join(" ; "),GlobalUi::_TOOLTIP));
+        ui->tbGameItem->setItem(i,6,UI.tbItem(listData.join(" ; "),GlobalUi::_TOOLTIP));
     }
 
 
@@ -592,7 +595,7 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
 
     QVariantMap data = m_listTipData.at(row).toMap();
 
-    if(column==4)
+    if(column==5)
     {
         QString st=
                 "新台幣 : %1 \n "
@@ -612,7 +615,7 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
 
         QToolTip::showText(QCursor::pos(),st);
     }
-    else  if(column==5)
+    else  if(column==6)
     {
 
         QToolTip::showText(QCursor::pos(),data["AddValueTypeSid"].toString());

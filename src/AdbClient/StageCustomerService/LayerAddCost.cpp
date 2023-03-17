@@ -182,7 +182,7 @@ QString LayerAddCost::getNewOrderId()
 
     QString sDate=QDate::currentDate().toString("MMdd");
 
-    sTmp=QString("%1").arg(tmp,6,16,QLatin1Char('0'));
+    sTmp=QString("%1").arg(tmp,6,16,QLatin1Char('0')).toUpper();
 
     sRe= sDate+"-"+sTmp;
 

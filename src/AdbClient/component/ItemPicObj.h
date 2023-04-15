@@ -108,7 +108,7 @@ protected:
 
     QString m_sFileName=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmss");
 
-    QPoint m_pos;
+    QRect m_rect;
 
     QImage *m_img=nullptr;
 

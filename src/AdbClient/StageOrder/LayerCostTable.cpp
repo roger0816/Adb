@@ -254,6 +254,44 @@ QString LayerCostTable::trText()
     QString st=ui->txEdit->toPlainText();
     //    listHeader2<<"%Item"<<"%NTD"<<"%USD"<<"%HKD"<<"%RMB"<<"%MYR"<<"%SGD";
 
+
+    QVariantList list;
+
+
+
+    for(int i=0;i<ui->tbGameItem->rowCount();i++)
+    {
+        QVariantMap d;
+        d["%Item"+QString::number(i+1)] = ui->tbGameItem->item(i,0)->text();
+        d["%NTD"+QString::number(i+1)] = ui->tbGameItem->item(i,1)->text();
+        d["%USD"+QString::number(i+1)] = ui->tbGameItem->item(i,2)->text();
+        d["%HKD"+QString::number(i+1)] = ui->tbGameItem->item(i,3)->text();
+        d["%RMB"+QString::number(i+1)] = ui->tbGameItem->item(i,4)->text();
+        d["%MYR"+QString::number(i+1)] = ui->tbGameItem->item(i,5)->text();
+        d["%SGD"+QString::number(i+1)] = ui->tbGameItem->item(i,6)->text();
+        list.append(d);
+    }
+
+    for(int i=list.length()-1;i>=0;i--)
+    {
+        QVariantMap d=list.at(i).toMap();
+        QStringList listKey = d.keys();
+
+        foreach(QString v,listKey)
+        {
+
+            st=st.replace(v,d[v].toString());
+
+        }
+
+
+    }
+
+   st= st.replace("%User",ACTION.m_currentUser.Name);
+   st= st.replace("%Time", GLOBAL.dateTimeUtc8().toString("yyyy/MM/dd hh:mm"));
+
+
+    /*
     QVariantMap d;
 
     for(int i=0;i<ui->tbGameItem->rowCount();i++)
@@ -276,11 +314,11 @@ QString LayerCostTable::trText()
 
     foreach(QString v,listKey)
     {
-        qDebug()<<"BBBBB: "<<st<<" , "<<v<<" , "<<d[v];
+
         st=st.replace(v,d[v].toString());
 
     }
-
+    */
 
 
     return st;

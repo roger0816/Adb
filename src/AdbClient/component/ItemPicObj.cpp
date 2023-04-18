@@ -48,6 +48,8 @@ void ItemPicObj::setData(QByteArray data)
 
     m_img->loadFromData(QByteArray::fromHex(m_dataHex));
 
+    qDebug()<<"IIIIIIIIIII : "<<m_img->size();
+
     reSetPic();
 
 }
@@ -216,6 +218,8 @@ void ItemPicObj::slotClip()
     {
         m_mainWindow->move(m_pos);  //Show qApp
     }
+
+
     setData(data);
 
 }

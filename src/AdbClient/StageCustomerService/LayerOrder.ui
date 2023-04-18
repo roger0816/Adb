@@ -76,13 +76,13 @@
               </property>
               <property name="minimumSize">
                <size>
-                <width>70</width>
+                <width>75</width>
                 <height>40</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>70</width>
+                <width>75</width>
                 <height>40</height>
                </size>
               </property>
@@ -96,7 +96,7 @@ font: 20px &quot;Microsoft JhengHei UI&quot;;
 
 
 QPushButton{background-color: rgb(255, 255, 255);
-border-radius:10px;
+border-radius:6px;
 color: rgb(41,41,41);
 border: 1px solid #000000; }
 

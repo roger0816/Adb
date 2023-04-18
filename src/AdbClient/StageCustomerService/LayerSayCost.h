@@ -31,7 +31,7 @@ public:
      Ui::LayerSayCost *ui;
      bool m_bOrderMode = false;
 
-     bool checkOk(QString &sMsg,QStringList listCopy);
+     QVariantMap getOk();
 
 private:
 
@@ -50,7 +50,6 @@ private:
 
     QString m_sMsg;
 
-    QStringList m_listCopy;
 
 
     QList<QSpinBox*> m_listSp;
@@ -96,6 +95,8 @@ private:
 
     void sayCostData();
     void orderData();
+
+
 protected:
 
 

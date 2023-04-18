@@ -20,6 +20,7 @@ LayerOrder::LayerOrder(QWidget *parent) :
 
     ui->wBottom->setCurrentIndex(0);
 
+
 }
 
 LayerOrder::~LayerOrder()
@@ -83,6 +84,45 @@ void LayerOrder::setData(OrderData order)
 
     setData(order,cus);
 }
+
+QVariantMap LayerOrder::getOk()
+{
+
+
+    QString sCost="";
+
+
+    for(int i=0;i<ui->tbInfo->rowCount();i++)
+    {
+        sCost+=ui->tbInfo->item(i,1)->text().split("_").first();
+        sCost+="  x "+ ui->tbInfo->item(i,2)->text();
+
+        sCost+="\n";
+
+    }
+
+    QVariantMap dData;
+    dData["OrderMode"] = true;
+    dData["Msg"] = "下單送出成功，已複製文字";
+    dData["Id"] = ui->lbId->text();
+    dData["Name"] = ui->lbName->text();
+    dData["Currency"] = ui->lbCurrency->text();
+    dData["Time"] = ui->lbTime->text();
+    dData["GameName"] = ui->lbGameName->text();
+    dData["LoginType"]= ui->lbLoginType->text();
+    dData["GameAccount"] = ui->lbGameAccount->text();
+    dData["GamePassword"] = ui->lbGamePassword->text();
+    dData["Server"]=ui->lbServer->text();
+    dData["Chr"]=ui->lbChr->text();
+    dData["Cost"]=sCost;
+    dData["Note0"]=ui->txNote1->toPlainText();
+    dData["Total"]=ui->lbTotal->text();
+
+    on_btnCopy_clicked();
+    return dData;
+}
+
+
 
 void LayerOrder::init()
 {
@@ -258,6 +298,16 @@ void LayerOrder::on_btnOrderSend_clicked()
         return ;
     }
 
+    QString sMsg="確定送出嗎？";
+
+    int iRet =UI.showMsg("",sMsg,QStringList()<<"否"<<"是");
+
+    if(iRet!=1)
+    {
+
+        return;
+    }
+
     m_order.Owner = ui->cbSelect->currentText();
 
     m_order.Step="1";
@@ -275,12 +325,18 @@ void LayerOrder::on_btnOrderSend_clicked()
     bool bOk = ACTION.replaceOrder(m_order,sError);
 
     if(bOk)
+    {
         sError="下單成功";
 
-    UI.showMsg("",sError,"OK");
+        emit back(6);
 
-    emit back();
+    }
+    else
+    {
+        UI.showMsg("AAAA",sError,"OK");
 
+       // emit back();
+    }
 
 }
 
@@ -327,7 +383,7 @@ void LayerOrder::on_btnCopy_clicked()
 
     sCost+="\n備註: "+ui->txNote1->toPlainText();
 
-    UI.copyMsg(sMsg+sCost);
+     UI.copyMsg(sMsg+sCost);
 
 
 

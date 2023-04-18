@@ -12,8 +12,8 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
     ui->tbGameItem->setColumnWidth(0,60);
     ui->tbInfo->setColumnWidth(0,40);
     ui->tbInfo->setColumnWidth(1,50);
-    ui->tbInfo->setColumnWidth(2,200);
-    ui->tbInfo->setColumnWidth(3,70);
+    ui->tbInfo->setColumnWidth(2,160);
+    ui->tbInfo->setColumnWidth(3,60);
 
     ui->wBottom->setCurrentIndex(0);
 
@@ -25,7 +25,7 @@ LayerSayCost::LayerSayCost(QWidget *parent) :
     ui->cbGame->setEnabled(false);
 
 
-    ui->btnCopy->hide();
+
 
     //    // ^(-?\d+)(\.\d+)?$
     //    QRegExp ex("^(-?\d+)(\.\d+)?$");
@@ -160,7 +160,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     dIn["Sid"] =data["Sid"];
     QString sError;
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query cus ";
+
     ACTION.action(ACT::QUERY_CUSTOMER,dIn,listOut,sError,true);
 
     m_sLoadOrderSid = sOrderSid;
@@ -187,13 +187,11 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     d["CustomerSid"] = m_dataCustomer.Sid;
 
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query cus game info ";
     ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,d,m_listGameInfo,sError,true);
 
 
     QStringList cbName;
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , game name ";
     for(int i=0;i<m_listGameInfo.length();i++)
     {
         QVariantMap tmp = m_listGameInfo.at(i).toMap();
@@ -226,10 +224,9 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
     on_cbGame_currentTextChanged(ui->cbGame->currentText());
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change cbName item ";
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query rate";
+
     m_costRate = ACTION.costRate(m_order.ExRateSid,true);
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query rate OK";
+
     // m_primeRate = ACTION.primeRate(m_order.PrimeRateSid,true);
 
 
@@ -367,12 +364,46 @@ void LayerSayCost::refreshInfo()
     checkTotal();
 }
 
-bool LayerSayCost::checkOk(QString &sMsg, QStringList listCopy)
+QVariantMap LayerSayCost::getOk( )
 {
-  //  bool bReIsChickOk = false;
+    QVariantMap dData;
+
+    QString sCost="";
+
+
+    for(int i=0;i<ui->tbInfo->rowCount();i++)
+    {
+        sCost+=ui->tbInfo->item(i,2)->text().split("_").first();
+        sCost+="  x "+ dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3))->text();
+
+
+        sCost+="  "+ui->tbInfo->item(i,4)->text();
+
+
+        sCost+="\n";
+
+    }
+
+
+    dData["OrderMode"] = false;
+    dData["Msg"] = "報價送出成功，已複製文字";
+    dData["Id"] = ui->lbId->text();
+    dData["Name"] = ui->lbName->text();
+    dData["Currency"] = ui->lbCurrency->text();
+    dData["Time"] = ui->lbTime->text();
+    dData["GameName"] = ui->lbGameName->text();
+    dData["LoginType"]= ui->lbLoginType->text();
+    dData["GameAccount"] = ui->lbGameAccount->text();
+    dData["GamePassword"] = ui->lbGamePassword->text();
+    dData["Server"]=ui->lbServer->text();
+    dData["Chr"]=ui->lbChr->text();
+    dData["Cost"]=sCost;
+    dData["Note0"]=ui->txNote1->toPlainText();
+    dData["Total"]=ui->lbTotal->text();
+    on_btnCopy_clicked();
 
     //to do
-    return true;
+    return dData;
 }
 
 bool LayerSayCost::checkHasInto(QString gameItemSid)
@@ -1230,16 +1261,16 @@ void LayerSayCost::on_btnSayOk_clicked()
     QString sError;
     bool bOk = ACTION.replaceOrder(m_order,sError);
 
-//    if(bOk && !m_bOrderMode)
-//    {
-//        sError="報價送出完成";
-//        m_sMsg = sError;
-//        emit back(5);
-//    }
-//    else
+    if(bOk && !m_bOrderMode)
+    {
+        sError="報價送出完成";
+        m_sMsg = sError;
+        emit back(5);
+    }
+    else
     {
         UI.showMsg("",sError,"OK");
-               emit back(1);
+        emit back(1);
     }
 
 

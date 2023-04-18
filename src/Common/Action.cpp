@@ -39,7 +39,7 @@ int Action::checkLogin(QString sUser, QString sPass, QString &sError)
     data.sMsg=ADP_VER;
 
 
-    CData dRe = query(data);
+    CData dRe = query(data,true);
 
     bool bOk = dRe.bOk;
 

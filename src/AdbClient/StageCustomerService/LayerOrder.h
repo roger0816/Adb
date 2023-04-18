@@ -21,7 +21,9 @@ public:
 
     void setData(OrderData order, CustomerData cus);
 
-        void setData(OrderData order);
+    void setData(OrderData order);
+    QVariantMap getOk();
+
 private:
     void init();
 

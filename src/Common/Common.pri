@@ -23,5 +23,8 @@ SOURCES += \
     $$PWD/VojData.cpp \
     $$PWD/common.cpp
 
+DISTFILES += \
+    $$PWD/serverConf
+
 
 

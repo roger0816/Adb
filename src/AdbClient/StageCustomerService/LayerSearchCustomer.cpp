@@ -14,6 +14,8 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
     connect(ui->pageAddCost,SIGNAL(back(int)),this,SLOT(slotBack(int)));
 
     connect(ui->pageOrder,SIGNAL(back(int)),this,SLOT(slotBack(int)));
+    connect(ui->pageSayOk,SIGNAL(back(int)),this,SLOT(slotBack(int)));
+    connect(ui->pageOrderOk,SIGNAL(back(int)),this,SLOT(slotBack(int)));
 
 
     connect(ui->page0,&LayerCustomer::into,[=](int iIdx)
@@ -75,7 +77,7 @@ void LayerSearchCustomer::changePage(int iPage)
 
     int iIdx=qBound(0,m_iIdx,m_listCus.length()-1);
 
-            /*
+    /*
     ACTION.action(ACT::QUERY_CUSTOMER,tmp,m_listData,sError);
 
 
@@ -171,8 +173,6 @@ void LayerSearchCustomer::changePage(int iPage)
     {
 
 
-
-
         if(order.Step!="0")
         {
             UI.showMsg("","沒預先報價流程，請先進行報價",QStringList()<<"OK");
@@ -189,9 +189,16 @@ void LayerSearchCustomer::changePage(int iPage)
         }
 
 
+    }
 
+    else if(iPage==5)
+    {
+        ui->pageSayOk->setData(ui->pageSayCost->getOk());
+    }
 
-
+    else if(iPage==6)
+    {
+        ui->pageOrderOk->setData(ui->pageOrder->getOk());
     }
 
     ui->stackedWidget->setCurrentIndex(iPage);
@@ -278,7 +285,7 @@ void LayerSearchCustomer::on_btnDetail_clicked()
 {
     if(m_listCus.length()<=0)
         return;
-  //  CustomerData customer(m_listData.at(m_iIdx).toMap());
+    //  CustomerData customer(m_listData.at(m_iIdx).toMap());
     DialogCustomerEdit dialog;
 
     int iIdx=qBound(0,m_iIdx,m_listCus.length()-1);
@@ -291,8 +298,5 @@ void LayerSearchCustomer::on_btnDetail_clicked()
 }
 
 
-void LayerSearchCustomer::on_btnBACK_clicked()
-{
-    ui->stackedWidget->setCurrentIndex(1);
-}
+
 

@@ -12,9 +12,23 @@
 #include "VojData.h"
 #include <QDoubleSpinBox>
 #include <QCompleter>
+#include <QWheelEvent>
 namespace Ui {
 class DialogEditGameItem;
 }
+
+
+namespace _DialogEditGameItem
+{
+    class DoubleSpinBox:public QDoubleSpinBox
+    {
+    public:
+        DoubleSpinBox(QWidget *parent=nullptr):QDoubleSpinBox(parent){}
+
+        void wheelEvent(QWheelEvent *) override{};
+    };
+}
+
 
 class DialogEditGameItem : public QDialog
 {
@@ -37,7 +51,7 @@ private :
 
     double m_iGameRate=1.00;
 
-    void appendCb(int iCbIdx=0, double cost=1.00);
+    void appendCb(int iCbIdx=0, double cost=100.00);
 
     enum{_Sort=0,_Sid,_Name,_PrimeCount};
 private slots:

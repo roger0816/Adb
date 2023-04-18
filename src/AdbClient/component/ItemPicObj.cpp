@@ -207,7 +207,7 @@ void ItemPicObj::slotClip()
 
     if(m_mainWindow!=nullptr)
     {
-        m_pos=m_mainWindow->pos();
+        m_rect=m_mainWindow->geometry();
 
         m_mainWindow->move(-10000,0);  //hide qApp
     }
@@ -216,7 +216,7 @@ void ItemPicObj::slotClip()
 
     if(m_mainWindow!=nullptr)
     {
-        m_mainWindow->move(m_pos);  //Show qApp
+        m_mainWindow->setGeometry(m_rect);  //Show qApp
     }
 
 

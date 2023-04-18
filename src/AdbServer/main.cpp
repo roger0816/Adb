@@ -25,8 +25,7 @@ int main(int argc, char *argv[])
 
 
     QString sDbIp="10.130.0.8";
-
-
+	sDbIp="127.0.0.1";
 
     if(argc>2)
     {

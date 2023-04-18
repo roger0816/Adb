@@ -8,32 +8,15 @@ int main(int argc, char *argv[])
 
      QString sListenPort ="6000";
      QString sDbName ="adp";
-
+     QString sDbIp="10.130.0.8";
+    // sDbIp="127.0.0.1";
 
     if(argc>1)
     {
         sListenPort = argv[1];
     }
 
-
     if(argc>2)
-    {
-        sDbName =argv[2];
-    }
-
-
-
-
-    QString sDbIp="10.130.0.8";
-	sDbIp="127.0.0.1";
-
-    if(argc>2)
-    {
-        sDbIp =QString(argv[2]).toLower();
-
-    }
-
-    if(argc>3)
     {
         sDbName =argv[3];
 

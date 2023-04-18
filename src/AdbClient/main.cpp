@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 
-#if 1
+#if 0
     //
 
     QString st=argv[0];
@@ -137,9 +137,9 @@ int main(int argc, char *argv[])
         break;
     }
     }
-
-
     qDebug()<<"run mode : "<<mode;
+
+#endif
 
     Widget w;
 
@@ -147,18 +147,18 @@ int main(int argc, char *argv[])
 
     DialogLogin login;
 
-    login.setReleaseIp(sServerIp,sServerPort);
-
-    login.setTestIp(sTestIp,sTestPort);
 
 
     login.setVer(ADP_VER);
 
     login.connect(&login,&DialogLogin::signalLogin,&w,&Widget::slotLogin);
 
-    login.setRelease(!ACTION.m_bTest);
-
     UI.m_dialogLogin = &login;
+
+    //    login.setReleaseIp(sServerIp,sServerPort);
+
+    //    login.setTestIp(sTestIp,sTestPort);
+   //     login.setRelease(!ACTION.m_bTest);
 
 #if 1
 
@@ -173,13 +173,12 @@ int main(int argc, char *argv[])
         return 0;
     }
 
-
 #else
     login.loginTarget("21");
 #endif
 
 
     return a.exec();
-#endif
+
 
 }

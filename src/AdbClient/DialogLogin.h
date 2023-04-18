@@ -7,6 +7,7 @@
 #include "Global.h"
 #include <QCloseEvent>
 #include <QBitmap>
+#include <QButtonGroup>
 #include "ItemMiniLoadbar.h"
 
 namespace Ui {
@@ -58,6 +59,8 @@ private:
     int m_iTimerCount=0;
 
     bool m_bPreLock= true;
+
+    QButtonGroup m_btns;
 
 private slots:
     void on_btnLogin_clicked();

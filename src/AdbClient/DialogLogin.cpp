@@ -7,6 +7,13 @@ DialogLogin::DialogLogin(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
+    m_btns.addButton(ui->btnServer0,0);
+
+    m_btns.addButton(ui->btnServer1,1);
+
+    m_btns.addButton(ui->btnServer2,2);
+
     setWindowFlags(windowFlags()  | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint );
 
     setWindowFlags(windowFlags()  &  ~Qt::WindowContextHelpButtonHint);

@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     if(argc>2)
     {
-        sDbName =argv[3];
+        sDbName =argv[2];
 
     }
     Launch l;

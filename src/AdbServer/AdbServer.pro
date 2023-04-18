@@ -43,3 +43,11 @@ include(../../libs/RpkLib/RpkCore.pri)
 win32: TARGET =AdbServerWin
 
 unix: TARGET =AdbServerUnix
+
+DISTFILES += \
+    ../../autoRun.sh \
+    ../../clearBuildRun.sh \
+    ../../run1.sh \
+    ../../run2.sh \
+    ../../run3.sh \
+    ../../run4.sh

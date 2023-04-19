@@ -39,6 +39,7 @@ SOURCES += \
     component/CExcelExport.cpp \
     component/CLinkTable.cpp \
     component/CObjectExcel.cpp \
+    component/CPing.cpp \
     component/CSideMenu.cpp \
     DialogBulletinEdit.cpp \
     DialogCommon.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
     component/CExcelExport.h \
     component/CLinkTable.h \
     component/CObjectExcel.h \
+    component/CPing.h \
     component/CSideMenu.h \
     DialogBulletinEdit.h \
     DialogCommon.h \

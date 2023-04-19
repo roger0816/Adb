@@ -6,11 +6,19 @@ Global::Global(QObject *parent)
     : QObject{parent}
 {
     loadConfig();
+
+  //  m_ping.start();
 }
 
 Global::~Global()
 {
     qDebug()<<"~Global";
+
+    m_ping.m_bIsStop = true;
+
+    m_ping.wait(1000);
+
+    m_ping.quit();
 }
 
 void Global::setServer(bool b, QString sIp, QString sPort)
@@ -609,6 +617,11 @@ QString Global::currencyStr(QString st)
     }
 
     return sReInt;
+}
+
+void Global::ping(QString sIp)
+{
+    m_ping.setIp(sIp);
 }
 
 

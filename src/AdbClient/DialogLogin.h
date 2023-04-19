@@ -8,6 +8,7 @@
 #include <QCloseEvent>
 #include <QBitmap>
 #include <QButtonGroup>
+#include <QSettings>
 #include "ItemMiniLoadbar.h"
 
 namespace Ui {
@@ -62,6 +63,8 @@ private:
 
     QButtonGroup m_btns;
 
+    void loadServerConf();
+
 private slots:
     void on_btnLogin_clicked();
 
@@ -78,7 +81,7 @@ private:
 
     ItemMiniLoadbar *m_loading=new ItemMiniLoadbar(this);
 
-
+    QVariantList m_listServer;
 };
 
 #endif // DIALOGLOGIN_H

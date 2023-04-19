@@ -7,12 +7,24 @@ DialogLogin::DialogLogin(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    loadServerConf();
+
 
     m_btns.addButton(ui->btnServer0,0);
 
     m_btns.addButton(ui->btnServer1,1);
 
     m_btns.addButton(ui->btnServer2,2);
+
+    connect(&m_btns,&QButtonGroup::idClicked,this,[=](int iId)
+    {
+
+        QString sIp=m_listServer.at(iId).toMap()["ip"].toString();
+
+        GLOBAL.ping(sIp);
+
+
+    });
 
     setWindowFlags(windowFlags()  | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint );
 
@@ -162,6 +174,33 @@ void DialogLogin::preload(bool bTrue)
     }
 
     ui->btnLogin->setDisabled(bTrue);
+}
+
+void DialogLogin::loadServerConf()
+{
+    QSettings conf(":/serverConf");
+
+    QVariantMap s1;
+    s1["ip"]= conf.value("server1/ip").toString();
+    s1["port"]= conf.value("server1/port").toString();
+
+    QVariantMap s2;
+    s1["ip"]= conf.value("server2/ip").toString();
+    s1["port"]= conf.value("server2/port").toString();
+
+    QVariantMap s3;
+    s1["ip"]= conf.value("server3/ip").toString();
+    s1["port"]= conf.value("server3/port").toString();
+
+    QVariantMap s4;
+    s1["ip"]= conf.value("server4/ip").toString();
+    s1["port"]= conf.value("server4/port").toString();
+
+    m_listServer.clear();
+
+    m_listServer<<s1<<s2<<s3<<s4;
+
+
 }
 
 void DialogLogin::on_btnLogin_clicked()

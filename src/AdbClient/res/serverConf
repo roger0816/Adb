@@ -1,20 +1,20 @@
 [server1]
 ip=167.172.87.35
-pot=6001
+port=6001
 db=adb
 
 [server2]
 ip=167.172.87.35
-pot=6002
+port=6002
 db=adb
 
 [server3]
 ip=167.99.66.45
-pot=6003
+port=6003
 db=adb
 
 [server4]
 ip=167.99.66.45
-pot=6004
+port=6004
 db=adbTest
 

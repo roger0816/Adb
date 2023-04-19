@@ -8,6 +8,7 @@
 #include "Action.h"
 #include "VojData.h"
 #include "DataSync.h"
+#include "CPing.h"
 
 #define GLOBAL Global::Instance()
 
@@ -86,6 +87,8 @@ public:
 
     QString currencyStr(QString st);
 
+
+    void ping(QString sIp);
 private:
     static Global *m_pInstance;
 
@@ -93,6 +96,8 @@ private:
     QString strNumber(double number);
 
     QMap<QString,QVariant> m_config;
+
+    CPing m_ping;
 
 
   //  DataSync m_dataSync;

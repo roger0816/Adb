@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
 
-#if 0
+#if 1
     //
 
     QString st=argv[0];
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
         else{}
     }
 
-    QString sPort="6000";
+    QString sPort="6001";
 
 
     if(argc>2)
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
     switch (mode) {
     case _LOCAL_SERVER :
-        GLOBAL.setServer(true,"127.0.0.1","6000");
+        GLOBAL.setServer(true,"127.0.0.1","6001");
         break;
     case _NO_SERVER :
         GLOBAL.setServer(false);

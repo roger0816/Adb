@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     }
     Launch l;
 
-    l.setDb(sDbIp);
+    l.setDb(sDbIp,sDbName);
 
     l.startServer(sListenPort);
 

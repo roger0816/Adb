@@ -25,8 +25,21 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+    Widget w;
 
-#if 1
+    UI.m_mainWidget=&w;
+
+    DialogLogin login;
+
+    login.connect(&login,&DialogLogin::signalLogin,&w,&Widget::slotLogin);
+
+    UI.m_dialogLogin = &login;
+
+
+    QString sServerIp ="167.172.87.35";
+    QString sPort="6000";
+
+#if 0
     //
 
     QString st=argv[0];
@@ -44,7 +57,7 @@ int main(int argc, char *argv[])
     else if(sArg.contains("ADBTEST"))
     {
         ACTION.m_bTest = true;
-         mode = _TEST;
+        mode = _TEST;
     }
 
 
@@ -54,7 +67,7 @@ int main(int argc, char *argv[])
     qDebug()<<"test mode : "<<ACTION.m_bTest;
 
 
-   // mode = _LOCAL_SERVER;
+    // mode = _LOCAL_SERVER;
 
     if(argc>1)
     {
@@ -84,7 +97,7 @@ int main(int argc, char *argv[])
         else{}
     }
 
-    QString sPort="6001";
+    QString sPort="6000";
 
 
     if(argc>2)
@@ -97,7 +110,7 @@ int main(int argc, char *argv[])
     GLOBAL;
 
 
-    QString sServerIp =GLOBAL.config("ServerIp").toString();
+    sServerIp =GLOBAL.config("ServerIp").toString();
 
 
     QString sTestIp =GLOBAL.config("TestIp").toString();
@@ -112,7 +125,7 @@ int main(int argc, char *argv[])
 
     switch (mode) {
     case _LOCAL_SERVER :
-        GLOBAL.setServer(true,"127.0.0.1","6001");
+        GLOBAL.setServer(true,"127.0.0.1","6000");
         break;
     case _NO_SERVER :
         GLOBAL.setServer(false);
@@ -139,26 +152,43 @@ int main(int argc, char *argv[])
     }
     qDebug()<<"run mode : "<<mode;
 
+
+    login.setReleaseIp(sServerIp,sServerPort);
+
+    login.setTestIp(sTestIp,sTestPort);
+    login.setRelease(!ACTION.m_bTest);
+
+#else
+
+
+
+    if(argc>1)
+    {
+
+        sServerIp=argv[1];
+
+
+        //        login.setReleaseIp(sServerIp,sServerPort);
+
+        //        login.setTestIp(sTestIp,sTestPort);
+        //        login.setRelease(!ACTION.m_bTest);
+    }
+
+    if(argc>2)
+    {
+        sPort=argv[2];
+    }
+
+
+
 #endif
 
-    Widget w;
-
-    UI.m_mainWidget=&w;
-
-    DialogLogin login;
 
 
 
-    login.setVer(ADP_VER);
 
-    login.connect(&login,&DialogLogin::signalLogin,&w,&Widget::slotLogin);
 
-    UI.m_dialogLogin = &login;
 
-    //    login.setReleaseIp(sServerIp,sServerPort);
-
-    //    login.setTestIp(sTestIp,sTestPort);
-   //     login.setRelease(!ACTION.m_bTest);
 
 #if 1
 

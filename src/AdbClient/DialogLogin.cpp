@@ -7,6 +7,8 @@ DialogLogin::DialogLogin(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    setVer(ADP_VER);
+
     loadServerConf();
 
 

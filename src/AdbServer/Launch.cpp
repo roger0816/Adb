@@ -22,12 +22,15 @@ void Launch::setDb(QString sDbIp, QString sDbName)
 {
     queryObj.setDataBase(true,sDbName,sDbIp);
 
+    queryObj.init();
+
+
+
 }
 
 void Launch::startServer(QString sListenPort)
 {
     qDebug()<<"version : "<<ADP_VER;
-
 
 
   RPKCORE.network.runTcpServer(sListenPort);

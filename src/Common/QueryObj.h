@@ -89,6 +89,7 @@ class QueryObj : public QObject
 public:
     explicit QueryObj(QObject *parent = nullptr);
 
+    void init();
 
     void linkage(int iApi, QList<int> listApi);
 

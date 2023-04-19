@@ -41,11 +41,16 @@ QueryObj::QueryObj(QObject *parent)
     });
 
 
+
+
+
+}
+
+void QueryObj::init()
+{
     readSync();
 
     m_timer.start(1000);
-
-
 }
 
 void QueryObj::linkage(int iApi, QList<int> listApi)

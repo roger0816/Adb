@@ -18,12 +18,20 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     m_btns.addButton(ui->btnServer2,2);
 
+    m_btns.addButton(ui->btnTestServer,3);
+
     connect(&m_btns,&QButtonGroup::idClicked,this,[=](int iId)
     {
 
+
+
         QString sIp=m_listServer.at(iId).toMap()["ip"].toString();
 
-        GLOBAL.ping(sIp);
+        QString sPort=m_listServer.at(iId).toMap()["port"].toString();
+
+
+         GLOBAL.setServer(true,sIp,sPort);
+        //GLOBAL.ping(sIp);
 
 
     });
@@ -48,7 +56,7 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     startTimer(500);
 
-    ui->btnTestLogin->hide();
+
 }
 
 DialogLogin::~DialogLogin()
@@ -180,25 +188,27 @@ void DialogLogin::preload(bool bTrue)
 
 void DialogLogin::loadServerConf()
 {
-    QSettings conf(":/serverConf");
+    QSettings conf(":/serverConf.ini",QSettings::IniFormat);
+
 
     QVariantMap s1;
     s1["ip"]= conf.value("server1/ip").toString();
     s1["port"]= conf.value("server1/port").toString();
 
     QVariantMap s2;
-    s1["ip"]= conf.value("server2/ip").toString();
-    s1["port"]= conf.value("server2/port").toString();
+    s2["ip"]= conf.value("server2/ip").toString();
+    s2["port"]= conf.value("server2/port").toString();
 
     QVariantMap s3;
-    s1["ip"]= conf.value("server3/ip").toString();
-    s1["port"]= conf.value("server3/port").toString();
+    s3["ip"]= conf.value("server3/ip").toString();
+    s3["port"]= conf.value("server3/port").toString();
 
     QVariantMap s4;
-    s1["ip"]= conf.value("server4/ip").toString();
-    s1["port"]= conf.value("server4/port").toString();
+    s4["ip"]= conf.value("server4/ip").toString();
+    s4["port"]= conf.value("server4/port").toString();
 
     m_listServer.clear();
+
 
     m_listServer<<s1<<s2<<s3<<s4;
 
@@ -211,11 +221,6 @@ void DialogLogin::on_btnLogin_clicked()
 }
 
 
-void DialogLogin::on_btnTestLogin_clicked()
-{
-
-    doLogin(true);
-}
 
 void DialogLogin::doLogin(bool bIsTestMode)
 {

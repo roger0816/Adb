@@ -68,7 +68,6 @@ private:
 private slots:
     void on_btnLogin_clicked();
 
-    void on_btnTestLogin_clicked();
 
     void doLogin(bool bIsTestMode=false);
 

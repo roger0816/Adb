@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
         else{}
     }
 
-    QString sPort="6000";
+    sPort="6000";
 
 
     if(argc>2)
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 
 #else
 
-
+         login.setRelease(true);
 
     if(argc>1)
     {
@@ -168,7 +168,6 @@ int main(int argc, char *argv[])
         sServerIp=argv[1];
 
 
-        //        login.setReleaseIp(sServerIp,sServerPort);
 
         //        login.setTestIp(sTestIp,sTestPort);
         //        login.setRelease(!ACTION.m_bTest);
@@ -179,6 +178,8 @@ int main(int argc, char *argv[])
         sPort=argv[2];
     }
 
+//       GLOBAL.setServer(true,sServerIp,sPort);
+//          login.setReleaseIp(sServerIp,sPort);
 
 
 #endif

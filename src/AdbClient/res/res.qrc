@@ -15,6 +15,6 @@
         <file>imageUpload.png</file>
         <file>user.png</file>
         <file>style.qss</file>
-        <file>serverConf</file>
+        <file>serverConf.ini</file>
     </qresource>
 </RCC>

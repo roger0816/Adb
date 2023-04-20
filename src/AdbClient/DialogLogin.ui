@@ -323,7 +323,7 @@ background-color:#3c78b4;
                </size>
               </property>
               <property name="text">
-               <string>測試一</string>
+               <string>測試機</string>
               </property>
               <property name="checkable">
                <bool>true</bool>
@@ -333,7 +333,7 @@ background-color:#3c78b4;
             <item>
              <widget class="QPushButton" name="btnServer4">
               <property name="text">
-               <string>測試二</string>
+               <string>測試機二</string>
               </property>
               <property name="checkable">
                <bool>true</bool>

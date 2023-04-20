@@ -1,5 +1,5 @@
-#ifndef VOJDATA_H
-#define VOJDATA_H
+#ifndef VOJ_H
+#define VOJ_H
 
 #include <QString>
 #include "DEF.h"
@@ -1184,4 +1184,4 @@ struct DataPayType :public DataObj
 
 
 
-#endif // VOJDATA_H
+#endif // VOJ_H

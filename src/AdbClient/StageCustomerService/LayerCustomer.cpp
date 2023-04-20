@@ -53,6 +53,7 @@ void LayerCustomer::on_btnAdd_clicked()
 
     ACTION.action(ACT::QUERY_GAME_LIST,in,outGame,sError);
 
+
     dialog.setCb(outClass,outGame);
 
 
@@ -79,9 +80,9 @@ void LayerCustomer::on_btnAdd_clicked()
         QString sCustomerSid = data["Sid"].toString();
 
         in=dialog.dataGameInfo(sCustomerSid);
-
+/*
         ACTION.action(ACT::REPLACE_GAME_INFO,in,sError);
-
+*/
         CustomerData cus(data);
 
         QVariantMap kValue;
@@ -93,14 +94,13 @@ void LayerCustomer::on_btnAdd_clicked()
 
 
         UI.showMsg("",sError,"OK");
-        qDebug()<<"AAAA1";
+
         refresh();
     }
 }
 
 void LayerCustomer::refresh()
 {
-    qDebug()<<"ddddddddddd";
 
     if(m_bReLock)
         return;
@@ -177,7 +177,13 @@ void LayerCustomer::refresh()
 
         ui->tb->setItem(iRow,7,UI.tbItem(updatetime));
         ui->tb->setItem(iRow,8,UI.tbItem(sUserName));
-        ui->tb->setItem(iRow,9,UI.tbItem(data.Note1));
+
+        QString sNote1 = data.Note1;
+
+        if(sNote1=="_")
+            sNote1="";
+
+        ui->tb->setItem(iRow,9,UI.tbItem(sNote1));
 
 
         m_dIdxMapping[iRow]=i;
@@ -295,19 +301,21 @@ void LayerCustomer::on_btnEdit_clicked()
         QVariantMap data = dialog.data();
 
         data["UserSid"] =ACTION.m_currentUser.Sid;
+        bool hasChangeCus = dialog.checkHasChange();
 
-
+        if(hasChangeCus)
+        {
+            ACTION.action(ACT::EDIT_CUSTOMER,data,sError);
+               UI.showMsg("",sError,"OK");
+        }
+        /*
         ACTION.action(ACT::REPLACE_GAME_INFO,dialog.dataGameInfo(customerData.Sid),sError);
 
-        bool hasChangeCus = dialog.checkHasChange();
-        qDebug()<<"CCCCCCCCC : "<<hasChangeCus;
-        if(hasChangeCus)
-            ACTION.action(ACT::EDIT_CUSTOMER,data,sError);
 
         ACTION.action(ACT::DEL_GAME_INFO,dialog.deleteGameInfo(),sError);
+*/
 
-        UI.showMsg("",sError,"OK");
-        qDebug()<<"AAAA2";
+
         refresh();
     }
     else if(iRet==3)
@@ -324,7 +332,7 @@ void LayerCustomer::on_btnEdit_clicked()
         ACTION.action(ACT::DEL_GAME_INFO,v,sError);
 
         UI.showMsg("",sError,"OK");
-        qDebug()<<"AAAA3";
+
         refresh();
     }
 }

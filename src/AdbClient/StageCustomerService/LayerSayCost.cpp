@@ -252,6 +252,8 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
     init();
 
+
+
 }
 
 void LayerSayCost::init()
@@ -439,6 +441,15 @@ double LayerSayCost::checkTotal()
     for(int i=0;i<ui->tbInfo->rowCount();i++)
     {
         QSpinBox *sp =dynamic_cast<QSpinBox*>(ui->tbInfo->cellWidget(i,3));
+
+        if(i<m_listInto.length())
+        {
+            QVariantMap d=m_listInto.at(i).toMap();
+           d["Count"]=sp->value();
+           m_listInto[i]=d;
+        }
+
+
 
         double iPrice =sp->value();
 
@@ -1051,6 +1062,8 @@ void LayerSayCost::slotTbGameItemCellClicked(int row, int column)
 
         int iMappingIdx =ACTION.mapping(m_listInto,"Sid",item.Sid);
 
+        qDebug()<<"AAAA0 :"<<iMappingIdx;
+
         if(iMappingIdx<0)
         {
 
@@ -1232,7 +1245,19 @@ void LayerSayCost::on_btnSayOk_clicked()
         return;
     }
 
-    QString sMsg="確定送出嗎？";
+
+    QString sMsg;
+
+    QString money =ACTION.getCustomerNowMoney(m_dataCustomer.Sid);
+
+    if(money.toDouble()<0 || money.toInt()<0)
+    {
+            qDebug()<<"BBB "<<money;
+        sMsg="該客戶餘額為負數,";
+    }
+
+
+     sMsg+="確定送出嗎？";
 
     int iRet =UI.showMsg("",sMsg,QStringList()<<"否"<<"是");
 
@@ -1300,7 +1325,6 @@ void LayerSayCost::delayShowEvent()
 
     QVariantMap v;
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<"query GAME ITEM ";
     ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError,true);
 
     if(m_listGameItem.length()<1)

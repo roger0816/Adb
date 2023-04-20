@@ -16,6 +16,7 @@
 
 #define QUERY Global::Instance().m_action.m_queryObj
 
+#define DATA Global::Instance().m_action.sync
 
 //#define DATA Global::Instance().m_data
 

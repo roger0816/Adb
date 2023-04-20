@@ -18,7 +18,7 @@ DialogCustomerEdit::DialogCustomerEdit(QWidget *parent) :
 
     ui->lbId->setReadOnly(true);
 
-
+    ui->stackedWidget_2->setCurrentWidget(ui->page);
 }
 
 DialogCustomerEdit::~DialogCustomerEdit()
@@ -28,6 +28,8 @@ DialogCustomerEdit::~DialogCustomerEdit()
 
 void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
 {
+
+    ui->page->setCb(listGame);
 
     m_listClass = listClass;
 
@@ -116,7 +118,12 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     //    ui->txPayInfo->setText(m_data["PayInfo"].toString());
 
-    ui->txNote1->setText(m_data["Note1"].toString());
+    QString sNote = m_data["Note1"].toString();
+
+    if(sNote=="_")
+        sNote="";
+
+    ui->txNote1->setText(sNote);
 
 
     ui->btnDel->setVisible(m_bIsRoot);
@@ -191,6 +198,11 @@ void DialogCustomerEdit::setData(QString sCustomerSid)
 
     ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,outCustomerInfo,sError);
 
+
+    CustomerData cus(outCustomer);
+
+    ui->page->setCustomer(m_sCustomerSid,cus.Id);
+
     setData(outClass,outGame,outCustomerInfo,outCustomer);
 
 
@@ -256,7 +268,7 @@ QVariantMap DialogCustomerEdit::data()
     QString sTmp=ui->txNote1->toPlainText();
 
     if(sTmp.trimmed().length()<1)
-        sTmp=" ";
+        sTmp="_";
 
     m_data["Note1"] = sTmp;
 

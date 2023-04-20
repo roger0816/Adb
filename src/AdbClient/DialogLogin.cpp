@@ -49,6 +49,8 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     startTimer(500);
 
+    ui->btnServer4->hide();
+
 
 }
 

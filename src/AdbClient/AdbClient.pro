@@ -25,6 +25,7 @@ INCLUDEPATH+= \
 SOURCES += \
     DialogNote.cpp \
     StageCustomerService/DialogCustomerCostHistory.cpp \
+    StageCustomerService/LayerCustomerGameEdit.cpp \
     StageCustomerService/LayerOkInfo.cpp \
     StageCustomerService/LayerOrder.cpp \
     StageManagerSetting/LayerItemCount.cpp \
@@ -97,6 +98,7 @@ SOURCES += \
 HEADERS += \
     DialogNote.h \
     StageCustomerService/DialogCustomerCostHistory.h \
+    StageCustomerService/LayerCustomerGameEdit.h \
     StageCustomerService/LayerOkInfo.h \
     StageCustomerService/LayerOrder.h \
     StageManagerSetting/LayerItemCount.h \
@@ -168,6 +170,7 @@ HEADERS += \
 FORMS += \
     DialogNote.ui \
     StageCustomerService/DialogCustomerCostHistory.ui \
+    StageCustomerService/LayerCustomerGameEdit.ui \
     StageCustomerService/LayerOkInfo.ui \
     StageCustomerService/LayerOrder.ui \
     StageManagerSetting/LayerItemCount.ui \

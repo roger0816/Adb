@@ -40,6 +40,8 @@ void LayerGetOrder1::refreshUser(bool bRe)
 
 
     ui->wBottom->setCurrentIndex(0);
+
+
     QList<UserData> list =ACTION.getUser(bRe);
 
 
@@ -67,6 +69,9 @@ void LayerGetOrder1::refreshUser(bool bRe)
     }
 
     QList<OrderData> listOrder = ACTION.getOrder(bRe);
+//ACTION.getOrder(bRe);
+//    QList<OrderData> listOrder = DATA.getOrderData();
+
 
     qSort(listOrder.begin(),listOrder.end(),[=](const OrderData &v1, const OrderData &v2)
     {

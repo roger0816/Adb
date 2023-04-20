@@ -3,7 +3,29 @@
 
 #include <QObject>
 #include <QTimer>
-#include "Action.h"
+#include <QVariantMap>
+#include <QVariantList>
+#include "VojData.h"
+
+
+class VojDataSync
+{
+public:
+    VojDataSync(){}
+    void updateData(QVariantList list);
+    QVariantList getList();
+    QString lastUpdate(){return m_lastUpdateTime;}
+private:
+    QStringList m_listKey;
+
+    QVariantMap m_dData;
+
+    QString m_lastUpdateTime="0";
+};
+
+
+
+
 
 class DataSync : public QObject
 {
@@ -11,6 +33,14 @@ class DataSync : public QObject
 public:
     explicit DataSync(QObject *parent = nullptr);
 
+    void updateOrderData(QVariantList list);
+
+    QList<OrderData> getOrderData();
+
+
+private:
+
+    VojDataSync m_orderData;
 
 signals:
 

@@ -808,6 +808,8 @@ QList<OrderData> Action::getOrder(bool bRequest)
         QString sError;
         action(ACT::QUERY_ORDER,in,out,sError,true);
 
+        sync.updateOrderData(out);
+
         m_listOrder.clear();
 
         for(int i=0;i<out.length();i++)
@@ -818,6 +820,7 @@ QList<OrderData> Action::getOrder(bool bRequest)
         }
 
     }
+
 
     return m_listOrder;
 }

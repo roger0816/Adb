@@ -2,6 +2,7 @@
 #define ACTION_H
 
 #include "ActionObj.h"
+#include "DataSync.h"
 
 namespace _KEY {
 static QString isRememberLogin="isRememberLogin";
@@ -174,6 +175,7 @@ public:
     QList<DataRate> listRate(QString sSid="", bool bRequest=true, bool bExchangeType=false, bool bStrong=false);
 
 
+    DataSync sync;
 
 private:
 

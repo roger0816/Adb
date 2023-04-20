@@ -115,7 +115,7 @@ void Widget::slotPage(int iIdx)
 
     if(ui->stackedWidget->currentWidget()==ui->pageService)
     {
-        //        ui->pageService->changePage(0);
+              ui->pageService->changePage(0);
     }
 
     else if(ui->stackedWidget->currentWidget()== ui->pageOrder)
@@ -178,17 +178,17 @@ void Widget::showEvent(QShowEvent *)
 
         ui->wTop->setStyleSheet("QWidget#wTop{background-color:lightgray;}");
 
-        ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:;}");
+      //  ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:;}");
 
 
     }
-//    else
-//    {
+    else
+    {
 
-//        ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:rgb(0, 37, 88);}");
+    //    ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:rgb(0, 37, 88);}");
 
-//        ui->wTop->setStyleSheet("QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}");
-//    }
+        ui->wTop->setStyleSheet("QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}");
+    }
 
 }
 

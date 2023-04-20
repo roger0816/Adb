@@ -47,6 +47,9 @@ public:
     bool orderStep4(OrderData &order,OrderData current,QString &sError);
 
 
+    QVariantList getOrderData(QString lastUpdateTime);
+
+    QVariantMap checkSync(QVariantMap syncSend);
 signals:
 
 };

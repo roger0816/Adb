@@ -56,6 +56,7 @@ void ItemPicObj::setData(QByteArray data)
 
 void ItemPicObj::setMainWindow(QWidget *w)
 {
+
     m_mainWindow = w;
 }
 

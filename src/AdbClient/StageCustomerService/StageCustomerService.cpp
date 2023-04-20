@@ -19,7 +19,9 @@ StageCustomerService::StageCustomerService(QWidget *parent) :
 
     connect(&m_btns,SIGNAL(buttonClicked(int)),this,SLOT(changePage(int)));
 
-    changePage(0);
+   // changePage(0);
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 StageCustomerService::~StageCustomerService()
@@ -36,6 +38,9 @@ void StageCustomerService::changePage(int iPage)
          ui->page->init();
 
     else if(iPage==1)
+    {
+
          ui->page1->init();
+    }
 }
 

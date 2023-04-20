@@ -187,6 +187,9 @@ CData ActionObj::query(CData data, bool bStrong)
 
 CData ActionObj::callServer(CData data, bool bStrong)
 {
+
+
+
     //        if(m_bIsLock)
     //        {
 

@@ -89,6 +89,8 @@ public:
 
 
     void ping(QString sIp);
+
+    bool m_bRootLogin= false;
 private:
     static Global *m_pInstance;
 

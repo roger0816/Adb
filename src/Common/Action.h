@@ -173,7 +173,11 @@ public:
     DataGameRate getGameRate(QString GameSid,QString sSid="");
     QList<DataRate> listRate(QString sSid="", bool bRequest=true, bool bExchangeType=false, bool bStrong=false);
 
+
+
 private:
+
+
 
     QList<UserData> m_listUser;
 

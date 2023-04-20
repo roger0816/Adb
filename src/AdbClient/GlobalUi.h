@@ -51,11 +51,13 @@ public:
 
     QRegExpValidator *regRate =new QRegExpValidator(QRegExp("^([0-9][0-9]*)+(.[0-9]{1,3})?$"),this);
 
-    QWidget *m_mainWidget=nullptr;
+    void setMainWidget(QWidget *w);
+
+    QWidget* mainWidget(){return m_mainWidget;}
 
 private:
     static GlobalUi *m_pInstance;
-
+ QWidget *m_mainWidget=nullptr;
 public slots:
     void slotLockLoading(bool b);
 signals:

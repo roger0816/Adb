@@ -71,6 +71,8 @@ private slots:
 
     void doLogin(bool bIsTestMode=false);
 
+    void slotBtnClicked(int iId);
+
 
 signals:
     void signalLogin();

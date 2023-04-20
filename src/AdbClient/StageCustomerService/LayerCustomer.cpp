@@ -93,13 +93,15 @@ void LayerCustomer::on_btnAdd_clicked()
 
 
         UI.showMsg("",sError,"OK");
-
+        qDebug()<<"AAAA1";
         refresh();
     }
 }
 
 void LayerCustomer::refresh()
 {
+    qDebug()<<"ddddddddddd";
+
     if(m_bReLock)
         return;
 
@@ -305,7 +307,7 @@ void LayerCustomer::on_btnEdit_clicked()
         ACTION.action(ACT::DEL_GAME_INFO,dialog.deleteGameInfo(),sError);
 
         UI.showMsg("",sError,"OK");
-
+        qDebug()<<"AAAA2";
         refresh();
     }
     else if(iRet==3)
@@ -322,7 +324,7 @@ void LayerCustomer::on_btnEdit_clicked()
         ACTION.action(ACT::DEL_GAME_INFO,v,sError);
 
         UI.showMsg("",sError,"OK");
-
+        qDebug()<<"AAAA3";
         refresh();
     }
 }
@@ -372,6 +374,7 @@ void LayerCustomer::slotClearSearch()
 {
     ui->txSearch->clear();
 
+         qDebug()<<"AAAA4";
     refresh();
 }
 
@@ -643,7 +646,7 @@ void LayerCustomer::on_btnInport_clicked()
         return ;
 
     exportXml(sPath);
-    qDebug()<<"AAAAA "<<sPath;
+
 
 
 
@@ -651,6 +654,7 @@ void LayerCustomer::on_btnInport_clicked()
 
 void LayerCustomer::slotSearch()
 {
+    qDebug()<<"AAAA5";
     refresh();
 }
 

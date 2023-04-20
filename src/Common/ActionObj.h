@@ -89,6 +89,7 @@ protected:
 
     virtual QVariantMap syncData(){return QVariantMap();}
 
+
 signals:
 
     void lockLoading(bool b);

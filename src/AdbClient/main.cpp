@@ -27,7 +27,10 @@ int main(int argc, char *argv[])
 
     Widget w;
 
-    UI.m_mainWidget=&w;
+  //  UI.m_mainWidget=&w;
+
+    UI.setMainWidget(&w);
+
 
     DialogLogin login;
 
@@ -38,6 +41,8 @@ int main(int argc, char *argv[])
 
     QString sServerIp ="167.172.87.35";
     QString sPort="6000";
+
+    QApplication::setActiveWindow(&w);
 
 #if 0
     //
@@ -160,26 +165,19 @@ int main(int argc, char *argv[])
 
 #else
 
-         login.setRelease(true);
-
-    if(argc>1)
-    {
-
-        sServerIp=argv[1];
-
-
-
-        //        login.setTestIp(sTestIp,sTestPort);
-        //        login.setRelease(!ACTION.m_bTest);
-    }
+    login.setRelease(true);
 
     if(argc>2)
     {
-        sPort=argv[2];
+        GLOBAL.m_bRootLogin=true;
+
+        login.setTestIp(argv[1],argv[2]);
+
+
+
     }
 
-//       GLOBAL.setServer(true,sServerIp,sPort);
-//          login.setReleaseIp(sServerIp,sPort);
+
 
 
 #endif

@@ -317,7 +317,7 @@ int CSqlClass::queryCount(QString sTableName, QVariantMap conditions)
 
     }
 
-        query.prepare(sCmd+sSub);
+    query.prepare(sCmd+sSub);
 
     QVariantList listTmp;
 
@@ -443,6 +443,45 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
                  " WHERE Id =? ;";
                  */
 
+}
+
+QString CSqlClass::queryLast(QString sTable, QString sUpdateTime, QVariantList &listOut, int iLimitCount)
+{
+
+    listOut.clear();
+
+    QString sCmd = "SELECT * FROM " +sTable +"WHERE UpdateTime > "+sUpdateTime+" Limit "+QString::number(iLimitCount);
+
+    QSqlQuery query(db());
+
+    query.exec(sCmd);
+
+    QStringList listHeader = fieldNames(query.record());
+
+    QString sUpdate =sUpdateTime;
+
+    while(query.next())
+    {
+        QVariantMap data;
+
+        for(int k=0;k<listHeader.length();k++)
+        {
+            QString sKey = listHeader.at(k);
+
+            data[sKey] = query.value(sKey);
+
+        }
+
+        QString sTmp = data["UpdateTime"].toString();
+
+        if(sTmp>sUpdate)
+            sUpdate = sTmp;
+
+        listOut.append(data);
+    }
+
+
+    return sUpdate;
 }
 
 
@@ -892,6 +931,8 @@ QDateTime CSqlClass::currentDateTime()
     return QDateTime::currentDateTimeUtc().addSecs(60*60*8);
 }
 
+
+
 //void CSqlClass::loadTrigger()
 //{
 
@@ -1279,8 +1320,8 @@ bool CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 
         qDebug()<< QSqlDatabase::drivers();
 
-        m_db =QSqlDatabase::addDatabase("QMYSQL");
-        //m_db =QSqlDatabase::addDatabase("QMYSQL","adp");
+        //  m_db =QSqlDatabase::addDatabase("QMYSQL");
+        m_db =QSqlDatabase::addDatabase("QMYSQL",sDbName);
 
 
         //  m_db.setHostName("206.189.185.20");

@@ -2,6 +2,7 @@
 #define DIALOGMSG_H
 
 #include <QDialog>
+#include "DialogBase.h"
 
 namespace Ui {
 class DialogMsg;
@@ -9,7 +10,7 @@ class DialogMsg;
 
 #define DMSG DialogMsg::Instance()
 
-class DialogMsg : public QDialog
+class DialogMsg : public DialogBase
 {
     Q_OBJECT
 

@@ -1200,6 +1200,8 @@ CData Query::implementRecall(CData data)
     }
     re.iState = ACT_RECALL;
 
+    re.dRecSync = checkSync(data.dSendSync);
+
     return re;
 }
 
@@ -1709,6 +1711,37 @@ bool Query::orderStep3(OrderData &order, OrderData current, QString &sError)
     }
 
     return true;
+}
+
+QVariantList Query::getOrderData(QString lastUpdateTime)
+{
+
+    return QVariantList();
+
+}
+
+QVariantMap Query::checkSync(QVariantMap syncSend)
+{
+    QVariantMap re;
+
+    QStringList listKey = syncSend.keys();
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        QString sTbName= listKey.at(i);
+        QString orderUpdate=syncSend[sTbName].toString();
+        QVariantList listOut;
+        QString sNewUpdateTime = m_sql.queryLast(SQL_TABLE::OrderData(),orderUpdate,listOut);
+
+        QVariantMap d;
+        d["UpdateTime"] = sNewUpdateTime;
+        d["data"]=listOut;
+
+        re[sTbName]=d;
+
+    }
+
+    return re;
 }
 
 

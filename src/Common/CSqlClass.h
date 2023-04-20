@@ -31,7 +31,7 @@ public:
 
     bool updateTb(QString sTableName, QVariantMap conditions, QVariantMap data, QString &sError);
 
-
+    QString queryLast(QString sTable,QString sUpdateTime, QVariantList &listOut,int iLimitCount=30);
     bool checkLogin(QString sUser,QString sPass,QVariantMap &out,QString &sError);
 
     bool addUser(QString sId, QString sPass, QString sCid, QString sName, int iLv, QString startDate, QString &sError);
@@ -73,6 +73,7 @@ public:
     QMap<QString,QString> readTrigger();
 
     QDateTime currentDateTime();
+
 
 private:
     void createTable();

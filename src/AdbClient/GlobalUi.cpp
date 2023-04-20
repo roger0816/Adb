@@ -21,6 +21,8 @@ GlobalUi &GlobalUi::Instance()
 
 int GlobalUi::showMsg(QString sTitle, QString sMsg, QStringList listBtn)
 {
+
+
     return DMSG.showMsg(sTitle,sMsg,listBtn);
 }
 
@@ -29,6 +31,8 @@ int GlobalUi::showMsg(QString sTitle, QString sMsg, QString btn)
     QStringList list;
 
     list.append(btn);
+
+
 
     return showMsg(sTitle,sMsg,list);
 }
@@ -169,7 +173,13 @@ void GlobalUi::copyMsg(QString sMsg)
 
 void GlobalUi::toolTip(QString st)
 {
-  QToolTip::showText(QCursor::pos(),st,nullptr,QRect(), 5000);
+    QToolTip::showText(QCursor::pos(),st,nullptr,QRect(), 5000);
+}
+
+void GlobalUi::setMainWidget(QWidget *w)
+{
+
+    m_mainWidget=w;
 }
 
 void GlobalUi::slotLockLoading(bool b)

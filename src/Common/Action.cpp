@@ -252,6 +252,7 @@ QList<GroupData> Action::getGroupData(int iType,QString &sError)
 
 void Action::reQuerty()
 {
+    qDebug()<<"RRRRRRRR";
     getUser(true);
 
     getGameList(true);
@@ -1251,6 +1252,7 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType,
 
     return re;
 }
+
 
 QString Action::setSellMoney(OrderData &order)
 {

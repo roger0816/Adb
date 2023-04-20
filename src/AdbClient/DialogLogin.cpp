@@ -18,23 +18,16 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     m_btns.addButton(ui->btnServer2,2);
 
-    m_btns.addButton(ui->btnTestServer,3);
+    m_btns.addButton(ui->btnServer3,3);
 
-    connect(&m_btns,&QButtonGroup::idClicked,this,[=](int iId)
-    {
+    m_btns.addButton(ui->btnServer4,4);
 
-
-
-        QString sIp=m_listServer.at(iId).toMap()["ip"].toString();
-
-        QString sPort=m_listServer.at(iId).toMap()["port"].toString();
+    m_btns.addButton(ui->btnServer5,5);
 
 
-         GLOBAL.setServer(true,sIp,sPort);
-        //GLOBAL.ping(sIp);
 
+    connect(&m_btns,&QButtonGroup::idClicked,this,&DialogLogin::slotBtnClicked);
 
-    });
 
     setWindowFlags(windowFlags()  | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint );
 
@@ -88,10 +81,15 @@ void DialogLogin::setRelease(bool b)
     if(!b)
     {
         ui->lbRelease->setText("Test");
-
         //ui->wBg->setStyleSheet("background-color:lightgary");
     }
+    else
+    {
+        ui->lbRelease->setText("Release");
 
+    }
+
+    ACTION.m_bTest=!b;
     //   ui->lbRelease->setVisible(b);
 }
 
@@ -139,6 +137,9 @@ void DialogLogin::setTestIp(QString sIp, QString sPort)
 
 void DialogLogin::showEvent(QShowEvent *)
 {
+    ui->btnServer5->setVisible(GLOBAL.m_bRootLogin);
+
+
     preload(true);
 }
 
@@ -190,6 +191,10 @@ void DialogLogin::loadServerConf()
 {
     QSettings conf(":/serverConf.ini",QSettings::IniFormat);
 
+    QVariantMap s0;
+    s0["ip"]= conf.value("server0/ip").toString();
+    s0["port"]= conf.value("server0/port").toString();
+
 
     QVariantMap s1;
     s1["ip"]= conf.value("server1/ip").toString();
@@ -207,11 +212,18 @@ void DialogLogin::loadServerConf()
     s4["ip"]= conf.value("server4/ip").toString();
     s4["port"]= conf.value("server4/port").toString();
 
+    QVariantMap s5;
+    s5["ip"]= conf.value("server5/ip").toString();
+    s5["port"]= conf.value("server5/port").toString();
+
+
+
     m_listServer.clear();
 
 
-    m_listServer<<s1<<s2<<s3<<s4;
+    m_listServer<<s0<<s1<<s2<<s3<<s4<<s5;
 
+    GLOBAL.setServer(true,s0["ip"].toString(),s0["port"].toString());
 
 }
 
@@ -224,6 +236,8 @@ void DialogLogin::on_btnLogin_clicked()
 
 void DialogLogin::doLogin(bool bIsTestMode)
 {
+
+
     ui->btnLogin->setDisabled(true);
     ui->lbMsg->setText("loading");
     /*
@@ -286,6 +300,37 @@ void DialogLogin::doLogin(bool bIsTestMode)
     {
         ui->lbMsg->setText("連線錯誤");
     }
+}
+
+void DialogLogin::slotBtnClicked(int iId)
+{
+    QString sIp,sPort;
+
+    if(iId<=m_listServer.length())
+    {
+        sIp=m_listServer.at(iId).toMap()["ip"].toString();
+
+        sPort=m_listServer.at(iId).toMap()["port"].toString();
+    }
+    else
+    {
+        sIp=m_sTestIp;
+
+        sPort=m_sPort;
+    }
+
+
+
+
+
+    GLOBAL.setServer(true,sIp,sPort);
+
+
+    setRelease(iId<3);
+
+    //GLOBAL.ping(sIp);
+
+
 }
 
 void DialogLogin::loginTarget(QString sSid)

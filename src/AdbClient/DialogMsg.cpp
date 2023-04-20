@@ -4,7 +4,7 @@
 DialogMsg *DialogMsg::m_pInstance=nullptr;
 
 DialogMsg::DialogMsg(QWidget *parent) :
-    QDialog(parent),
+    DialogBase(parent),
     ui(new Ui::DialogMsg)
 {
     ui->setupUi(this);
@@ -21,6 +21,13 @@ DialogMsg::~DialogMsg()
 
 int DialogMsg::showMsg(QString sTitle, QString sMsg, QStringList listBtn)
 {
+
+
+    if(dynamic_cast<QWidget*>(parent())!=nullptr)
+    {
+        qDebug()<<"GGGGGGGGGGGGGG "<<dynamic_cast<QWidget*>(parent())->rect();
+    }
+
     ui->lbTitle->setText(sTitle);
 
     ui->stackedWidget->setCurrentWidget(ui->page0);
@@ -28,6 +35,8 @@ int DialogMsg::showMsg(QString sTitle, QString sMsg, QStringList listBtn)
     ui->lbMsg->setText(sMsg);
 
     setButton(listBtn);
+
+   // qApp->desktop()
 
     return exec();
 }

@@ -17,7 +17,7 @@ ItemPic::~ItemPic()
 void ItemPic::showEvent(QShowEvent *e)
 {
 
-    setMainWindow(UI.m_mainWidget);
+    setMainWindow(UI.mainWidget());
 
     ItemPicObj::showEvent(e);
 }

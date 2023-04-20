@@ -17,6 +17,7 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
     connect(ui->pageSayOk,SIGNAL(back(int)),this,SLOT(slotBack(int)));
     connect(ui->pageOrderOk,SIGNAL(back(int)),this,SLOT(slotBack(int)));
 
+    // changePage(0);
 
     connect(ui->page0,&LayerCustomer::into,[=](int iIdx)
     {
@@ -25,7 +26,7 @@ LayerSearchCustomer::LayerSearchCustomer(QWidget *parent) :
         changePage(1);
     });
 
-    //  changePage(0);
+
 }
 
 LayerSearchCustomer::~LayerSearchCustomer()

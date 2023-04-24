@@ -31,14 +31,29 @@ void LayerCustomerGameEdit::setCustomer(QString sSid, QString sId)
 
     QVariantList outGame,outCustomerInfo;
 
-    ACTION.action(ACT::QUERY_GAME_LIST,in,outGame,sError);
+    //    ACTION.action(ACT::QUERY_GAME_LIST,in,outGame,sError);
 
-    setCb(outGame);
+    //    setCb(outGame);
     in["CustomerSid"] = m_sCustomerSid;
     ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,outCustomerInfo,sError);
     m_listCustomerInfo =outCustomerInfo;
 
     refresh();
+}
+
+void LayerCustomerGameEdit::setReadOnly(bool bReadOnly)
+{
+    bool bEnable =!bReadOnly;
+
+    ui->wGameItemArea->setVisible(bEnable);
+    ui->cbGame->setEnabled(bEnable);
+    ui->txLoginType->setReadOnly(!bEnable);
+    ui->txGameAccount->setReadOnly(!bEnable);
+    ui->txPassword->setReadOnly(!bEnable);
+    ui->txChr->setReadOnly(!bEnable);
+    ui->txServer->setReadOnly(!bEnable);
+    ui->tbCusGameInfo->hideColumn(0);
+
 }
 
 
@@ -80,9 +95,24 @@ void LayerCustomerGameEdit::refresh()
     }
 }
 
+QVariantList LayerCustomerGameEdit::queeList(QString sCustomerSid)
+{
+
+    for( int i=0;i<m_listCustomerInfo.length();i++)
+    {
+        CustomerGameInfo d(m_listCustomerInfo.at(i).toMap());
+        d.CustomerSid=sCustomerSid;
+
+        m_listCustomerInfo[i] =d.data();
+    }
+
+
+    return m_listCustomerInfo;
+}
+
 void LayerCustomerGameEdit::setCb(QVariantList outGame)
 {
-       m_listGame = outGame;
+    m_listGame = outGame;
 
     auto listGameName=[=](QString sKey)
     {
@@ -128,9 +158,15 @@ void LayerCustomerGameEdit::on_tbCusGameInfo_cellClicked(int row, int col)
         QString sError;
         QVariantMap in;
         in["Sid"] =data.Sid;
-        bool b= ACTION.action(ACT::DEL_GAME_INFO,QVariantList()<<in,sError);
 
-        if(b)
+        bool bOk;
+
+        if(!m_bAddMode)
+            bOk= ACTION.action(ACT::DEL_GAME_INFO,QVariantList()<<in,sError);
+        else
+            bOk=true;
+
+        if(bOk)
         {
             m_listCustomerInfo.removeAt(row);
 
@@ -178,9 +214,29 @@ void LayerCustomerGameEdit::slotAdd()
 
     QVariantList listIn;
     listIn.append(data.data());
-    bool b= ACTION.action(ACT::REPLACE_GAME_INFO,listIn,sError);
 
-    if(b)
+    bool bOk=false;
+
+    if(!m_bAddMode)
+    {
+        bool b= ACTION.action(ACT::REPLACE_GAME_INFO,listIn,sError);
+
+        if(b)
+        {
+            QVariantList out;
+            QVariantMap in;
+            in["CustomerSid"] = m_sCustomerSid;
+            bOk= ACTION.action(ACT::QUERY_CUSTOMER_GAME_INFO,in,out,sError);
+
+            data.Sid=out.last().toMap()["Sid"].toString();
+        }
+
+
+    }
+    else
+        bOk=true;
+
+    if(bOk)
     {
         m_listCustomerInfo.append(data.data());
         refresh();
@@ -225,11 +281,17 @@ void LayerCustomerGameEdit::slotChange()
 
     QVariantList listIn;
     listIn.append(data.data());
-    bool b= ACTION.action(ACT::REPLACE_GAME_INFO,listIn,sError);
 
+    bool bOk;
 
+    if(!m_bAddMode)
+    {
+        bOk= ACTION.action(ACT::REPLACE_GAME_INFO,listIn,sError);
+    }
+    else
+        bOk =true;
 
-    if(b)
+    if(bOk)
     {
         m_listCustomerInfo[row]=data.data();
         refresh();

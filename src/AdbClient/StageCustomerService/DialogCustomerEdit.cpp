@@ -11,8 +11,6 @@ DialogCustomerEdit::DialogCustomerEdit(QWidget *parent) :
 
     this->setWindowTitle(" ");
 
-    ui->tbGameList->setColumnWidth(0,56);
-
 
     ui->btnDel->hide();
 
@@ -38,10 +36,6 @@ void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
     ui->cbClass->clear();
 
     ui->cbClass->addItems(mapToList(m_listClass,"Name"));
-
-    ui->cbGame->clear();
-
-    ui->cbGame->addItems(mapToList(m_listGame,"Name"));
 
     m_lastPrimeRate=ACTION.primeRate("");
 
@@ -164,14 +158,6 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
         }
 
     }
-    refresh();
-
-    if(ui->tbGameList->rowCount()>0)
-    {
-
-        ui->tbGameList->setCurrentCell(0,1);
-        on_tbGameList_cellClicked(0,1);
-    }
 
 }
 
@@ -203,6 +189,7 @@ void DialogCustomerEdit::setData(QString sCustomerSid)
 
     ui->page->setCustomer(m_sCustomerSid,cus.Id);
 
+    ui->page->m_bAddMode = false;
     setData(outClass,outGame,outCustomerInfo,outCustomer);
 
 
@@ -214,28 +201,21 @@ void DialogCustomerEdit::setReadOnly(bool bReadOnly)
 
     ui->wBottom->setVisible(bEnable);
 
-    ui->wGameItemArea->setVisible(bEnable);
 
     ui->cbClass->setEnabled(bEnable);
     ui->cbCurrency->setEnabled(bEnable);
-    ui->cbGame->setEnabled(bEnable);
 
     ui->cbVip->setEnabled(bEnable);
     ui->txName->setReadOnly(!bEnable);
     ui->txNote1->setReadOnly(!bEnable);
 
-    ui->txLoginType->setReadOnly(!bEnable);
-    ui->txGameAccount->setReadOnly(!bEnable);
-    ui->txPassword->setReadOnly(!bEnable);
-    ui->txChr->setReadOnly(!bEnable);
-    ui->txServer->setReadOnly(!bEnable);
+
     ui->txNum5->setReadOnly(!bEnable);
 
-    ui->tbGameList->hideColumn(0);
 
     ui->lbTitle->setText("客戶詳細資料");
 
-
+    ui->page->setReadOnly(bReadOnly);
 }
 
 QVariantMap DialogCustomerEdit::data()
@@ -280,7 +260,8 @@ QVariantMap DialogCustomerEdit::data()
 
 QVariantList DialogCustomerEdit::dataGameInfo(QString sCustomerSid)
 {
-
+   return ui->page->queeList(sCustomerSid);
+    /*
     for(int i=0;i<m_listCustomerInfo.length();i++)
     {
         QVariantMap d =m_listCustomerInfo[i].toMap();
@@ -296,6 +277,7 @@ QVariantList DialogCustomerEdit::dataGameInfo(QString sCustomerSid)
 
 
     return m_listCustomerInfo;
+    */
 }
 
 QVariantList DialogCustomerEdit::deleteGameInfo()
@@ -316,164 +298,8 @@ QStringList DialogCustomerEdit::mapToList(QVariantList list, QString sKey)
 
     return listRe;
 }
-/*
-QString DialogCustomerEdit::checkId(int cbIdx)
-{
-    QString sId="";
-
-    QString sClassSid = m_listClass.at(cbIdx).toMap()["Sid"].toString();
-    QString sClassId  = m_listClass.at(cbIdx).toMap()["Id"].toString();
-
-    QVariantMap in,out;
-
-    in["Class"] = sClassSid;
-    in["ClassId"] = sClassId;
-
-    QString sError;
-
-    ACTION.action(ACT::LAST_CUSTOMER_ID,in,out,sError);
-
-    QString sLastId  = out["Id"].toString();
-
-    QString sTargetWord="EA";
-    QString sTargetNum="01";
 
 
-    if(sLastId.length()>=4)
-    {
-
-
-        QString sTmp = sLastId.mid(sLastId.length()-4,4);
-
-
-        QString sWord = sTmp.mid(0,2);
-
-        QString sNum=sTmp.mid(2,2);
-
-        if(sNum=="99")
-        {
-            sTargetNum="01";
-
-            sTargetWord = strAdd1(sWord);
-
-        }
-        else
-        {
-            sTargetWord = sWord;
-            sTargetNum=QString("%1").arg(sNum.toInt()+1,2,10,QLatin1Char('0'));
-        }
-    }
-    sId = sClassId.toUpper()+"-"+sTargetWord.toUpper()+sTargetNum;
-
-
-    return sId;
-
-
-
-}
-
-QString DialogCustomerEdit::strAdd1(QString st)
-{
-
-    if(st.length()!=2)
-        return st;
-
-    QString sRe0,sRe1;
-
-
-    QString sFirst=st.at(0);
-    QString sSecond =st.at(1);
-    if(sSecond.toUpper()=="Z")
-    {
-        sRe1="A";
-
-        int iTmp = (int)sFirst.toUtf8().at(0)+1;
-
-        QByteArray d;
-        d.append(iTmp);
-
-        sRe0=QString(d);
-
-
-    }
-    else
-    {
-        sRe0=sFirst;
-
-        int iTmp = (int)sSecond.toUtf8().at(0)+1;
-
-        QByteArray d;
-        d.append(iTmp);
-
-        sRe1=QString(d);
-
-    }
-
-
-    return sRe0+sRe1;
-}
-*/
-void DialogCustomerEdit::refresh()
-{
-    ui->tbGameList->setRowCount(0);
-
-    bool bHasCantRemove = false;
-
-    for(int i=0;i<m_listCustomerInfo.length();i++)
-    {
-        QVariantMap data = m_listCustomerInfo.at(i).toMap();
-
-        //        if(data["CustomerId"]!="" && data["CustomerId"]!=ui->lbId->text().trimmed())
-        //        {
-        //            continue;
-        //        }
-
-        if( data["CustomerSid"].toString()!="" && data["CustomerSid"].toString()!=m_sCustomerSid)
-        {
-            continue;
-        }
-        int iIdx = ui->tbGameList->rowCount();
-
-        ui->tbGameList->setRowCount(ui->tbGameList->rowCount()+1);
-
-
-        QString sGameName =gameToName(data["GameSid"].toString());
-        qDebug()<<"last : "<<m_lastOrderDate<<", creat date : "<<data["UpdateTime"].toString();
-//        if(data["UpdateTime"].toString().trimmed()!="" &&
-//                m_bHasHistoryOrder && data["UpdateTime"].toString()<=m_lastOrderDate)
-//        {
-
-//            ui->tbGameList->setItem(iIdx,0,UI.tbItem("*"));
-//            bHasCantRemove = true;
-//        }
-//        else
-        {
-            ui->tbGameList->setItem(iIdx,0,UI.tbItem("移除"));
-        }
-        ui->tbGameList->setItem(iIdx,1,UI.tbItem(sGameName));
-
-        ui->tbGameList->setItem(iIdx,2,UI.tbItem(data["LoginAccount"].toString()));
-
-        ui->tbGameList->setItem(iIdx,3,UI.tbItem(data["Characters"].toString()));
-
-        ui->tbGameList->setItem(iIdx,4,UI.tbItem(data["LoginPassword"].toString()));
-
-        ui->tbGameList->setItem(iIdx,5,UI.tbItem(data["ServerName"].toString()));
-
-        ui->tbGameList->setItem(iIdx,6,UI.tbItem(data["LoginType"].toString()));
-
-
-    }
-
-//    if(bHasCantRemove)
-//    {
-//        ui->lbMsg->setText(" * 客戶三天內有訂單，無法移除下單前的遊戲資料。");
-//    }
-//    else
-        ui->lbMsg->clear();
-
-
-}
 
 QString DialogCustomerEdit::gameToName(QString sSid)
 {
@@ -515,79 +341,6 @@ QString DialogCustomerEdit::gameToSid(QString sName)
 
 
 
-
-
-void DialogCustomerEdit::on_btnAddGame_clicked()
-{
-    QVariantMap data;
-
-    data["CustomerId"]="";
-
-    data["CustomerSid"]=m_sCustomerSid;
-
-    data["GameSid"] = gameToSid(ui->cbGame->currentText().trimmed());
-
-    data["LoginType"] = ui->txLoginType->text().trimmed();
-
-    data["LoginAccount"] = ui->txGameAccount->text().trimmed();
-
-    data["LoginPassword"] = ui->txPassword->text().trimmed();
-
-    data["ServerName"] =ui->txServer->text().trimmed();
-
-    data["Characters"] = ui->txChr->text().trimmed();
-
-    m_listCustomerInfo.append(data);
-
-    refresh();
-
-
-    return;
-
-
-}
-
-
-
-void DialogCustomerEdit::on_tbGameList_cellClicked(int row, int col)
-{
-
-    qDebug()<<"irow : "<<row;
-
-    if(row >=m_listCustomerInfo.length() || row<0 )
-    {
-        return;
-    }
-
-    if(col==0)
-    {
-        if( ui->tbGameList->item(row,0)->text()=="移除")
-        {
-            QVariantMap d = m_listCustomerInfo.at(row).toMap();
-
-            if(d["Sid"]!="")
-                m_listDeleteInfo.append(d);
-
-            m_listCustomerInfo.removeAt(row);
-            qDebug()<<m_listCustomerInfo.length();
-            refresh();
-        }
-
-    }
-    else
-    {
-
-
-        ui->cbGame->setCurrentText(ui->tbGameList->item(row,1)->text());
-        ui->txGameAccount->setText(ui->tbGameList->item(row,2)->text());
-        ui->txChr->setText(ui->tbGameList->item(row,3)->text());
-        ui->txPassword->setText(ui->tbGameList->item(row,4)->text());
-        ui->txServer->setText(ui->tbGameList->item(row,5)->text());
-        ui->txLoginType->setText(ui->tbGameList->item(row,6)->text());
-
-
-    }
-}
 
 
 void DialogCustomerEdit::on_cbClass_currentIndexChanged(int index)

@@ -80,9 +80,9 @@ void LayerCustomer::on_btnAdd_clicked()
         QString sCustomerSid = data["Sid"].toString();
 
         in=dialog.dataGameInfo(sCustomerSid);
-/*
+
         ACTION.action(ACT::REPLACE_GAME_INFO,in,sError);
-*/
+
         CustomerData cus(data);
 
         QVariantMap kValue;

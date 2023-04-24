@@ -49,10 +49,6 @@ public:
     void setRoot(bool b);
 
 private slots:
-    void on_btnAddGame_clicked();
-
-
-    void on_tbGameList_cellClicked(int row, int col);
 
     void on_cbClass_currentIndexChanged(int index);
 
@@ -95,7 +91,7 @@ private:
 
     QString strAdd1(QString st);
 */
-    void refresh();
+
 
     QString gameToName(QString sSid);
 

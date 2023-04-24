@@ -19,9 +19,15 @@ public:
 
     void setCustomer(QString sSid, QString sId);
 
+    void setReadOnly(bool bReadOnly);
     void refresh();
 
-        void setCb(QVariantList outGame);
+    bool m_bAddMode = true;  //新增客戶時還沒送出新增，未獲得客戶sid
+
+    QVariantList queeList(QString sCustomerSid);  //已獲得客戶sid時再補送
+
+
+    void setCb(QVariantList outGame);
 private slots:
     void on_tbCusGameInfo_cellClicked(int row, int col);
 

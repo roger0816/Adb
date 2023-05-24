@@ -167,6 +167,8 @@ int main(int argc, char *argv[])
 
     login.setRelease(true);
 
+   // login.setOnlyTest();
+
     if(argc>2)
     {
         GLOBAL.m_bRootLogin=true;

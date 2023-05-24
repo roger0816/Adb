@@ -50,15 +50,16 @@ void LayerItemCount::updateTb()
     int iIdx = ui->cbGame->currentIndex();
 
     QString sGameSid = m_listGame.at(iIdx).Sid;
-
+ qDebug()<<"4a : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     m_listGameItem  = ACTION.getGameItemFromGameSid(sGameSid,true);
 
-
+     qDebug()<<"4b : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     ui->tb->setRowCount(0);
 
     for(int i=0;i<m_listGameItem.length();i++)
     {
 
+         qDebug()<<"4ba : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
         ui->tb->setRowCount(ui->tb->rowCount()+1);
 
         DataGameItem v = m_listGameItem.at(i);
@@ -68,7 +69,7 @@ void LayerItemCount::updateTb()
 
         DataItemCount dataCount = checkCount(v.Sid);
 
-
+     qDebug()<<"4bb : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
         qlonglong iSell = dataCount.TotalSell;
         qlonglong iTotalCount = dataCount.TotalCount;
 
@@ -78,7 +79,7 @@ void LayerItemCount::updateTb()
         ui->tb->setItem(i,1,UI.tbItem(iSell));
 
         qlonglong iTmp = iTotalCount-iSell;
-
+     qDebug()<<"4bc : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
         if(v.Sid=="690")
         {
             qDebug()<<"BBBBB : item sid : "<<v.Sid;
@@ -95,7 +96,10 @@ void LayerItemCount::updateTb()
 
 
         ui->tb->setItem(i,4,UI.tbItem("入庫",GlobalUi::_BUTTON));
+         qDebug()<<"4bd : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     }
+
+     qDebug()<<"4c : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 }
 
 void LayerItemCount::refresh()
@@ -106,12 +110,12 @@ void LayerItemCount::refresh()
     QVariantList listOut;
 
     QString sError;
-
+    qDebug()<<"1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     ACTION.action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
 
 
     m_listData = listOut;
-
+     qDebug()<<"2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     m_listGame = ACTION.getGameList(true);
 
     QStringList listCbName;
@@ -121,7 +125,7 @@ void LayerItemCount::refresh()
         listCbName.append(v.Name);
     }
 
-
+     qDebug()<<"3 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     ui->cbGame->setProperty("lock",true);
 
     ui->cbGame->clear();
@@ -140,9 +144,9 @@ void LayerItemCount::refresh()
 
         return;
     }
-
+     qDebug()<<"4 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     updateTb();
-
+     qDebug()<<"5 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 }
 
 

@@ -11,6 +11,9 @@
 #include <QSettings>
 #include "ItemMiniLoadbar.h"
 
+
+
+
 namespace Ui {
 class DialogLogin;
 }
@@ -44,6 +47,8 @@ public:
     void loginTarget(QString sSid);
 
     bool bMLogin= false;
+
+    void setOnlyTest();
 
 private:
 

@@ -52,6 +52,8 @@ DialogLogin::DialogLogin(QWidget *parent) :
     ui->btnServer4->hide();
 
 
+
+
 }
 
 DialogLogin::~DialogLogin()
@@ -76,6 +78,12 @@ void DialogLogin::init(QString sMsg)
 
     ui->txPass->clear();
     ui->lbMsg->setText(sMsg);
+
+
+
+
+
+
 }
 
 void DialogLogin::setRelease(bool b)
@@ -306,6 +314,8 @@ void DialogLogin::doLogin(bool bIsTestMode)
 
 void DialogLogin::slotBtnClicked(int iId)
 {
+
+
     QString sIp,sPort;
 
     if(iId<=m_listServer.length())
@@ -327,7 +337,7 @@ void DialogLogin::slotBtnClicked(int iId)
 
     GLOBAL.setServer(true,sIp,sPort);
 
-
+    qDebug()<<"AAAAAAAAA : "<<iId;
     setRelease(iId<3);
 
     //GLOBAL.ping(sIp);
@@ -351,6 +361,17 @@ void DialogLogin::loginTarget(QString sSid)
         done(_DialogLogin::_LoginOk);
 
     }
+
+}
+
+void DialogLogin::setOnlyTest()
+{
+    ui->btnServer3->setChecked(true);
+
+    slotBtnClicked(3);
+    ui->btnServer0->hide();
+    ui->btnServer1->hide();
+    ui->btnServer2->hide();
 
 }
 

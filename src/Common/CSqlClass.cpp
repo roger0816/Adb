@@ -858,13 +858,7 @@ void CSqlClass::createTableMysql()
 
 }
 
-QSqlDatabase CSqlClass::db()
-{
-    if(!m_db.isOpen())
-        m_db.open();
 
-    return m_db;
-}
 
 QStringList CSqlClass::fieldNames(QSqlRecord record)
 {
@@ -950,9 +944,26 @@ QDateTime CSqlClass::currentDateTime()
 
 //}
 
+
+QSqlDatabase CSqlClass::db()
+{
+    if(!m_db.isOpen())
+    {
+        m_db.open();
+
+        if(m_db.isOpenError())
+        {
+            qDebug()<<m_db.lastError().text();
+        }
+
+    }
+    return m_db;
+}
+
 bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QString &sError)
 {
     qDebug()<<"user :"<<sUser<<" ,pass:"<<sPass;
+
     QSqlQuery query(db());
 
     query.prepare("SELECT * FROM UserData WHERE Id=:id AND Password =:pass;");
@@ -960,7 +971,13 @@ bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QStri
     query.bindValue(":id", sUser.trimmed());
     query.bindValue(":pass",sPass.trimmed());
 
-    query.exec();
+    bool bIsOk =query.exec();
+
+    if(!bIsOk)
+    {
+        sError =query.lastError().text();
+        qDebug()<<sError;
+    }
 
     bool bRe = false;
 

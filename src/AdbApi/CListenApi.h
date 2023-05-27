@@ -4,6 +4,20 @@
 #include <QObject>
 #include <QDebug>
 #include "RpkCore.h"
+#include "CHttpServerObj.h"
+
+class CHttpServer : public CHttpServerObj
+{
+    Q_OBJECT
+public:
+
+    QString query(QString method, QString path, QString args) override;
+
+
+};
+
+
+
 
 class CListenApi : public QObject
 {
@@ -11,16 +25,19 @@ class CListenApi : public QObject
 public:
     explicit CListenApi(QObject *parent = nullptr);
 
-    void listen(QString sPort);
+    void startRESTfulApi(QString sPort);
 
-    QByteArray encodeHttp(QString sData);
+private:
+
+    CHttpServer m_httpServer;
+
+
+
 signals:
 
 public slots:
 
-    void getData(QByteArray dData, uintptr_t handleId);
 
-    void getHttpRequest(QByteArray path, QByteArray method, uintptr_t handleId);
 
 };
 

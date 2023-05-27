@@ -5,11 +5,9 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-
-
     CListenApi api;
 
-    api.listen("80");
+    api.startRESTfulApi("81");
 
     return a.exec();
 }

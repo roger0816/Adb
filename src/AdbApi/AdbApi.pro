@@ -14,6 +14,7 @@ UI_DIR =$$PWD/obj
 DESTDIR =$$PWD/../../bin/
 
 SOURCES += \
+        CHttpServerObj.cpp \
         CListenApi.cpp \
         main.cpp
 
@@ -28,4 +29,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    CHttpServerObj.h \
     CListenApi.h

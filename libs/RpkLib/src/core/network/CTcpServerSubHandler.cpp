@@ -28,22 +28,37 @@ void CTcpServerSubHandler::responcesClient(QByteArray data)
 
     psend.insert(data);
 
- //   qDebug() << "CTcpServerSubHandler" <<  (uintptr_t)this << "responces";
+    //   qDebug() << "CTcpServerSubHandler" <<  (uintptr_t)this << "responces";
 
     this->socket->write(psend.package());
 
 }
 
+void CTcpServerSubHandler::responcesOrigin(QByteArray data)
+{
+    this->socket->write(data);
+}
+
 void CTcpServerSubHandler::readyRead()
 {
-    packager.insert(socket->readAll());
+    QByteArray read = socket->readAll();
+
+
+    // QString tmp(read);
+
+    //qDebug()<<tmp.toStdString().c_str();
+
+
+    emit originQuery(read,this);
+
+    packager.insert(read);
 
     //qDebug() << QString(packager.raw());
 
     if(packager.isPackageComplete())
     {
         QByteArray readdate = packager.unPackage();
-
+        qDebug()<<"deocde ok : "<<QString(readdate).toStdString().c_str();
         emit clientQuery(readdate,this);
 
         packager.clear();

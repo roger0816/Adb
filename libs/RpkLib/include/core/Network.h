@@ -19,11 +19,13 @@ public:
      * @brief startServer
      * @param sPort
      */
+
+
     void runTcpServer(QString sPort);
 
     void stopTcpServer();
 
-    void recallClient(QByteArray arrReturn, uintptr_t handlerID);
+    void recallClient(QByteArray arrReturn, uintptr_t handlerID,bool bUsePackage=true);
 
 
     /** block tcpip client
@@ -49,6 +51,7 @@ signals:
      * @param arrRead
      */
     void signalReadAll(QByteArray arrRead, uintptr_t handlerID);
+     void signalReadOrigin(QByteArray arrRead, uintptr_t handlerID);
 
 
     void replyFromServer(QString sId,QByteArray data,int error);

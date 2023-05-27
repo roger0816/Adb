@@ -22,6 +22,8 @@ public:
     QByteArray package();
     QByteArray unPackage();
 
+
+
 private:
     QByteArray m_data;
 };

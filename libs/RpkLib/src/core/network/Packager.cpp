@@ -87,6 +87,8 @@ bool Packager::isPackageComplete()
         return false;
     }
 
+
+
     uint datavlen = ByteArrayToUint32(m_data.mid(sp+8,4));
 
     if(datavlen == uint(m_data.length()-sp))
@@ -144,5 +146,7 @@ QByteArray Packager::unPackage()
 
     return rdata;
 }
+
+
 
 

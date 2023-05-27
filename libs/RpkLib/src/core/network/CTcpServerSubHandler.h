@@ -16,12 +16,13 @@ public:
     //void run();
 
     void responcesClient(QByteArray data);
+    void responcesOrigin(QByteArray data);
 
     signals:
         void error(QTcpSocket::SocketError socketerror);
 
         void clientQuery(QByteArray data, CTcpServerSubHandler * self);
-
+        void originQuery(QByteArray data, CTcpServerSubHandler * self);
     public slots:
         void readyRead();
         void disconnected();

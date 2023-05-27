@@ -58,21 +58,21 @@ void CTcpServer::stop()
 
 void CTcpServer::handlerQuery(QByteArray data, CTcpServerSubHandler *handler)
 {
-     uintptr_t h =  (uintptr_t)handler;
+    uintptr_t h =  (uintptr_t)handler;
 
-     emit signalReadAll(data, h);
+    emit signalReadAll(data, h);
 
 }
 void CTcpServer::handlerFinish()
 {
     CTcpServerSubHandler *handler = qobject_cast<CTcpServerSubHandler *>(sender());
 
-//    qDebug() << "CTcpServer handler" <<  (uintptr_t)handler << "finish";
+    //    qDebug() << "CTcpServer handler" <<  (uintptr_t)handler << "finish";
 
-//    foreach(CTcpServerSubHandler* h  ,handlerList)
-//    {
-//        qDebug() << (uintptr_t)h;
-//    }
+    //    foreach(CTcpServerSubHandler* h  ,handlerList)
+    //    {
+    //        qDebug() << (uintptr_t)h;
+    //    }
 
     if(handlerList.contains(handler))
     {
@@ -81,10 +81,10 @@ void CTcpServer::handlerFinish()
         //qDebug() << "CTcpServer handler" <<  (uintptr_t)handler  << "remove form list" << handlerList.contains(handler);
     }
 
-//    foreach(CTcpServerSubHandler *h  ,handlerList)
-//    {
-//        qDebug() << (uintptr_t)h;
-//    }
+    //    foreach(CTcpServerSubHandler *h  ,handlerList)
+    //    {
+    //        qDebug() << (uintptr_t)h;
+    //    }
 
 
 
@@ -96,7 +96,7 @@ void CTcpServer::handlerFinish()
 void CTcpServer::incomingConnection(qintptr socketDescriptor)
 {
     // We have a new connection
-   // qDebug() << "CTcpServer " << socketDescriptor << " Connecting...";
+    // qDebug() << "CTcpServer " << socketDescriptor << " Connecting...";
 
     // Every new connection will be run in a newly created thread
     CTcpServerSubHandler *handler = new CTcpServerSubHandler(socketDescriptor, this);
@@ -108,17 +108,30 @@ void CTcpServer::incomingConnection(qintptr socketDescriptor)
     connect(handler, SIGNAL(finished()), this, SLOT(handlerFinish()));
     connect(handler, SIGNAL(clientQuery(QByteArray, CTcpServerSubHandler *)), this,SLOT(handlerQuery(QByteArray, CTcpServerSubHandler *)));
 
+    connect(handler, &CTcpServerSubHandler::originQuery,[=](QByteArray data, CTcpServerSubHandler *hand)
+    {
+        uintptr_t h =  (uintptr_t)hand;
+
+        emit signalReadOrigin(data, h);
+    });
+
+
     handler->start();
 }
 
-void CTcpServer::slotRetrun(QByteArray arrReturn, uintptr_t handlerID)
+void CTcpServer::slotRetrun(QByteArray arrReturn, uintptr_t handlerID,bool bUsePackage)
 {
     CTcpServerSubHandler *handler = (CTcpServerSubHandler *)handlerID;
 
-  //  qDebug() << "CTcpServer handler" <<  (uintptr_t)handler << "responcesClient";
+    //  qDebug() << "CTcpServer handler" <<  (uintptr_t)handler << "responcesClient";
 
     if(handlerList.contains(handler))
-        handler->responcesClient(arrReturn);
+    {
+        if(bUsePackage)
+            handler->responcesClient(arrReturn);
+        else
+            handler->responcesOrigin(arrReturn);
+    }
 }
 
 

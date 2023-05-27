@@ -26,8 +26,8 @@ private:
 
 signals:
     void signalLog(QString st);
-    void signalReadAll(QByteArray data, uintptr_t handlerID);
-
+    void signalReadAll(QByteArray data, uintptr_t handlerID);   //sender需要用package封裝才讀的到
+    void signalReadOrigin(QByteArray data, uintptr_t handlerID);//不需要使用package封裝就能讀取
 private slots:
     void handlerQuery(QByteArray data, CTcpServerSubHandler * handler);
     void handlerFinish();
@@ -37,7 +37,7 @@ protected:
 
 
 public slots:
-    void slotRetrun(QByteArray arrReturn, uintptr_t handlerID);
+    void slotRetrun(QByteArray arrReturn, uintptr_t handlerID, bool bUsePackage);
 
 };
 

@@ -603,7 +603,7 @@ struct OrderData :public DataObj
         re["Bouns"] = Bouns;
         re["PayType"] = PayType;
         re["CanSelectPayType"] = CanSelectPayType;
-                re["GameRate"] = GameRate;
+        re["GameRate"] = GameRate;
         re["ExRateSid"] = ExRateSid;
         re["PrimeRateSid"] = PrimeRateSid;
         re["Money"] = Money.join(";");
@@ -1059,6 +1059,8 @@ struct DataItemCount :public DataObj
 
     QString  UserSid;
 
+    QString GameSid;
+
     QString  GameItemSid;
 
     qlonglong ChangeValue=0;
@@ -1081,6 +1083,8 @@ struct DataItemCount :public DataObj
 
         UserSid = data["UserSid"].toString();
 
+        GameSid=data["GameSid"].toString();
+
         GameItemSid=data["GameItemSid"].toString();
 
         ChangeValue = data["ChangeValue"].toLongLong();
@@ -1101,7 +1105,7 @@ struct DataItemCount :public DataObj
         QVariantMap re =DataObj::data();
 
         re["UserSid"] = UserSid;
-
+        re["GameSid"] = GameSid;
         re["GameItemSid"] = GameItemSid;
         re["GameRate"] = GameRate;
 

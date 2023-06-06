@@ -894,7 +894,15 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::ADD_ITEM_COUNT)
     {
 
+        QString sItemSid = data.dData["GameItemSid"].toString();
+        DataGameItem item = getGameByItemSid(sItemSid);
+
+        data.dData["GameSid"]=item.GameSid;
+        data.dData["Name"] = item.Name;
         bOk = m_sql.insertTb(SQL_TABLE::GameItemCount(),data.dData,sError);
+
+        updateCount(item.GameSid,item.Sid,item.Name,data.dData["TotalSell"].toLongLong(),data.dData["TotalCount"].toLongLong());
+
         sOkMsg = "新增完成";
 
     }
@@ -902,10 +910,29 @@ CData Query::implementRecall(CData data)
     else if(data.iAciton==ACT::EDIT_ITEM_COUNT)
     {
 
+        QString sItemSid = data.dData["GameItemSid"].toString();
+        DataGameItem item = getGameByItemSid(sItemSid);
+
+        data.dData["GameSid"]=item.GameSid;
+        data.dData["Name"] = item.Name;
+
         QVariantMap d;
         d["Sid"] = data.dData["Sid"];
         bOk = m_sql.updateTb(SQL_TABLE::GameItemCount(),d,data.dData,sError);
+
+        if(data.dData.keys().contains("TotalCount")
+                && data.dData["TotalCount"].toInt()>0)
+        {
+            updateCount(item.GameSid,item.Sid,item.Name,data.dData["TotalSell"].toLongLong(),data.dData["TotalCount"].toLongLong());
+
+        }
+
+
         sOkMsg = "修改完成";
+
+
+
+
 
     }
 
@@ -921,9 +948,9 @@ CData Query::implementRecall(CData data)
 
     else if(data.iAciton==ACT::QUERY_ITEM_COUNT)
     {
-
+ //  qDebug()<<"a1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
         bOk = m_sql.queryTb(SQL_TABLE::GameItemCount(),data.dData,re.listData,sError);
-
+ //  qDebug()<<"a2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     }
 
 
@@ -1715,9 +1742,29 @@ bool Query::orderStep3(OrderData &order, OrderData current, QString &sError)
 
 QVariantList Query::getOrderData(QString lastUpdateTime)
 {
+  return QVariantList();
 
-    return QVariantList();
+}
 
+DataGameItem Query::getGameByItemSid(QString sSid)
+{
+    DataGameItem re;
+    QString sError;
+    QVariantMap in;
+    QVariantList listOut;
+    in["Sid"]= sSid;
+
+
+    m_sql.queryTb(SQL_TABLE::GameItem(),in,listOut,sError);
+
+
+    if(listOut.length()>0)
+    {
+        re.setData(listOut.first().toMap());
+      //  sRe = listOut.first().toMap()["GameSid"].toString();
+    }
+
+    return re;
 }
 
 QVariantMap Query::checkSync(QVariantMap syncSend)
@@ -1742,6 +1789,46 @@ QVariantMap Query::checkSync(QVariantMap syncSend)
     }
 
     return re;
+}
+
+void Query::updateCount(QString sGameSid, QString sItemSid,QString sName, int TotalSell, int TotalCount)
+{
+    QString sSid="";
+
+    QString sError;
+    QVariantMap d;
+    d["GameItemSid"]=sItemSid;
+    QVariantList listOut;
+    m_sql.queryTb(SQL_TABLE::QueryCount(),d,listOut,sError);
+
+    if(listOut.length()>0)
+    {
+        sSid = listOut.last().toMap()["Sid"].toString();
+    }
+
+
+    QVariantMap data;
+
+    data["GameSid"]=sGameSid;
+    data["GameItemSid"]=sItemSid;
+    data["Name"] = sName;
+    data["TotalSell"]=TotalSell;
+    data["TotalCount"]=TotalCount;
+
+
+    if(sSid!="")
+    {
+        QVariantMap tmp;
+        tmp["Sid"]=sSid;
+        data["Sid"]=sSid;
+        m_sql.updateTb(SQL_TABLE::QueryCount(),tmp,data,sError);
+
+    }
+    else
+    {
+         m_sql.insertTb(SQL_TABLE::QueryCount(),data,sError);
+    }
+
 }
 
 

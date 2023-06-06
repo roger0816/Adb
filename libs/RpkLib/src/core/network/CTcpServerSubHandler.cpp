@@ -58,7 +58,7 @@ void CTcpServerSubHandler::readyRead()
     if(packager.isPackageComplete())
     {
         QByteArray readdate = packager.unPackage();
-        qDebug()<<"deocde ok : "<<QString(readdate).toStdString().c_str();
+       // qDebug()<<"deocde ok : "<<QString(readdate).toStdString().c_str();
         emit clientQuery(readdate,this);
 
         packager.clear();

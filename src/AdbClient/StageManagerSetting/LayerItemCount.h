@@ -38,9 +38,9 @@ private:
 
    int m_iCbGame=0;
 
+   bool m_bFlagShow = true;
 
-
-    QVariantList m_listData;
+   QVariantList m_listData;
 private:
     Ui::LayerItemCount *ui;
 };

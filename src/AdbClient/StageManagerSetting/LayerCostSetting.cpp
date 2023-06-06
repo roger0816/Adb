@@ -444,7 +444,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
         }
         DataItemCount dataCount;
 
-        dataCount.Id = data["GameSid"].toString();
+        dataCount.GameSid = data["GameSid"].toString();
         dataCount.GameItemSid = data["Sid"].toString();
         dataCount.Name = data["Name"].toString();
 
@@ -528,7 +528,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
         if(dTmp.length()>0)
             dataCount.setData(dTmp.last().toMap());
 
-        dataCount.Id = data["GameSid"].toString();
+        dataCount.GameSid = m_iCurrentGameSid;
         dataCount.GameItemSid = data["Sid"].toString();
         dataCount.Name = data["Name"].toString();
 

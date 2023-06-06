@@ -252,13 +252,22 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
             query.exec();
             */
 
-
+     //  qDebug()<<"b1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     bool bOk = query.exec();
+     //  qDebug()<<"b2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 
-    QStringList listHeader = fieldNames(query.record());
+
+
+       QStringList listHeader = fieldNames(query.record());
+
+      // qDebug()<<"b3 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+
 
     while(query.next())
     {
+
+
+
 
         QVariantMap data;
 
@@ -274,7 +283,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
 
         listOut.append(data);
     }
-
+   //    qDebug()<<"b4 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     sError =  query.lastError().text();
 
     qDebug()<<sLog<<listTmp<<" : "<<bOk;

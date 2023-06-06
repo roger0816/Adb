@@ -23,10 +23,10 @@ struct SQL_TABLE
     static QString ExchangeRate(){return "ExchangeRate";}
     static QString PrimeCostRate(){return "PrimeCostRate";}
     static QString GameList(){return "GameList";}
-        static QString GameRate(){return "GameRate";}
+    static QString GameRate(){return "GameRate";}
     static QString GameItem(){return "GameItem";}
     static QString Bulletin(){return "Bulletin";}
-      static QString CustomerMoney(){return "CustomerMoney";}
+    static QString CustomerMoney(){return "CustomerMoney";}
     static QString CustomerClass(){return "CustomerClass";}
     static QString DebitClass(){return "DebitClass";}
     static QString GroupData(){return "GroupData";}
@@ -41,6 +41,7 @@ struct SQL_TABLE
     static QString Schedule(){return "Schedule";}
     static QString PicData(){return "PicData";}
     static QString GameItemCount(){return "GameItemCount";}
+    static QString QueryCount(){return "QueryCount";}
     static QString Settings(){return "Settings";}
 };
 
@@ -293,20 +294,20 @@ struct CListPair : public QList< CPair >
 
 
 
-//        if(sKey.length()>=3)
-//        {
-//            for(int i=0;i<listFirst().length();i++)
-//            {
-//                QString st = listFirst().at(i);
+        //        if(sKey.length()>=3)
+        //        {
+        //            for(int i=0;i<listFirst().length();i++)
+        //            {
+        //                QString st = listFirst().at(i);
 
-//                if(st.contains(sKey))
-//                {
-//                    iIdx=i;
-//                    break;
-//                }
-//            }
-//        }
-//        else
+        //                if(st.contains(sKey))
+        //                {
+        //                    iIdx=i;
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //        else
         {
             iIdx= listFirst().indexOf(sKey);
 

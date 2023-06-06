@@ -20,7 +20,9 @@ LayerItemCount::~LayerItemCount()
 
 void LayerItemCount::showEvent(QShowEvent *)
 {
-    QTimer::singleShot(50,this,[=](){ refresh();});
+    QTimer::singleShot(50,this,[=](){
+        m_bFlagShow=true;
+        refresh();});
 }
 
 DataItemCount LayerItemCount::checkCount(QString itemSid)
@@ -51,7 +53,10 @@ void LayerItemCount::updateTb()
 
     QString sGameSid = m_listGame.at(iIdx).Sid;
  qDebug()<<"4a : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
-    m_listGameItem  = ACTION.getGameItemFromGameSid(sGameSid,true);
+qDebug()<<"strong : "<<m_bFlagShow;
+    m_listGameItem  = ACTION.getGameItemFromGameSid(sGameSid,m_bFlagShow);
+
+    m_bFlagShow = false;
 
      qDebug()<<"4b : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     ui->tb->setRowCount(0);
@@ -80,11 +85,6 @@ void LayerItemCount::updateTb()
 
         qlonglong iTmp = iTotalCount-iSell;
      qDebug()<<"4bc : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
-        if(v.Sid=="690")
-        {
-            qDebug()<<"BBBBB : item sid : "<<v.Sid;
-            qDebug()<<"iSell : "<<iSell<<" icount : "<<iTotalCount;
-        }
 
 
         ui->tb->setItem(i,2,UI.tbItem(iTmp));
@@ -104,18 +104,9 @@ void LayerItemCount::updateTb()
 
 void LayerItemCount::refresh()
 {
-
-    QVariantMap in;
-    in["ASC"]="Sid";
-    QVariantList listOut;
-
-    QString sError;
-    qDebug()<<"1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
-    ACTION.action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
+  qDebug()<<"1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 
 
-    m_listData = listOut;
-     qDebug()<<"2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     m_listGame = ACTION.getGameList(true);
 
     QStringList listCbName;
@@ -125,7 +116,7 @@ void LayerItemCount::refresh()
         listCbName.append(v.Name);
     }
 
-     qDebug()<<"3 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+
     ui->cbGame->setProperty("lock",true);
 
     ui->cbGame->clear();
@@ -144,9 +135,19 @@ void LayerItemCount::refresh()
 
         return;
     }
-     qDebug()<<"4 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+
+    QVariantMap in;
+    in["ASC"]="Sid";
+    QVariantList listOut;
+
+    QString sError;
+    ACTION.action(ACT::QUERY_ITEM_COUNT,in,listOut,sError);
+
+
+    m_listData = listOut;
+
     updateTb();
-     qDebug()<<"5 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+     qDebug()<<"2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 }
 
 
@@ -213,6 +214,8 @@ void LayerItemCount::on_tb_cellClicked(int row, int column)
             DataItemCount last =checkCount(item.Sid);
 
             DataItemCount data;
+
+            data.GameSid = item.GameSid;
 
             data.GameItemSid = item.Sid;
 

@@ -49,7 +49,7 @@ public:
 
     QVariantList getOrderData(QString lastUpdateTime);
 
-    DataGameItem getGameByItemSid(QString sSid);
+    DataGameItem getGameItem(QString sSid);
 
     QVariantMap checkSync(QVariantMap syncSend);
 

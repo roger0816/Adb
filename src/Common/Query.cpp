@@ -895,7 +895,7 @@ CData Query::implementRecall(CData data)
     {
 
         QString sItemSid = data.dData["GameItemSid"].toString();
-        DataGameItem item = getGameByItemSid(sItemSid);
+        DataGameItem item = getGameItem(sItemSid);
 
         data.dData["GameSid"]=item.GameSid;
         data.dData["Name"] = item.Name;
@@ -911,7 +911,7 @@ CData Query::implementRecall(CData data)
     {
 
         QString sItemSid = data.dData["GameItemSid"].toString();
-        DataGameItem item = getGameByItemSid(sItemSid);
+        DataGameItem item = getGameItem(sItemSid);
 
         data.dData["GameSid"]=item.GameSid;
         data.dData["Name"] = item.Name;
@@ -1518,28 +1518,37 @@ bool Query::changeItemCount(OrderData orderData, bool bIsAdd,QString &sErrorMsg)
     for(int i=0;i<list.length();i++)
     {
 
-        DataItemCount item;
+        DataItemCount itemCount;
 
-        item.OrderSid=orderData.Sid;
+        itemCount.OrderSid=orderData.Sid;
 
-        item.GameItemSid = list.at(i).first;
+        itemCount.GameItemSid = list.at(i).first;
 
-        item.ChangeValue = list.at(i).second.toInt();
+        DataGameItem gameItem =getGameItem(itemCount.GameItemSid);
+
+        itemCount.GameSid = gameItem.GameSid;
+
+        itemCount.Name = gameItem.Name;
+
+        itemCount.ChangeValue = list.at(i).second.toInt();
 
         if(!bIsAdd)
-            item.ChangeValue=item.ChangeValue*-1;
+            itemCount.ChangeValue=itemCount.ChangeValue*-1;
 
         if(orderData.User.length()>1)
-            item.UserSid = orderData.User.at(1);
+            itemCount.UserSid = orderData.User.at(1);
 
         int iTmpIdx = qBound(0,i,listLast.length()-1);
 
 
-        item.TotalSell= listLast.at(iTmpIdx).TotalSell+(item.ChangeValue*-1);
+        itemCount.TotalSell= listLast.at(iTmpIdx).TotalSell+(itemCount.ChangeValue*-1);
 
-        item.TotalCount = listLast.at(iTmpIdx).TotalCount;
+        itemCount.TotalCount = listLast.at(iTmpIdx).TotalCount;
         QString sError;
-        m_sql.insertTb(SQL_TABLE::GameItemCount(),item.data(),sError,false);
+        m_sql.insertTb(SQL_TABLE::GameItemCount(),itemCount.data(),sError,false);
+
+
+        updateCount(itemCount.GameSid,itemCount.GameItemSid,itemCount.Name,itemCount.TotalSell,itemCount.TotalCount);
 
     }
 
@@ -1746,7 +1755,7 @@ QVariantList Query::getOrderData(QString lastUpdateTime)
 
 }
 
-DataGameItem Query::getGameByItemSid(QString sSid)
+DataGameItem Query::getGameItem(QString sSid)
 {
     DataGameItem re;
     QString sError;

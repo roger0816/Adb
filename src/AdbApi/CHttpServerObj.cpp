@@ -15,6 +15,22 @@ void CHttpServerObj::listen(QString sPort)
     RPKCORE.network.runTcpServer(sPort);
 }
 
+QString CHttpServerObj::funcGet(QString Path, QVariantMap args)
+{
+    Q_UNUSED(Path);
+    Q_UNUSED(args);
+    //override
+    return "";
+}
+
+QString CHttpServerObj::funcPost(QString Path, QVariantMap args)
+{
+    Q_UNUSED(Path);
+    Q_UNUSED(args);
+    //override
+    return "";
+}
+
 
 void CHttpServerObj::getData(QByteArray dData, uintptr_t handleId)
 {
@@ -34,17 +50,17 @@ void CHttpServerObj::getData(QByteArray dData, uintptr_t handleId)
     QString method = methodAndPath[0];
     QString path = methodAndPath[1];
 
-    QString args ="";
+    //    QString args ="";
 
-    if(path.contains("?"))
-    {
-        path =path.split("?").first();
+    //    if(path.contains("?"))
+    //    {
+    //        path =path.split("?").first();
 
-        args =path.split("?").last();
-    }
+    //        args =path.split("?").last();
+    //    }
 
 
-    QString sReply=query(method,path,args);
+    QString sReply=implementRecall(method,path);
 
     RPKCORE.network.recallClient(encodeHttp(sReply),handleId,false);
 
@@ -68,37 +84,113 @@ QByteArray CHttpServerObj::encodeHttp(QString sData)
     return re;
 }
 
-QString CHttpServerObj::query(QString method, QString path, QString args)
+QString CHttpServerObj::implementRecall(QString method, QString path)
 {
 
-    qDebug()<<" method : "<<method<<" ,ori path : "<<path<<" , args : "<<args;
+    if(path.toLower().contains("favicon.ico"))
+        return "";
 
-    QString sSendData ="test data!";
-
-    path.replace("/api","/");
-    path.replace("/apiTest","/");
-
-	qDebug()<<"path: "<<path;
+    m_sOriPath = path;
 
 
-    if(path=="/test" && method.toUpper()=="GET")
+
+    if(method.toUpper()=="GET")
     {
-        qDebug()<<"reply : "<<sSendData;
+        QString sPath = m_sOriPath;
 
+        QVariantMap dArgv;
 
+        bool bHasArgs=getArgs(sPath,dArgv);
 
-    }
-    else
-    {
-        sSendData="400 Bad Request";
+        if(bHasArgs)
+           sPath = sPath.split("?").first();
 
-        // 不知哪來的/favicon.ico  不處理
-
-
+        return funcGet(sPath,dArgv);
     }
 
-    return sSendData;
+    else if(method.toUpper()=="POST")
+    {
+        QString sPath = m_sOriPath;
+
+        QVariantMap dArgv;
+
+        bool bHasArgs=getArgs(sPath,dArgv);
+
+        if(bHasArgs)
+           sPath = sPath.split("?").first();
+
+        return funcPost(sPath,dArgv);
+    }
+
+
+
+
 }
+
+bool CHttpServerObj::getArgs(QString sOriPath, QVariantMap &reData)
+{
+    bool bRe= false;
+
+    reData.clear();
+    if(sOriPath.split("?").length()>1)
+    {
+        QString sTmp = sOriPath.split("?").last();
+
+        QStringList list = sTmp.split("&");
+
+        foreach (QString v,list)
+        {
+            if(v.split("=").length()>1)
+            {
+                reData[v.split("=").at(0)]=v.split("=").at(1);
+            }
+        }
+
+    }
+
+    return reData.keys().length()>0;
+}
+
+bool CHttpServerObj::dPath(QString sPath, QString sKeyCmd, QString &sSubPath)
+{
+    qDebug()<<"a "<<sKeyCmd;
+    sKeyCmd="/"+sKeyCmd.toLower()+"/";
+
+    qDebug()<<"b "<<sKeyCmd;
+
+    sKeyCmd = sKeyCmd.replace("//","/");
+
+
+
+
+    if(sPath.left(1)!="/")
+        sPath="/"+sPath;
+
+    if(sPath.right(1)!="/")
+        sPath+="/";
+
+    qDebug()<<"c "<<sKeyCmd<<" , "<<sPath;
+    bool bRe = false;
+
+
+    if(sPath.toLower().contains(sKeyCmd))
+    {
+        bRe = true;
+
+        sSubPath="";
+
+        if(sPath.split(sKeyCmd).length()>1)
+        {
+            sSubPath=sPath.split(sKeyCmd).last();
+        }
+    }
+
+    qDebug()<<"BRE : "<<bRe;
+
+    return bRe;
+}
+
+
 
 
 

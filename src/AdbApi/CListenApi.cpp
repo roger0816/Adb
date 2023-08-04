@@ -11,23 +11,37 @@ CListenApi::CListenApi(QObject *parent)
 void CListenApi::startRESTfulApi(QString sPort)
 {
     m_httpServer.listen(sPort);
+
 }
 
 
 
 //===============================================
 
-QString CHttpServer::query(QString method, QString path, QString args)
+
+
+QString CHttpServer::funcGet(QString path, QVariantMap args)
 {
-    qDebug()<<" method : "<<method<<" , path : "<<path<<" , args : "<<args;
+    qDebug()<<" ori path : "<<path<<" , args : "<<args;
 
-    QString sSendData ="test data!";
+    QString sSendData ="";
 
+    QString sSubPath;
 
-    if(path=="/test" && method.toUpper()=="GET")
+    if(dPath(path,"test",sSubPath))
     {
-        qDebug()<<"reply : "<<sSendData;
 
+        qDebug()<<"cmd : test , subPath : "<<sSubPath<<" , args: "<<args;
+
+        QStringList listKey = args.keys();
+
+        foreach(QString sKey,listKey)
+            sSendData+=sKey+":"+args[sKey].toString()+"\n";
+
+        sSendData+="\n GET Test ok";
+
+
+        qDebug()<<"reply : "<<sSendData;
 
 
     }

@@ -6,12 +6,13 @@
 #include "RpkCore.h"
 #include "CHttpServerObj.h"
 
+
 class CHttpServer : public CHttpServerObj
 {
     Q_OBJECT
 public:
 
-    QString query(QString method, QString path, QString args) override;
+    QString funcGet(QString path, QVariantMap args) override;
 
 
 };

@@ -14,14 +14,22 @@ public:
 
     void listen(QString sPort);
 
-    virtual QString query(QString method, QString path, QString args);
+    virtual QString funcGet(QString Path, QVariantMap args);
+
+    virtual QString funcPost(QString Path, QVariantMap args);
 
 
+    bool dPath(QString sPath,QString sKeyCmd, QString &sSubPath);
 
 private:
 
     QByteArray encodeHttp(QString sData);
 
+    virtual QString implementRecall (QString method, QString path);
+
+    bool getArgs(QString sOriPath, QVariantMap &reData);
+
+    QString m_sOriPath="";
 signals:
 
 

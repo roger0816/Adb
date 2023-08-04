@@ -71,12 +71,14 @@ QByteArray CHttpServerObj::encodeHttp(QString sData)
 QString CHttpServerObj::query(QString method, QString path, QString args)
 {
 
-    qDebug()<<" method : "<<method<<" , path : "<<path<<" , args : "<<args;
+    qDebug()<<" method : "<<method<<" ,ori path : "<<path<<" , args : "<<args;
 
     QString sSendData ="test data!";
 
     path.replace("/api","/");
     path.replace("/apiTest","/");
+
+	qDebug()<<"path: "<<path;
 
 
     if(path=="/test" && method.toUpper()=="GET")

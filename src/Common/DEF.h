@@ -155,7 +155,10 @@ enum _KEY
 
     PAY_ADD_COST,  //1.07後的新版
 
-    PAY_ORDER
+    PAY_ORDER,
+
+    API_GAME_LIST=5001,
+    API_GMAE_ITEM=5011
 
 };
 

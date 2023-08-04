@@ -91,6 +91,7 @@ QTableWidgetItem *GlobalUi::tbItem(QVariant var, int iType, int iPixSize)
 
     QTableWidgetItem *item = new QTableWidgetItem();
 
+    // item->setFlags(item->flags() | Qt::ItemIsSelectable);
     QFont f =item->font();
 
 

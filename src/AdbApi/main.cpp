@@ -7,7 +7,14 @@ int main(int argc, char *argv[])
 
     CListenApi api;
 
-    api.startRESTfulApi("81");
+    QString sPort="81";
+
+    if(argc>1)
+    {
+        sPort=argv[1];
+    }
+
+    api.startRESTfulApi(sPort);
 
     return a.exec();
 }

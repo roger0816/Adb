@@ -144,6 +144,8 @@ void LayerCustomer::refresh()
 
         ui->tb->setItem(iRow,1,UI.tbItem(data.Id));
 
+
+
         QString sClassSid = ACTION.getCustomerClass(data.Class).Name;
 
         ui->tb->setItem(iRow,2,UI.tbItem(sClassSid));

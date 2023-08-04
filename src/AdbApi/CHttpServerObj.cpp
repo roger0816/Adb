@@ -75,6 +75,9 @@ QString CHttpServerObj::query(QString method, QString path, QString args)
 
     QString sSendData ="test data!";
 
+    path.replace("/api","/");
+    path.replace("/apiTest","/");
+
 
     if(path=="/test" && method.toUpper()=="GET")
     {

@@ -16,6 +16,7 @@ DESTDIR =$$PWD/../../bin/
 SOURCES += \
         CHttpServerObj.cpp \
         CListenApi.cpp \
+        CRequestData.cpp \
         main.cpp
 
 include(../Common/Common.pri)
@@ -30,4 +31,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     CHttpServerObj.h \
-    CListenApi.h
+    CListenApi.h \
+    CRequestData.h

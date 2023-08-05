@@ -168,7 +168,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantList &listOut, QString &sErr
 bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList &listOut, QString &sError)
 {
 
-
+    qDebug()<<"qeury tb";
     listOut.clear();
 
     QSqlQuery query(db());
@@ -286,7 +286,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
    //    qDebug()<<"b4 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     sError =  query.lastError().text();
 
-    qDebug()<<sLog<<listTmp<<" : "<<bOk;
+    qDebug()<<sLog<<conditions<<" : "<<bOk;
 
     if(!bOk)
     {

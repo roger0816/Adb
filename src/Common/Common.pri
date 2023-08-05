@@ -10,6 +10,7 @@ HEADERS += \
     $$PWD/DEF.h \
     $$PWD/DataSync.h \
     $$PWD/Query.h \
+    $$PWD/QueryApi.h \
     $$PWD/QueryObj.h \
     $$PWD/VojData.h
 
@@ -19,6 +20,7 @@ SOURCES += \
     $$PWD/CSqlClass.cpp \
     $$PWD/DataSync.cpp \
     $$PWD/Query.cpp \
+    $$PWD/QueryApi.cpp \
     $$PWD/QueryObj.cpp \
     $$PWD/VojData.cpp \
     $$PWD/common.cpp

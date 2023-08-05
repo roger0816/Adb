@@ -4,12 +4,21 @@ Query::Query(QObject *parent)
     : QueryObj{parent}
 {
 
-
+    m_api.m_sql=&m_sql;
 }
 
 
 CData Query::implementRecall(CData data)
 {
+
+    if(data.iAciton>=ACT::API_REQUSET)
+    {
+
+        return m_api.api(data);
+
+    }
+
+
 
 
     CData re;

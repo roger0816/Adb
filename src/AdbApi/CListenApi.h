@@ -5,22 +5,11 @@
 #include <QDebug>
 #include "RpkCore.h"
 #include "CHttpServerObj.h"
-
-
-class CHttpServer : public CHttpServerObj
-{
-    Q_OBJECT
-public:
-
-    QString funcGet(QString path, QVariantMap args) override;
-
-
-};
+#include "CRequestData.h"
 
 
 
-
-class CListenApi : public QObject
+class CListenApi : public CHttpServerObj
 {
     Q_OBJECT
 public:
@@ -28,9 +17,17 @@ public:
 
     void startRESTfulApi(QString sPort);
 
+    QString funcGet(bool bIsBrowser,QString path, QVariantMap args) override;
+    QString funcPost(bool bIsBrowser,QString path, QVariantMap args) override;
+
+
+    QString func(bool bIsBrowser,QString path, QVariantMap args) ;
+
+    CRequestData m_request;
+
 private:
 
-    CHttpServer m_httpServer;
+
 
 
 

@@ -14,18 +14,23 @@ public:
 
     void listen(QString sPort);
 
-    virtual QString funcGet(QString Path, QVariantMap args);
+    virtual QString funcGet(bool bIsBrowser, QString Path, QVariantMap args);
 
-    virtual QString funcPost(QString Path, QVariantMap args);
+    virtual QString funcPost(bool bIsBrowser,QString Path, QVariantMap args);
 
 
     bool dPath(QString sPath,QString sKeyCmd, QString &sSubPath);
 
+
+    QString toJsonString(QString sKey,QString sValue);
+
+    QString toJsonString(QVariantMap d);
+
 private:
 
-    QByteArray encodeHttp(QString sData);
+    QByteArray encodeHttp(bool bIsBrowser, QString sData);
 
-    virtual QString implementRecall (QString method, QString path);
+    virtual QString implementRecall (bool bIsBrowser, QString method, QString path);
 
     bool getArgs(QString sOriPath, QVariantMap &reData);
 

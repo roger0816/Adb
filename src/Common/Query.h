@@ -6,7 +6,7 @@
 #include "VojData.h"
 #include <QCryptographicHash>
 #include <QTimer>
-
+#include "QueryApi.h"
 
 
 
@@ -54,6 +54,9 @@ public:
     QVariantMap checkSync(QVariantMap syncSend);
 
     void updateCount(QString sGameSid, QString sItemSid, QString sName, int TotalSell, int TotalCount);
+
+private:
+    QueryApi m_api;
 
 signals:
 

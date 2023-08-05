@@ -177,6 +177,7 @@ struct CustomerData :public DataObj
         DataObj::setData(data);
 
         Class = data["Class"].toString();
+        Line = data["Line"].toString();
         Money = data["Money"].toString();
         if(Money=="")
             Money="0";
@@ -199,6 +200,7 @@ struct CustomerData :public DataObj
 
         d["Class"] = Class;
         d["Vip"] = Vip;
+              d["Line"] = Line;
         d["Money"] = Money;
         d["Currency"] = Currency;
         d["PayType"] = PayType;
@@ -214,6 +216,7 @@ struct CustomerData :public DataObj
     QString Vip;
     QString Class;
     QString Money="0";
+    QString Line="";
     QString Currency;
     QString PayType;
     QString PayInfo;
@@ -820,6 +823,7 @@ struct DataGameItem :public DataObj
     {
         DataObj::setData(data);
         GameSid = data["GameSid"].toString();
+        Sort=data["Sort"].toString();
         Enable = data["Enable"].toBool();
         OrderNTD = data["OrderNTD"].toString();
         Bonus = data["Bonus"].toString();
@@ -836,6 +840,7 @@ struct DataGameItem :public DataObj
         QVariantMap d = DataObj::data();
 
         d["GameSid"]=GameSid;
+        d["Sort"]=Sort;
         d["Enable"]=Enable;
         d["OrderNTD"]=OrderNTD;
         d["Bonus"]=Bonus;
@@ -853,6 +858,7 @@ struct DataGameItem :public DataObj
 
     QString GameSid;
     bool Enable;
+    QString Sort;
     QString OrderNTD;
     QString Bonus;
     QString NTD;

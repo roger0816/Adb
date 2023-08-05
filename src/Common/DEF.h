@@ -157,13 +157,29 @@ enum _KEY
 
     PAY_ORDER,
 
-    API_GAME_LIST=5001,
-    API_GMAE_ITEM=5011
+    API_REQUSET=7000
+
 
 };
 
 }
 
+
+namespace ADP_API
+{
+enum _KEY
+{
+     GAME_LIST=7001,
+     GAME_ITEM,
+     RATE,
+     CUS_DATA,
+     CUS_HISTORY,
+     CUS_GAME,
+     ADD_VALUE_TYPE
+
+
+};
+}
 
 namespace  GROUP_DATA{
 enum

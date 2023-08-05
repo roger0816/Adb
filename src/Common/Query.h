@@ -60,6 +60,9 @@ private:
 
 signals:
 
+public slots:
+    void slotApiDoOrder(QVariantMap data);
+
 };
 
 #endif // QUERY_H

@@ -32,6 +32,8 @@ public:
 
     QString getCusGame(QString sSid);
 
+    QString doOrder(QVariantMap data);
+
 
 
 private:

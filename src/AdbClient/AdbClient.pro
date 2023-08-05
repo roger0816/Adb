@@ -30,6 +30,7 @@ SOURCES += \
     StageCustomerService/LayerOrder.cpp \
     StageManagerSetting/LayerItemCount.cpp \
     StageOrder/DialogDayReportEdit.cpp \
+    StageOrder/DialogEditOwner.cpp \
     StageOrder/ItemOrderSelector.cpp \
     StageOrder/LayerDayDebit.cpp \
     StageReport/LayerCostReport.cpp \
@@ -103,6 +104,7 @@ HEADERS += \
     StageCustomerService/LayerOrder.h \
     StageManagerSetting/LayerItemCount.h \
     StageOrder/DialogDayReportEdit.h \
+    StageOrder/DialogEditOwner.h \
     StageOrder/ItemOrderSelector.h \
     StageOrder/LayerDayDebit.h \
     StageReport/LayerCostReport.h \
@@ -175,6 +177,7 @@ FORMS += \
     StageCustomerService/LayerOrder.ui \
     StageManagerSetting/LayerItemCount.ui \
     StageOrder/DialogDayReportEdit.ui \
+    StageOrder/DialogEditOwner.ui \
     StageOrder/ItemOrderSelector.ui \
     StageOrder/LayerDayDebit.ui \
     StageReport/LayerCostReport.ui \

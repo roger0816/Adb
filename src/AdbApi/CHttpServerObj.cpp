@@ -102,12 +102,10 @@ QByteArray CHttpServerObj::encodeHttp(bool bIsBrowser,QString sData)
 
 
 
-
     QByteArray re;
 
 
-
-     QString response = st.arg(jsonData.toUtf8().size())+
+    QString response = st.arg(jsonData.toUtf8().size())+
              jsonData;
      re.append(response);
 

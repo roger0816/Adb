@@ -71,7 +71,7 @@
             <number>36</number>
            </attribute>
            <attribute name="horizontalHeaderDefaultSectionSize">
-            <number>200</number>
+            <number>170</number>
            </attribute>
            <attribute name="verticalHeaderVisible">
             <bool>false</bool>
@@ -217,7 +217,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="page0"/>
         <widget class="QWidget" name="page1">
@@ -494,6 +494,51 @@ color: rgb(255, 0, 0);
              </size>
             </property>
            </spacer>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="page">
+         <layout class="QGridLayout" name="gridLayout_7">
+          <item row="0" column="0">
+           <widget class="QWidget" name="widget" native="true">
+            <layout class="QGridLayout" name="gridLayout_6">
+             <item row="0" column="0">
+              <widget class="QComboBox" name="cbFacChange">
+               <property name="minimumSize">
+                <size>
+                 <width>240</width>
+                 <height>42</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>240</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QPushButton" name="btnFacChange">
+               <property name="minimumSize">
+                <size>
+                 <width>120</width>
+                 <height>42</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>120</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>確認</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>

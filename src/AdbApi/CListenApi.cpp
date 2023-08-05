@@ -149,6 +149,34 @@ QString CListenApi::func(bool bIsBrowser,QString path, QVariantMap args)
 
     }
 
+    else if(dPath(path,"Order",sSubPath))
+    {
+            QStringList listKey;
+            listKey<<"UserId"<<"Password"<<"Item"<<"Count"<<"Customer"<<"GameAccount";
+
+            bool bOk=true;
+
+            foreach(QString v,listKey)
+            {
+                if(!args.keys().contains(v))
+                    bOk = false;
+            }
+
+            if(!bOk)
+            {
+                sSendData=toJsonString("Error","400 Bad Request : input Error ");
+
+            }
+            else
+            {
+                sSendData=m_request.doOrder(args);
+                qDebug()<<"send : "<<sSendData;
+            }
+
+
+
+    }
+
     else if(dPath(path,"AddValueType",sSubPath))
     {
 
@@ -170,6 +198,8 @@ QString CListenApi::func(bool bIsBrowser,QString path, QVariantMap args)
 
 
     }
+
+
 
     return sSendData;
 }

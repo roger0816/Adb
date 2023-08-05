@@ -27,7 +27,7 @@ private:
 
     bool getGameList(QString &data);
 
-    bool getGameItem(QString sSid,QString &data);
+    bool getGameItemFromGame(QString sSid,QString &data);
 
     bool getCusFromLineId(QString sLine, QString &data);
 
@@ -38,12 +38,29 @@ private:
 
     bool getPayType(QString &data);
 
+
+    bool doOrder(QVariantMap input, QString &data);
+
+
+    bool doOrder(QString sCusSid, QStringList listItem, QStringList listCount, QString &data);
+
     QString listToJson(QVariantList list, QStringList listKey={});
+
+    QVariantList jsonToList(const QString& jsonString);
 
     QString mapToJson(QVariantMap map, QStringList listKey={});
 
 
+    bool checkGameItem(QStringList listItem, QStringList listCount , QString &sGameSid,QStringList &listCanType);
+
+
+    //
+    bool checkLogin(QString sUser, QString sPassword);
+
+
 signals:
+
+    void signalDoOrder(QVariantMap data);
 
 };
 

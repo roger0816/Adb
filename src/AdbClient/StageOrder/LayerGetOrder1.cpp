@@ -88,7 +88,7 @@ void LayerGetOrder1::refreshUser(bool bRe)
 
         OrderData order = listOrder.at(i);
 
-        if(listKeyUser.indexOf(order.Owner)<0)
+        if(listKeyUser.indexOf(order.Owner)<0 &&order.Owner!="")
             continue;
 
         if(order.Step=="1" || (order.Step=="2" && order.PaddingUser.trimmed()!=""))
@@ -108,6 +108,8 @@ void LayerGetOrder1::refreshUser(bool bRe)
     ui->tbUser->setRowCount(0);
 
     ui->tbUser->setColumnCount(0);
+
+
     int row=0,col=0;
 
     for(int i=0;i<listFac.length();i++)
@@ -135,7 +137,7 @@ void LayerGetOrder1::refreshUser(bool bRe)
 
         col++;
 
-        if(col>=5)
+        if(col>=6)
         {
             col=0;
 
@@ -200,6 +202,9 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
     int iIdx = row*ui->tbUser->columnCount()+column;
     QString sKey= m_listFactory.at(iIdx).Name;
     m_currentDataKey = sKey;
+
+
+
 
     //  ui->cbAddValueType->setVisible(sKey=="艾比代");
 
@@ -321,6 +326,14 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
     if(column==_Action && ui->tbOrder->item(row,_Action)->text()=="確認接單")
     {
+        if(ui->tbUser->currentItem()->text().contains("未分配"))
+        {
+            ui->wBottom->setCurrentIndex(2);
+            return ;
+        }
+
+
+
         if(1==UI.showMsg("",QString("請確認是否鎖定處理編號:%1？").arg(order.Id),QStringList()<<"否"<<"是"))
         {
             bool bCheck= false;
@@ -456,6 +469,9 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
         ui->wBottom->setCurrentIndex(1);
 
     }
+
+
+
 
 }
 
@@ -595,7 +611,23 @@ void LayerGetOrder1::refresh()
 
     m_listFactory.clear();
 
+    ui->cbFacChange->clear();
+
     m_listFactory.append(ACTION.getFactoryClass("",true));
+
+    QStringList listFacName;
+    foreach(DataFactory fc,m_listFactory)
+    {
+        listFacName.append(fc.Name);
+    }
+
+    ui->cbFacChange->addItems(listFacName);
+
+//    DataFactory fcLine;
+//    fcLine.Name="未分配";
+
+//    m_listFactory.append(fcLine);
+
 
     ui->tbOrder->setRowCount(0);
 
@@ -674,6 +706,29 @@ void LayerGetOrder1::slotCancel()
 
 void LayerGetOrder1::on_btnDelayOrder_clicked()
 {
+
+}
+
+
+void LayerGetOrder1::on_btnFacChange_clicked()
+{
+    QVariantList listData =m_data[m_currentDataKey].toList();
+
+    QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
+
+    OrderData order(data);
+
+    order.StepTime[1]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
+
+    // order.PaddingUser="";
+    order.Owner=ui->cbFacChange->currentText();
+    QString sError;
+    bool bOk =ACTION.replaceOrder(order,sError);
+    if(bOk)
+        sError="已修改訂單負責人";
+    UI.showMsg("",sError,"OK");
+
+    refreshUser();
 
 }
 

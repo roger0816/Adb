@@ -45,7 +45,7 @@ CData QueryApi::api(CData data)
     else if(iAction == ADP_API::GAME_ITEM)
     {
 
-        re.bOk = getGameItem(data.dData["Sid"].toString(),sData);
+        re.bOk = getGameItemFromGame(data.dData["Sid"].toString(),sData);
 
         re.dData["data"]=sData.toUtf8();
 
@@ -81,6 +81,15 @@ CData QueryApi::api(CData data)
     {
 
         re.bOk = getPayType(sData);
+
+        re.dData["data"]=sData.toUtf8();
+
+    }
+
+    else  if(iAction == ADP_API::ORDER)
+    {
+
+        re.bOk = doOrder(data.dData,sData);
 
         re.dData["data"]=sData.toUtf8();
 
@@ -138,7 +147,7 @@ bool QueryApi::getGameList(QString &data)
     return bOk;
 }
 
-bool QueryApi::getGameItem(QString sSid, QString &data)
+bool QueryApi::getGameItemFromGame(QString sSid, QString &data)
 {
     QVariantMap in;
     in["GameSid"]=sSid;
@@ -150,7 +159,7 @@ bool QueryApi::getGameItem(QString sSid, QString &data)
     if(bOk)
     {
         QStringList listKey;
-        listKey<<"Sid"<<"GameSid"<<"Name"<<"Bouns"<<"OrderNTD"<<"Enable"<<"AddValueTypeSid"<<"UpdateTime";
+        listKey<<"Sid"<<"GameSid"<<"Name"<<"Bouns"<<"OrderNTD"<<"Enable"<<"AddValueTypeSid"<<"Bonus"<<"UpdateTime";
         data = listToJson(listData,QStringList()<<listKey);
     }
     else
@@ -210,7 +219,7 @@ bool QueryApi::getCusHistory(QString sSid, QString &data)
     if(bOk)
     {
         QStringList listKey;
-       // listKey<<"Sid"<<"GameSid"<<"Name"<<"Bouns"<<"OrderNTD"<<"Enable"<<"UpdateTime";
+        // listKey<<"Sid"<<"GameSid"<<"Name"<<"Bouns"<<"OrderNTD"<<"Enable"<<"UpdateTime";
         data = listToJson(listData,QStringList()<<listKey);
     }
     else
@@ -233,7 +242,7 @@ bool QueryApi::getCusGame(QString sSid, QString &data)
     if(bOk)
     {
         QStringList listKey;
-       // listKey<<"Sid"<<"GameSid"<<"Name"<<"Bouns"<<"OrderNTD"<<"Enable"<<"UpdateTime";
+        // listKey<<"Sid"<<"GameSid"<<"Name"<<"Bouns"<<"OrderNTD"<<"Enable"<<"UpdateTime";
         data = listToJson(listData,QStringList()<<listKey);
     }
     else
@@ -262,6 +271,161 @@ bool QueryApi::getPayType(QString &data)
 
 
     return bOk;
+}
+
+bool QueryApi::doOrder(QVariantMap input, QString &data)
+{
+
+    qDebug()<<"do order : "<<input;
+
+    QString sUserId=input["UserId"].toString();
+    QString sPassword=input["Password"].toString();
+    QStringList listItem=input["Item"].toString().split(",");
+    QStringList listCount=input["Count"].toString().split(",");
+    QString sCusSid = input["Customer"].toString();
+    QString sGameAccount = input["GameAccount"].toString();
+
+
+    if(!checkLogin(sUserId,sPassword))
+    {
+        qDebug()<<"Login error";
+
+        data="Login error";
+        return false;
+    }
+
+    QVariantMap in;
+    in["Sid"]=sCusSid;
+    QVariantList listData;
+    QString sError;
+    bool bOk;
+    bOk= m_sql->queryTb(SQL_TABLE::CustomerData(),in,listData,sError);
+
+    CustomerData cus;
+    if(bOk && listData.length()>0)
+    {
+        cus.setData(listData.first().toMap());
+    }
+    else
+    {
+        qDebug()<<"no found customer";
+
+        data="no found customer";
+        return false;
+    }
+
+
+    QString sMsg;
+    QStringList listCanType;
+    bool bCheck = checkGameItem(listItem,listCount,sMsg,listCanType);
+
+    qDebug()<<"check : "<<bCheck;
+
+
+    if(!bCheck)
+    {
+        data = sMsg;
+        return false;
+    }
+
+
+    auto items = [=]()
+    {
+        QStringList listRe;
+        for(int i=0;i<listItem.length();i++)
+        {
+            QString st = listItem.at(i)+",,"+listCount.at(i);
+
+            listRe.append(st);
+        }
+
+        return listRe.join(";;");
+    };
+
+
+    OrderData order;
+    order.CustomerSid=cus.Sid;
+    order.CustomerName=cus.Name;
+    order.Currency=cus.Currency;
+    order.GameSid = sMsg; // it is game sid or error msg
+    order.CanSelectPayType=listCanType.join(";;");
+
+    order.OrderDate=QDateTime::currentDateTimeUtc().addSecs(8 * 3600).toString("yyyyMMdd");
+
+    order.OrderTime=QDateTime::currentDateTimeUtc().addSecs(8 * 3600).toString("hhmmss");
+    order.Step="0";
+    order.Item = items();
+
+    qDebug()<<"send signalDoOrder";
+
+
+    emit signalDoOrder(order.data());
+
+
+
+    data="send ok";
+    return true;
+}
+
+bool QueryApi::doOrder(QString sCusSid, QStringList listItem, QStringList listCount, QString &data)
+{
+
+    QVariantMap in;
+    in["Sid"]=sCusSid;
+    QVariantList listData;
+    QString sError;
+    bool bOk;
+    bOk= m_sql->queryTb(SQL_TABLE::CustomerData(),in,listData,sError);
+
+    CustomerData cus;
+    if(bOk && listData.length()>0)
+    {
+        cus.setData(listData.first().toMap());
+    }
+    else
+    {
+        data="no found customer";
+        return false;
+    }
+
+    QString sMsg;
+    QStringList listCanType;
+    bool bCheck = checkGameItem(listItem,listCount,sMsg,listCanType);
+
+    if(!bCheck)
+    {
+        data = sMsg;
+        return false;
+    }
+
+
+    auto items = [=]()
+    {
+        QStringList listRe;
+        for(int i=0;i<listItem.length();i++)
+        {
+            QString st = listItem.at(i)+",,"+listCount.at(i);
+
+            listRe.append(st);
+        }
+
+        return listRe.join(";;");
+    };
+
+
+    OrderData order;
+    order.CustomerSid=cus.Sid;
+    order.CustomerName=cus.Name;
+    order.Currency=cus.Currency;
+    order.GameSid = sMsg; // it is game sid or error msg
+    order.CanSelectPayType=listCanType.join(";;");
+
+    order.OrderDate=QDateTime::currentDateTimeUtc().addSecs(8 * 3600).toString("yyyyMMdd");
+
+    order.OrderTime=QDateTime::currentDateTimeUtc().addSecs(8 * 3600).toString("hhmmss");
+    order.Step=2;
+    order.Item = items();
+
 }
 
 
@@ -311,6 +475,22 @@ QString QueryApi::listToJson(QVariantList list,QStringList listKey)
     return jsonString;
 }
 
+QVariantList jsonToList(const QString& jsonString) {
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(jsonString.toUtf8());
+    if (jsonDoc.isNull() || !jsonDoc.isArray()) {
+        // 若轉換失敗或不是 JSON Array，返回空的 QVariantList
+        return QVariantList();
+    }
+
+    QJsonArray jsonArray = jsonDoc.array();
+    QVariantList list;
+    for (const QJsonValue& jsonValue : jsonArray) {
+        list.append(jsonValue.toVariant());
+    }
+
+    return list;
+}
+
 QString QueryApi::mapToJson(QVariantMap map, QStringList listKey)
 {
 
@@ -334,17 +514,137 @@ QString QueryApi::mapToJson(QVariantMap map, QStringList listKey)
     }
 
 
-// 將 QVariantMap 轉換為 QJsonObject
-QJsonObject jsonObject = QJsonObject::fromVariantMap(variantMap);
+    // 將 QVariantMap 轉換為 QJsonObject
+    QJsonObject jsonObject = QJsonObject::fromVariantMap(variantMap);
 
-// 使用 QJsonDocument 來創建 JSON 格式的 QByteArray
-QJsonDocument jsonDoc(jsonObject);
+    // 使用 QJsonDocument 來創建 JSON 格式的 QByteArray
+    QJsonDocument jsonDoc(jsonObject);
 
-// 使用 toJson 函數將 QJsonDocument 轉換為格式化的 JSON 字串
-QByteArray jsonData = jsonDoc.toJson(QJsonDocument::Indented);
+    // 使用 toJson 函數將 QJsonDocument 轉換為格式化的 JSON 字串
+    QByteArray jsonData = jsonDoc.toJson(QJsonDocument::Indented);
 
-// 將 QByteArray 轉換為 QString
-QString jsonString(jsonData);
+    // 將 QByteArray 轉換為 QString
+    QString jsonString(jsonData);
 
-return jsonString;
+    return jsonString;
+}
+
+bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, QString &sGameSid,QStringList &listCanType)
+{
+
+    QStringList listReCanType;
+
+    auto getAddValueTypeList=[=](QString  sAddValueType)
+    {
+        QStringList listRe;
+
+        QStringList listTmp;
+        listTmp = sAddValueType.split(";;");
+
+        foreach(QString v,listTmp)
+        {
+            listRe.append(v.split(",,").first());
+        }
+
+        return listRe;
+    };
+
+    auto getItemFromSid=[=](QString sSid,DataGameItem &gameItem)
+    {
+
+        QVariantMap in;
+        in["Sid"]=sSid;
+        in["ASC"]="Sort";
+        QVariantList listData;
+        QString sError;
+        bool bOk = m_sql->queryTb(SQL_TABLE::GameItem(),in,listData,sError);
+
+
+        if(bOk || listData.length()<1)
+        {
+            return false;
+        }
+        else
+        {
+            DataGameItem item(listData.first().toMap());
+            gameItem =item;
+            return true;
+        }
+    };
+
+
+
+    if(listItem.length()!=listCount.length())
+    {
+        sGameSid="item length no mapping count lenght";
+        return false;
+    }
+
+    QString sTmpGameSid="";
+
+    for(int i=0;i<listItem.length();i++)
+    {
+
+
+        DataGameItem item;
+        bool b=  getItemFromSid(listItem.at(i),item);
+        if(!b)
+        {
+            sGameSid = "no found GameItem Sid:"+listItem.at(i);
+            return false;
+        }
+
+        QStringList listPayType =getAddValueTypeList(item.AddValueTypeSid);
+
+
+
+        if(i==0)
+        {
+            listReCanType = listPayType;
+            sTmpGameSid =item.GameSid;
+        }
+        else
+        {
+            if(sTmpGameSid!=item.GameSid)
+            {
+                sGameSid = "Game Sid no mapping :"+listItem.at(i);
+                return false;
+            }
+
+            QSet<QString> setA=listReCanType.toSet();
+            QSet<QString> setB=listPayType.toSet();
+
+            QSet<QString> commonElements = setA.intersect(setB);
+
+            listReCanType=commonElements.toList();
+
+            if(listReCanType.length()<1)
+            {
+                sGameSid = "Items AddValueType no mapping :"+listItem.at(i);
+                return false;
+            }
+
+
+        }
+
+
+
+    }
+
+    sGameSid = sTmpGameSid;
+
+    listCanType=listReCanType;
+    return true;
+}
+
+bool QueryApi::checkLogin(QString sUser, QString sPassword)
+{
+    QVariantMap in;
+    QString sError;
+    in["Id"]=sUser;
+    in["Password"]=sPassword;
+    QVariantList out;
+    m_sql->queryTb(SQL_TABLE::UserData(),in,out,sError);
+    qDebug()<<"DDD "<<out;
+    return out.length()>0;
 }

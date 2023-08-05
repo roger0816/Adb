@@ -108,6 +108,16 @@ void LayerFactory::refresh()
 
     ACTION.action(ACT::QUERY_FACTORY_CLASS,tmp,m_listFactory,sError);
 
+    if(m_listFactory.length()>1)
+    {
+        DataFactory fac(m_listFactory.last().toMap());
+
+        if(fac.Id=="未" && fac.Name=="未分配")
+            m_listFactory.pop_back();
+
+    }
+
+
     ui->tbFactory->setRowCount(0);
 
     CListPair listPay = ACTION.getAddValueType(true);

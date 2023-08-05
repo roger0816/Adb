@@ -12,7 +12,7 @@
 
 
 
-#define ADP_VER "v1.13.0421"
+#define ADP_VER "v1.14.0711"
 static int SERVER_MIN_VER = 12;
 
 static QString SPLIT1 =";;" ;
@@ -175,7 +175,8 @@ enum _KEY
      CUS_DATA,
      CUS_HISTORY,
      CUS_GAME,
-     ADD_VALUE_TYPE
+     ADD_VALUE_TYPE,
+     ORDER
 
 
 };

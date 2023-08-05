@@ -150,18 +150,19 @@ void LayerCustomer::refresh()
 
         ui->tb->setItem(iRow,2,UI.tbItem(sClassSid));
         ui->tb->setItem(iRow,3,UI.tbItem(data.Name));
+        ui->tb->setItem(iRow,4,UI.tbItem(data.Line));
 
         QString sLv="一般";
 
         if(data.Vip=="1")
             sLv="VIP";
 
-        ui->tb->setItem(iRow,4,UI.tbItem(sLv));
+        ui->tb->setItem(iRow,5,UI.tbItem(sLv));
 
-        ui->tb->setItem(iRow,5,UI.tbItem(data.Currency));
+        ui->tb->setItem(iRow,6,UI.tbItem(data.Currency));
        // ui->tb->setItem(iRow,6,UI.tbItem(data.Money,GlobalUi::_BUTTON));
 
-        ui->tb->setItem(iRow,6,UI.tbItem("詳細",GlobalUi::_BUTTON));
+        ui->tb->setItem(iRow,7,UI.tbItem("詳細",GlobalUi::_BUTTON));
 
         QVariantMap in;
 
@@ -177,15 +178,15 @@ void LayerCustomer::refresh()
 
         QString sUserName = ACTION.getUser(data.UserSid).Name;
 
-        ui->tb->setItem(iRow,7,UI.tbItem(updatetime));
-        ui->tb->setItem(iRow,8,UI.tbItem(sUserName));
+        ui->tb->setItem(iRow,8,UI.tbItem(updatetime));
+        ui->tb->setItem(iRow,9,UI.tbItem(sUserName));
 
         QString sNote1 = data.Note1;
 
         if(sNote1=="_")
             sNote1="";
 
-        ui->tb->setItem(iRow,9,UI.tbItem(sNote1));
+        ui->tb->setItem(iRow,10,UI.tbItem(sNote1));
 
 
         m_dIdxMapping[iRow]=i;
@@ -361,7 +362,7 @@ void LayerCustomer::on_tb_cellClicked(int row, int column)
         emit into(iTmp);
     }
 
-    else if(column==6)
+    else if(column==7)
     {
 
         DialogCustomerCostHistory dialog;

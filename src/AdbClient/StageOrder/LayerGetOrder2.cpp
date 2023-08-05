@@ -121,7 +121,7 @@ void LayerGetOrder2::refreshUser(bool bRe)
 
         col++;
 
-        if(col>=5)
+        if(col>=6)
         {
             col=0;
 
@@ -543,6 +543,14 @@ void LayerGetOrder2::refresh()
     //    m_listFactory.append(tmp);
 
     m_listFactory.append(ACTION.getFactoryClass("",true));
+
+    if(m_listFactory.length()>0)
+    {
+        if(m_listFactory.last().Id=="未" && m_listFactory.last().Name=="未分配")
+        {
+            m_listFactory.pop_back();
+        }
+    }
 
     ui->tbOrder->setRowCount(0);
 

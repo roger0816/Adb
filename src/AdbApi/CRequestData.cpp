@@ -135,6 +135,22 @@ QString CRequestData::getCusGame(QString sSid)
     return sRe;
 }
 
+QString CRequestData::doOrder(QVariantMap data)
+{
+    CData d;
+    d.iAciton=ADP_API::ORDER;
+    d.dData=data;
+
+    QByteArray output;
+
+
+    RPKCORE.network.connectHost(m_sIp,m_sPort,d.enCodeJson(),output);
+
+    return "";
+}
+
+
+
 QString CRequestData::listToJson(QVariantList list)
 {
 

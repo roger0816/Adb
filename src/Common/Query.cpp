@@ -5,6 +5,8 @@ Query::Query(QObject *parent)
 {
 
     m_api.m_sql=&m_sql;
+
+    m_api.connect(&m_api,&QueryApi::signalDoOrder,this,&Query::slotApiDoOrder);
 }
 
 
@@ -485,6 +487,13 @@ CData Query::implementRecall(CData data)
             d = data.listData.first().toMap();
 
         bOk = m_sql.queryTb(SQL_TABLE::FactoryClass(),d,re.listData,sError);
+
+        DataFactory fac;
+        fac.Sid="999";
+        fac.Id="未";
+        fac.Name="未分配";
+        re.listData.append(fac.data());
+
 
     }
 
@@ -1644,7 +1653,7 @@ bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
 
         }
 
-        else if(current.Note1==order.Note1 &&  current.Step!="0")
+        else if(current.Note1==order.Note1 &&  current.Step!="0" && current.Owner!="未分配")
         {
             sError ="下單失敗，目標訂單不處於報價狀態。";
 
@@ -1847,6 +1856,21 @@ void Query::updateCount(QString sGameSid, QString sItemSid,QString sName, int To
          m_sql.insertTb(SQL_TABLE::QueryCount(),data,sError);
     }
 
+}
+
+void Query::slotApiDoOrder(QVariantMap data)
+{
+   // OrderData d(data);
+
+    qDebug()<<"get slot : "<<data;
+
+    CData input;
+
+    input.iAciton = ACT::REPLACE_ORDER;
+
+   input.dData = data;
+
+   CData re= implementRecall(input);
 }
 
 

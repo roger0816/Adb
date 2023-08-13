@@ -6,4 +6,4 @@
 #make
 
 cd bin/
-./AdbApi 7001 
+./AdbApi 7001 127.0.0.1 6003 

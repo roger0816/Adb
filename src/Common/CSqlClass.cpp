@@ -1349,6 +1349,7 @@ bool CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
         //  m_db =QSqlDatabase::addDatabase("QMYSQL");
         m_db =QSqlDatabase::addDatabase("QMYSQL",sDbName);
 
+        m_db.setConnectOptions("wait_timeout=2140000");
 
         //  m_db.setHostName("206.189.185.20");
 

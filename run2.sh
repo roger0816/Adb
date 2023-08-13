@@ -6,4 +6,4 @@
 #make
 
 cd bin/
-./AdbServerUnix 6002 10.130.0.9 adp
+./AdbServerUnix 6002 127.0.0.1 adp

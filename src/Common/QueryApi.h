@@ -10,6 +10,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include "Common.h"
 
 class QueryApi : public QObject
 {
@@ -23,32 +24,30 @@ public:
 
 private:
 
-    bool getRate(QString &data);
-
-    bool getGameList(QString &data);
-
-    bool getGameItemFromGame(QString sSid,QString &data);
-
-    bool getCusFromLineId(QString sLine, QString &data);
-
-    bool getCusHistory(QString sSid, QString &data);
+    bool getRate(QVariantMap &data);
 
 
-    bool getCusGame(QString sSid, QString &data);
+    bool getGameList(QVariantMap &data);
 
-    bool getPayType(QString &data);
-
-
-    bool doOrder(QVariantMap input, QString &data);
+     bool getGameItemFromGame(QString sSid,QVariantMap &data);
 
 
-    bool doOrder(QString sCusSid, QStringList listItem, QStringList listCount, QString &data);
+    bool getCusFromLineId(QString sLine, QVariantMap &data);
 
-    QString listToJson(QVariantList list, QStringList listKey={});
 
-    QVariantList jsonToList(const QString& jsonString);
+    bool getCusHistory(QString sSid, QVariantMap &data);
 
-    QString mapToJson(QVariantMap map, QStringList listKey={});
+
+    bool getCusGame(QString sSid, QVariantMap &data);
+
+    bool getPayType(QVariantMap &data);
+
+
+    bool doOrder(QVariantMap input, QVariantMap &data);
+
+
+   // bool doOrder(QString sCusSid, QStringList listItem, QStringList listCount, QString &data);
+
 
 
     bool checkGameItem(QStringList listItem, QStringList listCount , QString &sGameSid,QStringList &listCanType);
@@ -57,6 +56,9 @@ private:
     //
     bool checkLogin(QString sUser, QString sPassword);
 
+
+
+    QString notFound(QString sOtherMsg="");
 
 signals:
 

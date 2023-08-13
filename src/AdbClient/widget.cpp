@@ -289,7 +289,8 @@ void Widget::slotLogin()
     ACTION.reQuerty();
     qDebug()<<"preload ok";
     show();
-    qDebug()<<"main ui show";
+
+    qDebug()<<"main ui show "<<size();
     checkUserLv();
     ui->stackedWidget->setCurrentIndex(0);
 

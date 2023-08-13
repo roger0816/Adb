@@ -146,7 +146,10 @@ QString CRequestData::doOrder(QVariantMap data)
 
     RPKCORE.network.connectHost(m_sIp,m_sPort,d.enCodeJson(),output);
 
-    return "";
+    CData re(output);
+
+    QString sRe =QString::fromUtf8(re.dData["data"].toByteArray());
+    return sRe;
 }
 
 

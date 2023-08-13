@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
 
     Widget w;
 
+
   //  UI.m_mainWidget=&w;
 
     UI.setMainWidget(&w);

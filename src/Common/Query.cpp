@@ -652,19 +652,28 @@ CData Query::implementRecall(CData data)
         }
         else
         {
-            QVariantMap inTmp;
-            QVariantList outTmp;
-            inTmp["Sid"] = order.Sid;
-            m_sql.queryTb(SQL_TABLE::OrderData(),inTmp,outTmp,sError);
 
-            if(outTmp.length()<1)
+            if(order.Owner=="未分配")
             {
-                sError="報價失敗，查詢不到該訂單";
-                bOk = false;
+                current = order;
             }
+
             else
             {
-                current.setData(outTmp.first().toMap());
+                QVariantMap inTmp;
+                QVariantList outTmp;
+                inTmp["Sid"] = order.Sid;
+                m_sql.queryTb(SQL_TABLE::OrderData(),inTmp,outTmp,sError);
+
+                if(outTmp.length()<1)
+                {
+                    sError="報價失敗，查詢不到該訂單";
+                    bOk = false;
+                }
+                else
+                {
+                    current.setData(outTmp.first().toMap());
+                }
             }
         }
 
@@ -966,9 +975,9 @@ CData Query::implementRecall(CData data)
 
     else if(data.iAciton==ACT::QUERY_ITEM_COUNT)
     {
- //  qDebug()<<"a1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+        //  qDebug()<<"a1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
         bOk = m_sql.queryTb(SQL_TABLE::GameItemCount(),data.dData,re.listData,sError);
- //  qDebug()<<"a2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+        //  qDebug()<<"a2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     }
 
 
@@ -1632,6 +1641,8 @@ bool Query::orderStep0(OrderData &order, QString &sError)
         order.Money[0]="0";
     }
 
+    if(order.StepTime.length()>0)
+        order.StepTime[0]=QDateTime::currentDateTimeUtc().addSecs(60*8).toString("yyyyMMddhhmmss");
 
 
     return true;
@@ -1667,6 +1678,12 @@ bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
 
             order.Id=getNewOrderId(order.OrderDate);
 
+            if(order.StepTime.length()>1)
+            {
+                order.StepTime[1]=QDateTime::currentDateTimeUtc().addSecs(60*8).toString("yyyyMMddhhmmss");
+                if(order.StepTime.at(0).trimmed()=="")
+                    order.StepTime[0]=QDateTime::currentDateTimeUtc().addSecs(60*8).toString("yyyyMMddhhmmss");
+            }
             QVariantMap in;
             QVariantList tmpOut;
             in["Sid"]=order.GameSid;
@@ -1769,7 +1786,7 @@ bool Query::orderStep3(OrderData &order, OrderData current, QString &sError)
 
 QVariantList Query::getOrderData(QString lastUpdateTime)
 {
-  return QVariantList();
+    return QVariantList();
 
 }
 
@@ -1788,7 +1805,7 @@ DataGameItem Query::getGameItem(QString sSid)
     if(listOut.length()>0)
     {
         re.setData(listOut.first().toMap());
-      //  sRe = listOut.first().toMap()["GameSid"].toString();
+        //  sRe = listOut.first().toMap()["GameSid"].toString();
     }
 
     return re;
@@ -1853,14 +1870,14 @@ void Query::updateCount(QString sGameSid, QString sItemSid,QString sName, int To
     }
     else
     {
-         m_sql.insertTb(SQL_TABLE::QueryCount(),data,sError);
+        m_sql.insertTb(SQL_TABLE::QueryCount(),data,sError);
     }
 
 }
 
 void Query::slotApiDoOrder(QVariantMap data)
 {
-   // OrderData d(data);
+    // OrderData d(data);
 
     qDebug()<<"get slot : "<<data;
 
@@ -1868,9 +1885,10 @@ void Query::slotApiDoOrder(QVariantMap data)
 
     input.iAciton = ACT::REPLACE_ORDER;
 
-   input.dData = data;
+    input.dData = data;
 
-   CData re= implementRecall(input);
+    CData re= implementRecall(input);
+
 }
 
 

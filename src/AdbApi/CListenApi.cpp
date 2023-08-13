@@ -67,6 +67,7 @@ QString CListenApi::func(bool bIsBrowser,QString path, QVariantMap args)
     {
 
         sSendData=m_request.getAllGames();
+        qDebug()<<"AAA : "<<sSendData;
     }
 
     else if(dPath(path,"GameItem",sSubPath))

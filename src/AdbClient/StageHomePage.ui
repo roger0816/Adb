@@ -35,7 +35,7 @@
       <item>
        <widget class="QTabWidget" name="tabWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tabWidgetPage1">
          <attribute name="title">
@@ -197,15 +197,15 @@ max-height:12px;</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>LayerSchedule</class>
-   <extends>QWidget</extends>
-   <header>LayerSchedule.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>ItemPic</class>
    <extends>QWidget</extends>
    <header>ItemPic.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerSchedule</class>
+   <extends>QWidget</extends>
+   <header>LayerSchedule.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

@@ -4,6 +4,10 @@
 #include <QObject>
 #include "DEF.h"
 #include "VojData.h"
+#include <QJsonObject>
+#include <QJsonDocument>
+#include <QJsonArray>
+
 
 #define COMMON Common::INS()
 
@@ -18,6 +22,20 @@ public:
     static Common &INS();
 
 
+    QString toJsonString(QString sKey,QString sValue);
+
+
+    QString toJsonString(QVariantMap d);
+
+
+
+
+    QString listToJson(QVariantList list, QStringList listKey={});
+
+    QVariantList jsonToList(const QString& jsonString);
+
+
+    QString mapToJson(QVariantMap map, QStringList listKey={});
 
 
 private:
@@ -25,6 +43,10 @@ private:
 
 
 signals:
+
+
+
+
 
 };
 

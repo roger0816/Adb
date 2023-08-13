@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1366</width>
-    <height>720</height>
+    <height>428</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -128,7 +128,7 @@ background-color:gray;
             <string notr="true"/>
            </property>
            <property name="currentIndex">
-            <number>6</number>
+            <number>5</number>
            </property>
            <widget class="StageHomePage" name="pageHome"/>
            <widget class="StageCustomerService" name="pageService">
@@ -156,7 +156,7 @@ background-color:gray;
              <string notr="true"/>
             </property>
            </widget>
-           <widget class="StageTest" name="pageTest"/>
+           <widget class="QWidget" name="pageTest"/>
            <widget class="QWidget" name="pagePreLoad"/>
           </widget>
          </item>
@@ -168,13 +168,13 @@ background-color:gray;
         <property name="minimumSize">
          <size>
           <width>0</width>
-          <height>80</height>
+          <height>64</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>80</height>
+          <height>64</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -182,10 +182,13 @@ background-color:gray;
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
          <property name="topMargin">
-          <number>0</number>
+          <number>2</number>
          </property>
          <property name="bottomMargin">
-          <number>4</number>
+          <number>2</number>
+         </property>
+         <property name="spacing">
+          <number>2</number>
          </property>
          <item row="2" column="0">
           <widget class="QWidget" name="widget_3" native="true">
@@ -260,7 +263,7 @@ color: rgb(95, 95, 0);</string>
            <property name="minimumSize">
             <size>
              <width>230</width>
-             <height>33</height>
+             <height>30</height>
             </size>
            </property>
            <layout class="QGridLayout" name="gridLayout_6">
@@ -386,8 +389,15 @@ color: rgb(0, 85, 255);</string>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="lbTestName">
+           <property name="font">
+            <font>
+             <pointsize>-1</pointsize>
+             <italic>false</italic>
+             <bold>true</bold>
+            </font>
+           </property>
            <property name="styleSheet">
-            <string notr="true">font: 700 36px &quot;Microsoft JhengHei UI&quot;;</string>
+            <string notr="true">font: 700 30px &quot;Microsoft JhengHei UI&quot;;</string>
            </property>
            <property name="text">
             <string>測試模式，非正式資料</string>
@@ -676,12 +686,6 @@ color: rgb(122, 122, 122);
    <class>StageReport</class>
    <extends>QWidget</extends>
    <header>StageReport.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>StageTest</class>
-   <extends>QWidget</extends>
-   <header>StageTest.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

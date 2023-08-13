@@ -416,11 +416,24 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
 
     emit signalDoOrder(reOrder.data());
 
+    in.clear();
+    in["CustomerSid"]=reOrder.CustomerSid;
+    in["Owner"] = reOrder.Owner;
+
+
+   bOk= m_sql->queryTb(SQL_TABLE::OrderData(),in,listData,sError);
+    if(!bOk || listData.length()<1)
+    {
+        data["data"] = COMMON.toJsonString("error","write fail");
+        return false;
+    }
+
+    OrderData rechek(listData.last().toMap());
 
 
     QVariantMap d;
     d["Status"]="1";
-    d["Order"]="";
+    d["OrderId"]=rechek.Id;
 
     data["data"]=COMMON.mapToJson(d);
 

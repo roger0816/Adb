@@ -144,7 +144,7 @@ void LayerSayCost::orderMode()
 
 void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 {
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , setCus ";
+
     m_listInto.clear();
     m_gameRate.clear();
 
@@ -207,16 +207,13 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
     ui->cbGame->clear();
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , game name OK ";
 
 
     ui->cbGame->setProperty("lock",true);
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add cb game";
 
 
     ui->cbGame->addItems(cbName);
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add cb game ok";
 
 
 
@@ -239,7 +236,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
         ui->cbGame->setEnabled(true);
         ui->txNote2->clear();
 
-        qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , new ORDER ";
+
         m_order=OrderData();
     }
     //    m_exRate = ACTION.listRate(m_order.ExRateSid,false,true).first();
@@ -873,7 +870,7 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
     }
 
     ui->cbAccount->clear();
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add accuont";
+
     ui->cbAccount->addItems(cbAcc);
 
     QVariantMap v;
@@ -882,12 +879,13 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 
     v["Enable"] =1;
 
+    v["ASC"]="Sort";
 
     QString sError;
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query m_listGameItem";
+
     ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError);
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , query m_listGameItem OK";
+
     ui->tbGameItem->setRowCount(0);
 
     for(int i=0;i<m_listGameItem.length();i++)
@@ -935,7 +933,7 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 
 void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 {
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change accuont";
+
     ui->lbGameAccount->setText(arg1);
 
     ui->cbServer->clear();
@@ -965,7 +963,7 @@ void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 
     }
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change accuont OK";
+
     ui->cbServer->addItems(server);
 
 }
@@ -973,7 +971,7 @@ void LayerSayCost::on_cbAccount_currentTextChanged(const QString &arg1)
 
 void LayerSayCost::on_cbServer_currentTextChanged(const QString &arg1)
 {
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change server";
+
     ui->lbServer->setText(arg1);
 
     QStringList chr;
@@ -998,7 +996,7 @@ void LayerSayCost::on_cbServer_currentTextChanged(const QString &arg1)
     }
 
     ui->cbChr->clear();
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change server ok";
+
     ui->cbChr->addItems(chr);
 
 
@@ -1314,7 +1312,6 @@ void LayerSayCost::delayShowEvent()
     qDebug()<<"show Event ";
     // m_listPayType = ACTION.getAddValueType();
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , show ";
 
     m_date = GLOBAL.dateTimeUtc8();
 
@@ -1323,16 +1320,16 @@ void LayerSayCost::delayShowEvent()
 
     QString sError;
 
-    QVariantMap v;
+//    QVariantMap v;
+//    v["ASC"]="Sort";
+//    ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError,true);
 
-    ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError,true);
-
-    if(m_listGameItem.length()<1)
-    {
-        DMSG.showMsg("ERROR 403","無商品資料錯誤，再重新操作一次。",QStringList()<<"OK");
-        emit back(1);
-        return ;
-    }
+//    if(m_listGameItem.length()<1)
+//    {
+//        DMSG.showMsg("ERROR 403","無商品資料錯誤，再重新操作一次。",QStringList()<<"OK");
+//        emit back(1);
+//        return ;
+//    }
 
 
     refreshInfo();

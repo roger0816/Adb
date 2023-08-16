@@ -252,7 +252,7 @@ QList<GroupData> Action::getGroupData(int iType,QString &sError)
 
 void Action::reQuerty()
 {
-    qDebug()<<"RRRRRRRR";
+
     getUser(true);
 
     getGameList(true);
@@ -1251,7 +1251,6 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType,
         re.append(DataRate());
 
 
-    qDebug()<<"cost rate list "<<m_exRate.length()<< "re len : "<<re.length();
 
     return re;
 }
@@ -1405,8 +1404,8 @@ QString Action::setPrimeMoney(OrderData &order)
 
         if(bCheck)
         {
-            qDebug()<<"AAAAA: ItemSid: "<<sItemSid<<" ,count : "<<itemCount<<" , orderPayType : "<<sValue
-                   <<" oneItemPrice : "<<iOneItemPrice;
+//            qDebug()<<"AAAAA: ItemSid: "<<sItemSid<<" ,count : "<<itemCount<<" , orderPayType : "<<sValue
+//                   <<" oneItemPrice : "<<iOneItemPrice;
         }
 
 
@@ -1612,7 +1611,7 @@ bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrder
 
     clearCacheData(ACT::QUERY_ITEM_COUNT);
 
-    qDebug()<<"clear cacheData ok";
+
     return bRe;
 }
 
@@ -1697,7 +1696,7 @@ void Action::clearCacheData(int iApi)
 
         if(sK.length()>2 && sK.mid(0,2) == sKey)
         {
-            qDebug()<<"clear cache : "<<sK;
+
             m_dKeepData[sK]="";
 
         }
@@ -1716,6 +1715,8 @@ bool Action::getNewCustomerId(QString &sGetId, bool bRenew)
 
     if(!bRenew)
         sGetId =getKeyValue(sKey,false).toUpper();
+
+    qDebug()<<"A0816 : "<<sGetId;
 
     if(sGetId=="")
     {

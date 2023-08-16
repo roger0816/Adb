@@ -287,10 +287,26 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
 
     QString sUserId=input["UserId"].toString();
     QString sPassword=input["Password"].toString();
-    QStringList listItem=input["Item"].toString().split(",");
-    QStringList listCount=input["Count"].toString().split(",");
+    QStringList inItem=input["Item"].toString().split(",");
+    QStringList inCount=input["Count"].toString().split(",");
     QString sCusSid = input["Customer"].toString();
     QString sGameAccount = input["GameAccount"].toString();
+    //
+    DataRate rate,primeRate;
+    QString sMsg;
+    DataGameList game;
+    CustomerGameInfo gameInfo;
+    CustomerData cus;
+
+    if(inItem.length()<1 || inCount.length()<1 ||
+            inItem.length()!=inCount.length())
+    {
+        qDebug()<<"item or count error";
+
+
+        data["data"]=COMMON.toJsonString("error","item or count error");
+        return false;
+    }
 
 
     if(!checkLogin(sUserId,sPassword))
@@ -302,14 +318,36 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
         return false;
     }
 
+    if(!checkGameInfo(sCusSid,sGameAccount,gameInfo))
+    {
+        qDebug()<<"GameAccount error";
+
+        data["data"]=COMMON.toJsonString("error","GameAccount error");
+        return false;
+    }
+
+
+    if(!checkRate(rate,primeRate))
+    {
+        qDebug()<<"rate error";
+
+        data["data"]=COMMON.toJsonString("error","rate error");
+        return false;
+    }
+
+
+
+
     QVariantMap in;
     in["Sid"]=sCusSid;
     QVariantList listData;
     QString sError;
     bool bOk;
+
+    //--------- get customer data
+
     bOk= m_sql->queryTb(SQL_TABLE::CustomerData(),in,listData,sError);
 
-    CustomerData cus;
     if(bOk && listData.length()>0)
     {
         cus.setData(listData.first().toMap());
@@ -323,22 +361,7 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
         return false;
     }
 
-    //------------------
-    in.clear();
-    in["Sid"]=sGameAccount;
-
-    bOk= m_sql->queryTb(SQL_TABLE::CustomerGameInfo(),in,listData,sError);
-
-    if(!bOk || listData.length()<1)
-    {
-        data["data"]=notFound("customer game account");
-        return false;
-    }
-    CustomerGameInfo gameInfo(listData.first().toMap());
-
-
-    //--------------------
-
+    //--------------get gamelist
 
     in.clear();
     in["Sid"]= gameInfo.GameSid;
@@ -349,47 +372,24 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
         return false;
     }
 
-    DataGameList game(listData.first().toMap());
+    game.setData(listData.first().toMap());
+
+    //-----------------------
 
 
-    QString sGameName= game.Name;
-    reOrder.GameSid=gameInfo.GameSid;
-
-    reOrder.GameRate= QString::number(game.GameRate);
-    //-------------------
-
-    QStringList listItemInfo;
-    listItemInfo.append(sGameName);
-    listItemInfo.append(gameInfo.LoginType);
-    listItemInfo.append(gameInfo.LoginAccount);
-    listItemInfo.append(gameInfo.LoginPassword);
-    listItemInfo.append(gameInfo.ServerName);
-    listItemInfo.append(gameInfo.Characters);
-    reOrder.ItemInfo = listItemInfo;
-
-
-
-    QString sMsg;
-    QStringList listCanType;
-    bool bCheck = checkGameItem(listItem,listCount,sMsg,listCanType);
-
-    qDebug()<<"check : "<<bCheck;
-
-
-    if(!bCheck)
+    if(!checkGameItem(inItem,inCount,reOrder,sMsg))
     {
         data["data"] = COMMON.toJsonString("error",sMsg);
         return false;
     }
 
 
-
     auto items = [=]()
     {
         QStringList listRe;
-        for(int i=0;i<listItem.length();i++)
+        for(int i=0;i<inItem.length();i++)
         {
-            QString st = listItem.at(i)+",,"+listCount.at(i);
+            QString st = inItem.at(i)+",,"+inCount.at(i);
 
             listRe.append(st);
         }
@@ -403,13 +403,29 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
     reOrder.CustomerName=cus.Name;
     reOrder.Currency=cus.Currency;
 
-    reOrder.CanSelectPayType=listCanType.join(";;");
+    reOrder.GameSid=gameInfo.GameSid;
+    reOrder.GameRate= QString::number(game.GameRate);
 
+    reOrder.ExRateSid=rate.Sid;
+    reOrder.PrimeRateSid=primeRate.Sid;
+
+    reOrder.UiRecord="0,0,0,0";
     reOrder.OrderDate=QDateTime::currentDateTimeUtc().addSecs(8 * 3600).toString("yyyyMMdd");
     reOrder.Owner="未分配";
     reOrder.OrderTime=QDateTime::currentDateTimeUtc().addSecs(8 * 3600).toString("hhmmss");
     reOrder.Step="1";
     reOrder.Item = items();
+
+    QStringList listItemInfo;
+    listItemInfo.append(game.Name);
+    listItemInfo.append(gameInfo.LoginType);
+    listItemInfo.append(gameInfo.LoginAccount);
+    listItemInfo.append(gameInfo.LoginPassword);
+    listItemInfo.append(gameInfo.ServerName);
+    listItemInfo.append(gameInfo.Characters);
+    reOrder.ItemInfo = listItemInfo;
+
+    checkOrderCost(cus,game,rate,reOrder);
 
     qDebug()<<"send signalDoOrder";
 
@@ -506,10 +522,10 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
 
 
 
-bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, QString &sGameSid,QStringList &listCanType)
+bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, OrderData &order,QString &sMsg)
 {
-
-    QStringList listReCanType;
+    QStringList listReCanType,listCanType;
+   // QList<DataGameItem> listGameItem;
 
     auto getAddValueTypeList=[=](QString  sAddValueType)
     {
@@ -553,23 +569,35 @@ bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, QStrin
 
     if(listItem.length()!=listCount.length())
     {
-        sGameSid="item length no mapping count lenght";
+        sMsg="item length no mapping count lenght";
         return false;
     }
 
-    QString sTmpGameSid="";
+    QString sGameSid="";
 
+    QStringList sItem;
+
+    double iTotalBonus=0.00;
+    QStringList listBonus;
+
+   // listGameItem.clear();
     for(int i=0;i<listItem.length();i++)
     {
+        QString sCount =listCount.at(i);
 
+        sItem.append(listItem.at(i)+",,"+sCount);
 
         DataGameItem item;
         bool b=  getItemFromSid(listItem.at(i),item);
         if(!b)
         {
-            sGameSid = "not found GameItem Sid:"+listItem.at(i);
+            sMsg = "not found GameItem Sid:"+listItem.at(i);
             return false;
         }
+      //  listGameItem.append(item);
+
+        iTotalBonus+= item.Bonus.toDouble();
+        listBonus.append(item.Bonus+"*"+sCount);
 
         QStringList listPayType =getAddValueTypeList(item.AddValueTypeSid);
 
@@ -578,13 +606,13 @@ bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, QStrin
         if(i==0)
         {
             listReCanType = listPayType;
-            sTmpGameSid =item.GameSid;
+            sGameSid =item.GameSid;
         }
         else
         {
-            if(sTmpGameSid!=item.GameSid)
+            if(sGameSid!=item.GameSid)
             {
-                sGameSid = "Game Sid no mapping :"+listItem.at(i);
+                sMsg = "Game Sid no mapping :"+listItem.at(i);
                 return false;
             }
 
@@ -597,7 +625,7 @@ bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, QStrin
 
             if(listReCanType.length()<1)
             {
-                sGameSid = "Items AddValueType no mapping :"+listItem.at(i);
+                sMsg = "Items AddValueType no mapping :"+listItem.at(i);
                 return false;
             }
 
@@ -608,9 +636,12 @@ bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, QStrin
 
     }
 
-    sGameSid = sTmpGameSid;
 
-    listCanType=listReCanType;
+    order.Item=sItem.join(";;");
+    order.CanSelectPayType=listReCanType.join(";;");
+    order.Bouns=QString::number(iTotalBonus);
+    order.ListBouns=listBonus;
+
     return true;
 }
 
@@ -624,6 +655,112 @@ bool QueryApi::checkLogin(QString sUser, QString sPassword)
     m_sql->queryTb(SQL_TABLE::UserData(),in,out,sError);
 
     return out.length()>0;
+}
+
+bool QueryApi::checkGameInfo(QString sCusSid, QString sGameInfoSid, CustomerGameInfo &gameAccount)
+{
+    QVariantMap in;
+    QString sError;
+    in["CustomerSid"]=sCusSid;
+    in["Sid"]=sGameInfoSid;
+    QVariantList out;
+    bool bOk =m_sql->queryTb(SQL_TABLE::CustomerGameInfo(),in,out,sError);
+
+    if(out.length()>0)
+    {
+        gameAccount.setData(out.first().toMap());
+    }
+
+
+    return bOk && out.length()>0 ;
+}
+
+bool QueryApi::checkRate(DataRate &exRate, DataRate &primeRate)
+{
+    QVariantMap in;
+    QVariantList out;
+    QString sError;
+    in["DESC"]="Sid";
+    in["LIMIT"]="1";
+
+    bool bOk = false;
+
+    bOk = m_sql->queryTb(SQL_TABLE::ExchangeRate(),in,out,sError);
+
+    if(bOk && out.length()>0)
+    {
+        exRate.setData(out.first().toMap());
+    }
+    else
+    {
+        return false;
+    }
+
+    out.clear();
+    bOk = m_sql->queryTb(SQL_TABLE::PrimeCostRate(),in,out,sError);
+
+    if(bOk && out.length()>0)
+    {
+        primeRate.setData(out.first().toMap());
+    }
+    else
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool QueryApi::checkOrderCost(CustomerData cus, DataGameList game, DataRate exRate, OrderData &order)
+{
+    QString sCurrency=cus.Currency;
+
+    double iRate = 1.0;
+
+    double iGameRate = game.GameRate;
+
+    if(!sCurrency.toUpper().contains("NTD"))
+        iRate= exRate.findValue(sCurrency);
+
+
+    auto into=[=](double d)
+    {
+
+        int roundedNumber = static_cast<int>(std::ceil(d));
+
+        return roundedNumber;
+    };
+
+    int iTotalNtd=0;
+    int iTotalCost=0;
+    QStringList listCost;
+
+    foreach(QString s,order.ListBouns)
+    {
+        QStringList tmp = s.split("*");
+
+        if(tmp.length()<2)
+            continue;
+
+        double iBonus=tmp.first().toDouble();
+        int iCount = tmp.last().toInt();
+
+        int iNtd=into(iBonus*iGameRate);
+
+        int iCost = into((iBonus*iGameRate)/iRate);
+
+        iTotalNtd+=iNtd*iCount;
+
+        iTotalCost+=iCost*iCount;
+
+        listCost.append(QString::number(iCost));
+    }
+
+    order.Money[0] =QString::number(iTotalNtd);
+    order.Cost=QString::number(iTotalCost);
+    order.ListCost = listCost;
+
+    return true;
 }
 
 QString QueryApi::notFound(QString sOtherMsg)

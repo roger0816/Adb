@@ -328,6 +328,28 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
     {
         if(ui->tbUser->currentItem()->text().contains("未分配"))
         {
+            QStringList tmpCanType =order.CanSelectPayType.split(";;");
+            QStringList tmpCb;
+
+            ui->cbFacChange->clear();
+
+            foreach(DataFactory fac, m_listFactory)
+            {
+                bool bHas= false;
+
+                foreach(QString sFacPay,fac.PayTypdSid)
+                {
+                    if(tmpCanType.contains(sFacPay))
+                        bHas = true;
+                }
+
+                if(bHas)
+                    tmpCb.append(fac.Name);
+            }
+
+            ui->cbFacChange->addItems(tmpCb);
+
+
             ui->wBottom->setCurrentIndex(2);
             return ;
         }
@@ -611,9 +633,10 @@ void LayerGetOrder1::refresh()
 
     m_listFactory.clear();
 
-    ui->cbFacChange->clear();
 
     m_listFactory.append(ACTION.getFactoryClass("",true));
+
+    ui->cbFacChange->clear();
 
     QStringList listFacName;
     foreach(DataFactory fc,m_listFactory)
@@ -722,6 +745,7 @@ void LayerGetOrder1::on_btnFacChange_clicked()
 
     // order.PaddingUser="";
     order.Owner=ui->cbFacChange->currentText();
+    order.User[1]=ACTION.m_currentUser.Sid;
     QString sError;
     bool bOk =ACTION.replaceOrder(order,sError);
     if(bOk)

@@ -11,6 +11,8 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include "Common.h"
+#include <iostream>
+#include <cmath>
 
 class QueryApi : public QObject
 {
@@ -50,14 +52,17 @@ private:
 
 
 
-    bool checkGameItem(QStringList listItem, QStringList listCount , QString &sGameSid,QStringList &listCanType);
+    bool checkGameItem(QStringList listItem, QStringList listCount , OrderData &order, QString &sMsg);
 
 
     //
     bool checkLogin(QString sUser, QString sPassword);
 
+    bool checkGameInfo(QString sCusSid,QString sGameInfoSid,CustomerGameInfo &gameAccount);
 
+    bool checkRate(DataRate &exRate, DataRate &primeRate);
 
+    bool checkOrderCost(CustomerData cus, DataGameList game, DataRate exRate, OrderData &order);
     QString notFound(QString sOtherMsg="");
 
 signals:

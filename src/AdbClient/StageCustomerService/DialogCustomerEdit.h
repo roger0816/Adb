@@ -35,6 +35,8 @@ public:
 
     void setData(QString sCustomerSid);
 
+    void setAddMode();
+
 
     void setReadOnly(bool bReadOnly=true);
     QVariantMap data();
@@ -48,6 +50,8 @@ public:
 
     void setRoot(bool b);
 
+private:
+      bool m_bIsAdd= false;
 private slots:
 
     void on_cbClass_currentIndexChanged(int index);

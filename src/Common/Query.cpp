@@ -13,7 +13,7 @@ Query::Query(QObject *parent)
 CData Query::implementRecall(CData data)
 {
 
-    if(data.iAciton>=ACT::API_REQUSET)
+    if(data.iAciton>=ACT::API_REQUSET && data.iAciton<9900)
     {
 
         return m_api.api(data);
@@ -1650,6 +1650,10 @@ bool Query::orderStep0(OrderData &order, QString &sError)
 
 bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
 {
+    bool bOnlyChangeOwner = false;
+
+    if(current.Owner=="未分配" || current.Owner.trimmed()=="")
+        bOnlyChangeOwner = true;
 
 
     if(!isBackSayCost(order))
@@ -1664,7 +1668,7 @@ bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
 
         }
 
-        else if(current.Note1==order.Note1 &&  current.Step!="0" && current.Owner!="未分配")
+        else if(current.Note1==order.Note1 &&  current.Step!="0" && !bOnlyChangeOwner)
         {
             sError ="下單失敗，目標訂單不處於報價狀態。";
 
@@ -1676,7 +1680,10 @@ bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
 
             checkUpdate(ACT::ADD_ITEM_COUNT);
 
-            order.Id=getNewOrderId(order.OrderDate);
+            if(order.Id.trimmed()=="")
+                order.Id=getNewOrderId(order.OrderDate);
+
+
 
             if(order.StepTime.length()>1)
             {
@@ -1714,13 +1721,15 @@ bool Query::orderStep1(OrderData &order, OrderData current, QString &sError)
 
             // order.Name=order.Owner+sDash+QString("%1").arg(iSeq+1,2,10,QLatin1Char('0'));
 
-            if(current.Sid==order.Sid && current.Step=="1")
+            if(current.Sid==order.Sid && current.Step=="1" &&!bOnlyChangeOwner)
             {
                 //改留言，不重新給與編號
             }
             else
-                order.Name=order.Owner+sDash+QString::number(iSeq+1);
-
+            {
+                if(order.Owner!="未分配")
+                    order.Name=order.Owner+sDash+QString::number(iSeq+1);
+            }
 
 
         }
@@ -1873,6 +1882,14 @@ void Query::updateCount(QString sGameSid, QString sItemSid,QString sName, int To
         m_sql.insertTb(SQL_TABLE::QueryCount(),data,sError);
     }
 
+}
+
+QString Query::getNewCustomerId()
+{
+    QString sRe="";
+
+
+    return sRe;
 }
 
 void Query::slotApiDoOrder(QVariantMap data)

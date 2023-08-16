@@ -145,7 +145,7 @@
                 </widget>
                </item>
                <item row="1" column="0">
-                <widget class="QLabel" name="label">
+                <widget class="QLabel" name="lbId">
                  <property name="text">
                   <string>編號:</string>
                  </property>
@@ -239,7 +239,7 @@
                 <widget class="QLineEdit" name="txNum5"/>
                </item>
                <item row="1" column="1">
-                <widget class="QLineEdit" name="lbId"/>
+                <widget class="QLineEdit" name="txId"/>
                </item>
                <item row="3" column="1">
                 <widget class="QLineEdit" name="txLine"/>

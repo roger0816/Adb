@@ -7,9 +7,17 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    ui->tbGameItem->setColumnWidth(0,60);
-    ui->tbGameItem->setColumnWidth(1,160);
-    ui->tbGameItem->setColumnWidth(2,40);
+    ui->tbGameItem->setColumnWidth(_Sid,60);
+    ui->tbGameItem->setColumnWidth(_Name,160);
+    ui->tbGameItem->setColumnWidth(_Enable,40);
+
+    connect(ui->btnSortUp,&QPushButton::clicked,this,&LayerCostSetting::on_btnSortUp);
+
+    connect(ui->btnSortTop,&QPushButton::clicked,this,&LayerCostSetting::on_btnSortTop);
+
+    connect(ui->btnSortDown,&QPushButton::clicked,this,&LayerCostSetting::on_btnSortDown);
+
+    connect(ui->btnSortSave,&QPushButton::clicked,this,&LayerCostSetting::on_btnSortSave);
 
     ui->lbItemTitle0->hide();
 
@@ -45,7 +53,7 @@ void LayerCostSetting::on_btnGameAdd_clicked()
 
         data["Enable"] = dialog.m_bEnable;
 
-      //  data["GameRate"] = dialog.m_iGameRate;
+        //  data["GameRate"] = dialog.m_iGameRate;
 
         data["Id"] = dialog.m_sId;
 
@@ -176,9 +184,10 @@ void LayerCostSetting::refreshItemList()
     QVariantMap d;
 
     d["GameSid"] = m_iCurrentGameSid;
-
+    d["ASC"]="Sort";
 
     QString sError;
+
 
     bool bOk = ACTION.action(ACT::QUERY_GAME_ITEM,d,m_listItem,sError);
 
@@ -189,12 +198,12 @@ void LayerCostSetting::refreshItemList()
         return;
     }
 
-//    QList<DataRate> tmp = ACTION.listRate("",true,true);
+    //    QList<DataRate> tmp = ACTION.listRate("",true,true);
 
-//    DataRate rate2;
+    //    DataRate rate2;
 
-//    if(tmp.length()>0)
-//        rate2 = tmp.last();
+    //    if(tmp.length()>0)
+    //        rate2 = tmp.last();
 
 
     DataRate rate2=ACTION.costRate("",true);
@@ -212,15 +221,15 @@ void LayerCostSetting::refreshItemList()
 
         ui->tbGameItem->setRowCount(i+1);
 
-        ui->tbGameItem->setItem(i,0,UI.tbItem(data.Sid));
+        ui->tbGameItem->setItem(i,_Sid,UI.tbItem(data.Sid));
 
-        ui->tbGameItem->setItem(i,1,UI.tbItem(data.Name));
+        ui->tbGameItem->setItem(i,_Name,UI.tbItem(data.Name));
 
-        ui->tbGameItem->setItem(i,2,UI.tbItem(data.Enable));
+        ui->tbGameItem->setItem(i,_Enable,UI.tbItem(data.Enable));
 
-        ui->tbGameItem->setItem(i,3,UI.tbItem(data.OrderNTD));
+        ui->tbGameItem->setItem(i,_OrderNTD,UI.tbItem(data.OrderNTD));
 
-        ui->tbGameItem->setItem(i,4,UI.tbItem(data.Bonus));
+        ui->tbGameItem->setItem(i,_Bonus,UI.tbItem(data.Bonus));
 
         double iNTD = GameRate*data.Bonus.toDouble();
 
@@ -255,7 +264,7 @@ void LayerCostSetting::refreshItemList()
 
         m_listTipData.append(toolData);
 
-        ui->tbGameItem->setItem(i,6,UI.tbItem(listData.join(" ; "),GlobalUi::_TOOLTIP));
+        ui->tbGameItem->setItem(i,_PayType,UI.tbItem(listData.join(" ; "),GlobalUi::_TOOLTIP));
     }
 
 
@@ -417,8 +426,8 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     DataRate rate = ACTION.costRate("",true);
 
-//    if(ACTION.listRate("",true,true).length()>0)
-//        rate=ACTION.listRate("",true,true).last();
+    //    if(ACTION.listRate("",true,true).length()>0)
+    //        rate=ACTION.listRate("",true,true).last();
 
     dialog.setRate(sGameName+" : 新增商品",rate);
     QVariantMap dat;
@@ -595,7 +604,7 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
 
     QVariantMap data = m_listTipData.at(row).toMap();
 
-    if(column==5)
+    if(column==_Cost)
     {
         QString st=
                 "新台幣 : %1 \n "
@@ -615,7 +624,7 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
 
         QToolTip::showText(QCursor::pos(),st);
     }
-    else  if(column==6)
+    else  if(column==_PayType)
     {
 
         QToolTip::showText(QCursor::pos(),data["AddValueTypeSid"].toString());
@@ -631,7 +640,129 @@ void LayerCostSetting::on_tbGameItem_cellEntered(int row, int column)
 
 void LayerCostSetting::on_txSearch_textChanged(const QString &)
 {
-   refresh();
+    refresh();
 }
+
+
+
+void LayerCostSetting::on_btnSortUp()
+{
+    int iRow = ui->tbGameItem->currentRow();
+
+    if(iRow==0)
+        return ;
+
+    if(iRow<0 || iRow>=ui->tbGameItem->rowCount())
+    {
+        UI.showMsg("","請先選擇商品","OK");
+        return ;
+    }
+
+    QTableWidgetItem *current=ui->tbGameItem->currentItem();
+    int columnCount = ui->tbGameItem->columnCount();
+    QList<QTableWidgetItem*> items;
+
+    for (int col = 0; col < columnCount; ++col) {
+        items.append(ui->tbGameItem->takeItem(iRow, col));
+    }
+
+    ui->tbGameItem->removeRow(iRow);
+    ui->tbGameItem->insertRow(iRow - 1);
+
+    for (int col = 0; col < columnCount; ++col) {
+        ui->tbGameItem->setItem(iRow - 1, col, items.at(col));
+    }
+
+    ui->tbGameItem->setCurrentItem(current);
+}
+
+void LayerCostSetting::on_btnSortTop()
+{
+    int iRow = ui->tbGameItem->currentRow();
+
+    if(iRow==0)
+        return ;
+
+    if(iRow<0 || iRow>=ui->tbGameItem->rowCount())
+    {
+        UI.showMsg("","請先選擇商品","OK");
+        return ;
+    }
+
+
+
+
+    QTableWidgetItem *current=ui->tbGameItem->currentItem();
+    int columnCount = ui->tbGameItem->columnCount();
+    QList<QTableWidgetItem*> items;
+
+    for (int col = 0; col < columnCount; ++col) {
+        items.append(ui->tbGameItem->takeItem(iRow, col));
+    }
+
+    ui->tbGameItem->removeRow(iRow);
+    ui->tbGameItem->insertRow(0);
+
+    for (int col = 0; col < columnCount; ++col) {
+        ui->tbGameItem->setItem(0, col, items.at(col));
+    }
+
+    ui->tbGameItem->setCurrentItem(current);
+
+}
+
+
+void LayerCostSetting::on_btnSortDown()
+{
+    int iRow = ui->tbGameItem->currentRow();
+
+    if(iRow==ui->tbGameItem->rowCount()-1)
+        return ;
+
+    if(iRow<0 || iRow>=ui->tbGameItem->rowCount())
+    {
+        UI.showMsg("","請先選擇商品","OK");
+        return ;
+    }
+
+    QTableWidgetItem *current=ui->tbGameItem->currentItem();
+    int columnCount = ui->tbGameItem->columnCount();
+    QList<QTableWidgetItem*> items;
+
+    for (int col = 0; col < columnCount; ++col) {
+        items.append(ui->tbGameItem->takeItem(iRow, col));
+    }
+
+    ui->tbGameItem->removeRow(iRow);
+    ui->tbGameItem->insertRow(iRow + 1);
+
+    for (int col = 0; col < columnCount; ++col) {
+        ui->tbGameItem->setItem(iRow + 1, col, items.at(col));
+    }
+
+    ui->tbGameItem->setCurrentItem(current);
+}
+
+
+void LayerCostSetting::on_btnSortSave()
+{
+    QVariantList list;
+
+    for(int i=0;i<ui->tbGameItem->rowCount();i++)
+    {
+        QVariantMap d;
+        d["Sid"]=ui->tbGameItem->item(i,_Sid)->text().toInt();
+        d["Sort"]=i+1;
+        list.append(d);
+    }
+    QString sError;
+    bool bOk=ACTION.action(ACT::EDIT_GAME_ITEM,list,sError);
+
+    if(bOk)
+        UI.showMsg("","排序已修改","OK");
+    else
+        UI.showMsg("",sError,"OK");
+}
+
 
 

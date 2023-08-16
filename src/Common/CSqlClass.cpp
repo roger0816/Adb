@@ -252,15 +252,13 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
             query.exec();
             */
 
-     //  qDebug()<<"b1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
+
     bool bOk = query.exec();
-     //  qDebug()<<"b2 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 
 
 
        QStringList listHeader = fieldNames(query.record());
 
-      // qDebug()<<"b3 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 
 
     while(query.next())
@@ -286,7 +284,7 @@ bool CSqlClass::queryTb(QString sTableName, QVariantMap conditions, QVariantList
    //    qDebug()<<"b4 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
     sError =  query.lastError().text();
 
-    qDebug()<<sLog<<conditions<<" : "<<bOk;
+
 
     if(!bOk)
     {
@@ -1349,7 +1347,8 @@ bool CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
         //  m_db =QSqlDatabase::addDatabase("QMYSQL");
         m_db =QSqlDatabase::addDatabase("QMYSQL",sDbName);
 
-        m_db.setConnectOptions("wait_timeout=30");
+        //no work
+       // m_db.setConnectOptions("wait_timeout=30");
 
         //  m_db.setHostName("206.189.185.20");
 

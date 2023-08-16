@@ -10,6 +10,7 @@
 #include <QShowEvent>
 #include <QTableWidgetItem>
 #include <QToolTip>
+#include "Action.h"
 namespace Ui {
 class LayerCostSetting;
 }
@@ -21,6 +22,19 @@ class LayerCostSetting : public QWidget
 public:
     explicit LayerCostSetting(QWidget *parent = nullptr);
     ~LayerCostSetting();
+
+   private:
+    enum header
+    {
+        _Sid=0,
+        _Name,
+        _Enable,
+        _OrderNTD,
+        _Bonus,
+        _Cost,
+        _PayType
+
+    } m_header;
 
 
 private slots:
@@ -75,6 +89,11 @@ private slots:
      void refresh();
 
      void on_txSearch_textChanged(const QString &);
+
+     void on_btnSortUp();
+     void on_btnSortTop();
+     void on_btnSortDown();
+     void on_btnSortSave();
 
 };
 

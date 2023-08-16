@@ -55,6 +55,9 @@ public:
 
     void updateCount(QString sGameSid, QString sItemSid, QString sName, int TotalSell, int TotalCount);
 
+
+    QString getNewCustomerId();
+
 private:
     QueryApi m_api;
 

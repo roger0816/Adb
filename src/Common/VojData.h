@@ -823,7 +823,7 @@ struct DataGameItem :public DataObj
     {
         DataObj::setData(data);
         GameSid = data["GameSid"].toString();
-        Sort=data["Sort"].toString();
+        Sort=data["Sort"].toInt();
         Enable = data["Enable"].toBool();
         OrderNTD = data["OrderNTD"].toString();
         Bonus = data["Bonus"].toString();
@@ -858,7 +858,7 @@ struct DataGameItem :public DataObj
 
     QString GameSid;
     bool Enable;
-    QString Sort;
+    int Sort;
     QString OrderNTD;
     QString Bonus;
     QString NTD;

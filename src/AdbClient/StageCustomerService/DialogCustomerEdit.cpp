@@ -14,7 +14,7 @@ DialogCustomerEdit::DialogCustomerEdit(QWidget *parent) :
 
     ui->btnDel->hide();
 
-    ui->lbId->setReadOnly(true);
+    ui->txId->setReadOnly(true);
 
     ui->stackedWidget_2->setCurrentWidget(ui->page);
 }
@@ -71,7 +71,7 @@ void DialogCustomerEdit::setRoot(bool b)
 {
     m_bIsRoot = b;
 
-    ui->lbId->setReadOnly(!b);
+    ui->txId->setReadOnly(!b);
 }
 
 void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,QVariantList listCustomerInfo,QVariantMap data)
@@ -89,7 +89,7 @@ void DialogCustomerEdit::setData(QVariantList listClass, QVariantList listGame,Q
 
     ui->cbClass->setEnabled(false);
 
-    ui->lbId->setText(m_data["Id"].toString());
+    ui->txId->setText(m_data["Id"].toString());
     int vip = 0;
     if(m_data["Vip"]=="1")
         vip=1;
@@ -197,6 +197,13 @@ void DialogCustomerEdit::setData(QString sCustomerSid)
 
 }
 
+void DialogCustomerEdit::setAddMode()
+{
+    m_bIsAdd = true;
+//    ui->lbId->hide();
+//    ui->txId->hide();
+}
+
 void DialogCustomerEdit::setReadOnly(bool bReadOnly)
 {
     bool bEnable =!bReadOnly;
@@ -224,7 +231,11 @@ QVariantMap DialogCustomerEdit::data()
 {
     QVariantMap re;
 
-    m_data["Id"] = ui->lbId->text().trimmed();
+    m_data["Id"] = ui->txId->text().trimmed();
+
+//    if(m_bIsAdd)
+//        m_data["Id"]="";
+
 
     m_data["Name"] = ui->txName->text().trimmed();
 
@@ -347,6 +358,9 @@ QString DialogCustomerEdit::gameToSid(QString sName)
 
 void DialogCustomerEdit::on_cbClass_currentIndexChanged(int index)
 {
+
+    qDebug()<<"aaaddd:"<<index;
+
     if(index<0 || index>=m_listClass.length())
     {
         return;
@@ -356,12 +370,13 @@ void DialogCustomerEdit::on_cbClass_currentIndexChanged(int index)
 
     bool bOk = ACTION.getNewCustomerId(sId);
 
+
     if(!bOk)
         return;
 
     QString sClassId  = m_listClass.at(index).toMap()["Id"].toString();
 
-    ui->lbId->setText(sClassId+"-"+sId);
+    ui->txId->setText(sClassId+"-"+sId);
     qDebug()<<sClassId+"-"+sId;
 }
 
@@ -399,7 +414,7 @@ void DialogCustomerEdit::on_btnOk_clicked()
     }
 
 
-    QString customerId= ui->lbId->text();
+    QString customerId= ui->txId->text();
 
     if(m_sCustomerSid=="" && !m_bIsRoot)
     {
@@ -440,7 +455,7 @@ void DialogCustomerEdit::on_btnOk_clicked()
 
         if(d["CustomerId"]=="")
         {
-            d["CustomerId"] =ui->lbId->text().trimmed();
+            d["CustomerId"] =ui->txId->text().trimmed();
 
             m_listCustomerInfo[i] = d;
         }

@@ -45,6 +45,8 @@ void LayerCustomer::on_btnAdd_clicked()
 {
     DialogCustomerEdit dialog;
 
+    dialog.setAddMode();
+
     QVariantList in,outClass,outGame;
 
     QString sError;

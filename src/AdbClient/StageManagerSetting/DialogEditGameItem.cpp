@@ -63,6 +63,8 @@ void DialogEditGameItem::setData(double iGameRate,QVariantMap data)
 
     ui->sbOrderBouns->setValue(m_data["Bonus"].toDouble());
 
+    ui->sbSort->setValue(m_data["Sort"].toInt());
+
     // ui->sbNTD->setValue(m_data["NTD"].toDouble());
 
     //ui->sbNTD->setValue(m_iGameRate*m_data["Bonus"].toDouble());
@@ -82,6 +84,7 @@ QVariantMap DialogEditGameItem::data()
 
     m_data["Bonus"] = ui->sbOrderBouns->value();
 
+     m_data["Sort"] = ui->sbSort->value();
     m_data["NTD"] =ui->sbNTD->value();
 
     CListPair listAddValueType;

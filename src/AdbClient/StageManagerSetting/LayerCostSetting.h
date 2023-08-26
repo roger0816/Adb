@@ -11,6 +11,8 @@
 #include <QTableWidgetItem>
 #include <QToolTip>
 #include "Action.h"
+
+
 namespace Ui {
 class LayerCostSetting;
 }

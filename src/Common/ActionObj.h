@@ -55,7 +55,6 @@ public:
 protected:
     CData callServer(CData data,bool bStrong=false);
 
-    CData sendData(CData data);
 
     bool isQueryApi(int iApi);
 

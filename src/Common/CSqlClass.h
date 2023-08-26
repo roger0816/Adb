@@ -11,6 +11,10 @@
 #include <QSqlError>
 #include <QSqlRecord>
 #include "RpkCore.h"
+
+
+#define DB_COUNT 100
+
 class CSqlClass : public QObject
 {
     Q_OBJECT
@@ -84,13 +88,20 @@ private:
 
     QSqlDatabase m_db;
 
+     QSqlDatabase m_db2;
+
+    QList<QSqlDatabase> m_listDb;
+
+    int m_iIdx=-1;
+
+QSqlDatabase writeDb();
     QSqlDatabase db();
 
     QSqlDatabase m_local;
 
     QStringList fieldNames(QSqlRecord record);
 
-
+    QString m_sDbName;
     QString m_sIp;
     QString m_sPort;
 

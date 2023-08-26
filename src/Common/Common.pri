@@ -6,6 +6,7 @@ HEADERS += \
     $$PWD/ActionCache.h \
     $$PWD/ActionObj.h \
     $$PWD/CSqlClass.h \
+    $$PWD/CSqlite.h \
     $$PWD/Common.h \
     $$PWD/DEF.h \
     $$PWD/DataSync.h \
@@ -18,6 +19,7 @@ SOURCES += \
     $$PWD/Action.cpp \
     $$PWD/ActionObj.cpp \
     $$PWD/CSqlClass.cpp \
+    $$PWD/CSqlite.cpp \
     $$PWD/DataSync.cpp \
     $$PWD/Query.cpp \
     $$PWD/QueryApi.cpp \

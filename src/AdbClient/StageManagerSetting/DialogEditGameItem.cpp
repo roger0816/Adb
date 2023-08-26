@@ -74,6 +74,21 @@ void DialogEditGameItem::setData(double iGameRate,QVariantMap data)
 
 }
 
+void DialogEditGameItem::setEanbleCount(bool bShowCountEdit)
+{
+
+    if(!ACTION.isNewVersion())
+         ui->wCountArea->setVisible(false);
+        return;
+
+    ui->wCountArea->setVisible(bShowCountEdit);
+}
+
+bool DialogEditGameItem::isEnableCount()
+{
+    return ui->wCountArea->isVisible();
+}
+
 QVariantMap DialogEditGameItem::data()
 {
     m_data["Name"] = ui->txName->text();
@@ -86,6 +101,12 @@ QVariantMap DialogEditGameItem::data()
 
      m_data["Sort"] = ui->sbSort->value();
     m_data["NTD"] =ui->sbNTD->value();
+
+    if(ACTION.isNewVersion())
+    {
+    //for item count
+    m_data["Count"] = ui->sbCount->value();
+    }
 
     CListPair listAddValueType;
 

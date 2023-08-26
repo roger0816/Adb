@@ -11,40 +11,40 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
- double x=123456789.10;
+    double x=123456789.10;
 
- qDebug()<<"AA1:"<<QString::number(x,'f',3);  // "123456789.123"
+    qDebug()<<"AA1:"<<QString::number(x,'f',3);  // "123456789.123"
 
- double x1=QString::number(x,'f',3).toDouble();
- x1=QString("-1.02675e+06").toDouble();
- qDebug()<<"AA2:"<<x1;
+    double x1=QString::number(x,'f',3).toDouble();
+    x1=QString("-1.02675e+06").toDouble();
+    qDebug()<<"AA2:"<<x1;
 
- qDebug()<<"AA3"<<QString::number(x1,'f',3);
-
-
-
-QByteArray m_data="AAAA";
-
-m_data.resize(3);
-
-qDebug()<<"SSSSS : "<<m_data.mid(8,4);
+    qDebug()<<"AA3"<<QString::number(x1,'f',3);
 
 
-QByteArray tag = m_data.mid(8+12,4-20);
-quint32 value;
-QDataStream s(&tag,QIODevice::ReadWrite);
-s >> value;
 
-m_data.remove(0,100);
+    QByteArray m_data="AAAA";
+
+    m_data.resize(3);
+
+    qDebug()<<"SSSSS : "<<m_data.mid(8,4);
 
 
-//        uint datavlen = ByteArrayToUint32(m_data.mid(8,4));
+    QByteArray tag = m_data.mid(8+12,4-20);
+    quint32 value;
+    QDataStream s(&tag,QIODevice::ReadWrite);
+    s >> value;
 
-//        if(datavlen == uint(m_data.length()-sp))
-//        {
-//            //qDebug() << "Package is Complete";
+    m_data.remove(0,100);
 
-//        }
+
+    //        uint datavlen = ByteArrayToUint32(m_data.mid(8,4));
+
+    //        if(datavlen == uint(m_data.length()-sp))
+    //        {
+    //            //qDebug() << "Package is Complete";
+
+    //        }
 
 
     ui->lbTestName->hide();
@@ -115,7 +115,7 @@ void Widget::slotPage(int iIdx)
 
     if(ui->stackedWidget->currentWidget()==ui->pageService)
     {
-              ui->pageService->changePage(0);
+        ui->pageService->changePage(0);
     }
 
     else if(ui->stackedWidget->currentWidget()== ui->pageOrder)
@@ -132,33 +132,6 @@ void Widget::slotPage(int iIdx)
 void Widget::on_btnTest_clicked()
 {
 
-    ui->stackedWidget->setCurrentIndex(6);
-    return ;
-    CData data;
-
-    data.iAciton=ACT::LOGIN;
-
-    data.sUser="root";
-
-    data.sMsg="msgA";
-
-    data.listData<<"listA"<<"listB"<<"listC";
-
-    data.listName<<"listNameA"<<"listNameB"<<"listNameC";
-
-    data.dData["A"]="a";
-
-    data.dData["B"]="b";
-
-    data.dData["C"]="c";
-
-    CData outData;
-
-    QByteArray out;
-
-    RPKCORE.network.connectHost("127.0.0.1","6000",data.enCodeJson(),out);
-
-    outData.deCodeJson(out);
 
 
 
@@ -178,14 +151,14 @@ void Widget::showEvent(QShowEvent *)
 
         ui->wTop->setStyleSheet("QWidget#wTop{background-color:lightgray;}");
 
-      //  ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:;}");
+        //  ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:;}");
 
 
     }
     else
     {
 
-    //    ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:rgb(0, 37, 88);}");
+        //    ui->wMenu->setStyleSheet("QWidget#wMenu{background-color:rgb(0, 37, 88);}");
 
         ui->wTop->setStyleSheet("QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}");
     }
@@ -240,10 +213,10 @@ void Widget::checkUserLv()
         ui->btn3->setEnabled(true);
     }
 
-     if(iLv>=USER_LV::_ROOT)
+    if(iLv>=USER_LV::_ROOT)
     {
         ui->btnTest->setEnabled(true);
-      // ui->btnTest->show();
+        // ui->btnTest->show();
     }
 
     UI.m_loading->resize(this->size());
@@ -267,8 +240,7 @@ void Widget::on_btnLogout_clicked()
 
 void Widget::slotLogin()
 {
-    qDebug()<<"login ";
-
+    qDebug()<<"["+QDateTime::currentDateTimeUtc().addMSecs(60*8).toString("hh:mm:ss:zzz")+"] login ";
 
     ACTION.setStartSyanc(true);
 
@@ -285,9 +257,14 @@ void Widget::slotLogin()
 
     loop->exec();
 
+    if(ACTION.isNewVersion())
+        ACTION.reQuerty();
+    else
+        ACTION.reQuertyOld();
 
-    ACTION.reQuerty();
-    qDebug()<<"preload ok";
+    ui->pageHome->setBulletinData(ACTION.m_listBulletin);
+qDebug()<<"["+QDateTime::currentDateTimeUtc().addMSecs(60*8).toString("hh:mm:ss:zzz")+"] preload ok ";
+
     show();
 
     qDebug()<<"main ui show "<<size();
@@ -301,6 +278,7 @@ void Widget::slotLogin()
 
 void Widget::slotSessionError()
 {
+
     ACTION.setStartSyanc(false);
 
     this->hide();

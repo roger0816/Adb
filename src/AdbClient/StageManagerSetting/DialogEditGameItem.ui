@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>929</width>
-    <height>680</height>
+    <width>933</width>
+    <height>685</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -132,7 +132,7 @@
             <item row="2" column="0">
              <widget class="QLabel" name="label">
               <property name="text">
-               <string>商品名稱:</string>
+               <string>商品名稱:    </string>
               </property>
              </widget>
             </item>
@@ -206,7 +206,7 @@
               </property>
              </widget>
             </item>
-            <item row="7" column="0" colspan="2">
+            <item row="8" column="0" colspan="2">
              <spacer name="verticalSpacer_2">
               <property name="orientation">
                <enum>Qt::Vertical</enum>
@@ -243,6 +243,50 @@
               <property name="maximum">
                <number>1000</number>
               </property>
+             </widget>
+            </item>
+            <item row="7" column="0" colspan="2">
+             <widget class="QWidget" name="wCountArea" native="true">
+              <property name="minimumSize">
+               <size>
+                <width>25</width>
+                <height>30</height>
+               </size>
+              </property>
+              <layout class="QFormLayout" name="formLayout_2">
+               <property name="leftMargin">
+                <number>0</number>
+               </property>
+               <property name="topMargin">
+                <number>0</number>
+               </property>
+               <property name="rightMargin">
+                <number>0</number>
+               </property>
+               <property name="bottomMargin">
+                <number>0</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_5">
+                 <property name="text">
+                  <string>商品總數量:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSpinBox" name="sbCount">
+                 <property name="alignment">
+                  <set>Qt::AlignCenter</set>
+                 </property>
+                 <property name="maximum">
+                  <number>999999999</number>
+                 </property>
+                 <property name="value">
+                  <number>100000000</number>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
            </layout>

@@ -107,7 +107,7 @@ QString CRequestData::getHistory(QString sSid)
     data.iAciton=ADP_API::CUS_HISTORY;
     data.dData["Sid"]=sSid;
     QByteArray output;
-    qDebug()<<"DDDD : "<<sSid;
+
     RPKCORE.network.connectHost(m_sIp,m_sPort,data.enCodeJson(),output);
 
     CData re(output);

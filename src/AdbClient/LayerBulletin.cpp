@@ -28,57 +28,64 @@ void LayerBulletin::refresh(bool bRequery)
     if(m_block)
         return ;
 
+    if(m_bFirst)
+    {
+        bRequery = false;
+
+        m_bFirst =false;
+    }
 
     m_block=true;
 
 
+
+
+
+    QString sError;
+
+    m_listData.clear();
+
+
+    ui->tbTop->setRowCount(0);
+
+    ui->tbSys->setRowCount(0);
+
+    QVariantMap in;
+    in["DESC"] ="Sid";
+    qDebug()<<"layer Bulletin";
     if(bRequery)
     {
-        QString sError;
-
-        m_listData.clear();
-
-        m_listUser.clear();
-
-        ui->tbTop->setRowCount(0);
-
-        ui->tbSys->setRowCount(0);
-
-        QVariantMap in;
-        in["DESC"] ="Sid";
-        qDebug()<<"layer Bulletin";
-        m_listUser = ACTION.queryUser();
-
         ACTION.action(ACT::QUERY_BULLETIN,in,m_listData,sError);
-        m_listTop.clear();
-        m_listSys.clear();
-        for(int i=0;i<m_listData.length();i++)
-        {
-
-            QVariantMap data = m_listData.at(i).toMap();
-
-
-            QDateTime End=QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss");
-
-            if(End.toSecsSinceEpoch()<=GLOBAL.dateTimeUtc8().toSecsSinceEpoch())
-                continue;
-
-
-            if(data["Type"].toString() =="0")
-            {
-                m_listTop.append(data);
-                intoTopTb(data);
-            }
-            else if(data["Type"].toString() =="1")
-            {
-                m_listSys.append(data);
-                intoSysTb(data);
-            }
-        }
-
-
-
     }
+    m_listTop.clear();
+    m_listSys.clear();
+    for(int i=0;i<m_listData.length();i++)
+    {
+
+        QVariantMap data = m_listData.at(i).toMap();
+
+
+        QDateTime End=QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss");
+
+        if(End.toSecsSinceEpoch()<=GLOBAL.dateTimeUtc8().toSecsSinceEpoch())
+            continue;
+
+
+        if(data["Type"].toString() =="0")
+        {
+            m_listTop.append(data);
+            intoTopTb(data);
+        }
+        else if(data["Type"].toString() =="1")
+        {
+            m_listSys.append(data);
+            intoSysTb(data);
+        }
+    }
+
+
+
+
 
 
     m_block=false;
@@ -131,9 +138,9 @@ QString LayerBulletin::userName(QString sId)
 {
     QString sRe="";
 
-    for(int i=0;i<m_listUser.length();i++)
+    for(int i=0;i<ACTION.m_listUser.length();i++)
     {
-        UserData data = m_listUser.at(i);
+        UserData data = ACTION.m_listUser.at(i);
 
         if(sId==data.Sid)
         {
@@ -154,13 +161,13 @@ void LayerBulletin::on_tbSys_cellDoubleClicked(int row, int )
     QVariantMap d = m_listSys.at(row).toMap();
 
 
-//    QDateTime date = QDateTime::fromString(ui->tbSys->item(row,0)->text(),"yyyy/MM/dd hh:mm");
+    //    QDateTime date = QDateTime::fromString(ui->tbSys->item(row,0)->text(),"yyyy/MM/dd hh:mm");
 
-//    d["UpdateTime"] = date.toString("yyyyMMddhhmm00");
+    //    d["UpdateTime"] = date.toString("yyyyMMddhhmm00");
 
     QString sUserName = ui->tbSys->item(row,1)->text();
-//    d["Title"] = ui->tbSys->item(row,2)->text();
-//    d["Content"] = ui->tbSys->item(row,3)->text();
+    //    d["Title"] = ui->tbSys->item(row,2)->text();
+    //    d["Content"] = ui->tbSys->item(row,3)->text();
 
     DialogBulletinEdit dialog;
 
@@ -179,13 +186,13 @@ void LayerBulletin::on_tbTop_cellDoubleClicked(int row, int )
     QVariantMap d = m_listTop.at(row).toMap();
 
 
-//    QDateTime date = QDateTime::fromString(ui->tbTop->item(row,0)->text(),"yyyy/MM/dd hh:mm");
+    //    QDateTime date = QDateTime::fromString(ui->tbTop->item(row,0)->text(),"yyyy/MM/dd hh:mm");
 
-//    d["UpdateTime"] = date.toString("yyyyMMddhhmm00");
+    //    d["UpdateTime"] = date.toString("yyyyMMddhhmm00");
 
     QString sUserName = ui->tbTop->item(row,1)->text();
-//    d["Title"] = ui->tbTop->item(row,2)->text();
-//    d["Content"] = ui->tbTop->item(row,3)->text();
+    //    d["Title"] = ui->tbTop->item(row,2)->text();
+    //    d["Content"] = ui->tbTop->item(row,3)->text();
 
     DialogBulletinEdit dialog;
 

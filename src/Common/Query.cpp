@@ -13,6 +13,9 @@ Query::Query(QObject *parent)
 CData Query::implementRecall(CData data)
 {
 
+
+
+
     if(data.iAciton>=ACT::API_REQUSET && data.iAciton<9900)
     {
 
@@ -267,7 +270,15 @@ CData Query::implementRecall(CData data)
         bool bHasList = data.listData.length()>0;
 
         bOk =true;
+/*
+        QEventLoop *loop=new QEventLoop(this);
 
+
+                QTimer::singleShot(5000,this,[=](){loop->quit();});
+                loop->exec();
+
+                loop->deleteLater();
+                */
 
 
         for(int i=0;i<data.listData.length();i++)
@@ -292,6 +303,7 @@ CData Query::implementRecall(CData data)
         {
             bOk = m_sql.updateTb(SQL_TABLE::GameItem(),d,data.dData,sError);
         }
+
 
         sOkMsg="修改完成";
 
@@ -498,21 +510,21 @@ CData Query::implementRecall(CData data)
     }
 
 
-    else if(data.iAciton==ACT::LAST_CUSTOMER_ID)
-    {
-        QString sReId="";
+//    else if(data.iAciton==ACT::LAST_CUSTOMER_ID)
+//    {
+//        QString sReId="";
 
-        QString sSid = data.dData["Class"].toString();
+//        QString sSid = data.dData["Class"].toString();
 
-        QString sId =  data.dData["ClassId"].toString();
+//        QString sId =  data.dData["ClassId"].toString();
 
-        bOk  =m_sql.lsatCustomerId(sSid,sId,sReId,sError);
+//        bOk  =m_sql.lsatCustomerId(sSid,sId,sReId,sError);
 
-        QVariantMap tmp;
-        tmp["Id"]=sReId;
+//        QVariantMap tmp;
+//        tmp["Id"]=sReId;
 
-        re.listData.append(tmp);
-    }
+//        re.listData.append(tmp);
+//    }
 
     else if(data.iAciton==ACT::ADD_CUSTOMER)
     {

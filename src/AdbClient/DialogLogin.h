@@ -79,6 +79,10 @@ private slots:
     void slotBtnClicked(int iId);
 
 
+    void on_txIp_textChanged(const QString &);
+
+    void on_txPort_textChanged(const QString &);
+
 signals:
     void signalLogin();
 private:

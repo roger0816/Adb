@@ -14,7 +14,7 @@ Launch::Launch(QObject *parent)
 
     connect(&RPKCORE.network,SIGNAL(signalReadAll(QByteArray,uintptr_t)),this,SLOT(getData(QByteArray,uintptr_t)));
 
-
+qDebug()<<"main thread id :"<<thread()->currentThreadId();
 
 }
 

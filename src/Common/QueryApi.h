@@ -52,7 +52,7 @@ private:
 
 
 
-    bool checkGameItem(QStringList listItem, QStringList listCount , OrderData &order, QString &sMsg);
+    bool checkGameItem(QStringList listItem, QStringList listCount , QString sInfoGameSid, OrderData &order, QString &sMsg);
 
 
     //

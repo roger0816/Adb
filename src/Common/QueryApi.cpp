@@ -377,7 +377,7 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
     //-----------------------
 
 
-    if(!checkGameItem(inItem,inCount,reOrder,sMsg))
+    if(!checkGameItem(inItem,inCount,gameInfo.GameSid,reOrder,sMsg))
     {
         data["data"] = COMMON.toJsonString("error",sMsg);
         return false;
@@ -522,7 +522,7 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
 
 
 
-bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, OrderData &order,QString &sMsg)
+bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount,QString sInfoGameSid, OrderData &order,QString &sMsg)
 {
     QStringList listReCanType,listCanType;
    // QList<DataGameItem> listGameItem;
@@ -594,6 +594,14 @@ bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount, OrderD
             sMsg = "not found GameItem Sid:"+listItem.at(i);
             return false;
         }
+
+
+        if(item.GameSid != sInfoGameSid)
+        {
+            sMsg = "GameAccount 、Item GameSid no mapping";
+            return false;
+        }
+
       //  listGameItem.append(item);
 
         iTotalBonus+= item.Bonus.toDouble();

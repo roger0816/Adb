@@ -5,6 +5,7 @@
 #include <QDebug>
 #include "RpkCore.h"
 #include "Query.h"
+#include <QThread>
 
 class Launch : public QObject
 {

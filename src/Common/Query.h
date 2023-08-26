@@ -7,7 +7,7 @@
 #include <QCryptographicHash>
 #include <QTimer>
 #include "QueryApi.h"
-
+#include <QEventLoop>
 
 
 

@@ -19,6 +19,7 @@ class LayerBulletin : public QWidget
 public:
     explicit LayerBulletin(QWidget *parent = nullptr);
     ~LayerBulletin();
+    QVariantList m_listData;
 
 private slots:
     void on_tbSys_cellDoubleClicked(int row, int);
@@ -34,9 +35,7 @@ private:
 
     //void refresh(bool bRequery=true);
 
-    QList<UserData> m_listUser;
 
-    QVariantList m_listData;
 
     QVariantList m_listTop;
 
@@ -51,6 +50,8 @@ private:
      QButtonGroup m_btns;
 
     bool m_block= false;
+
+   bool m_bFirst = true;  //first no query becaust by Widget::requery
 };
 
 #endif // LAYERBULLETIN_H

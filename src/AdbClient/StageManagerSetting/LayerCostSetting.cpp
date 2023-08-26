@@ -451,14 +451,18 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
             return;
         }
-        DataItemCount dataCount;
 
-        dataCount.GameSid = data["GameSid"].toString();
-        dataCount.GameItemSid = data["Sid"].toString();
-        dataCount.Name = data["Name"].toString();
+        if(!ACTION.isNewVersion())
+        {
+            DataItemCount dataCount;
 
-        ACTION.action(ACT::ADD_ITEM_COUNT,dataCount.data(),sError);
+            dataCount.GameSid = data["GameSid"].toString();
+            dataCount.GameItemSid = data["Sid"].toString();
+            dataCount.Name = data["Name"].toString();
+            //dataCount.TotalCount = data["Count"].toLongLong();
 
+            ACTION.action(ACT::ADD_ITEM_COUNT,dataCount.data(),sError);
+        }
         UI.showMsg("",sError,"OK");
 
 
@@ -499,6 +503,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     DialogEditGameItem dialog;
 
+    dialog.setEanbleCount(false);
     DataGameList gameData( m_gameDisplayData.at(ui->tbGame->currentRow()).toMap());
 
     QString sGameName =gameData.Name;
@@ -526,23 +531,25 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
         UI.showMsg("",sError,"OK");
 
+        if(dialog.isEnableCount() || !ACTION.isNewVersion())
+        {
+            QVariantList dTmp;
+            QVariantMap inTmp;
+            inTmp["GameItemSid"]=data["Sid"].toString();
+            ACTION.action(ACT::QUERY_ITEM_COUNT,inTmp,dTmp,sError);
 
-        QVariantList dTmp;
-        QVariantMap inTmp;
-        inTmp["GameItemSid"]=data["Sid"].toString();
-        ACTION.action(ACT::QUERY_ITEM_COUNT,inTmp,dTmp,sError);
+            DataItemCount dataCount;
 
-        DataItemCount dataCount;
+            if(dTmp.length()>0)
+                dataCount.setData(dTmp.last().toMap());
 
-        if(dTmp.length()>0)
-            dataCount.setData(dTmp.last().toMap());
+            dataCount.GameSid = m_iCurrentGameSid;
+            dataCount.GameItemSid = data["Sid"].toString();
+            dataCount.Name = data["Name"].toString();
+           // dataCount.TotalCount =data["Count"].toLongLong();
 
-        dataCount.GameSid = m_iCurrentGameSid;
-        dataCount.GameItemSid = data["Sid"].toString();
-        dataCount.Name = data["Name"].toString();
-
-        ACTION.action(ACT::EDIT_ITEM_COUNT,dataCount.data(),sError);
-
+            ACTION.action(ACT::EDIT_ITEM_COUNT,dataCount.data(),sError);
+        }
 
 
         refreshItemList();
@@ -746,6 +753,10 @@ void LayerCostSetting::on_btnSortDown()
 
 void LayerCostSetting::on_btnSortSave()
 {
+
+
+
+
     QVariantList list;
 
     for(int i=0;i<ui->tbGameItem->rowCount();i++)
@@ -756,12 +767,29 @@ void LayerCostSetting::on_btnSortSave()
         list.append(d);
     }
     QString sError;
+
+
+
+
+
+#ifdef _BUSY_TEST
+    ACTION.action(ACT::EDIT_GAME_ITEM,list,sError);
+
+    while (1) {
+
+        if(!ACTION.m_bIsLock)
+            ACTION.action(ACT::EDIT_GAME_ITEM,list,sError);
+
+    }
+#else
+
     bool bOk=ACTION.action(ACT::EDIT_GAME_ITEM,list,sError);
 
     if(bOk)
         UI.showMsg("","排序已修改","OK");
     else
         UI.showMsg("",sError,"OK");
+#endif
 }
 
 

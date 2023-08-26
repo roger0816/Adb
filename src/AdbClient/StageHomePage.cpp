@@ -34,6 +34,11 @@ StageHomePage::~StageHomePage()
     delete ui;
 }
 
+void StageHomePage::setBulletinData(QVariantList list)
+{
+    ui->wBulletin->m_listData = list;
+}
+
 
 void StageHomePage::showEvent(QShowEvent *)
 {

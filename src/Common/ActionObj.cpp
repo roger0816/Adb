@@ -53,7 +53,7 @@ void ActionObj::setStartSyanc(bool b)
     if(b)
     {
 
-        m_timer.start(1000);
+        m_timer.start(3000);
     }
     else
         m_timer.stop();
@@ -124,6 +124,8 @@ bool ActionObj::action(int act, QVariantMap data, QVariantMap &out, QString &sEr
     // out = re.dData;
     if(re.listData.length()>0)
         out = re.listData.first().toMap();
+    else
+        out =re.dData;
 
     sError =re.sMsg;
 
@@ -328,6 +330,7 @@ CData ActionObj::callServer(CData data, bool bStrong)
 
     qDebug()<<sApi+"已完成送出 : "<<iTmp;
 
+
     re.deCodeJson(out);
 
 
@@ -393,16 +396,6 @@ CData ActionObj::callServer(CData data, bool bStrong)
     return re;
 }
 
-CData ActionObj::sendData(CData data)
-{
-    CData re;
-
-    QString sApi = QString::number(data.iAciton);
-
-    // int iTmp = RPKCORE.network.connectHost(m_ip,m_port,data.enCodeJson(),out);
-
-    return data;
-}
 
 
 

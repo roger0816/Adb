@@ -19,7 +19,7 @@ public:
     explicit StageHomePage(QWidget *parent = nullptr);
     ~StageHomePage();
 
-
+    void setBulletinData(QVariantList list);
     void showEvent(QShowEvent*) override;
 private slots:
     void on_btnFn_clicked();

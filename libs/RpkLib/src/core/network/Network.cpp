@@ -53,7 +53,10 @@ void Network::recallClient(QByteArray arrReturn, uintptr_t handlerID, bool bUseP
 
 int Network::connectHost(QString sIp, QString sPort, QByteArray arrInput, QByteArray &arrOutput, int iWaitTimer)
 {
-    return g_tcpClient->connectHost(sIp,sPort,arrInput,arrOutput,iWaitTimer);
+    int iRe = g_tcpClient->connectHost(sIp,sPort,arrInput,arrOutput,iWaitTimer);
+
+
+    return iRe;
 }
 
 int Network::connectHost(QString sId,QString sIp, QString sPort, QByteArray arrInput, int iWaitTimer)

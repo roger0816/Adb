@@ -1,5 +1,5 @@
 #include "widget.h"
-
+#include "DEF.h"
 #include <QApplication>
 //#include "DialogLogin.h"
 //#include <QDebug>
@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
     Widget w;
 
 
-  //  UI.m_mainWidget=&w;
+    //  UI.m_mainWidget=&w;
 
     UI.setMainWidget(&w);
 
@@ -168,8 +168,11 @@ int main(int argc, char *argv[])
 
     login.setRelease(true);
 
-   // login.setOnlyTest();
+    // login.setOnlyTest();
 
+#ifdef _BUSY_TEST
+    GLOBAL.m_bRootLogin=true;
+#endif
     if(argc>2)
     {
         GLOBAL.m_bRootLogin=true;

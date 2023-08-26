@@ -239,6 +239,7 @@ void CTcpClient::slotReadyRead()
     QString sId = tcp->property(CTcp::id).toString();
 
     QByteArray readData = tcp->readAll();
+
     // qDebug()<<"ready read len : "<<readData.length();
     bool bOk = false;
 
@@ -260,10 +261,9 @@ void CTcpClient::slotReadyRead()
 
     bOk =pp->isPackageComplete();
 
-
     if(bOk)
     {
-        tcp->close();
+       // tcp->close();
 
         QByteArray re =pp->unPackage();
 

@@ -421,7 +421,7 @@ bool CSqlClass::updateTb(QString sTableName, QVariantMap conditions, QVariantMap
         //sSub+=tmp.at(i)=;
     }
 
-    QSqlQuery sql(db());
+    QSqlQuery sql(writeDb());
 
     sql.prepare(sCmd+sSub);
 
@@ -865,6 +865,21 @@ void CSqlClass::createTableMysql()
 
 }
 
+QSqlDatabase CSqlClass::writeDb()
+{
+    if(!m_db2.isOpen())
+    {
+        m_db2.open();
+
+        if(m_db2.isOpenError())
+        {
+            qDebug()<<m_db2.lastError().text();
+        }
+
+    }
+    return m_db2;
+}
+
 
 
 QStringList CSqlClass::fieldNames(QSqlRecord record)
@@ -954,6 +969,56 @@ QDateTime CSqlClass::currentDateTime()
 
 QSqlDatabase CSqlClass::db()
 {
+#if 0
+    m_iIdx++;
+
+    if(m_iIdx>=DB_COUNT)
+        m_iIdx=0;
+
+
+    QSqlDatabase db;
+
+    if(m_listDb.length()<DB_COUNT)
+    {
+
+
+        //  m_db =QSqlDatabase::addDatabase("QMYSQL");
+        db =QSqlDatabase::addDatabase("QMYSQL",m_sDbName+"_"+QString::number(m_iIdx));
+
+        db.setHostName(m_sIp);
+
+
+        db.setPort(m_sPort.toInt());
+
+        db.setUserName("roger");
+
+        db.setPassword("Aa111111");
+
+        db.setDatabaseName(m_sDbName);
+
+        bool bOk = db.open();
+
+        m_listDb.append(db);
+
+
+    }
+    else
+    {
+        db = m_listDb.at(m_iIdx);
+
+    }
+
+    if(!db.isOpen())
+    {
+        db.open();
+    }
+
+    qDebug()<<"open mysql : "<<m_sIp<<" : "<<db.connectionName();
+
+    return db;
+#else
+
+
     if(!m_db.isOpen())
     {
         m_db.open();
@@ -965,6 +1030,9 @@ QSqlDatabase CSqlClass::db()
 
     }
     return m_db;
+
+
+#endif
 }
 
 bool CSqlClass::checkLogin(QString sUser, QString sPass, QVariantMap &out, QString &sError)
@@ -1343,19 +1411,20 @@ bool CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
     {
 
         qDebug()<< QSqlDatabase::drivers();
+        m_sDbName = sDbName;
 
+        m_sIp = sIp;
+
+        m_sPort = sPort;
         //  m_db =QSqlDatabase::addDatabase("QMYSQL");
-        m_db =QSqlDatabase::addDatabase("QMYSQL",sDbName);
 
         //no work
        // m_db.setConnectOptions("wait_timeout=30");
 
         //  m_db.setHostName("206.189.185.20");
 
-        m_sIp = sIp;
 
-        m_sPort = sPort;
-
+        m_db =QSqlDatabase::addDatabase("QMYSQL",sDbName);
         m_db.setHostName(m_sIp);
 
 
@@ -1369,6 +1438,23 @@ bool CSqlClass::openDb(bool bMysql, QString sIp, QString sPort, QString sDbName)
 
         bOk = m_db.open();
         qDebug()<<"open mysql : "<<sIp<<" : "<<bOk;
+
+
+        m_db2 =QSqlDatabase::addDatabase("QMYSQL",sDbName+"_2");
+        m_db2.setHostName(m_sIp);
+
+
+        m_db2.setPort(m_sPort.toInt());
+
+        m_db2.setUserName("roger");
+
+        m_db2.setPassword("Aa111111");
+
+        m_db2.setDatabaseName(sDbName);
+
+        bOk = m_db2.open();
+
+
 
     }
 

@@ -41,6 +41,8 @@ public:
     void setRate(QString sTitle,DataRate rate);
     void setData(double iGameRate, QVariantMap data);
 
+    void setEanbleCount(bool bShowCountEdit =true);
+    bool isEnableCount();
     QVariantMap data();
 
     //DataExchange::Rate m_rate;

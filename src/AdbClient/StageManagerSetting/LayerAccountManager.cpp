@@ -18,7 +18,11 @@ LayerAccountManager::~LayerAccountManager()
 void LayerAccountManager::showEvent(QShowEvent *)
 {
     ui->tabWidget->setCurrentIndex(0);
-
+    ui->txAddId->clear();
+    ui->txAddCid->clear();
+    ui->txAddName->clear();
+     ui->txAddPass->clear();
+      ui->txAddPass2->clear();
     QTimer::singleShot(30,Qt::PreciseTimer,this,SLOT(refresh()));
 }
 
@@ -188,7 +192,10 @@ void LayerAccountManager::on_btnDel_clicked()
     DialogMsg dialog;
 
 
-    if(ui->tb->currentRow()<0 || ui->tb->currentRow()>=ui->tb->rowCount())
+    int iRow =ui->tb->currentRow();
+
+    if(ui->tb->currentRow()<0 || iRow>=ui->tb->rowCount()
+            || iRow>=m_listUser.length())
     {
 
         dialog.setDialogInfo("請選擇要刪除的帳號!",QStringList()<<"確定");
@@ -199,17 +206,17 @@ void LayerAccountManager::on_btnDel_clicked()
     }
     else
     {
-        QString sUser= ui->tb->item(ui->tb->currentRow(),0)->text();
-        QString sName = ui->tb->item(ui->tb->currentRow(),1)->text();
 
-        QString sTemp =sUser+"("+sName+")";
+        UserData user = m_listUser.at(iRow);
+
+        QString sTemp =user.Id+"("+user.Name+")";
 
         dialog.setDialogInfo("確定要刪除 "+sTemp+" ? ",QStringList()<<"否"<<"是");
 
         if(dialog.exec()==1)
         {
             QString sError;
-            bool bOk = ACTION.delUser(sUser,sError);
+            bool bOk = ACTION.delUser(user.Sid,sError);
 
             if(bOk)
             {

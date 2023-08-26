@@ -149,7 +149,7 @@ CData QueryObj::queryData(CData data)
     }
 
 
-    if(data.iAciton==1000)
+    if(data.iAciton==ACT::LOGIN)
     {
         int iRe=-1;
 

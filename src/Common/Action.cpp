@@ -41,6 +41,7 @@ int Action::checkLogin(QString sUser, QString sPass, QString &sError)
 
     CData dRe = query(data,true);
 
+
     bool bOk = dRe.bOk;
 
     sError = dRe.sMsg;
@@ -100,7 +101,7 @@ bool Action::delUser(QString sUser,QString &sError)
 
     data.iAciton = ACT::DEL_USER;
 
-    data.dData["Id"]=sUser;
+    data.dData["Sid"]=sUser;
 
     CData dRe = query(data);
 
@@ -245,14 +246,8 @@ QList<GroupData> Action::getGroupData(int iType,QString &sError)
     return list;
 }
 
-
-
-
-
-
-void Action::reQuerty()
+void Action::reQuertyOld()
 {
-
     getUser(true);
 
     getGameList(true);
@@ -269,8 +264,7 @@ void Action::reQuerty()
 
     primeRate("",true);
 
-
-
+    /*
     //一進入程式，首先的公告、公告圖、圖片資料做預載
     QString sError;
     QVariantMap in,out;
@@ -280,6 +274,7 @@ void Action::reQuerty()
     in.clear();
     in["Type"]=2;
     action(ACT::QUERY_BULLETIN,in,out,sError);
+    */
 
     /*
     in.clear();
@@ -287,6 +282,216 @@ void Action::reQuerty()
     action(ACT::QUERY_PIC,in,out,sError);
     */
     //pre load make cache data
+
+
+}
+
+
+
+
+
+
+void Action::reQuerty()
+{
+
+
+    CData inData,outData;
+    inData.iAciton=ACT::QUERY_MIX;
+
+    QList<int> listAction;
+    listAction<<ACT::QUERY_GAME_LIST<<ACT::QUERY_GAME_ITEM
+                <<ACT::QUERY_USER<<ACT::QUERY_CUSTOMER
+                  <<ACT::QUERY_FACTORY_CLASS<<ACT::QUERY_CUSTOM_CLASS
+                    <<ACT::QUERY_EXCHANGE<<ACT::QUERY_PRIMERATE
+                   <<ACT::QUERY_BULLETIN;
+
+    foreach(int iAction,listAction)
+    {
+        CData d;
+        d.iAciton=iAction;
+        QVariantMap in;
+
+        if(iAction==ACT::QUERY_BULLETIN)
+        {
+            in["DESC"]="Sid";
+        }
+        d.dData=in;
+
+        inData.dData[QString::number(iAction)]=d.enCodeJson();
+    }
+
+    outData =query(inData);
+
+    QStringList listKey =outData.dData.keys();
+
+    for(int i=0;i<listKey.length();i++)
+    {
+        QString sKey = listKey.at(i);
+        CData dValue;
+
+        QByteArray arr = outData.dData[sKey].toByteArray();
+
+        QByteArray decodedData = QByteArray::fromBase64(arr);
+        dValue.deCodeJson(decodedData);
+
+        if(sKey=="1031")
+        {
+            qDebug()<<"DDD : "<<decodedData;
+
+          qDebug()<<"BBB : "<<dValue.listData.length();
+        }
+
+
+        int iAction = dValue.iAciton;
+
+        if(iAction==ACT::QUERY_USER)
+        {
+            m_listUser.clear();
+
+            foreach(QVariant v,dValue.listData)
+            {
+                UserData tmp(v.toMap());
+                m_listUser.append(tmp);
+            }
+        }
+
+        if(iAction==ACT::QUERY_GAME_LIST)
+        {
+            m_listGameList.clear();
+
+            foreach(QVariant v,dValue.listData)
+            {
+
+                DataGameList tmp;
+
+                tmp.setData(v.toMap());
+
+                m_listGameList.append(tmp);
+
+            }
+        }
+
+        if(iAction==ACT::QUERY_GAME_ITEM)
+        {
+            m_listGameItem.clear();
+
+            foreach(QVariant v,dValue.listData)
+            {
+
+                DataGameItem tmp;
+
+                tmp.setData(v.toMap());
+
+                m_listGameItem.append(tmp);
+
+            }
+        }
+
+        if(iAction==ACT::QUERY_FACTORY_CLASS)
+        {
+            m_listFactoryClass.clear();
+
+            foreach(QVariant v,dValue.listData)
+            {
+
+                DataFactory tmp;
+
+                tmp.setData(v.toMap());
+
+                m_listFactoryClass.append(tmp);
+
+            }
+        }
+
+        if(iAction==ACT::QUERY_CUSTOMER)
+        {
+            m_listCustomer.clear();
+
+            foreach(QVariant v,dValue.listData)
+            {
+
+                CustomerData tmp;
+
+                tmp.setData(v.toMap());
+
+                m_listCustomer.append(tmp);
+
+            }
+        }
+
+
+        if(iAction==ACT::QUERY_CUSTOM_CLASS)
+        {
+            m_listCustomerClass.clear();
+
+            foreach(QVariant v,dValue.listData)
+            {
+
+                DataCustomerClass tmp;
+
+                tmp.setData(v.toMap());
+
+                m_listCustomerClass.append(tmp);
+
+            }
+        }
+
+        if(iAction==ACT::QUERY_EXCHANGE)
+        {
+            m_exRate = dValue.listData;
+
+        }
+
+        if(iAction==ACT::QUERY_PRIMERATE)
+        {
+            m_primeRate = dValue.listData;
+
+        }
+
+        if(iAction==ACT::QUERY_BULLETIN)
+        {
+
+             m_listBulletin = dValue.listData;
+
+        }
+
+
+
+
+
+    }
+
+
+    qDebug()<<" query mix recall len :"<<listKey.length();
+
+    return ;
+
+
+
+
+//    if(listKey.length()<1)
+//    {
+
+//       qDebug()<<" old reqeury ";
+//        getUser(true);
+
+//        getGameList(true);
+
+//        getGameItem(true,true);
+
+//        getFactoryClass("",true);
+
+//        getCustomerList();
+
+//        getCustomerClass(true);
+
+//        costRate("",true);
+
+//        primeRate("",true);
+//    }
+
+
+
 }
 
 QList<UserData> Action::getUser(bool bQuery)
@@ -619,19 +824,19 @@ DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
     };
 
 
-     QList<DataGameItem> list = fnGet();
+    QList<DataGameItem> list = fnGet();
 
-     if(list.length()<1)
-     {
+    if(list.length()<1)
+    {
 
-         getGameItem(true,true);
+        getGameItem(true,true);
 
-         list = fnGet();
+        list = fnGet();
 
-     }
+    }
 
-     if(list.length()>0)
-         re = list.first();
+    if(list.length()>0)
+        re = list.first();
 
 
     return re;
@@ -1404,8 +1609,8 @@ QString Action::setPrimeMoney(OrderData &order)
 
         if(bCheck)
         {
-//            qDebug()<<"AAAAA: ItemSid: "<<sItemSid<<" ,count : "<<itemCount<<" , orderPayType : "<<sValue
-//                   <<" oneItemPrice : "<<iOneItemPrice;
+            //            qDebug()<<"AAAAA: ItemSid: "<<sItemSid<<" ,count : "<<itemCount<<" , orderPayType : "<<sValue
+            //                   <<" oneItemPrice : "<<iOneItemPrice;
         }
 
 
@@ -1716,7 +1921,6 @@ bool Action::getNewCustomerId(QString &sGetId, bool bRenew)
     if(!bRenew)
         sGetId =getKeyValue(sKey,false).toUpper();
 
-    qDebug()<<"A0816 : "<<sGetId;
 
     if(sGetId=="")
     {

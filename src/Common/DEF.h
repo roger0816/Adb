@@ -11,12 +11,16 @@
 #include <QVariantMap>
 
 
+//#define _BUSY_TEST
 
 #define ADP_VER "v1.14.0816"
 static int SERVER_MIN_VER = 12;
 
 static QString SPLIT1 =";;" ;
 static QString SPLIT2 =",," ;
+
+
+
 
 struct SQL_TABLE
 {
@@ -52,7 +56,7 @@ enum _KEY
 
     SET_VALUE=9901,
     GET_VALUE=9931,
-
+    QUERY_INFO =10,
     LOGIN = 1000,
 
     ADD_USER =1001,
@@ -65,7 +69,7 @@ enum _KEY
     DEL_CUSTOMER,
     EDIT_CUSTOMER,
     QUERY_CUSTOMER=1131,
-    LAST_CUSTOMER_ID,
+    //LAST_CUSTOMER_ID,
 
     REPLACE_GAME_INFO =1201,
     DEL_GAME_INFO,
@@ -156,6 +160,8 @@ enum _KEY
     PAY_ADD_COST,  //1.07後的新版
 
     PAY_ORDER,
+
+    QUERY_MIX		=6031,
 
     API_REQUSET=7000
 

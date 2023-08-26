@@ -46,10 +46,43 @@
 </string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="2" column="2">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item row="4" column="2">
        <widget class="QLabel" name="lbVersion">
         <property name="text">
          <string>version</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label_3">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(109, 109, 109);
+font: 700 28pt &quot;Microsoft JhengHei UI&quot;;</string>
+        </property>
+        <property name="text">
+         <string>艾比代管理系統</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -65,26 +98,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item row="2" column="2">
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="lbRelease">
-        <property name="text">
-         <string>release</string>
-        </property>
-       </widget>
       </item>
       <item row="2" column="0">
        <spacer name="horizontalSpacer">
@@ -112,23 +125,10 @@
         </property>
        </spacer>
       </item>
-      <item row="0" column="1">
-       <widget class="QLabel" name="label_3">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>40</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(109, 109, 109);
-font: 700 28pt &quot;Microsoft JhengHei UI&quot;;</string>
-        </property>
+      <item row="4" column="0">
+       <widget class="QLabel" name="lbRelease">
         <property name="text">
-         <string>艾比代管理系統</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <string>release</string>
         </property>
        </widget>
       </item>
@@ -168,96 +168,77 @@ font: 700 28pt &quot;Microsoft JhengHei UI&quot;;</string>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
-          <widget class="QWidget" name="widget_3" native="true">
-           <property name="styleSheet">
-            <string notr="true"/>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="1">
-             <widget class="QPushButton" name="btnLogin">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>90</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QPushButton{
-font: 20px &quot;Microsoft JhengHei UI&quot;;
-
-}
-
-QPushButton{
-background-color: rgb(255, 255, 255);
-border-radius:8px;
-color: rgb(41,41,41);
-border: 1px solid #000000; 
-}
-
-
-QPushButton:disabled{
-background-color: rgb(255, 255, 255);
-color:#b1b1b1;
-border: 1px solid #b1b1b1; 
-}
-
-QPushButton:hover { 
-background-color: #55aaff; 
-border-style: outset; 
-border-width: 2px; 
-font: 700 18px &quot;Microsoft JhengHei UI&quot;; 
-}
-QPushButton:pressed { 
-border-style: outset; 
-border-width: 0px; 
-font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
-color:rgb(241,241,241);
-background-color:#3c78b4;
-}</string>
-              </property>
-              <property name="text">
-               <string>登入</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <spacer name="horizontalSpacer_3">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLabel" name="lbMsg">
-           <property name="styleSheet">
-            <string notr="true">color: rgb(255, 0, 0);</string>
-           </property>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
            <property name="text">
             <string/>
            </property>
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QCheckBox" name="checkBox">
-           <property name="focusPolicy">
-            <enum>Qt::NoFocus</enum>
-           </property>
-           <property name="text">
-            <string>儲存帳號</string>
-           </property>
+          <widget class="QWidget" name="widget_4" native="true">
+           <layout class="QGridLayout" name="gridLayout_5">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="checkBox">
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
+              <property name="text">
+               <string>儲存帳號</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QStackedWidget" name="stackIp">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>33</height>
+               </size>
+              </property>
+              <property name="currentIndex">
+               <number>1</number>
+              </property>
+              <widget class="QWidget" name="pageIpNone"/>
+              <widget class="QWidget" name="pageIpInput">
+               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLineEdit" name="txIp">
+                  <property name="minimumSize">
+                   <size>
+                    <width>160</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>127.0.0.1</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="txPort">
+                  <property name="text">
+                   <string>6005</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
          <item row="3" column="0" colspan="2">
@@ -349,6 +330,106 @@ background-color:#3c78b4;
                <bool>true</bool>
               </property>
              </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QWidget" name="widget_5" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>33</height>
+            </size>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_4">
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="lbMsg">
+              <property name="styleSheet">
+               <string notr="true">color: rgb(255, 0, 0);</string>
+              </property>
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QWidget" name="widget_3" native="true">
+           <property name="styleSheet">
+            <string notr="true"/>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_2">
+            <item row="0" column="1">
+             <widget class="QPushButton" name="btnLogin">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>90</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton{
+font: 20px &quot;Microsoft JhengHei UI&quot;;
+
+}
+
+QPushButton{
+background-color: rgb(255, 255, 255);
+border-radius:8px;
+color: rgb(41,41,41);
+border: 1px solid #000000; 
+}
+
+
+QPushButton:disabled{
+background-color: rgb(255, 255, 255);
+color:#b1b1b1;
+border: 1px solid #b1b1b1; 
+}
+
+QPushButton:hover { 
+background-color: #55aaff; 
+border-style: outset; 
+border-width: 2px; 
+font: 700 18px &quot;Microsoft JhengHei UI&quot;; 
+}
+QPushButton:pressed { 
+border-style: outset; 
+border-width: 0px; 
+font: 700 24px &quot;Microsoft JhengHei UI&quot;; 
+color:rgb(241,241,241);
+background-color:#3c78b4;
+}</string>
+              </property>
+              <property name="text">
+               <string>登入</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <spacer name="horizontalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>

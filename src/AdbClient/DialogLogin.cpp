@@ -7,6 +7,8 @@ DialogLogin::DialogLogin(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->stackIp->setCurrentWidget(ui->pageIpNone);
+
     setVer(ADP_VER);
 
     loadServerConf();
@@ -22,7 +24,7 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     m_btns.addButton(ui->btnServer4,4);
 
-    m_btns.addButton(ui->btnServer5,5);
+    m_btns.addButton(ui->btnServer5,9);
 
 
 
@@ -246,6 +248,21 @@ void DialogLogin::on_btnLogin_clicked()
 
 void DialogLogin::doLogin(bool bIsTestMode)
 {
+    QString sErrorTmp;
+    QVariantMap in,out;
+    bool b=ACTION.action(ACT::QUERY_INFO,in,out,sErrorTmp);
+
+    if(b&&out.keys().length()>0)
+    {
+        QString s=out["ServerVersion"].toString();
+        if(s.length()>0)
+        {
+           ACTION.m_fServerVersion= s.toFloat();
+        }
+    }
+
+
+
 
 
     ui->btnLogin->setDisabled(true);
@@ -318,17 +335,26 @@ void DialogLogin::slotBtnClicked(int iId)
 
     QString sIp,sPort;
 
+
+
     if(iId<=m_listServer.length())
     {
+
+
         sIp=m_listServer.at(iId).toMap()["ip"].toString();
 
         sPort=m_listServer.at(iId).toMap()["port"].toString();
+
+        ui->stackIp->setCurrentWidget(ui->pageIpNone);
+
     }
     else
     {
-        sIp=m_sTestIp;
+        ui->stackIp->setCurrentWidget(ui->pageIpInput);
 
-        sPort=m_sPort;
+        sIp=ui->txIp->text();
+
+        sPort = ui->txPort->text();
     }
 
 
@@ -337,7 +363,7 @@ void DialogLogin::slotBtnClicked(int iId)
 
     GLOBAL.setServer(true,sIp,sPort);
 
-    qDebug()<<"AAAAAAAAA : "<<iId;
+
     setRelease(iId<3);
 
     //GLOBAL.ping(sIp);
@@ -373,5 +399,17 @@ void DialogLogin::setOnlyTest()
     ui->btnServer1->hide();
     ui->btnServer2->hide();
 
+}
+
+
+void DialogLogin::on_txIp_textChanged(const QString &)
+{
+     GLOBAL.setServer(true,ui->txIp->text().trimmed(),ui->txPort->text().trimmed());
+}
+
+
+void DialogLogin::on_txPort_textChanged(const QString &)
+{
+     GLOBAL.setServer(true,ui->txIp->text().trimmed(),ui->txPort->text().trimmed());
 }
 

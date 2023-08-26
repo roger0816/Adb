@@ -28,7 +28,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -156,7 +156,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>b</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -169,7 +169,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>b</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -238,7 +238,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>B</string>
+                <string/>
                </property>
                <property name="placeholderText">
                 <string>新增後無法修改</string>
@@ -261,7 +261,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>Bill</string>
+                <string/>
                </property>
               </widget>
              </item>
@@ -282,10 +282,10 @@
              <item row="3" column="1">
               <widget class="QLineEdit" name="txAddCid">
                <property name="text">
-                <string>B01</string>
+                <string/>
                </property>
                <property name="placeholderText">
-                <string>新增後無法修改</string>
+                <string/>
                </property>
               </widget>
              </item>

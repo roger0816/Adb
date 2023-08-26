@@ -21,6 +21,10 @@ public:
 
     ~Action();
 
+    float m_fServerVersion=1.0;
+
+    bool isNewVersion(){return m_fServerVersion>=1.5;}
+
     bool m_bTest=false;
 
     void setServer(bool b = true,QString sIp="127.0.0.1",QString sPort="6000");
@@ -50,7 +54,7 @@ public:
 
     QList<GroupData> getGroupData(int iType,QString &sError);
 
-
+    void reQuertyOld();
     void reQuerty();
 
     QList<UserData> getUser(bool bQuery=false);
@@ -177,8 +181,6 @@ public:
 
     DataSync sync;
 
-private:
-
 
 
     QList<UserData> m_listUser;
@@ -207,6 +209,9 @@ private:
     QVariantList m_primeRate;
 
     QVariantList m_exRate;
+        QVariantList m_listBulletin;
+
+private:
 
 
      QVariantMap syncData() override;

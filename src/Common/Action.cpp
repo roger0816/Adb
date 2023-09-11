@@ -12,6 +12,13 @@ Action::~Action()
     qDebug()<<"un Action";
 }
 
+bool Action::isNewVersion()
+{
+
+    qDebug()<<"isNewVersion: "<<m_fServerVersion;
+    return m_fServerVersion>=1.5;
+}
+
 
 void Action::setServer(bool b, QString sIp, QString sPort)
 {
@@ -300,10 +307,10 @@ void Action::reQuerty()
 
     QList<int> listAction;
     listAction<<ACT::QUERY_GAME_LIST<<ACT::QUERY_GAME_ITEM
-                <<ACT::QUERY_USER<<ACT::QUERY_CUSTOMER
-                  <<ACT::QUERY_FACTORY_CLASS<<ACT::QUERY_CUSTOM_CLASS
-                    <<ACT::QUERY_EXCHANGE<<ACT::QUERY_PRIMERATE
-                   <<ACT::QUERY_BULLETIN;
+             <<ACT::QUERY_USER<<ACT::QUERY_CUSTOMER
+            <<ACT::QUERY_FACTORY_CLASS<<ACT::QUERY_CUSTOM_CLASS
+           <<ACT::QUERY_EXCHANGE<<ACT::QUERY_PRIMERATE
+          <<ACT::QUERY_BULLETIN;
 
     foreach(int iAction,listAction)
     {
@@ -338,7 +345,7 @@ void Action::reQuerty()
         {
             qDebug()<<"DDD : "<<decodedData;
 
-          qDebug()<<"BBB : "<<dValue.listData.length();
+            qDebug()<<"BBB : "<<dValue.listData.length();
         }
 
 
@@ -451,7 +458,7 @@ void Action::reQuerty()
         if(iAction==ACT::QUERY_BULLETIN)
         {
 
-             m_listBulletin = dValue.listData;
+            m_listBulletin = dValue.listData;
 
         }
 
@@ -469,26 +476,26 @@ void Action::reQuerty()
 
 
 
-//    if(listKey.length()<1)
-//    {
+    //    if(listKey.length()<1)
+    //    {
 
-//       qDebug()<<" old reqeury ";
-//        getUser(true);
+    //       qDebug()<<" old reqeury ";
+    //        getUser(true);
 
-//        getGameList(true);
+    //        getGameList(true);
 
-//        getGameItem(true,true);
+    //        getGameItem(true,true);
 
-//        getFactoryClass("",true);
+    //        getFactoryClass("",true);
 
-//        getCustomerList();
+    //        getCustomerList();
 
-//        getCustomerClass(true);
+    //        getCustomerClass(true);
 
-//        costRate("",true);
+    //        costRate("",true);
 
-//        primeRate("",true);
-//    }
+    //        primeRate("",true);
+    //    }
 
 
 
@@ -1281,6 +1288,31 @@ QList<OrderData> Action::waitOrder(QString sCustomerSid)
     }
 
     return re;
+}
+
+void Action::setItemCountChange(QString sItemSid, int iSell, int iTotal, QString sOrderId)
+{
+    QVariantMap d;
+
+    d["GameItemSid"]=sItemSid;
+    d["SellChange"]=iSell;
+    d["TotalChange"]=iTotal;
+    d["UserSid"] = m_currentUser.Sid;
+    d["OrderId"] = sOrderId;
+    //to do
+
+}
+
+QVariantList Action::getItemCount(QString sGameSid)
+{
+    //to do
+    return QVariantList();
+}
+
+QVariantList Action::getItemCount(QStringList listGameItem)
+{
+    //to do
+    return QVariantList();
 }
 
 

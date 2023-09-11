@@ -78,8 +78,10 @@ void DialogEditGameItem::setEanbleCount(bool bShowCountEdit)
 {
 
     if(!ACTION.isNewVersion())
-         ui->wCountArea->setVisible(false);
+    {
+        ui->wCountArea->setVisible(false);
         return;
+    }
 
     ui->wCountArea->setVisible(bShowCountEdit);
 }
@@ -99,13 +101,13 @@ QVariantMap DialogEditGameItem::data()
 
     m_data["Bonus"] = ui->sbOrderBouns->value();
 
-     m_data["Sort"] = ui->sbSort->value();
+    m_data["Sort"] = ui->sbSort->value();
     m_data["NTD"] =ui->sbNTD->value();
 
     if(ACTION.isNewVersion())
     {
-    //for item count
-    m_data["Count"] = ui->sbCount->value();
+        //for item count
+        m_data["Count"] = ui->sbCount->value();
     }
 
     CListPair listAddValueType;
@@ -117,7 +119,7 @@ QVariantMap DialogEditGameItem::data()
     {
         QComboBox *cb=dynamic_cast<QComboBox*>(ui->tableWidget->cellWidget(i,_Name));
 
-       QStringList listItem =cb->property("items").toStringList();
+        QStringList listItem =cb->property("items").toStringList();
         if(cb->currentIndex()<0 || cb->currentIndex()>=listItem.length())
             continue;
         QString target = listItem.at(cb->currentIndex());
@@ -163,7 +165,7 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
     cb->setEditable(true);
 
     QCompleter *completer=new QCompleter(cb->model(),this);
-//        completer->setCompletionMode(QCompleter::PopupCompletion);
+    //        completer->setCompletionMode(QCompleter::PopupCompletion);
     cb->setCompleter(completer);
 
 
@@ -301,7 +303,7 @@ double DialogEditGameItem::valueToUp(double d, int decimals)
 void DialogEditGameItem::on_sbOrderBouns_valueChanged(double arg1)
 {
 
-  //  ui->lbRateUsd->setText(QString::number(m_rate.USD()));
+    //  ui->lbRateUsd->setText(QString::number(m_rate.USD()));
 
     ui->lbRateHkd->setText(QString::number(m_rate.HKD()));
 

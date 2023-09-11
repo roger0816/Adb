@@ -23,7 +23,7 @@ public:
 
     float m_fServerVersion=1.0;
 
-    bool isNewVersion(){return m_fServerVersion>=1.5;}
+    bool isNewVersion();
 
     bool m_bTest=false;
 
@@ -112,7 +112,9 @@ public:
 
     QList<OrderData> waitOrder(QString sCustomerSid);
 
-
+    void setItemCountChange(QString sItemSid,int iSell,int itotal,QString sOrderId="");
+    QVariantList getItemCount(QString sGameSid);
+    QVariantList getItemCount(QStringList  listGameItem);
 
     QVariant trKey(QVariantList list,QVariantMap info,QString sTargetKey);
 

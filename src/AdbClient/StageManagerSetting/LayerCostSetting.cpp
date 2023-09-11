@@ -158,7 +158,7 @@ void LayerCostSetting::refreshItemList()
 
     if(iGameRow<0 || iGameRow>= m_gameDisplayData.length())
     {
-        m_iCurrentGameSid = -1;
+        m_sCurrentGameSid = "";
         ui->lbItemTitle0->hide();
         ui->lbItemTitle1->setText("請先在左側選擇遊戲");
 
@@ -172,7 +172,7 @@ void LayerCostSetting::refreshItemList()
 
     QString sGameName = gameData.Name;
 
-    m_iCurrentGameSid = gameData.Sid.toInt();
+    m_sCurrentGameSid = gameData.Sid;
 
     ui->lbItemTitle0->show();
 
@@ -183,7 +183,7 @@ void LayerCostSetting::refreshItemList()
 
     QVariantMap d;
 
-    d["GameSid"] = m_iCurrentGameSid;
+    d["GameSid"] = m_sCurrentGameSid;
     d["ASC"]="Sort";
 
     QString sError;
@@ -372,8 +372,8 @@ void LayerCostSetting::on_btnGameEdit_clicked()
         ACTION.action(ACT::EDIT_GAME_LIST,data,sError);
         UI.showMsg("",sError,"OK");
 
-
-        ACTION.updateGameItemPrice(dialog.m_sSid,dialog.m_iGameRate);
+        if(!ACTION.isNewVersion())
+            ACTION.updateGameItemPrice(dialog.m_sSid,dialog.m_iGameRate);
 
         refreshGameList();
 
@@ -436,24 +436,30 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     if(dialog.exec()==1)
     {
+
+
+
         QVariantMap data =dialog.data();
-
-        data["GameSid"] = m_iCurrentGameSid;
-
         QString sError;
 
-        bool b = ACTION.action(ACT::ADD_GAME_ITEM,data,sError);
+        data["GameSid"] = m_sCurrentGameSid;
 
-
-        if(!b)
-        {
-            UI.showMsg("",sError,"OK");
-
-            return;
-        }
 
         if(!ACTION.isNewVersion())
         {
+
+
+            bool b = ACTION.action(ACT::ADD_GAME_ITEM,data,sError);
+
+
+            if(!b)
+            {
+                UI.showMsg("",sError,"OK");
+
+                return;
+            }
+
+
             DataItemCount dataCount;
 
             dataCount.GameSid = data["GameSid"].toString();
@@ -462,14 +468,28 @@ void LayerCostSetting::on_btnItemAdd_clicked()
             //dataCount.TotalCount = data["Count"].toLongLong();
 
             ACTION.action(ACT::ADD_ITEM_COUNT,dataCount.data(),sError);
+
+        }
+        else
+        {
+            QVariantMap tmpD;
+            tmpD["Data"]=data;
+            tmpD["Count"]=data["Count"].toLongLong();
+            bool b = ACTION.action(ACT::ADD_GAME_ITEM,data,sError);
+
+            if(!b)
+            {
+                UI.showMsg("",sError,"OK");
+
+                return;
+            }
+
+
         }
         UI.showMsg("",sError,"OK");
 
 
         refreshItemList();
-
-
-
 
     }
 }
@@ -502,7 +522,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
 
     DialogEditGameItem dialog;
-
+    qDebug()<<"GGGGGGGGGG";
     dialog.setEanbleCount(false);
     DataGameList gameData( m_gameDisplayData.at(ui->tbGame->currentRow()).toMap());
 
@@ -523,7 +543,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
     {
         QVariantMap data =dialog.data();
 
-        data["GameSid"] = m_iCurrentGameSid;
+        data["GameSid"] = m_sCurrentGameSid;
 
         QString sError;
 
@@ -543,10 +563,10 @@ void LayerCostSetting::on_btnItemEdit_clicked()
             if(dTmp.length()>0)
                 dataCount.setData(dTmp.last().toMap());
 
-            dataCount.GameSid = m_iCurrentGameSid;
+            dataCount.GameSid = m_sCurrentGameSid;
             dataCount.GameItemSid = data["Sid"].toString();
             dataCount.Name = data["Name"].toString();
-           // dataCount.TotalCount =data["Count"].toLongLong();
+            // dataCount.TotalCount =data["Count"].toLongLong();
 
             ACTION.action(ACT::EDIT_ITEM_COUNT,dataCount.data(),sError);
         }

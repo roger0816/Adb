@@ -154,14 +154,14 @@ void DialogAddValueTypeEdit::on_btnOk_clicked()
         return;
     }
 
-    QString sMsg ="確認新增嗎？";
+//    QString sMsg ="確認新增嗎？";
 
-    if(!ui->btnDel->isHidden())
-    {
-        sMsg = "確定修改嗎？";
-    }
+//    if(!ui->btnDel->isHidden())
+//    {
+//        sMsg = "確定修改嗎？";
+//    }
 
-    if(1==UI.showMsg("",sMsg,QStringList()<<"否"<<"是"))
+//    if(1==UI.showMsg("",sMsg,QStringList()<<"否"<<"是"))
         done(1);
 }
 

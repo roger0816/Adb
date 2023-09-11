@@ -11,31 +11,9 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    double x=123456789.10;
-
-    qDebug()<<"AA1:"<<QString::number(x,'f',3);  // "123456789.123"
-
-    double x1=QString::number(x,'f',3).toDouble();
-    x1=QString("-1.02675e+06").toDouble();
-    qDebug()<<"AA2:"<<x1;
-
-    qDebug()<<"AA3"<<QString::number(x1,'f',3);
 
 
 
-    QByteArray m_data="AAAA";
-
-    m_data.resize(3);
-
-    qDebug()<<"SSSSS : "<<m_data.mid(8,4);
-
-
-    QByteArray tag = m_data.mid(8+12,4-20);
-    quint32 value;
-    QDataStream s(&tag,QIODevice::ReadWrite);
-    s >> value;
-
-    m_data.remove(0,100);
 
 
     //        uint datavlen = ByteArrayToUint32(m_data.mid(8,4));
@@ -240,7 +218,21 @@ void Widget::on_btnLogout_clicked()
 
 void Widget::slotLogin()
 {
-    qDebug()<<"["+QDateTime::currentDateTimeUtc().addMSecs(60*8).toString("hh:mm:ss:zzz")+"] login ";
+
+//    qDebug()<<"AAAAA0:"<<QDateTime::currentDateTimeUtc().addMSecs(60*60*8).toString("mm:ss:zzz");
+
+
+//    CData tmpIn,tmpOut;
+//    tmpIn.iAciton=ACT::QUERY_ORDER;
+//    tmpIn.dData["OrderDate > "]="20230722";
+//    tmpOut =ACTION.query(tmpIn);
+
+//    qDebug()<<"AAAAA1 out len : "<<tmpOut.listData.length();
+
+//    qDebug()<<"AAAAA2:"<<QDateTime::currentDateTimeUtc().addMSecs(60*60*8).toString("mm:ss:zzz");
+
+
+
 
     ACTION.setStartSyanc(true);
 

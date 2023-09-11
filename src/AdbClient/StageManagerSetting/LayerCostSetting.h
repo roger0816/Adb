@@ -82,7 +82,7 @@ private:
 
     QVariantList m_listItem;
 
-    int m_iCurrentGameSid = -1;
+    QString m_sCurrentGameSid = "";
 
 private slots:
 

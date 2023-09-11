@@ -155,6 +155,8 @@ enum _KEY
     QUERY_DEBIT_CLASS=2831,
 
 
+
+
     PAY_ADD=3001,  //1.07前的舊版
 
     PAY_ADD_COST,  //1.07後的新版

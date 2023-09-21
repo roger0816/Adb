@@ -95,7 +95,7 @@ void ItemMiniLoadbar::timerEvent(QTimerEvent *)
 
     if(ui->lbPic->isVisible())
     {
-        if(m_iMsec%(m_iTimerMsec*10)==0)
+        if(m_iMsec%(m_iTimerMsec*5)==0)
             m_iIdx++;
 
         if(m_iIdx>=m_listRes.length())

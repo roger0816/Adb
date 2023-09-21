@@ -151,7 +151,7 @@ public:
 
     QString getPayRate(QString sPayTypeSid);
 
-    bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
+   // bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
 
     QPair<qlonglong, qlonglong> getItemCount(QString sGameItemSid, bool bQuery=true);
 

@@ -28,6 +28,7 @@ SOURCES += \
     StageCustomerService/LayerCustomerGameEdit.cpp \
     StageCustomerService/LayerOkInfo.cpp \
     StageCustomerService/LayerOrder.cpp \
+    StageManagerSetting/LayerCountSetting.cpp \
     StageManagerSetting/LayerItemCount.cpp \
     StageOrder/DialogDayReportEdit.cpp \
     StageOrder/DialogEditOwner.cpp \
@@ -102,6 +103,7 @@ HEADERS += \
     StageCustomerService/LayerCustomerGameEdit.h \
     StageCustomerService/LayerOkInfo.h \
     StageCustomerService/LayerOrder.h \
+    StageManagerSetting/LayerCountSetting.h \
     StageManagerSetting/LayerItemCount.h \
     StageOrder/DialogDayReportEdit.h \
     StageOrder/DialogEditOwner.h \
@@ -175,6 +177,7 @@ FORMS += \
     StageCustomerService/LayerCustomerGameEdit.ui \
     StageCustomerService/LayerOkInfo.ui \
     StageCustomerService/LayerOrder.ui \
+    StageManagerSetting/LayerCountSetting.ui \
     StageManagerSetting/LayerItemCount.ui \
     StageOrder/DialogDayReportEdit.ui \
     StageOrder/DialogEditOwner.ui \

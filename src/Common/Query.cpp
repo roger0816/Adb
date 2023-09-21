@@ -1126,10 +1126,8 @@ CData Query::implementRecall(CData data)
     {
         CData tmp=data;
         tmp.iAciton=ACT::REPLACE_ORDER;
-        printTime("1");
 
         CData tmpRe=queryData(tmp);
-        printTime("2");
 
 
         if(!tmpRe.bOk)
@@ -1171,7 +1169,6 @@ CData Query::implementRecall(CData data)
 
             // if(tmpList.length()<1)
             {
-                printTime("3");
 
                 bool b;
                 QVariantMap in;
@@ -1187,7 +1184,6 @@ CData Query::implementRecall(CData data)
                 if(b && listOut.length()>0)
                     preTotal=listOut.first().toMap()["Total"].toDouble();
 
-                printTime("4");
 
                 //   QString Error;
 
@@ -1216,18 +1212,14 @@ CData Query::implementRecall(CData data)
                 cost.OrderTime=order.OrderDate+order.OrderTime;
 
                 m_sql.insertTb(SQL_TABLE::CustomerCost(),cost.data(),sError);
-                printTime("5");
 
                 changeMoney(cus, cost.Total,sError);
-
-                printTime("6");
 
 
 
                 checkUpdate(ACT::ADD_CUSTOMER_COST);
                 //   checkUpdate(ACT::REPLACE_ORDER);
 
-                printTime("7");
 
                 bOk=true;
                 sOkMsg="回報完成";
@@ -1292,8 +1284,6 @@ bool Query::changeMoney(QString sCustomerSid, QString sValue, QString &sError)
 
 bool Query::changeMoney(CustomerData cus, QString sValue, QString &sError)
 {
-
-
 
 
     QVariantMap in;

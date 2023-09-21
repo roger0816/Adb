@@ -13,7 +13,7 @@
 
 //#define _BUSY_TEST
 
-#define ADP_VER "v1.14.0816"
+#define ADP_VER "v2.0.0918"
 static int SERVER_MIN_VER = 12;
 
 static QString SPLIT1 =";;" ;
@@ -153,7 +153,7 @@ enum _KEY
     EDIT_DEBIT_CLASS,
     DEL_DEBIT_CLASS,
     QUERY_DEBIT_CLASS=2831,
-
+    QUERY_COUNT,
 
 
 

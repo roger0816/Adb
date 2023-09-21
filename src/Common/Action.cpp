@@ -1802,6 +1802,7 @@ QString Action::getPayRate(QString sPayTypeSid)
     return QString::number(re,'f',3);;
 }
 
+/*
 bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrderItem)
 {
     bool bRe =true;
@@ -1851,6 +1852,7 @@ bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrder
 
     return bRe;
 }
+*/
 
 QPair<qlonglong,qlonglong> Action::getItemCount(QString sGameItemSid,bool bQuery)
 {

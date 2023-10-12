@@ -152,6 +152,7 @@ bool QueryApi::getGameItemFromGame(QString sSid, QVariantMap &data)
 
     QVariantMap in;
     in["GameSid"]=sSid;
+    in["ForApi"] =1;
     in["ASC"]="Sort";
     QVariantList listData;
     QString sError;

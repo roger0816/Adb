@@ -70,6 +70,8 @@ void StageOrder::changePage(int iPage)
 
 
 
+
+
     ui->stackedWidget->setCurrentIndex(iPage);
     //本來在各頁showEvent 做init，調出來換頁時call
 }

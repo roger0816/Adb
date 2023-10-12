@@ -32,6 +32,7 @@ public:
         _Name,
         _Enable,
         _OrderNTD,
+        _ForApi,
         _Bonus,
         _Cost,
         _PayType

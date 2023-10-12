@@ -92,6 +92,8 @@ public:
     void ping(QString sIp);
 
     bool m_bRootLogin= false;
+
+    QString printTime(QString st);
 private:
     static Global *m_pInstance;
 

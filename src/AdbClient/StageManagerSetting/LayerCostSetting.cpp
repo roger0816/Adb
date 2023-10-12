@@ -10,6 +10,7 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
     ui->tbGameItem->setColumnWidth(_Sid,60);
     ui->tbGameItem->setColumnWidth(_Name,160);
     ui->tbGameItem->setColumnWidth(_Enable,40);
+     ui->tbGameItem->setColumnWidth(_ForApi,40);
 
     connect(ui->btnSortUp,&QPushButton::clicked,this,&LayerCostSetting::on_btnSortUp);
 
@@ -229,11 +230,18 @@ void LayerCostSetting::refreshItemList()
 
         ui->tbGameItem->setItem(i,_OrderNTD,UI.tbItem(data.OrderNTD));
 
+        QString sTmp ="是";
+
+        if (!data.ForApi)
+            sTmp ="否";
+
+        ui->tbGameItem->setItem(i,_ForApi,UI.tbItem(sTmp));
+
         ui->tbGameItem->setItem(i,_Bonus,UI.tbItem(data.Bonus));
 
         double iNTD = GameRate*data.Bonus.toDouble();
 
-        ui->tbGameItem->setItem(i,5,UI.tbItem(GLOBAL.addFlow(iNTD)));
+        ui->tbGameItem->setItem(i,_Cost,UI.tbItem(GLOBAL.addFlow(iNTD)));
 
         //  ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
 
@@ -522,7 +530,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
 
     DialogEditGameItem dialog;
-    qDebug()<<"GGGGGGGGGG";
+
     dialog.setEanbleCount(false);
     DataGameList gameData( m_gameDisplayData.at(ui->tbGame->currentRow()).toMap());
 

@@ -292,8 +292,8 @@ CData ActionObj::callServer(CData data, bool bStrong)
     if(bStrong)
         bNeedFromeServer=true;
 
-    qDebug()<<"trigger local:"<<m_dLocalTrigger[sGroup]<<", update:"<<m_dUpdateTrigger[sGroup];
-    if(data.iAciton !=ACT::UPLOAD_PIC && data.iAciton !=ACT::QUERY_PIC)
+   // qDebug()<<"trigger local:"<<m_dLocalTrigger[sGroup]<<", update:"<<m_dUpdateTrigger[sGroup];
+    if(data.iAciton !=ACT::UPLOAD_PIC && data.iAciton !=ACT::QUERY_PIC &&bNeedFromeServer)
     {
         qDebug()<<"call api :"+sApi<<",data from server:"<<bNeedFromeServer<<",cacheKey:"<<sCacheKey<<"\n";
     }

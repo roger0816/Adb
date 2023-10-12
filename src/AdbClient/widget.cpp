@@ -219,20 +219,6 @@ void Widget::on_btnLogout_clicked()
 void Widget::slotLogin()
 {
 
-//    qDebug()<<"AAAAA0:"<<QDateTime::currentDateTimeUtc().addMSecs(60*60*8).toString("mm:ss:zzz");
-
-
-//    CData tmpIn,tmpOut;
-//    tmpIn.iAciton=ACT::QUERY_ORDER;
-//    tmpIn.dData["OrderDate > "]="20230722";
-//    tmpOut =ACTION.query(tmpIn);
-
-//    qDebug()<<"AAAAA1 out len : "<<tmpOut.listData.length();
-
-//    qDebug()<<"AAAAA2:"<<QDateTime::currentDateTimeUtc().addMSecs(60*60*8).toString("mm:ss:zzz");
-
-
-
 
     ACTION.setStartSyanc(true);
 

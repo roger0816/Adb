@@ -83,7 +83,7 @@ public:
 
     bool checkFilter(OrderData order);
 
-    void refreshTb(bool bRequery=true,bool bResetCb=true);
+    virtual void refreshTb(bool bRequery=true,bool bResetCb=true);
 private slots:
     void on_tb_cellPressed(int row, int column);
 
@@ -129,7 +129,7 @@ private slots:
 
     void on_cbShowGameItem_clicked();
 
-private:
+public:
     Ui::LayerDayReport *ui;
 
     QList<OrderData> m_listOrder;
@@ -158,7 +158,7 @@ private:
 
     QString statusString(QString sStep);
 
-    QString getGameItemStr(QString items);
+    QString getGameItemStr(QString items, bool bQuery);
 
 };
 

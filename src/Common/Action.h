@@ -72,7 +72,7 @@ public:
     QList<DataGameList> getGameList(bool bQuery=true);
     DataGameList getGameList(QString sSid, bool bQuery=true);
 
-    QList<DataGameItem> getGameItem(bool bQuery = true, bool bStrong=false);
+    QList<DataGameItem> getGameItem(bool bQuery = true);
 
     QList<DataGameItem> getGameItem(QString sGameSid, bool bQuery=true);
 
@@ -142,14 +142,14 @@ public:
 
     CListPair getAddValueType(bool bRequest=true);
 
-    QString getAddValueName(QString sSid);
+    QList<DataPayType> getPayType(QString sSid="",bool bRequest=true);
 
-    QString getAddValueCurrency(QString sSid);
+    QString getAddValueName(QString sSid);
 
 
     double payTypeToNTDRate(QString payTypeSid, DataRate rate, QString &sOutRate);
 
-    QString getPayRate(QString sPayTypeSid);
+    QString getPayRate(QString sPayTypeSid, bool bRequest=false);
 
    // bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
 
@@ -205,6 +205,7 @@ public:
 
     QList<OrderData> m_listOrder;
 
+    QList<DataPayType> m_listPayType;
 
     CListPair m_listAddValueType;
 

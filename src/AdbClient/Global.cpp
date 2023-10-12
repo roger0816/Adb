@@ -624,6 +624,13 @@ void Global::ping(QString sIp)
     m_ping.setIp(sIp);
 }
 
+QString Global::printTime(QString st)
+{
+    QString sRe = st+" "+dateTimeUtc8().toString("mm:ss.zzz");
+    qDebug()<<sRe;
+    return sRe;
+}
+
 
 QString Global::strNumber(double number)
 {

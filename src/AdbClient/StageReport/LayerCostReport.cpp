@@ -213,17 +213,9 @@ void LayerCostReport::reMix()
             listSortUser.removeOne(costData.CustomerSid);
         }
 
-        if(costData.CustomerSid=="137")
-        {
-            qDebug()<<"GGGGG :"<<costData.data()["Total"]<<" , " <<dUser[costData.CustomerSid].toMap()["Total"];
-        }
 
         dUser[costData.CustomerSid] = costData.data();
 
-        if(costData.CustomerSid=="137")
-        {
-            qDebug()<<"GGGGG1 :"<<dUser[costData.CustomerSid].toMap()["Total"];
-        }
 
 
         listSortUser.append(costData.CustomerSid);

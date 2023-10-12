@@ -77,7 +77,28 @@ void LayerCountSetting::slotCbChangeIdx(int idx)
         DataGameItem item(v);
         QString sGameItemSid =item.Sid;
 
-        DataCount data = m_countData.value(sGameItemSid);
+         DataCount data;
+     //   if(m_countData.keys().contains(sGameItemSid))
+        {
+           data = m_countData.value(sGameItemSid);
+        }
+//        else
+//        {
+//            data.TotalCount=0;
+//            data.TotalSell=0;
+//            data.CurrentCount=0;
+//            data.Name=item.Name;
+//            data.GameSid= item.GameSid;
+//            data.GameItemSid=sGameItemSid;
+//            m_countData[sGameItemSid]=data;
+//        }
+
+
+
+
+
+        data.Name = item.Name;
+        data.GameSid = item.GameSid;
 
         QString sName =item.Name;
         int iCount = data.CurrentCount;

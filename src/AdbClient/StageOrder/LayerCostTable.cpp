@@ -104,7 +104,7 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
 
     QString sError;
 
-    m_currentItems =ACTION.getGameItem(sGameSid,true);
+    m_currentItems =ACTION.getGameItem(sGameSid);
 
 
 

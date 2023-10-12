@@ -135,13 +135,7 @@ void LayerFactory::refresh()
 
         QStringList listPayType = GLOBAL.mapping(listPay,listSid);
 
-        if(i==3)
-        {
-            qDebug()<<"AAAAAAAAAAAAAAAA : "<<listSid;
 
-             qDebug()<<"AAAAAAAAAAAAAAAA : "<<listPay;
-            qDebug()<<"AAAAAAAAAAAAAAAA : "<<listPayType;
-        }
 
         ui->tbFactory->setItem(i,2,UI.tbItem(listPayType.join(","),GlobalUi::_TOOLTIP));
 

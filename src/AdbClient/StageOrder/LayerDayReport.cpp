@@ -225,7 +225,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         ui->tb->setItem(iRow,_GameName,UI.tbItem(sGameName));
 
-        QTableWidgetItem *gameItem = UI.tbItem(getGameItemStr(data.Item));
+        QTableWidgetItem *gameItem = UI.tbItem(getGameItemStr(data.Item,false));
         ui->tb->setItem(iRow,_GameItem,gameItem);
 
         //        QFontMetrics fm(gameItem->font());
@@ -303,18 +303,24 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
 
             //成本匯率是要看儲值方式的幣別
-            QString sPayTypeCurrency= ACTION.getAddValueCurrency(data.PayType);
+            DataPayType dPayType;
+
+            QList<DataPayType> tmp = ACTION.getPayType(data.PayType,iRow==0);
+            if(tmp.length()>0)
+                dPayType = tmp.first();
+
+            QString sPayTypeCurrency= dPayType.Currency;
             sPrimeRate = primeRate.listData.findValue(sPayTypeCurrency);
             ui->tb->setItem(iRow,_PayCount,UI.tbItem(orderPayType.iTotalCount));
 
-            ui->tb->setItem(iRow,_PayRate,UI.tbItem(ACTION.getPayRate(data.PayType)));
+            ui->tb->setItem(iRow,_PayRate,UI.tbItem(ACTION.getPayRate(data.PayType,iRow==0)));
             ui->tb->setItem(iRow,_PrimeRate,UI.tbItem(sPrimeRate));
 
 
             //成本
             // ACTION.setPrimeMoney(data);
             // sNtdPrime=data.Money[1];
-            double iNtdPrime=sPrimeRate.toDouble()*orderPayType.iTotalCount*ACTION.getPayRate(data.PayType).toDouble();
+            double iNtdPrime=sPrimeRate.toDouble()*orderPayType.iTotalCount*ACTION.getPayRate(data.PayType,iRow==0).toDouble();
             sNtdPrime=QString::number(iNtdPrime,'f',2);
 
 
@@ -385,6 +391,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
 bool LayerDayReport::checkFilter(OrderData order)
 {
+
     QString step = order.Step;
     QString sDate = order.OrderDate;
 
@@ -894,7 +901,7 @@ _LayerDayReport::OrderPayType LayerDayReport::getPayCount(OrderData data)
 
         int itemCount = listItem.at(i).split(",,").last().toInt();
 
-        double iOnePayCount =ACTION.getGameItemPayCount(itemSid,sPaySid);
+        double iOnePayCount =ACTION.getGameItemPayCount(itemSid,sPaySid,false);
 
 
         double count = itemCount*iOnePayCount;
@@ -936,6 +943,7 @@ void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
 
 
         m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date(),bStrong);
+        ACTION.getGameItem(true); // preload
     }
 }
 
@@ -976,7 +984,7 @@ QString LayerDayReport::statusString(QString sStep)
     return sStatus;
 }
 
-QString LayerDayReport::getGameItemStr(QString items)
+QString LayerDayReport::getGameItemStr(QString items,bool bQuery)
 {
     QString sRe="";
     QStringList listItem=items.split(";;");
@@ -986,7 +994,7 @@ QString LayerDayReport::getGameItemStr(QString items)
         QString sSid =v.split(",,").first();
         QString sCount = v.split(",,").last();
 
-        sRe+= ACTION.getGameItemFromSid(sSid).Name+"*"+sCount+" ";
+        sRe+= ACTION.getGameItemFromSid(sSid,bQuery).Name+"*"+sCount+" ";
 
     }
 

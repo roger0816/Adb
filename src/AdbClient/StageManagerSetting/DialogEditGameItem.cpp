@@ -7,6 +7,8 @@ DialogEditGameItem::DialogEditGameItem(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->cbApi->setCurrentIndex(1);
+
     this->setWindowTitle("商品設定");
 
     ui->lbUSDtitle->hide();
@@ -65,6 +67,8 @@ void DialogEditGameItem::setData(double iGameRate,QVariantMap data)
 
     ui->sbSort->setValue(m_data["Sort"].toInt());
 
+    ui->cbApi->setCurrentIndex(m_data["ForApi"].toInt());
+
     // ui->sbNTD->setValue(m_data["NTD"].toDouble());
 
     //ui->sbNTD->setValue(m_iGameRate*m_data["Bonus"].toDouble());
@@ -103,6 +107,8 @@ QVariantMap DialogEditGameItem::data()
 
     m_data["Sort"] = ui->sbSort->value();
     m_data["NTD"] =ui->sbNTD->value();
+
+    m_data["ForApi"] = ui->cbApi->currentIndex();
 
     if(ACTION.isNewVersion())
     {

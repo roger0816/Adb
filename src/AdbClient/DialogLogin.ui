@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>492</width>
-    <height>396</height>
+    <width>496</width>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -178,10 +178,19 @@ font: 700 28pt &quot;Microsoft JhengHei UI&quot;;</string>
          <item row="2" column="1">
           <widget class="QWidget" name="widget_4" native="true">
            <layout class="QGridLayout" name="gridLayout_5">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
             <property name="topMargin">
              <number>0</number>
             </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
             <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <property name="spacing">
              <number>0</number>
             </property>
             <item row="0" column="0">
@@ -207,13 +216,32 @@ font: 700 28pt &quot;Microsoft JhengHei UI&quot;;</string>
               </property>
               <widget class="QWidget" name="pageIpNone"/>
               <widget class="QWidget" name="pageIpInput">
-               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="3,1">
+               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,3,1">
+                <property name="leftMargin">
+                 <number>0</number>
+                </property>
                 <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
                  <number>0</number>
                 </property>
                 <property name="bottomMargin">
                  <number>0</number>
                 </property>
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                 <item>
                  <widget class="QLineEdit" name="txIp">
                   <property name="minimumSize">

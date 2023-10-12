@@ -516,6 +516,11 @@
            </column>
            <column>
             <property name="text">
+             <string>API</string>
+            </property>
+           </column>
+           <column>
+            <property name="text">
              <string>業績點數</string>
             </property>
            </column>

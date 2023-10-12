@@ -259,7 +259,7 @@ void Action::reQuertyOld()
 
     getGameList(true);
 
-    getGameItem(true,true);
+    getGameItem(true);
 
     getFactoryClass("",true);
 
@@ -720,9 +720,9 @@ DataGameList Action::getGameList(QString sSid, bool bQuery)
     return re;
 }
 
-QList<DataGameItem> Action::getGameItem(bool bQuery,bool bStrong)
+QList<DataGameItem> Action::getGameItem(bool bQuery)
 {
-    if(!bQuery)
+    if(!bQuery && m_listGameItem.length()>0)  //有可能商品被刪除了，會一直 bStrong
         return m_listGameItem;
 
 
@@ -734,7 +734,7 @@ QList<DataGameItem> Action::getGameItem(bool bQuery,bool bStrong)
 
     QString sError;
 
-    action(ACT::QUERY_GAME_ITEM,d,listOut,sError,bStrong);
+    action(ACT::QUERY_GAME_ITEM,d,listOut,sError,true);
 
     m_listGameItem.clear();
 
@@ -752,6 +752,7 @@ QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
 {
 
     QList<DataGameItem> listRe;
+
     getGameItem(bQuery);
 
     auto fnGet=[=]()
@@ -772,9 +773,10 @@ QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
 
     listRe = fnGet();
 
-    if(listRe.length()<1)
+    if(!bQuery && listRe.length()<1)
     {
-        getGameItem(true,true);
+
+        getGameItem(true);
 
         listRe =fnGet();
     }
@@ -785,7 +787,7 @@ QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
 void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
 {
 
-
+    qDebug()<<"CCCCCC3 ";
     QList<DataGameItem> list = getGameItem(sGameSid,true);
 
     QVariantList listSend;
@@ -811,7 +813,7 @@ void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
 DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
 {
     DataGameItem re;
-
+    qDebug()<<"CCCCCC4 "<<bQuery<<" , "<<sSid;
     getGameItem(bQuery);
 
     auto fnGet=[=]()
@@ -833,14 +835,14 @@ DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
 
     QList<DataGameItem> list = fnGet();
 
-    if(list.length()<1)
-    {
+//    if(!bQuery && list.length()<1)
+//    {
+//    qDebug()<<"CCCCCC5 "<<bQuery;
+//        getGameItem(true);
 
-        getGameItem(true,true);
+//        list = fnGet();
 
-        list = fnGet();
-
-    }
+//    }
 
     if(list.length()>0)
         re = list.first();
@@ -876,7 +878,7 @@ double Action::getGameItemPayCount(QString sGameItemSid, QString sPaySid, bool b
 QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery)
 {
     QList<DataGameItem> re;
-
+    qDebug()<<"CCCCCC6 ";
     QList<DataGameItem> list = getGameItem(bQuery);
 
     foreach(DataGameItem v, list)
@@ -1695,25 +1697,76 @@ CListPair Action::getAddValueType(bool bRequest)
 {
     if(!bRequest && m_listAddValueType.length()>0)
         return m_listAddValueType;
-
-    CListPair listRe;
-
-    QVariantMap in;
-    QVariantList list;
-    QString sError;
-    in["ASC"]="Sort";
-    action(ACT::QUERY_PAY_TYPE,in,list,sError);
-
-    for(int i=0;i<list.length();i++)
+    else
     {
-        QVariantMap data = list.at(i).toMap();
-        QPair<QString,QString> v;
-        v.first=data["Sid"].toString();
-        v.second=data["Name"].toString();
-        listRe.append(v);
+        getPayType("",true);
+         return m_listAddValueType;
     }
 
-    m_listAddValueType = listRe;
+}
+
+QList<DataPayType> Action::getPayType(QString sSid, bool bRequest)
+{
+    auto fn =[=]()
+    {
+        QVariantMap in;
+        QVariantList out;
+        QString sError;
+        // in["Sid"]=sSid;
+        in["ASC"]="Sort";
+        action(ACT::QUERY_PAY_TYPE,in,out,sError);
+
+        m_listPayType.clear();
+        m_listAddValueType.clear();
+        for(int i=0;i<out.length();i++)
+        {
+            DataPayType data(out.at(i).toMap());
+            m_listPayType.append(data);
+
+              QPair<QString,QString> v;
+              v.first=data.Sid;
+              v.second=data.Name;
+              m_listAddValueType.append(v);
+        }
+
+
+    };
+
+
+    auto query =[=](QString sSid){
+       QList<DataPayType> re;
+
+       foreach(DataPayType v ,m_listPayType)
+       {
+           if(v.Sid==sSid)
+               re.append(v);
+       }
+
+       return re;
+    };
+
+    QList<DataPayType> listRe;
+
+    if(bRequest || m_listPayType.length()<1)
+    {
+        fn();
+    }
+
+    if(sSid=="")
+    {
+        listRe = m_listPayType;
+    }
+    else
+    {
+        listRe = query(sSid);
+
+        //retry agin
+        if(listRe.length()<1)
+        {
+            fn();
+            listRe = query(sSid);
+        }
+    }
 
     return listRe;
 }
@@ -1734,17 +1787,6 @@ QString Action::getAddValueName(QString sSid)
     return sRe;
 }
 
-QString Action::getAddValueCurrency(QString sSid)
-{
-    QVariantMap in;
-    QVariantMap out;
-    QString sError;
-    in["Sid"]=sSid;
-    action(ACT::QUERY_PAY_TYPE,in,out,sError);
-
-    return out["Currency"].toString();
-
-}
 
 double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutRate)
 {
@@ -1756,6 +1798,7 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutR
 
     input["Sid"] = payTypeSid;
     action(ACT::QUERY_PAY_TYPE,input,rawData,sError);
+
 
     if(rawData.length()<1)
         return 0;
@@ -1779,8 +1822,21 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutR
     return re;
 }
 
-QString Action::getPayRate(QString sPayTypeSid)
+QString Action::getPayRate(QString sPayTypeSid,bool bRequest)
 {
+
+
+    DataPayType data;
+
+    QList<DataPayType> tmp=getPayType(sPayTypeSid,bRequest);
+
+    if(tmp.length()>0)
+        data = tmp.first();
+    else
+        return "";
+
+
+    /*
     QVariantMap input;
     QVariantList rawData;
     QString sError;
@@ -1792,7 +1848,8 @@ QString Action::getPayRate(QString sPayTypeSid)
     if(rawData.length()<1)
         return 0;
 
-    DataPayType data(rawData.first().toMap());
+     data.setData(rawData.first().toMap());
+     */
 
     double re = data.Value[0].toDouble()*data.Value[1].toDouble()
             *data.Value[2].toDouble()*data.Value[3].toDouble()
@@ -1903,6 +1960,7 @@ QList<DataItemCount> Action::getItemCount(bool bQuery)
 QString Action::findGameSid(QString sGameItemSid,bool bQuery)
 {
     //GameCount、orderData 沒寫入game sid
+    qDebug()<<"CCCCCC7 ";
     getGameItem(bQuery);
 
 

@@ -13,7 +13,7 @@
 
 //#define _BUSY_TEST
 
-#define ADP_VER "v2.0.0918"
+#define ADP_VER "v2.1.1013"
 static int SERVER_MIN_VER = 12;
 
 static QString SPLIT1 =";;" ;
@@ -240,7 +240,7 @@ struct CListPair : public QList< CPair >
             listRe.append(this->at(i).first);
         }
 
-        qDebug()<<"list first : "<<listRe;
+
         return listRe;
     }
 
@@ -253,7 +253,7 @@ struct CListPair : public QList< CPair >
             listRe.append(this->at(i).second);
         }
 
-        qDebug()<<"list sec : "<<listRe;
+
         return listRe;
     }
 

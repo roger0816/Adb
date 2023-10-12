@@ -291,7 +291,7 @@ void LayerSayCost::refreshInfo()
 {
 
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , refresh";
+
     ui->tbInfo->setRowCount(0);
 
     auto checkTbRow = [=](QString sName)
@@ -420,7 +420,7 @@ bool LayerSayCost::checkHasInto(QString gameItemSid)
 double LayerSayCost::checkTotal()
 {
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" ,checkTotal ";
+
     double re = 0;
     if(m_gameRate.trimmed()=="")
     {
@@ -551,7 +551,6 @@ double LayerSayCost::checkTotal()
     ui->lbTotal->setText(QString::number(m_iTotal,'f',2));
     //    DATA.rate()
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , checkok ";
 
     return re;
 }
@@ -560,7 +559,7 @@ void LayerSayCost::addPayTypeToCb()
 {
     qDebug()<<"add pay type to cb";
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , add paytype ";
+
     if(m_listInto.length()<1)
         return;
 
@@ -618,7 +617,6 @@ void LayerSayCost::addPayTypeToCb()
     ui->cbSelect->addItems(cbData);
 
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" add type ok ";
 
 }
 
@@ -834,7 +832,6 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
     m_sCurrentGameSid = ACTION.getGameId(arg1);
     qDebug()<<"game sid : "<<m_sCurrentGameSid<<" ,name "<<arg1;
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change cb Game";
     if(m_order.OrderDate.toInt()<=20230216)
     {
         m_gameRate=ACTION.getGameRate(m_sCurrentGameSid).Rate;
@@ -852,7 +849,7 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
         m_gameRate=ACTION.getGameRate(m_sCurrentGameSid).Rate;
         qDebug()<<"game rate by query : "<<m_gameRate;
     }
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" ,getGameRate";
+
     ui->lbGameRate->setText(m_gameRate);
     ui->lbGameName->setText(arg1);
 
@@ -1005,7 +1002,7 @@ void LayerSayCost::on_cbServer_currentTextChanged(const QString &arg1)
 
 void LayerSayCost::on_cbChr_currentTextChanged(const QString &arg1)
 {
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change chr";
+
     ui->lbChr->setText(arg1);
 
     for(int i=0;i<m_listGameInfo.length();i++)
@@ -1030,7 +1027,7 @@ void LayerSayCost::on_cbChr_currentTextChanged(const QString &arg1)
         }
     }
 
-    qDebug()<<"CCCCC : "<<QDateTime::currentDateTime().toString("hh:mm:ss:zzz")<<" , change chr ok";
+
 }
 
 
@@ -1060,7 +1057,7 @@ void LayerSayCost::slotTbGameItemCellClicked(int row, int column)
 
         int iMappingIdx =ACTION.mapping(m_listInto,"Sid",item.Sid);
 
-        qDebug()<<"AAAA0 :"<<iMappingIdx;
+
 
         if(iMappingIdx<0)
         {

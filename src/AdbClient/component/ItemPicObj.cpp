@@ -48,7 +48,6 @@ void ItemPicObj::setData(QByteArray data)
 
     m_img->loadFromData(QByteArray::fromHex(m_dataHex));
 
-    qDebug()<<"IIIIIIIIIII : "<<m_img->size();
 
     reSetPic();
 

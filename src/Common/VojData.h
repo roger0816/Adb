@@ -833,6 +833,7 @@ struct DataGameItem :public DataObj
         AddValueTypeSid= data["AddValueTypeSid"].toString();
         Note1 = data["Note1"].toString();
         Note2 = data["Note2"].toString();
+        ForApi = data["ForApi"].toInt();
     }
 
     QVariantMap data()
@@ -850,7 +851,7 @@ struct DataGameItem :public DataObj
         d["AddValueTypeSid"]=AddValueTypeSid;
         d["Note1"]=Note1;
         d["Note2"]=Note2;
-
+        d["ForApi"]= ForApi;
 
         return d;
     }
@@ -858,6 +859,7 @@ struct DataGameItem :public DataObj
 
     QString GameSid;
     bool Enable;
+    int ForApi=1;
     int Sort;
     QString OrderNTD;
     QString Bonus;

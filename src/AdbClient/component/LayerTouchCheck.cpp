@@ -11,7 +11,6 @@ LayerTouchCheck::LayerTouchCheck(QWidget *parent)
 /*
 void LayerTouchCheck::mousePressEvent(QMouseEvent *e)
 {
-     qDebug()<<"AAAAAAAAAAAAAAAA";
 
        // QObject::event(e);
    //     QApplication::postEvent(this->parent(),e);

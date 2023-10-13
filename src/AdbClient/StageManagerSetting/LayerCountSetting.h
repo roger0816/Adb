@@ -6,6 +6,7 @@
 #include <QShowEvent>
 #include "Global.h"
 #include "GlobalUi.h"
+#include "DialogCountHisotry.h"
 
 namespace Ui {
 class LayerCountSetting;
@@ -30,6 +31,7 @@ public:
     ~LayerCountSetting();
     void showEvent(QShowEvent *) override;
 
+    DialogCountHisotry  m_wHistory;
     QList<DataGameList> m_listGame;
      QMap<QString,DataCount> m_countData;
 private slots:

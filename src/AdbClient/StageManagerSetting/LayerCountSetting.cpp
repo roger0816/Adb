@@ -7,6 +7,8 @@ LayerCountSetting::LayerCountSetting(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_wHistory.hide();
+
     ui->tb->hideColumn(0);
     ui->tb->hideColumn(6);
     ui->tb->setColumnWidth(1,300);
@@ -109,9 +111,9 @@ void LayerCountSetting::slotCbChangeIdx(int idx)
         ui->tb->setItem(iRow,1,UI.tbItem(sName));
         ui->tb->setItem(iRow,2,UI.tbItem(iCount));
         ui->tb->setItem(iRow,3,UI.tbItem(iSell));
-        ui->tb->setItem(iRow,4,UI.tbItem(iTotal));
+        ui->tb->setItem(iRow,4,UI.tbItem(iTotal,GlobalUi::_BUTTON));
         ui->tb->setItem(iRow,5,UI.tbItem("修改",GlobalUi::_BUTTON));
-        ui->tb->setItem(iRow,6,UI.tbItem("詳細",GlobalUi::_BUTTON));
+     //   ui->tb->setItem(iRow,6,UI.tbItem("詳細",GlobalUi::_BUTTON));
 
         iRow++;
 
@@ -159,7 +161,14 @@ void LayerCountSetting::on_tb_cellClicked(int row, int column)
     if(row<0 )
         return;
 
-    if(column==5)
+    if(column==4)
+    {
+        m_wHistory.setTitle(ui->tb->item(row,0)->text(),ui->cbGame->currentText(),ui->tb->item(row,1)->text(),ui->tb->item(row,2)->text());
+        m_wHistory.show();
+        m_wHistory.raise();
+    }
+
+    else if(column==5)
     {
         DialogInput input;
         input.hideDelete();

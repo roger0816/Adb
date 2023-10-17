@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
      QString sListenPort ="6000";
      QString sDbName ="adp";
-     QString sDbIp="10.130.0.9";
+     QString sDbIp="172.104.117.7";
     // sDbIp="127.0.0.1";
 
     if(argc>1)

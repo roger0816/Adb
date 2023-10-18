@@ -6,4 +6,4 @@
 #make
 
 cd bin/
-./AdbServerUnix 6002 192.168.148.141 adp
+./AdbServerUnix 6003 172.104.117.7 adp

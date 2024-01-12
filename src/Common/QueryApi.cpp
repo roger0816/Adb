@@ -105,6 +105,7 @@ bool QueryApi::getRate(QVariantMap &data)
     QString sError;
     QVariantMap in;
     in["LIMIT"]="5";
+    in["DESC"]="Sid";
 
     bool bOk = m_sql->queryTb(SQL_TABLE::ExchangeRate(),in,listData,sError);
 

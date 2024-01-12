@@ -655,6 +655,10 @@ bool LayerSayCost::checkPayType(CListPair &data)
 
 void LayerSayCost::sayCostData()
 {
+
+    m_date = GLOBAL.dateTimeUtc8();
+
+
     m_order.Owner="";
     // m_order.Sid="";
     m_order.Note0[0] = ui->txNote1->toPlainText();
@@ -1270,6 +1274,7 @@ void LayerSayCost::on_btnSayOk_clicked()
         orderData();
 
     }
+    m_date = GLOBAL.dateTimeUtc8();
 
     m_order.OrderDate = m_date.toString("yyyyMMdd");
     m_order.OrderTime = m_date.toString("hhmmss");

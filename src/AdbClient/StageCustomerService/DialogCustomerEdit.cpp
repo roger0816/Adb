@@ -46,7 +46,7 @@ void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
 
 bool DialogCustomerEdit::checkHasChange()
 {
-
+    bool bRe = false;
     QVariantMap d =data();
 
     QStringList listKey = d.keys();
@@ -59,12 +59,11 @@ bool DialogCustomerEdit::checkHasChange()
         if(d[sKey].toString().trimmed()!=m_originData[sKey].toString().trimmed())
         {
 
-            return true;
+            bRe = true;
         }
     }
 
-
-    return false;
+    return bRe;
 }
 
 void DialogCustomerEdit::setRoot(bool b)

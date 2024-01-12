@@ -218,6 +218,7 @@ bool QueryApi::getCusHistory(QString sSid, QVariantMap &data)
 {
     QVariantMap in;
     in["CustomerSid"]=sSid;
+    in["DESC"]="Sid";
     QVariantList listData;
     QString sError;
     bool bOk = m_sql->queryTb(SQL_TABLE::CustomerCost(),in,listData,sError);

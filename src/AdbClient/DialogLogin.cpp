@@ -27,6 +27,18 @@ DialogLogin::DialogLogin(QWidget *parent) :
     m_btns.addButton(ui->btnServer5,9);
 
 
+    for(int i=0;i<m_btns.buttons().length() && i<m_listServer.length();i++)
+    {
+        QString sName = m_listServer.at(i).toMap()["name"].toString();
+
+        QAbstractButton *btn = m_btns.buttons()[i];
+        btn->setText(sName);
+
+        qDebug()<<sName;
+        //m_btns.button(i)->setText();
+    }
+
+
 
     connect(&m_btns,&QButtonGroup::idClicked,this,&DialogLogin::slotBtnClicked);
 
@@ -51,7 +63,7 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     startTimer(500);
 
-    ui->btnServer2->hide();
+
     ui->btnServer4->hide();
 
 
@@ -203,31 +215,42 @@ void DialogLogin::preload(bool bTrue)
 void DialogLogin::loadServerConf()
 {
     QSettings conf(":/serverConf.ini",QSettings::IniFormat);
+    conf.setIniCodec("UTF-8"); // 设置编码为UTF-8
 
     QVariantMap s0;
     s0["ip"]= conf.value("server0/ip").toString();
     s0["port"]= conf.value("server0/port").toString();
-
+    s0["name"]=conf.value("server0/name").toString();
 
     QVariantMap s1;
     s1["ip"]= conf.value("server1/ip").toString();
     s1["port"]= conf.value("server1/port").toString();
+    s1["name"]=conf.value("server1/name").toString();
+
 
     QVariantMap s2;
     s2["ip"]= conf.value("server2/ip").toString();
     s2["port"]= conf.value("server2/port").toString();
+    s2["name"]=conf.value("server2/name").toString();
+
 
     QVariantMap s3;
     s3["ip"]= conf.value("server3/ip").toString();
     s3["port"]= conf.value("server3/port").toString();
+    s3["name"]=conf.value("server3/name").toString();
+
 
     QVariantMap s4;
     s4["ip"]= conf.value("server4/ip").toString();
     s4["port"]= conf.value("server4/port").toString();
+    s4["name"]=conf.value("server4/name").toString();
+
 
     QVariantMap s5;
     s5["ip"]= conf.value("server5/ip").toString();
     s5["port"]= conf.value("server5/port").toString();
+    s5["name"]=conf.value("server5/name").toString();
+
 
 
 
@@ -347,6 +370,7 @@ void DialogLogin::slotBtnClicked(int iId)
         sPort=m_listServer.at(iId).toMap()["port"].toString();
 
         ui->stackIp->setCurrentWidget(ui->pageIpNone);
+
 
     }
     else

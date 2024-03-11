@@ -294,6 +294,7 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
     QStringList inCount=input["Count"].toString().split(",");
     QString sCusSid = input["Customer"].toString();
     QString sGameAccount = input["GameAccount"].toString();
+    QString sNote0 = input["Note0"].toString();
     //
     DataRate rate,primeRate;
     QString sMsg;
@@ -418,6 +419,11 @@ bool QueryApi::doOrder(QVariantMap input, QVariantMap &data)
     reOrder.OrderTime=QDateTime::currentDateTimeUtc().addSecs(8 * 3600).toString("hhmmss");
     reOrder.Step="1";
     reOrder.Item = items();
+
+    while(reOrder.Note0.length()<6)
+        reOrder.Note0.append("");
+
+    reOrder.Note0[1] = sNote0;
 
     QStringList listItemInfo;
     listItemInfo.append(game.Name);

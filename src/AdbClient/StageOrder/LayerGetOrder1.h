@@ -44,6 +44,8 @@ private slots:
 
     void on_btnFacChange_clicked();
 
+    void on_btnFacCancel_clicked();
+
 private:
     Ui::LayerGetOrder1 *ui;
 

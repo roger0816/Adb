@@ -614,7 +614,7 @@ bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount,QString
       //  listGameItem.append(item);
 
         iTotalBonus+= item.Bonus.toDouble();
-        listBonus.append(item.Bonus+"*"+sCount);
+        listBonus.append(QString::number(item.Bonus.toDouble())+"*"+sCount);
 
         QStringList listPayType =getAddValueTypeList(item.AddValueTypeSid);
 
@@ -732,6 +732,97 @@ bool QueryApi::checkOrderCost(CustomerData cus, DataGameList game, DataRate exRa
 {
     QString sCurrency=cus.Currency;
 
+
+    double iRate = 1.0;
+
+    double iGameRate = game.GameRate;
+
+
+    if(!sCurrency.toUpper().contains("NTD"))
+        iRate= exRate.findValue(sCurrency);
+
+
+    auto into=[=](double d)
+    {
+
+        int roundedNumber = static_cast<int>(std::ceil(d));
+
+        return roundedNumber;
+    };
+
+
+
+    int iTotalNtd=0;
+    int iTotalCost=0;
+    QStringList listCost;
+
+    foreach(QString s,order.ListBouns)
+    {
+        QStringList tmp = s.split("*");
+
+        if(tmp.length()<2)
+            continue;
+
+        double iBonus=tmp.first().toDouble();
+        int iCount = tmp.last().toInt();
+
+        double iOriNtd = iGameRate*iBonus;
+        double iNtd=COMMON.addFlow(iOriNtd);
+
+        QString sCost = QString::number(COMMON.addFlow(iOriNtd));
+
+
+        if(sCurrency.toUpper().contains("USD"))
+        {
+            sCost = QString::number(COMMON.addFlow(iOriNtd/exRate.USD(),2));
+
+        }
+
+        else if(sCurrency.toUpper().contains("HKD"))
+        {
+
+            sCost = QString::number(COMMON.addFlow(iOriNtd/exRate.HKD()));
+        }
+
+        else if(sCurrency.toUpper().contains("RMB"))
+        {
+
+            sCost = QString::number(COMMON.addFlow(iOriNtd/exRate.RMB()));
+
+        }
+        else if(sCurrency.toUpper().contains("MYR"))
+        {
+            sCost = QString::number(COMMON.addFlow(iOriNtd/exRate.MYR()));
+
+        }
+        else if(sCurrency.toUpper().contains("SGD"))
+        {
+
+            sCost = QString::number(COMMON.addFlow(iOriNtd/exRate.SGD(),1));
+
+        }
+
+        double cost = sCost.toDouble()* iCount;
+
+
+        iTotalNtd+=iNtd*iCount;
+
+        iTotalCost+=cost;
+
+        listCost.append(QString::number(cost));
+    }
+
+    order.Money[0] =QString::number(iTotalNtd);
+    order.Cost=QString::number(iTotalCost,'f',2);
+
+    order.ListCost = listCost;
+
+    return true;
+
+
+    /*
+          QString sCurrency=cus.Currency;
+
     double iRate = 1.0;
 
     double iGameRate = game.GameRate;
@@ -778,6 +869,7 @@ bool QueryApi::checkOrderCost(CustomerData cus, DataGameList game, DataRate exRa
     order.ListCost = listCost;
 
     return true;
+     */
 }
 
 QString QueryApi::notFound(QString sOtherMsg)

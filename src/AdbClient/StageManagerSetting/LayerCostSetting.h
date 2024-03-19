@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "DialogGameEdit.h"
 #include "DialogEditGameItem.h"
+#include "Common.h"
 #include "Global.h"
 #include "GlobalUi.h"
 #include "DialogMsg.h"

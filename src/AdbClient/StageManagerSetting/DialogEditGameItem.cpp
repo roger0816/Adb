@@ -324,12 +324,12 @@ void DialogEditGameItem::on_sbOrderBouns_valueChanged(double arg1)
     double ntd =arg1*m_iGameRate;
 
 
-    ui->sbNTD->setValue(GLOBAL.addFlow(ntd));
-    ui->sbUSD->setValue(GLOBAL.addFlow(ntd/m_rate.USD(),2));
-    ui->sbHKD->setValue(GLOBAL.addFlow(ntd/m_rate.HKD()));
-    ui->sbRMB->setValue(GLOBAL.addFlow(ntd/m_rate.RMB()));
-    ui->sbMYR->setValue(GLOBAL.addFlow(ntd/m_rate.MYR()));
-    ui->sbSGD->setValue(GLOBAL.addFlow(ntd/m_rate.SGD(),1));
+    ui->sbNTD->setValue(COMMON.addFlow(ntd));
+    ui->sbUSD->setValue(COMMON.addFlow(ntd/m_rate.USD(),2));
+    ui->sbHKD->setValue(COMMON.addFlow(ntd/m_rate.HKD()));
+    ui->sbRMB->setValue(COMMON.addFlow(ntd/m_rate.RMB()));
+    ui->sbMYR->setValue(COMMON.addFlow(ntd/m_rate.MYR()));
+    ui->sbSGD->setValue(COMMON.addFlow(ntd/m_rate.SGD(),1));
 
 }
 

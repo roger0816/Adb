@@ -229,7 +229,7 @@ void LayerOrder::setBuyData()
 
         ui->tbInfo->setItem(iRow,4,UI.tbItem(QString::number(bouns*iCount)));
 
-        double iNtd = GLOBAL.addFlow(bouns*m_order.GameRate.toDouble());
+        double iNtd = COMMON.addFlow(bouns*m_order.GameRate.toDouble());
 
         QTableWidgetItem *itemNtd = UI.tbItem(iNtd*iCount);
 
@@ -307,6 +307,9 @@ void LayerOrder::on_btnOrderSend_clicked()
 
         return;
     }
+
+    m_date = GLOBAL.dateTimeUtc8();
+
 
     m_order.Owner = ui->cbSelect->currentText();
 

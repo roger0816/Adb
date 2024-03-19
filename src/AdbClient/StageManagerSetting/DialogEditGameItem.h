@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QDebug>
 #include <QComboBox>
+#include "Common.h"
 #include "Global.h"
 #include "GlobalUi.h"
 #include <QVariantMap>

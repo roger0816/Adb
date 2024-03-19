@@ -48,11 +48,11 @@ public:
 
     QString sidAdd(QString last);
 
-    QString addFlow(QString st,QString currency);
+//    QString addFlow(QString st,QString currency);
 
-    QString addFlow(QString sDouble,int flowCount);
+//    QString addFlow(QString sDouble,int flowCount);
 
-    double addFlow(double value, int flowCount=0);
+//    double addFlow(double value, int flowCount=0);
 
     QVariantList reData(QVariantList data,QStringList listKey);
 

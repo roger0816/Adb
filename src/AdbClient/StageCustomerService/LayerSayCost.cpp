@@ -471,37 +471,37 @@ double LayerSayCost::checkTotal()
 
         double iOriNtd = m_gameRate.toDouble()*bouns;
 
-        double iNtd=GLOBAL.addFlow(iOriNtd);
-        QString sCost = QString::number(GLOBAL.addFlow(iOriNtd));
+        double iNtd=COMMON.addFlow(iOriNtd);
+        QString sCost = QString::number(COMMON.addFlow(iOriNtd));
 
 
         if(m_dataCustomer.Currency.toUpper().contains("USD"))
         {
-            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.USD(),2));
+            sCost = QString::number(COMMON.addFlow(iOriNtd/m_costRate.USD(),2));
 
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("HKD"))
         {
 
-            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.HKD()));
+            sCost = QString::number(COMMON.addFlow(iOriNtd/m_costRate.HKD()));
         }
 
         else if(m_dataCustomer.Currency.toUpper().contains("RMB"))
         {
 
-            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.RMB()));
+            sCost = QString::number(COMMON.addFlow(iOriNtd/m_costRate.RMB()));
 
         }
         else if(m_dataCustomer.Currency.toUpper().contains("MYR"))
         {
-            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.MYR()));
+            sCost = QString::number(COMMON.addFlow(iOriNtd/m_costRate.MYR()));
 
         }
         else if(m_dataCustomer.Currency.toUpper().contains("SGD"))
         {
 
-            sCost = QString::number(GLOBAL.addFlow(iOriNtd/m_costRate.SGD(),1));
+            sCost = QString::number(COMMON.addFlow(iOriNtd/m_costRate.SGD(),1));
 
         }
 
@@ -663,7 +663,7 @@ void LayerSayCost::sayCostData()
     // m_order.Sid="";
     m_order.Note0[0] = ui->txNote1->toPlainText();
 
-    m_order.Bouns = QString::number(m_iBouns,'f',2);
+
     m_order.User[0] = ACTION.m_currentUser.Sid;
     m_order.StepTime[0] = m_date.toString("yyyyMMddhhmmss");
     m_order.Step="0";
@@ -678,6 +678,7 @@ void LayerSayCost::sayCostData()
 
     m_order.ItemInfo=info;
 
+    m_order.Bouns = QString::number(m_iBouns,'f',2);
     m_order.Cost=QString::number(m_iTotal,'f',2);
 
     m_order.ListCost = m_listCost;
@@ -740,6 +741,8 @@ void LayerSayCost::orderData()
 {
     //  m_order.Sid="";
     // m_order.ExRateSid = m_exRateSid;
+    m_date = GLOBAL.dateTimeUtc8();
+
     m_order.Note0[1] = ui->txNote1->toPlainText();
     m_order.User[1] = ACTION.m_currentUser.Sid;
     m_order.StepTime[1] = m_date.toString("yyyyMMddhhmmss");

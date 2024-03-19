@@ -241,16 +241,16 @@ void LayerCostSetting::refreshItemList()
 
         double iNTD = GameRate*data.Bonus.toDouble();
 
-        ui->tbGameItem->setItem(i,_Cost,UI.tbItem(GLOBAL.addFlow(iNTD)));
+        ui->tbGameItem->setItem(i,_Cost,UI.tbItem(COMMON.addFlow(iNTD)));
 
         //  ui->tbGameItem->setItem(i,4,UI.tbItem(data.NTD));
 
-        toolData["NTD"] = QString::number(GLOBAL.addFlow(iNTD));
-        toolData["USD"] = QString::number(GLOBAL.addFlow(iNTD/rate2.USD(),2));
-        toolData["HKD"] = QString::number(GLOBAL.addFlow(iNTD/rate2.HKD()));
-        toolData["RMB"] = QString::number(GLOBAL.addFlow(iNTD/rate2.RMB()));
-        toolData["MYR"] = QString::number(GLOBAL.addFlow(iNTD/rate2.MYR()));
-        toolData["SGD"] = QString::number(GLOBAL.addFlow(iNTD/rate2.SGD(),1));
+        toolData["NTD"] = QString::number(COMMON.addFlow(iNTD));
+        toolData["USD"] = QString::number(COMMON.addFlow(iNTD/rate2.USD(),2));
+        toolData["HKD"] = QString::number(COMMON.addFlow(iNTD/rate2.HKD()));
+        toolData["RMB"] = QString::number(COMMON.addFlow(iNTD/rate2.RMB()));
+        toolData["MYR"] = QString::number(COMMON.addFlow(iNTD/rate2.MYR()));
+        toolData["SGD"] = QString::number(COMMON.addFlow(iNTD/rate2.SGD(),1));
         CListPair p(data.AddValueTypeSid);
         QStringList listSid =p.listFirst();
         QStringList listCost =p.listSecond();

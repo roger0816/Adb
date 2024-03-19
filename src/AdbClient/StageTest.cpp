@@ -62,6 +62,6 @@ void StageTest::on_btnTestPic_clicked()
 
 void StageTest::on_pushButton_clicked()
 {
-    ui->label->setText(GLOBAL.addFlow(ui->lineEdit->text().trimmed(),ui->spinBox->value()));
+    ui->label->setText(COMMON.addFlow(ui->lineEdit->text().trimmed(),ui->spinBox->value()));
 }
 

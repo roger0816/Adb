@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "Global.h"
 #include "GlobalUi.h"
+#include "Common.h"
 
 namespace Ui {
 class StageTest;

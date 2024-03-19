@@ -156,7 +156,7 @@ QString Global::sidAdd(QString last)
 
     return sId;
 }
-
+/*
 QString Global::addFlow(QString st, QString currency)
 {
     int iFlowCount =0;
@@ -289,7 +289,7 @@ double Global::addFlow(double value, int flowCount)
 
     return addFlow(st,flowCount).toDouble();
 }
-
+*/
 QVariantList Global::reData(QVariantList data, QStringList listKey)
 {
     QVariantList listRe;

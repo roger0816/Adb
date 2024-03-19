@@ -2,6 +2,7 @@
 #define LAYERCOSTTABLE_H
 
 #include <QWidget>
+#include "Common.h"
 #include "Global.h"
 #include "GlobalUi.h"
 #include <QDoubleSpinBox>

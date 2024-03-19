@@ -2,6 +2,7 @@
 #define LAYERORDER_H
 
 #include <QWidget>
+#include "Common.h"
 #include "Global.h"
 #include "GlobalUi.h"
 

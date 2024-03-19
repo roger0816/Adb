@@ -7,6 +7,8 @@ LayerCostTable::LayerCostTable(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->tbGameItem->setColumnWidth(1,140);
+
     ui->tabWidget->setCurrentWidget(ui->page0);
 
     connect(ui->tabWidget,SIGNAL(currentChanged(int)),this,SLOT(slotTabCurrentChanged(int)));
@@ -119,35 +121,34 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
         DataGameItem item = m_currentItems.at(i);
 
 
-
-
-
         double iOriNtd = item.Bonus.toDouble()*iGameRate;
 
-        double iNtd =GLOBAL.addFlow(iOriNtd);
+        double iNtd =COMMON.addFlow(iOriNtd);
 
-        double iUsd = GLOBAL.addFlow(iOriNtd/rate.USD(),2);
-        double iHkd = GLOBAL.addFlow(iOriNtd/rate.HKD());
-        double iRmb = GLOBAL.addFlow(iOriNtd/rate.RMB());
-        double iMyr = GLOBAL.addFlow(iOriNtd/rate.MYR());
-        double iSgd = GLOBAL.addFlow(iOriNtd/rate.SGD(),1);
+        double iUsd = COMMON.addFlow(iOriNtd/rate.USD(),2);
+        double iHkd = COMMON.addFlow(iOriNtd/rate.HKD());
+        double iRmb = COMMON.addFlow(iOriNtd/rate.RMB());
+        double iMyr = COMMON.addFlow(iOriNtd/rate.MYR());
+        double iSgd = COMMON.addFlow(iOriNtd/rate.SGD(),1);
 
 
         ui->tbGameItem->setRowCount(iRow+1);
 
-        ui->tbGameItem->setItem(iRow,0,UI.tbItem(item.Name));
+        ui->tbGameItem->setItem(iRow,0,UI.tbItem(item.Sid));
 
-        ui->tbGameItem->setItem(iRow,1,UI.tbItem(iNtd));
+        ui->tbGameItem->setItem(iRow,1,UI.tbItem(item.Name));
 
-        ui->tbGameItem->setItem(iRow,2,UI.tbItem(iUsd));
+        ui->tbGameItem->setItem(iRow,2,UI.tbItem(iNtd));
 
-        ui->tbGameItem->setItem(iRow,3,UI.tbItem(iHkd));
+        ui->tbGameItem->setItem(iRow,3,UI.tbItem(iUsd));
 
-        ui->tbGameItem->setItem(iRow,4,UI.tbItem(iRmb));
+        ui->tbGameItem->setItem(iRow,4,UI.tbItem(iHkd));
 
-        ui->tbGameItem->setItem(iRow,5,UI.tbItem(iMyr));
+        ui->tbGameItem->setItem(iRow,5,UI.tbItem(iRmb));
 
-        ui->tbGameItem->setItem(iRow,6,UI.tbItem(iSgd));
+        ui->tbGameItem->setItem(iRow,6,UI.tbItem(iMyr));
+
+        ui->tbGameItem->setItem(iRow,7,UI.tbItem(iSgd));
     }
 
 
@@ -208,10 +209,10 @@ void LayerCostTable::slotTabCurrentChanged(int index)
 {
 
     QStringList listHeader;
-    listHeader<<"商品名稱"<<"新台幣"<<"美金"<<"港幣"<<"人民幣"<<"林吉特"<<"新加坡元";
+    listHeader<<"代號"<<"商品名稱"<<"新台幣"<<"美金"<<"港幣"<<"人民幣"<<"林吉特"<<"新加坡元";
 
     QStringList listHeader2;
-    listHeader2<<"%Item"<<"%NTD"<<"%USD"<<"%HKD"<<"%RMB"<<"%MYR"<<"%SGD";
+    listHeader2<<""<<"%Item"<<"%NTD"<<"%USD"<<"%HKD"<<"%RMB"<<"%MYR"<<"%SGD";
 
     if(index==0)
     {
@@ -261,14 +262,15 @@ QString LayerCostTable::trText()
 
     for(int i=0;i<ui->tbGameItem->rowCount();i++)
     {
+        QString sSid= ui->tbGameItem->item(i,0)->text().trimmed();
         QVariantMap d;
-        d["%Item"+QString::number(i+1)] = ui->tbGameItem->item(i,0)->text();
-        d["%NTD"+QString::number(i+1)] = ui->tbGameItem->item(i,1)->text();
-        d["%USD"+QString::number(i+1)] = ui->tbGameItem->item(i,2)->text();
-        d["%HKD"+QString::number(i+1)] = ui->tbGameItem->item(i,3)->text();
-        d["%RMB"+QString::number(i+1)] = ui->tbGameItem->item(i,4)->text();
-        d["%MYR"+QString::number(i+1)] = ui->tbGameItem->item(i,5)->text();
-        d["%SGD"+QString::number(i+1)] = ui->tbGameItem->item(i,6)->text();
+        d["%Item("+sSid+")"] = ui->tbGameItem->item(i,1)->text().split("_").first();
+        d["%NTD("+sSid+")"] = COMMON.addFlow(ui->tbGameItem->item(i,2)->text(),"NTD");
+        d["%USD("+sSid+")"] = COMMON.addFlow(ui->tbGameItem->item(i,3)->text(),"USD");
+        d["%HKD("+sSid+")"] = COMMON.addFlow(ui->tbGameItem->item(i,4)->text(),"HKD");
+        d["%RMB("+sSid+")"] = COMMON.addFlow(ui->tbGameItem->item(i,5)->text(),"RMB");
+        d["%MYR("+sSid+")"] = COMMON.addFlow(ui->tbGameItem->item(i,6)->text(),"MYR");
+        d["%SGD("+sSid+")"] = COMMON.addFlow(ui->tbGameItem->item(i,7)->text(),"SGD");
         list.append(d);
     }
 
@@ -289,36 +291,6 @@ QString LayerCostTable::trText()
 
    st= st.replace("%User",ACTION.m_currentUser.Name);
    st= st.replace("%Time", GLOBAL.dateTimeUtc8().toString("yyyy/MM/dd hh:mm"));
-
-
-    /*
-    QVariantMap d;
-
-    for(int i=0;i<ui->tbGameItem->rowCount();i++)
-    {
-        d["%Item"+QString::number(i+1)] = ui->tbGameItem->item(i,0)->text();
-        d["%NTD"+QString::number(i+1)] = ui->tbGameItem->item(i,1)->text();
-        d["%USD"+QString::number(i+1)] = ui->tbGameItem->item(i,2)->text();
-        d["%HKD"+QString::number(i+1)] = ui->tbGameItem->item(i,3)->text();
-        d["%RMB"+QString::number(i+1)] = ui->tbGameItem->item(i,4)->text();
-        d["%MYR"+QString::number(i+1)] = ui->tbGameItem->item(i,5)->text();
-        d["%SGD"+QString::number(i+1)] = ui->tbGameItem->item(i,6)->text();
-
-    }
-
-    d["%User"] = ACTION.m_currentUser.Name;
-    d["%Time"] = GLOBAL.dateTimeUtc8().toString("yyyy/MM/dd hh:mm");
-
-
-    QStringList listKey = d.keys();
-
-    foreach(QString v,listKey)
-    {
-
-        st=st.replace(v,d[v].toString());
-
-    }
-    */
 
 
     return st;

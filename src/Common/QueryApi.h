@@ -65,6 +65,7 @@ private:
     bool checkOrderCost(CustomerData cus, DataGameList game, DataRate exRate, OrderData &order);
     QString notFound(QString sOtherMsg="");
 
+
 signals:
 
     void signalDoOrder(QVariantMap data);

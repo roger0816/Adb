@@ -217,7 +217,7 @@
          </size>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="page0"/>
         <widget class="QWidget" name="page1">
@@ -505,7 +505,23 @@ color: rgb(255, 0, 0);
           <item row="0" column="0">
            <widget class="QWidget" name="widget" native="true">
             <layout class="QGridLayout" name="gridLayout_6">
-             <item row="0" column="2">
+             <item row="2" column="1">
+              <widget class="QComboBox" name="cbFacChange">
+               <property name="minimumSize">
+                <size>
+                 <width>240</width>
+                 <height>42</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>240</width>
+                 <height>16777215</height>
+                </size>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
               <widget class="QPushButton" name="btnFacChange">
                <property name="minimumSize">
                 <size>
@@ -524,23 +540,20 @@ color: rgb(255, 0, 0);
                </property>
               </widget>
              </item>
-             <item row="0" column="0">
-              <widget class="QComboBox" name="cbFacChange">
-               <property name="minimumSize">
+             <item row="2" column="2">
+              <spacer name="horizontalSpacer_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
                 <size>
-                 <width>240</width>
-                 <height>42</height>
+                 <width>40</width>
+                 <height>20</height>
                 </size>
                </property>
-               <property name="maximumSize">
-                <size>
-                 <width>240</width>
-                 <height>16777215</height>
-                </size>
-               </property>
-              </widget>
+              </spacer>
              </item>
-             <item row="0" column="3">
+             <item row="2" column="4">
               <widget class="QPushButton" name="btnFacCancel">
                <property name="minimumSize">
                 <size>
@@ -556,18 +569,25 @@ color: rgb(255, 0, 0);
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <spacer name="horizontalSpacer_3">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>備註:</string>
                </property>
-               <property name="sizeHint" stdset="0">
+              </widget>
+             </item>
+             <item row="2" column="0" rowspan="2">
+              <widget class="QLabel" name="lbFacNote0">
+               <property name="minimumSize">
                 <size>
-                 <width>40</width>
-                 <height>20</height>
+                 <width>200</width>
+                 <height>0</height>
                 </size>
                </property>
-              </spacer>
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
              </item>
             </layout>
            </widget>

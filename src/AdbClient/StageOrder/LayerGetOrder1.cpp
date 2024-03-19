@@ -348,8 +348,9 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
             }
 
             ui->cbFacChange->addItems(tmpCb);
-
-
+            while(order.Note0.length()<2)
+                order.Note0.append("");
+            ui->lbFacNote0->setText(order.Note0.at(1));
             ui->wBottom->setCurrentIndex(2);
             return ;
         }

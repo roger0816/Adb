@@ -613,7 +613,7 @@ bool QueryApi::checkGameItem(QStringList listItem, QStringList listCount,QString
 
       //  listGameItem.append(item);
 
-        iTotalBonus+= item.Bonus.toDouble();
+        iTotalBonus+= item.Bonus.toDouble()*sCount.toInt();
         listBonus.append(QString::number(item.Bonus.toDouble())+"*"+sCount);
 
         QStringList listPayType =getAddValueTypeList(item.AddValueTypeSid);

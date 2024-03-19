@@ -742,18 +742,8 @@ bool QueryApi::checkOrderCost(CustomerData cus, DataGameList game, DataRate exRa
         iRate= exRate.findValue(sCurrency);
 
 
-    auto into=[=](double d)
-    {
-
-        int roundedNumber = static_cast<int>(std::ceil(d));
-
-        return roundedNumber;
-    };
-
-
-
-    int iTotalNtd=0;
-    int iTotalCost=0;
+    double iTotalNtd=0;
+    double iTotalCost=0;
     QStringList listCost;
 
     foreach(QString s,order.ListBouns)

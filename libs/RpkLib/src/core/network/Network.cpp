@@ -21,6 +21,8 @@ Network::Network(QObject *parent):
     g_tcpClient=new CTcpClient(this);
     g_tcpClient->connect(g_tcpClient,SIGNAL(signalLog(QString)),this,SIGNAL(signalLog(QString)));
     g_tcpClient->connect(g_tcpClient,SIGNAL(signalReply(QString,QByteArray,int)),this,SIGNAL(replyFromServer(QString,QByteArray,int)));
+    g_tcpClient->connect(g_tcpClient,SIGNAL(singalLongConnect(QString , QString ,QByteArray ,int )),
+                         this,SIGNAL(singalLongConnect(QString , QString ,QByteArray ,int )));
 
 
     g_tcpServer=new CTcpServer(this);
@@ -62,7 +64,27 @@ int Network::connectHost(QString sIp, QString sPort, QByteArray arrInput, QByteA
 int Network::connectHost(QString sId,QString sIp, QString sPort, QByteArray arrInput, int iWaitTimer)
 {
 
-  return g_tcpClient->connectHost(sId,sIp,sPort,arrInput,iWaitTimer);
+    return g_tcpClient->connectHost(sId,sIp,sPort,arrInput,iWaitTimer);
+}
+
+int Network::openConnect(QString sIp,QString sPort)
+{
+    return g_tcpClient->openConnect(sIp,sPort);
+}
+
+bool Network::sendData(QString sId, QByteArray arrInput, QString sIp, QString sPort)
+{
+    return g_tcpClient->sendData(sId,arrInput,sIp,sPort);
+}
+
+bool Network::connectIsOpen(QString sIp, QString sPort)
+{
+    return g_tcpClient->connectIsOpen(sIp,sPort);
+}
+
+void Network::closeConnect(QString sIp, QString sPort)
+{
+    return g_tcpClient->closeConnect(sIp,sPort);
 }
 
 

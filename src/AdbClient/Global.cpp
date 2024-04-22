@@ -7,6 +7,7 @@ Global::Global(QObject *parent)
 {
     loadConfig();
 
+
   //  m_ping.start();
 }
 

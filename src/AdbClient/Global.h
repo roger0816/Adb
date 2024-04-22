@@ -9,6 +9,7 @@
 #include "VojData.h"
 #include "DataSync.h"
 #include "CPing.h"
+#include "UpdateData.h"
 
 #define GLOBAL Global::Instance()
 
@@ -16,7 +17,10 @@
 
 #define QUERY Global::Instance().m_action.m_queryObj
 
-#define DATA Global::Instance().m_action.sync
+#define DATA Global::Instance().m_data
+
+
+//#define DATA Global::Instance().m_action.sync
 
 //#define DATA Global::Instance().m_data
 
@@ -71,6 +75,8 @@ public:
     static Global& Instance();
 
     Action m_action;
+
+    UpdateData m_data;
 
     QVariant config(QString st);
 

@@ -813,7 +813,7 @@ void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
 DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
 {
     DataGameItem re;
-    qDebug()<<"CCCCCC4 "<<bQuery<<" , "<<sSid;
+
     getGameItem(bQuery);
 
     auto fnGet=[=]()

@@ -42,6 +42,13 @@ public:
     //Id =""  is Auto
     int connectHost(QString sId,QString sIp, QString sPort, QByteArray arrInput, int iWaitTimer=3000);
 
+    int openConnect(QString sIp,QString sPort);
+
+    bool sendData(QString sId,QByteArray arrInput, QString sIp="",QString sPort="");
+
+    bool connectIsOpen(QString sIp,QString sPort);
+
+    void closeConnect(QString sIp,QString sPort);
 
 signals:
     void signalLog(QString st);
@@ -56,7 +63,7 @@ signals:
 
     void replyFromServer(QString sId,QByteArray data,int error);
 
-
+     void singalLongConnect(QString sConnect, QString sId,QByteArray data,int Error);
 };
 
 #endif // NETWORK_H

@@ -21,7 +21,7 @@ public:
 
     QString Name="";
 
-
+    bool bRead=false;
 
     QString UpdateTime;
 

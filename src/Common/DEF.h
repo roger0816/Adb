@@ -164,7 +164,7 @@ enum _KEY
     PAY_ORDER,
 
     QUERY_MIX		=6031,
-
+    UPDATE_DATA = 6999,
     API_REQUSET=7000
 
 

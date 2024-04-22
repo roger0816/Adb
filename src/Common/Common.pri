@@ -13,6 +13,7 @@ HEADERS += \
     $$PWD/Query.h \
     $$PWD/QueryApi.h \
     $$PWD/QueryObj.h \
+    $$PWD/UpdateData.h \
     $$PWD/VojData.h
 
 SOURCES += \
@@ -24,6 +25,7 @@ SOURCES += \
     $$PWD/Query.cpp \
     $$PWD/QueryApi.cpp \
     $$PWD/QueryObj.cpp \
+    $$PWD/UpdateData.cpp \
     $$PWD/VojData.cpp \
     $$PWD/common.cpp
 

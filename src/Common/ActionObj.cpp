@@ -192,66 +192,6 @@ CData ActionObj::callServer(CData data, bool bStrong)
 
 
 
-    //        if(m_bIsLock)
-    //        {
-
-    //            QElapsedTimer timer;
-
-    //            timer.start();
-
-    //            int iTmp = timer.elapsed();
-    //            qDebug()<<"action wait: " <<QString::number(data.iAciton);
-
-    //            while(m_bIsLock)
-    //            {
-
-    //                QCoreApplication::processEvents();
-
-
-    //              //  qDebug()<<"aaaaaaaaaa "<<timer.elapsed();
-
-    //            }
-
-    //            qDebug()<<"action OK";
-
-
-    //        }
-
-
-
-    //            QElapsedTimer timer;
-
-    //            timer.start();
-
-    //            int tTmp=timer.elapsed();
-    //            qDebug()<<"action wait: " <<QString::number(data.iAciton);
-
-    //            bool bStop = true;
-
-    //            while(bStop)
-    //            {
-    //                if(timer.elapsed()-tTmp>=50)
-    //                {
-    //                    tTmp = timer.elapsed();
-
-    //                    bStop = m_bIsLock;
-
-    //                    qDebug()<<m_bIsLock;
-
-    //                    qDebug()<<QDateTime::currentDateTime().toString("hhmmsszz");
-    //                }
-
-
-    //            }
-
-    //             qDebug()<<"action OK";
-
-
-
-
-
-
-
     if(m_bIsLock)
     {
 

@@ -4,16 +4,11 @@
 #define varName(x) #x
 
 
-
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-
-
-
-
 
 
     //        uint datavlen = ByteArrayToUint32(m_data.mid(8,4));
@@ -221,7 +216,10 @@ void Widget::slotLogin()
 
 
     ACTION.setStartSyanc(true);
-
+    int iTmp = ACTION.m_port.toInt()+10;
+    qDebug()<<"PPPPPPPPPPP : "<<ACTION.m_port;
+    DATA.connectIp(ACTION.m_ip,QString::number(iTmp));
+    DATA.setRun(true);
     QEventLoop *loop=new QEventLoop(this);
 
     //   loop.connect(&timer,&QTimer::timeout,&loop,&QEventLoop::quit);

@@ -3,8 +3,11 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QEventLoop>
-
+#include <QCoreApplication>
 static QMap<QString,Packager > m_kPackger;
+
+static QMap<QString,QTcpSocket* > m_kLongConnect;
+
 
 namespace  CTcp{
 const char *id= "id";
@@ -122,13 +125,13 @@ int CTcpClient::connectHost(QString sId, QString sIp, QString sPort, QByteArray 
 
 
     if(sId.trimmed()=="")
-        sId =QDateTime::currentDateTime().toString("yyyyMMddhhmmsszzz");
+        sId =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmsszzz");
     QTcpSocket *tcp = new QTcpSocket(this);
 
 
     tcp->setProperty(CTcp::id,sId);
 
-    QString sPpKey=QDateTime::currentDateTime().toString("MMddhhmmsszzz");
+    QString sPpKey=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("MMddhhmmsszzz");
     Packager pp;
     m_kPackger.insert(sPpKey,pp);
 
@@ -179,6 +182,162 @@ int CTcpClient::connectHost(QString sId, QString sIp, QString sPort, QByteArray 
 
 
     return 1;
+}
+
+bool CTcpClient::openConnect(QString sIp, QString sPort)
+{
+
+    //    QString sConnect = QString::number(QDateTime::currentMSecsSinceEpoch(), 16);
+
+    bool bConnected = false;
+
+
+    QTcpSocket *tcp = new QTcpSocket(this);
+
+
+    tcp->setProperty(CTcp::outputData,QByteArray());
+
+    tcp->setProperty("ip",sIp);
+    tcp->setProperty("port",sPort);
+
+
+
+    connect(tcp, QOverload<QAbstractSocket::SocketError>::of(&QTcpSocket::error), this,[&bConnected](QAbstractSocket::SocketError socketError) {
+        //  qDebug() << "Socket error:" << socketError << "-" << socket->errorString();
+        bConnected = false;
+    });
+
+    connect(tcp,&QTcpSocket::disconnected,this,[=](){
+
+        if(qobject_cast<QTcpSocket*>(sender())==0)
+            return;
+        qDebug()<<"disconnected event";
+        //    QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
+        //QString sKey = tcp->property("ip").toString()+":"+tcp->property("port").toString();
+        // m_kLongConnect.remove(sKey);
+        //        tcp->disconnect();
+        //        tcp->close();
+        //        tcp->deleteLater();
+
+    });
+
+    tcp->connect(tcp,&QTcpSocket::readyRead,this,&CTcpClient::slotLongRead);
+
+
+    tcp->connectToHost(sIp, sPort.toInt());
+
+    QTimer timer;
+    timer.setInterval(100); // 100ms 的計時器間隔
+
+    connect(tcp, &QTcpSocket::connected,this, [&bConnected, tcp, &timer]() {
+        if (tcp->state() == QAbstractSocket::ConnectedState) {
+            qDebug() << "Connected to host.";
+            bConnected = true;
+            timer.stop();
+        }
+    });
+    timer.start();
+    // 等待連接成功或超時
+    QEventLoop loop;
+    connect(tcp, &QTcpSocket::connected, &loop, &QEventLoop::quit);
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    loop.exec();
+
+
+    if(bConnected)
+    {
+        m_kLongConnect.insert(sIp+":"+sPort,tcp);
+    }
+
+    return bConnected;
+}
+
+bool CTcpClient::sendData(QString sId, QByteArray arrInput, QString sIp, QString sPort)
+{
+    if(m_kLongConnect.isEmpty())
+        return false;
+
+    if(sId.trimmed()=="")
+        sId =QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("yyyyMMddhhmmsszzz");
+
+
+    if(sIp=="" || sPort=="")
+    {
+        sIp = m_kLongConnect.firstKey().split(":").first();
+        sPort = m_kLongConnect.firstKey().split(":").last();
+    }
+
+    QTcpSocket *tcp=nullptr;
+
+    if(!m_kLongConnect.contains(sIp+":"+sPort))
+        return false;
+
+    tcp = m_kLongConnect.value(sIp+":"+sPort);
+
+
+    // 確保 QTcpSocket 是處於 ConnectedState 狀態
+    if (tcp->state() != QAbstractSocket::ConnectedState)
+    {
+        qDebug() << "Socket is not in connected state.";
+
+        // 如果不是，嘗試重新建立連接
+        if (!openConnect(sIp, sPort))
+        {
+            qDebug() << "Failed to reconnect.";
+            return false;
+        }
+
+        return false;
+    }
+
+    tcp->setProperty(CTcp::id,sId);
+    tcp->setProperty(CTcp::inputData,arrInput);
+
+
+    QString sPpKey=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("MMddhhmmsszzz");
+    Packager pp(arrInput);
+    m_kPackger.insert(sPpKey,pp);
+
+    tcp->setProperty(CTcp::ppKey,sPpKey);
+
+
+    tcp->write(pp.package());
+
+
+    return true;
+}
+
+bool CTcpClient::connectIsOpen(QString sIp, QString sPort)
+{
+    return m_kLongConnect.contains(sIp+":"+sPort);
+}
+
+void CTcpClient::closeConnect(QString sIp,QString sPort)
+{
+    QString sConnect = sIp+":"+sPort;
+    QTcpSocket *tcp=nullptr;
+
+    if(sConnect=="" && !m_kLongConnect.isEmpty())
+    {
+        tcp = m_kLongConnect.first();
+    }
+    else
+    {
+        if(connectIsOpen(sIp,sPort))
+        {
+            tcp = m_kLongConnect.value(sConnect);
+        }
+
+    }
+
+    if(tcp!=nullptr)
+    {
+        m_kLongConnect.remove(sConnect);
+        tcp->disconnected();
+        tcp->close();
+        tcp->deleteLater();
+
+    }
 }
 
 
@@ -263,7 +422,7 @@ void CTcpClient::slotReadyRead()
 
     if(bOk)
     {
-       // tcp->close();
+        // tcp->close();
 
         QByteArray re =pp->unPackage();
 
@@ -286,6 +445,56 @@ void CTcpClient::slotReadyRead()
         tcp->disconnect();
 
         tcp->deleteLater();
+    }
+}
+
+void CTcpClient::slotLongRead()
+{
+
+    if(qobject_cast<QTcpSocket*>(sender())==0)
+        return;
+    QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
+
+    QString sId = tcp->property(CTcp::id).toString();
+
+    QByteArray readData = tcp->readAll();
+
+    // qDebug()<<"ready read len : "<<readData.length();
+    bool bOk = false;
+
+
+
+    QByteArray out= tcp->property(CTcp::outputData).toByteArray();
+
+    out.append(readData);
+
+    tcp->setProperty(CTcp::outputData,out);
+
+
+    QString sPpKey =tcp->property(CTcp::ppKey).toString();
+
+    Packager *pp=&m_kPackger[sPpKey];
+
+    pp->insert(readData);
+
+    bOk =pp->isPackageComplete();
+
+    if(bOk)
+    {
+        // tcp->close();
+
+        QByteArray re =pp->unPackage();
+
+        //  qDebug()<<"send len : "<<re.length();
+
+        QString sConnect = tcp->property("ip").toString()+":"+tcp->property("port").toString();
+
+        emit singalLongConnect(sConnect, sId,re,1);
+
+
+        m_kPackger.remove(sPpKey);
+
+
     }
 }
 

@@ -52,6 +52,10 @@ public:
 
 
     QString m_sCurrentSession="";
+
+    QString m_ip;
+
+    QString m_port;
 protected:
     CData callServer(CData data,bool bStrong=false);
 
@@ -62,9 +66,7 @@ protected:
 
     bool m_bDataFromServer = true;
 
-    QString m_ip;
 
-    QString m_port;
 
 
 

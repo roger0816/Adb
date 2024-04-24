@@ -255,15 +255,13 @@ QList<GroupData> Action::getGroupData(int iType,QString &sError)
 
 void Action::reQuertyOld()
 {
-    getUser(true);
+   // getUser(true);
 
-    getGameList(true);
+   // getGameList(true);
 
     getGameItem(true);
 
     getFactoryClass("",true);
-
-    getCustomerList();
 
     getCustomerClass(true);
 
@@ -306,8 +304,7 @@ void Action::reQuerty()
     inData.iAciton=ACT::QUERY_MIX;
 
     QList<int> listAction;
-    listAction<<ACT::QUERY_GAME_LIST<<ACT::QUERY_GAME_ITEM
-             <<ACT::QUERY_USER<<ACT::QUERY_CUSTOMER
+    listAction<<ACT::QUERY_GAME_ITEM
             <<ACT::QUERY_FACTORY_CLASS<<ACT::QUERY_CUSTOM_CLASS
            <<ACT::QUERY_EXCHANGE<<ACT::QUERY_PRIMERATE
           <<ACT::QUERY_BULLETIN;
@@ -341,42 +338,9 @@ void Action::reQuerty()
         QByteArray decodedData = QByteArray::fromBase64(arr);
         dValue.deCodeJson(decodedData);
 
-        if(sKey=="1031")
-        {
-            qDebug()<<"DDD : "<<decodedData;
-
-            qDebug()<<"BBB : "<<dValue.listData.length();
-        }
-
 
         int iAction = dValue.iAciton;
 
-        if(iAction==ACT::QUERY_USER)
-        {
-            m_listUser.clear();
-
-            foreach(QVariant v,dValue.listData)
-            {
-                UserData tmp(v.toMap());
-                m_listUser.append(tmp);
-            }
-        }
-
-        if(iAction==ACT::QUERY_GAME_LIST)
-        {
-            m_listGameList.clear();
-
-            foreach(QVariant v,dValue.listData)
-            {
-
-                DataGameList tmp;
-
-                tmp.setData(v.toMap());
-
-                m_listGameList.append(tmp);
-
-            }
-        }
 
         if(iAction==ACT::QUERY_GAME_ITEM)
         {
@@ -406,22 +370,6 @@ void Action::reQuerty()
                 tmp.setData(v.toMap());
 
                 m_listFactoryClass.append(tmp);
-
-            }
-        }
-
-        if(iAction==ACT::QUERY_CUSTOMER)
-        {
-            m_listCustomer.clear();
-
-            foreach(QVariant v,dValue.listData)
-            {
-
-                CustomerData tmp;
-
-                tmp.setData(v.toMap());
-
-                m_listCustomer.append(tmp);
 
             }
         }
@@ -500,7 +448,7 @@ void Action::reQuerty()
 
 
 }
-
+/*
 QList<UserData> Action::getUser(bool bQuery)
 {
     if(bQuery)
@@ -523,7 +471,8 @@ UserData Action::getUser(QString sSid,bool bQuery)
 
     return re;
 }
-
+*/
+/*
 QList<CustomerData> Action::getCustomerList()
 {
 
@@ -587,7 +536,7 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
     return data;
 
 }
-
+*/
 QList<DataCustomerClass> Action::getCustomerClass(bool bQuery)
 {
     if(bQuery)
@@ -674,7 +623,7 @@ QList<DataFactory> Action::getFactoryClass(QString sSid, bool bQuery)
 }
 
 
-
+/*
 
 QList<DataGameList> Action::getGameList(bool bQuery)
 {
@@ -719,7 +668,7 @@ DataGameList Action::getGameList(QString sSid, bool bQuery)
 
     return re;
 }
-
+*/
 QList<DataGameItem> Action::getGameItem(bool bQuery)
 {
     if(!bQuery && m_listGameItem.length()>0)  //有可能商品被刪除了，會一直 bStrong
@@ -892,58 +841,58 @@ QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery
     return re;
 }
 
-QString Action::getGameName(QString sId)
-{
-    QString sRe="";
+//QString Action::getGameName(QString sId)
+//{
+//    QString sRe="";
 
-    auto fnGameName= [=](QString sId,QList<DataGameList> list)
-    {
-        QString r="";
-        for(int i=0;i<list.length();i++)
-        {
-            if(sId==list.at(i).Sid)
-            {
+//    auto fnGameName= [=](QString sId,QList<DataGameList> list)
+//    {
+//        QString r="";
+//        for(int i=0;i<list.length();i++)
+//        {
+//            if(sId==list.at(i).Sid)
+//            {
 
-                r =list.at(i).Name;
+//                r =list.at(i).Name;
 
-                break;
-            }
-        }
+//                break;
+//            }
+//        }
 
-        return r;
-    };
+//        return r;
+//    };
 
 
-    sRe = fnGameName(sId,m_listGameList);
+//    sRe = fnGameName(sId,m_listGameList);
 
-    if(sRe=="")
-    {
-        //retry
-        getGameList(true);
+//    if(sRe=="")
+//    {
+//        //retry
+//        getGameList(true);
 
-        sRe = fnGameName(sId,m_listGameList);
-    }
+//        sRe = fnGameName(sId,m_listGameList);
+//    }
 
-    return sRe;
+//    return sRe;
 
-}
+//}
 
-QString Action::getGameId(QString sName)
-{
-    QString sRe="";
+//QString Action::getGameId(QString sName)
+//{
+//    QString sRe="";
 
-    for(int i=0;i<m_listGameList.length();i++)
-    {
-        if(sName==m_listGameList.at(i).Name)
-        {
-            sRe =m_listGameList.at(i).Sid;
+//    for(int i=0;i<m_listGameList.length();i++)
+//    {
+//        if(sName==m_listGameList.at(i).Name)
+//        {
+//            sRe =m_listGameList.at(i).Sid;
 
-            break;
-        }
-    }
+//            break;
+//        }
+//    }
 
-    return sRe;
-}
+//    return sRe;
+//}
 
 QList<CustomerCost> Action::getCustomerCost(QString sCustomerSid, bool bQuery)
 {
@@ -1088,7 +1037,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
     }
     else if(order.Step=="1")  //下單- 計算應收
     {
-        //  setSellMoney(order);
+
 
     }
     else if(order.Step=="3") //儲值 - 計算成本
@@ -1154,7 +1103,7 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
         data.IsAddCost=false;
 
-        data.Currency =  getCustomer(data.CustomerSid).Currency;
+        data.Currency =  DATA.getCustomer(data.CustomerSid).Currency;
 
         data.ChangeValue=QString::number(order.Cost.toDouble()*-1);
 
@@ -1494,7 +1443,7 @@ QList<DataRate> Action::listRate(QString sSid, bool bRequest,bool bExchangeType,
     return re;
 }
 
-
+/*
 QString Action::setSellMoney(OrderData &order)
 {
     int Money0=0;
@@ -1541,44 +1490,8 @@ QString Action::setSellMoney(OrderData &order)
     return QString::number(rate.listValue().at(idx).toDouble());
 
 
-
-    /*
-
-
-    auto ntdToInt=[=](double iCost)
-    {
-        QStringList listTmp = QString::number(iCost).split(".");
-
-        int cost = listTmp.first().toInt();
-
-        if(listTmp.length()>1 && listTmp.last().toInt()>0)
-        {
-            cost+=1;
-        }
-
-        return cost;
-    };
-
-    //
-
-    QStringList listMoney;
-
-    DataRate rate=costRate(order.ExRateSid,true);
-
-    int idx =rate.listKey().indexOf(getCustomer(order.CustomerSid).Currency);
-
-    if(idx<0)
-        return "1";
-
-    double iCost = order.Cost.toDouble()*rate.listValue().at(idx).toDouble(); //原幣應收
-
-
-    order.Money[0]= QString::number(ntdToInt(iCost));
-
-    return QString::number(rate.listValue().at(idx).toDouble());
-    */
 }
-
+*/
 QString Action::setPrimeMoney(OrderData &order)
 {
 

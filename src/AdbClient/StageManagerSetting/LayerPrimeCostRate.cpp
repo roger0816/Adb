@@ -134,7 +134,7 @@ void LayerPrimeCostRate::refreshTbDetail()
         if(listData.length()>0)
             listData.pop_front();
         ui->tb1->setItem(iRow,1,UI.tbItem(QDateTime::fromString(rate.UpdateTime,"yyyyMMddhhmmss").toString("MM/dd hh:mm:ss")));
-        QString sUserName = ACTION.getUser(rate.UserSid).Name;
+        QString sUserName = DATA.getUser(rate.UserSid).Name;
 
         ui->tb1->setItem(iRow,2,UI.tbItem(sUserName));
 

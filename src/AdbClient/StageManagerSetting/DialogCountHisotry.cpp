@@ -91,7 +91,7 @@ void DialogCountHisotry::refresh()
 
          ui->tb->setItem(iRow,4, UI.tbItem(data.TotalCount-data.TotalSell));
 
-         ui->tb->setItem(iRow,5,UI.tbItem(ACTION.getUser(data.UserSid,false).Name));
+         ui->tb->setItem(iRow,5,UI.tbItem(DATA.getUser(data.UserSid).Name));
 
          ui->tb->setItem(iRow,6,UI.tbItem(QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss")));
 

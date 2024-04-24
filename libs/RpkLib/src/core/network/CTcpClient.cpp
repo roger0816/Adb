@@ -2,7 +2,7 @@
 #include "Packager.h"
 #include <QDateTime>
 #include <QTimer>
-#include <QEventLoop>
+
 #include <QCoreApplication>
 static QMap<QString,Packager > m_kPackger;
 
@@ -227,21 +227,20 @@ bool CTcpClient::openConnect(QString sIp, QString sPort)
     tcp->connectToHost(sIp, sPort.toInt());
 
     QTimer timer;
-    timer.setInterval(100); // 100ms 的計時器間隔
 
-    connect(tcp, &QTcpSocket::connected,this, [&bConnected, tcp, &timer]() {
+    connect(tcp, &QTcpSocket::connected,this, [=,&bConnected]() {
         if (tcp->state() == QAbstractSocket::ConnectedState) {
             qDebug() << "Connected to host.";
             bConnected = true;
-            timer.stop();
+            loop->quit();
         }
     });
-    timer.start();
+    timer.start(2000);
     // 等待連接成功或超時
-    QEventLoop loop;
-    connect(tcp, &QTcpSocket::connected, &loop, &QEventLoop::quit);
-    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-    loop.exec();
+
+  //  connect(tcp, &QTcpSocket::connected, &loop, &QEventLoop::quit);
+    timer.connect(&timer, &QTimer::timeout, loop, &QEventLoop::quit);
+    loop->exec();
 
 
     if(bConnected)

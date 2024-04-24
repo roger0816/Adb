@@ -44,6 +44,7 @@ private slots:
 
     void slotSearch();
 
+
 private:
     Ui::LayerCustomer *ui;
 
@@ -66,7 +67,7 @@ private:
     QString checkCurrency(QString sKey);
 
 
-
+    QString m_sPreSid="";
 public:
 
     void exportXml(QString sFilePath);

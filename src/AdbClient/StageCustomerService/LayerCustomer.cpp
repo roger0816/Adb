@@ -19,6 +19,10 @@ LayerCustomer::LayerCustomer(QWidget *parent) :
 
     connect(ui->btnSearch,&QPushButton::clicked,this,&LayerCustomer::slotSearch);
 
+    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType){
+        if(iType==CUSTOMER_DATA)
+            refresh();
+    });
 }
 
 LayerCustomer::~LayerCustomer()
@@ -118,8 +122,9 @@ void LayerCustomer::refresh()
 
     QVariantList in;
 
-    m_listCus=ACTION.getCustomerList();
+   // m_listCus=ACTION.getCustomerList();
 
+    m_listCus = DATA.getCustomerList();
 
     m_dIdxMapping.clear();
 
@@ -178,7 +183,7 @@ void LayerCustomer::refresh()
 
         QDateTime updatetime =QDateTime::fromString(data.UpdateTime,"yyyyMMddhhmmss");
 
-        QString sUserName = ACTION.getUser(data.UserSid).Name;
+        QString sUserName = DATA.getUser(data.UserSid).Name;
 
         ui->tb->setItem(iRow,8,UI.tbItem(updatetime));
         ui->tb->setItem(iRow,9,UI.tbItem(sUserName));
@@ -192,6 +197,10 @@ void LayerCustomer::refresh()
 
 
         m_dIdxMapping[iRow]=i;
+
+        if(data.Sid == m_sPreSid)
+            ui->tb->setCurrentCell(iRow,0);
+
     }
 
 
@@ -358,6 +367,8 @@ void LayerCustomer::on_tb_cellClicked(int row, int column)
     CustomerData data=m_listCus.at(iTmp);
 
 
+    m_sPreSid = data.Sid;
+
     if(column==0)
     {
 
@@ -375,6 +386,7 @@ void LayerCustomer::on_tb_cellClicked(int row, int column)
 
 
     }
+
 }
 
 
@@ -670,4 +682,6 @@ void LayerCustomer::slotSearch()
     qDebug()<<"AAAA5";
     refresh();
 }
+
+
 

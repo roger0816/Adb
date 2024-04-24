@@ -46,8 +46,8 @@ void LayerCostTable::refreshGameList()
 
 
 
-    m_listGame = ACTION.getGameList(true);
-
+   // m_listGame = ACTION.getGameList(true);
+    m_listGame = DATA.getGameList();
 
     int iOldIdx = ui->tbGame->currentRow();
 

@@ -140,7 +140,7 @@ void DialogCustomerCostHistory::refresh(int)
 
             ui->tableWidget->setItem(i,5,UI.tbItem(QDateTime::fromString(d.OrderTime,"yyyyMMddhhmmss")));
 
-            ui->tableWidget->setItem(i,6,UI.tbItem(ACTION.getUser(d.UserSid).Name));
+            ui->tableWidget->setItem(i,6,UI.tbItem(DATA.getUser(d.UserSid).Name));
 
             QString sPic0="";
             if(d.Pic0.length()>0)
@@ -185,7 +185,7 @@ void DialogCustomerCostHistory::refresh(int)
             if(d.User.length()>=3)
                 sUserSid = d.User.at(2);
 
-            ui->tableWidget->setItem(i,6,UI.tbItem(ACTION.getUser(sUserSid).Name));
+            ui->tableWidget->setItem(i,6,UI.tbItem(DATA.getUser(sUserSid).Name));
 
             QString sPic0="";
             if(d.Pic0.length()>0)

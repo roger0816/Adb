@@ -30,6 +30,10 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
     });
 
 
+    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType){
+        if(iType==GAME_LIST)
+            refresh();
+    });
 }
 
 LayerCostSetting::~LayerCostSetting()
@@ -89,63 +93,39 @@ void LayerCostSetting::showEvent(QShowEvent *)
 void LayerCostSetting::refreshGameList()
 {
 
-
-    QVariantList listIn,listOut;
-
-    QString sError;
-    ACTION.action(ACT::QUERY_GAME_LIST,listIn,listOut,sError);
-
-    m_gameData = listOut;
+    m_listGame = DATA.getGameList();
 
     ui->tbGame->setRowCount(0);
 
     m_gameDisplayData.clear();
 
-    for(int i=0;i<m_gameData.length();i++)
+    for(int i=0;i<m_listGame.length();i++)
     {
-        if(!checkSearch(m_gameData.at(i).toMap()))
+        DataGameList gameList = m_listGame.at(i);
+        if(!checkSearch(gameList))
             continue;
 
-        m_gameDisplayData.append(m_gameData.at(i).toMap());
+        m_gameDisplayData.append(gameList.data());
 
         int iRow = ui->tbGame->rowCount();
 
         ui->tbGame->setRowCount(iRow+1);
 
-        DataGameList data(m_gameData.at(i).toMap());
 
-        ui->tbGame->setItem(iRow,0,UI.tbItem(data.Id));
+        ui->tbGame->setItem(iRow,0,UI.tbItem(gameList.Id));
 
-        ui->tbGame->setItem(iRow,1,UI.tbItem(data.GameRate));
+        ui->tbGame->setItem(iRow,1,UI.tbItem(gameList.GameRate));
 
-        ui->tbGame->setItem(iRow,2,UI.tbItem(data.Name));
+        ui->tbGame->setItem(iRow,2,UI.tbItem(gameList.Name));
 
-
-    }
-
-
-
-
-    /*
-    m_gameList.setGameList(listOut);
-
-    ui->tbGame->setRowCount(0);
-
-    for(int i=0;i<m_gameList.listData.length();i++)
-    {
-        ui->tbGame->setRowCount(i+1);
-
-
-        ui->tbGame->setItem(i,0,UI.tbItem(m_gameList.listData.at(i).Id));
-
-        ui->tbGame->setItem(i,1,UI.tbItem(m_gameList.listData.at(i).GameRate));
-
-        ui->tbGame->setItem(i,2,UI.tbItem(m_gameList.listData.at(i).Name));
-
+        if(gameList.Sid == m_sPreGameSid)
+        {
+            ui->tbGame->setCurrentCell(iRow,0);
+        }
 
     }
 
-    */
+
 
 }
 
@@ -153,7 +133,6 @@ void LayerCostSetting::refreshItemList()
 {
 
     int iGameRow = ui->tbGame->currentRow();
-    m_listItem.clear();
 
     ui->tbGameItem->setRowCount(0);
 
@@ -181,43 +160,21 @@ void LayerCostSetting::refreshItemList()
 
     ui->lbItemTitle1->setText("商品內容");
 
-
-    QVariantMap d;
-
-    d["GameSid"] = m_sCurrentGameSid;
-    d["ASC"]="Sort";
-
-    QString sError;
+    m_listGameItem = DATA.getGameItemFromGameSid(m_sCurrentGameSid);
 
 
-    bool bOk = ACTION.action(ACT::QUERY_GAME_ITEM,d,m_listItem,sError);
-
-    if(!bOk)
-    {
-        UI.showMsg("",sError,"OK");
-
-        return;
-    }
-
-    //    QList<DataRate> tmp = ACTION.listRate("",true,true);
-
-    //    DataRate rate2;
-
-    //    if(tmp.length()>0)
-    //        rate2 = tmp.last();
-
-
-    DataRate rate2=ACTION.costRate("",true);
-
+    DataRate rate2;
+   // rate2=ACTION.costRate("",true);
+    rate2 = DATA.costRate();
 
     m_listTipData.clear();
 
     CListPair listCurrent = ACTION.getAddValueType();
 
-    for(int i=0;i<m_listItem.length();i++)
+    for(int i=0;i<m_listGameItem.length();i++)
     {
         QVariantMap toolData;
-        DataGameItem data(m_listItem.at(i).toMap());
+        DataGameItem data= m_listGameItem.at(i);
 
 
         ui->tbGameItem->setRowCount(i+1);
@@ -279,7 +236,7 @@ void LayerCostSetting::refreshItemList()
 
 }
 
-bool LayerCostSetting::checkSearch(QVariantMap data)
+bool LayerCostSetting::checkSearch(DataGameList gameData)
 {
     QString searchKey = ui->txSearch->text();
 
@@ -287,7 +244,6 @@ bool LayerCostSetting::checkSearch(QVariantMap data)
         return true;
     QStringList listKey = searchKey.split("&");
 
-    DataGameList gameData(data);
 
     bool bRe = false;
 
@@ -505,9 +461,12 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
 
 
-void LayerCostSetting::on_tbGame_cellClicked(int , int )
+void LayerCostSetting::on_tbGame_cellClicked(int row , int )
 {
-
+    if(row>=0 && row<m_gameDisplayData.length())
+    {
+     m_sPreGameSid = m_gameDisplayData.at(row).toMap()["Sid"].toString();
+    }
     refreshItemList();
 }
 
@@ -521,7 +480,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
         return ;
     }
 
-    if(ui->tbGameItem->currentRow()<0 || ui->tbGameItem->currentRow()>= m_listItem.length())
+    if(ui->tbGameItem->currentRow()<0 || ui->tbGameItem->currentRow()>= m_listGameItem.length())
     {
         UI.showMsg("","請先選擇要修改的商品","OK");
 
@@ -542,8 +501,8 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
 
     dialog.setRate(sGameName+" : 修改商品",rate);
-
-    dialog.setData(gameRate,m_listItem.at(ui->tbGameItem->currentRow()).toMap());
+    DataGameItem gameItem=m_listGameItem.at(ui->tbGameItem->currentRow());
+    dialog.setData(gameRate,gameItem.data());
 
     int iRet = dialog.exec();
 

@@ -17,6 +17,12 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
     ui->wBottom->setCurrentIndex(0);
 
 
+    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType)
+    {
+        if(iType == ORDER_DATA)
+            refresh();
+    });
+
 }
 
 LayerGetOrder1::~LayerGetOrder1()
@@ -42,7 +48,7 @@ void LayerGetOrder1::refreshUser(bool bRe)
     ui->wBottom->setCurrentIndex(0);
 
 
-    QList<UserData> list =ACTION.getUser(bRe);
+    QList<UserData> list =DATA.getUserList();
 
 
     m_listOwner.clear();
@@ -68,7 +74,10 @@ void LayerGetOrder1::refreshUser(bool bRe)
         }
     }
 
-    QList<OrderData> listOrder = ACTION.getOrder(bRe);
+    QList<OrderData> listOrder ;
+
+    listOrder= DATA.getOrder();
+
 //ACTION.getOrder(bRe);
 //    QList<OrderData> listOrder = DATA.getOrderData();
 
@@ -221,7 +230,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         QString sUserCid="";
         if(order.User.length()>1)
         {
-            sUserCid = ACTION.getUser(order.User.at(1)).Cid;
+            sUserCid = DATA.getUser(order.User.at(1)).Cid;
         }
 
 
@@ -263,7 +272,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         QString sGameItemSid= order.Item.split(";;").first().split(",,").first();
         QVariantMap item=gameItem(sGameItemSid);
 
-        ui->tbOrder->setItem(i,_GameName,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
+        ui->tbOrder->setItem(i,_GameName,UI.tbItem(DATA.getGameName(item["GameSid"].toString())));
 
         ui->tbOrder->setItem(i,_Note1,UI.tbItem(order.Note0.at(1),true));
 
@@ -282,7 +291,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         {
 
 
-            ui->tbOrder->setItem(i,_Status,UI.tbItem(ACTION.getUser(order.PaddingUser,true).Name+" 處理中"));
+            ui->tbOrder->setItem(i,_Status,UI.tbItem(DATA.getUser(order.PaddingUser).Name+" 處理中"));
 
             if(order.PaddingUser==ACTION.m_currentUser.Sid)
             {
@@ -292,6 +301,14 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
             {
                 ui->tbOrder->setItem(i,_Action,UI.tbItem(""));
             }
+
+        }
+
+        if(order.Sid==m_sPreSid)
+        {
+            ui->tbOrder->setFocus();
+
+            ui->tbOrder->setCurrentCell(i, 0); // 設置當前單元格為指定的行和列
 
         }
 
@@ -311,6 +328,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
     ui->wBottom->setCurrentIndex(0);
     OrderData order(listData.at(row).toMap());
+    m_sPreSid = order.Sid;
 
     if(column==_Id)
     {
@@ -361,8 +379,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
         {
             bool bCheck= false;
 
-            OrderData reGet = ACTION.getOrder(order.Sid,true);
-
+            OrderData reGet = DATA.getOrder(order.Sid);
             if(reGet.Sid!=order.Sid)
                 DMSG.showMsg("","錯誤，找不到該訂單","OK");
             else
@@ -370,7 +387,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
                 if(reGet.PaddingUser=="")
                     bCheck=true;
                 else
-                    DMSG.showMsg("","該訂單已被'"+ACTION.getUser(reGet.PaddingUser).Name+"'鎖定","OK");
+                    DMSG.showMsg("","該訂單已被'"+DATA.getUser(reGet.PaddingUser).Name+"'鎖定","OK");
 
             }
 
@@ -404,7 +421,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
         foreach(QString sUserSid,order.User)
         {
-            listName.append(ACTION.getUser(sUserSid).Name);
+            listName.append(DATA.getUser(sUserSid).Name);
         }
 
         dialogNote.setUser(listName);
@@ -626,9 +643,9 @@ void LayerGetOrder1::refresh()
     m_bLockLoading= true;
 
     ui->wBottom->setCurrentIndex(0);
-    ACTION.getUser(true);
+    //ACTION.getUser(true);
 
-    ACTION.getOrder(true);
+   // ACTION.getOrder(true);
 
     m_listPayType = ACTION.getAddValueType(true);
 

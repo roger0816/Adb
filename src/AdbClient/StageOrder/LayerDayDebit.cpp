@@ -145,7 +145,7 @@ void LayerDayDebit::refreshTb()
 
         ui->tb->setItem(iRow,_OrderId,UI.tbItem(data.OrderId));
 
-        CustomerData customer =ACTION.getCustomer(data.CustomerSid);
+        CustomerData customer =DATA.getCustomer(data.CustomerSid);
 
         ui->tb->setItem(iRow,_CusSid,UI.tbItem(customer.Id));
 
@@ -166,7 +166,7 @@ void LayerDayDebit::refreshTb()
 
         QString sData = QDateTime::fromString(data.OrderTime,"yyyyMMddhhmmss").toString("hh:mm:ss");
         ui->tb->setItem(iRow,_OrderTime,UI.tbItem(sData));
-        ui->tb->setItem(iRow,_UserName,UI.tbItem(ACTION.getUser(data.UserSid).Name));
+        ui->tb->setItem(iRow,_UserName,UI.tbItem(DATA.getUser(data.UserSid).Name));
         if(data.Pic0.trimmed()!="")
         {
             ui->tb->setItem(iRow,_Pic0,UI.tbItem("圖1",1));

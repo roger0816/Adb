@@ -107,7 +107,9 @@ void LayerItemCount::refresh()
   qDebug()<<"1 : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 
 
-    m_listGame = ACTION.getGameList(true);
+    //m_listGame = ACTION.getGameList(true);
+    m_listGame = DATA.getGameList();
+
 
     QStringList listCbName;
 

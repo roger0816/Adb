@@ -11,14 +11,9 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
 
 
-    //        uint datavlen = ByteArrayToUint32(m_data.mid(8,4));
 
-    //        if(datavlen == uint(m_data.length()-sp))
-    //        {
-    //            //qDebug() << "Package is Complete";
-
-    //        }
-
+    m_wMargee= new ItemMargee(ui->wTopLeft);
+    m_wMargee->move(0,0);
 
     ui->lbTestName->hide();
 
@@ -71,6 +66,36 @@ Widget::Widget(QWidget *parent)
     m_touchCheck->hide();
 
     ui->btnTest->hide();
+
+    connect(&DATA,&UpdateData::updateNotify,[=](int iType,QStringList listSid){
+        if( iType == BULLETIN_DATA)
+        {
+            QVariantList list = DATA.getBulletin();
+
+            for(int i=0;i<list.length();i++)
+            {
+
+                QVariantMap data = list.at(i).toMap();
+
+
+                QDateTime End=QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss");
+
+                if(!listSid.contains(data["Sid"].toString()) ||  End.toSecsSinceEpoch()<=GLOBAL.dateTimeUtc8().toSecsSinceEpoch())
+                    continue;
+
+
+                if(data["Type"].toString() =="0")
+                {
+                    QString sUserName = DATA.getUser(data["UserSid"].toString()).Name;
+                   // QString st=data["Title"].toString()+" : "+data["Content"].toString();
+                    m_wMargee->appendText(data["Title"].toString(),sUserName,data["Content"].toString().replace("\n","  "));
+                }
+
+            }
+
+
+        }
+    });
 
 }
 
@@ -135,7 +160,7 @@ void Widget::showEvent(QShowEvent *)
 
         ui->wTop->setStyleSheet("QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}");
     }
-
+    m_wMargee->resize(ui->wTopLeft->size());
 }
 
 void Widget::resizeEvent(QResizeEvent *)
@@ -143,6 +168,8 @@ void Widget::resizeEvent(QResizeEvent *)
     UI.m_loading->resize(this->size());
 
     m_touchCheck->resize(size());
+
+    m_wMargee->resize(ui->wTopLeft->size());
 }
 
 void Widget::checkUserLv()
@@ -217,7 +244,7 @@ void Widget::slotLogin()
 
     ACTION.setStartSyanc(true);
     int iTmp = ACTION.m_port.toInt()+10;
-    qDebug()<<"PPPPPPPPPPP : "<<ACTION.m_port;
+
     DATA.connectIp(ACTION.m_ip,QString::number(iTmp));
     DATA.setRun(true);
     QEventLoop *loop=new QEventLoop(this);
@@ -265,4 +292,8 @@ void Widget::slotSessionError()
 
     // DMSG.showMsg("","連線失敗，網路狀態異常或帳密重複登入","OK");
 }
+
+
+
+
 

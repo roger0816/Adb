@@ -11,6 +11,15 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 
     // ui->tb->setSortingEnabled(true);
 
+
+    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType)
+    {
+        if(iType==ORDER_DATA && ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
+        {
+            delayRefresh();
+        }
+    });
+
     ui->wShowArea->hide();
 
     ui->tb->hideColumn(_Bonus);
@@ -147,7 +156,8 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         customer.setData(listCustomer.first().toMap());
 #else
-        customer =ACTION.getCustomer(data.CustomerSid);
+       // customer =ACTION.getCustomer(data.CustomerSid);
+        customer = DATA.getCustomer(data.CustomerSid);
 #endif
 
 
@@ -176,7 +186,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         if(data.User.length()>3)
         {
-            UserData user = ACTION.getUser(data.User.at(3));
+            UserData user = DATA.getUser(data.User.at(3));
 
 
             sUser = user.Name;
@@ -221,7 +231,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         ui->tb->setItem(iRow,_Bonus,UI.tbItem(data.Bouns));
 
-        QString sGameName = ACTION.getGameName( data.GameSid);
+        QString sGameName = DATA.getGameName( data.GameSid);
 
         ui->tb->setItem(iRow,_GameName,UI.tbItem(sGameName));
 
@@ -283,7 +293,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
             QString sExRate="1";
 
-            int idx =exRate.listKey().indexOf(ACTION.getCustomer(data.CustomerSid).Currency);
+            int idx =exRate.listKey().indexOf(DATA.getCustomer(data.CustomerSid).Currency);
 
             if(idx>=0)
                 sExRate = exRate.listValue().at(idx);
@@ -448,14 +458,14 @@ bool LayerDayReport::checkFilter(OrderData order)
         QString sDate=order.OrderDate+order.OrderTime;
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
 
-        CustomerData cus=ACTION.getCustomer(order.CustomerSid);
+        CustomerData cus=DATA.getCustomer(order.CustomerSid);
 
 
         QStringList target;
         target<<order.Owner
              <<order.Id<<order.Name
             <<cus.Id<<cus.Currency
-           <<ACTION.getGameName(order.GameSid);
+           <<DATA.getGameName(order.GameSid);
         //        <<date.toString("hh:mm:ss");
 
 
@@ -539,7 +549,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             if(bOk && data.User.length()>2)
             {
-                UserData user = ACTION.getUser(data.User.at(2));
+                UserData user = DATA.getUser(data.User.at(2));
 
                 QVariantMap in;
                 QVariantList out;
@@ -600,7 +610,6 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
             ACTION.setPrimeMoney(order);
 
-            //ACTION.setSellMoney(order);
 
             bool bOk =ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
 
@@ -665,7 +674,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
         foreach(QString sUserSid,data.User)
         {
-            listName.append(ACTION.getUser(sUserSid).Name);
+            listName.append(DATA.getUser(sUserSid).Name);
         }
 
 
@@ -860,7 +869,7 @@ void LayerDayReport::on_tb_cellEntered(int row, int column)
 
         foreach(QString sUserSid,data.User)
         {
-            listName.append(ACTION.getUser(sUserSid).Name);
+            listName.append(DATA.getUser(sUserSid).Name);
         }
 
         while(listName.length()<6)
@@ -942,7 +951,26 @@ void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
         }
 
 
-        m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date(),bStrong);
+        if(ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
+        {
+            QString sDate = ui->dateEdit->date().toString("yyyyMMdd");
+            QList<OrderData> list = DATA.getOrder();
+            m_listOrder.clear();
+
+            for(int i=0;i<list.length();i++)
+            {
+                OrderData d = list.at(i);
+
+                if(d.OrderDate==sDate)
+                    m_listOrder.append(d);
+            }
+
+        }
+
+        else
+        {
+            m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date(),bStrong);
+        }
         ACTION.getGameItem(true); // preload
     }
 }

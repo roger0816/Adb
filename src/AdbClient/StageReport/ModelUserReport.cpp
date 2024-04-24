@@ -203,7 +203,7 @@ void ModelUserReport::requestAction()
 
     m_listUser.clear();
 
-    QList<UserData> list = ACTION.getUser(true);
+    QList<UserData> list = DATA.getUserList();
 
     foreach(UserData v,list)
     {

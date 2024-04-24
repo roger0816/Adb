@@ -13,6 +13,12 @@ LayerGetOrder2::LayerGetOrder2(QWidget *parent) :
     m_layerCost->hide();
 
     ui->wBottom->setCurrentIndex(0);
+
+    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType)
+    {
+        if(iType == ORDER_DATA)
+            refresh();
+    });
 }
 
 LayerGetOrder2::~LayerGetOrder2()
@@ -35,7 +41,7 @@ void LayerGetOrder2::refreshUser(bool bRe)
 
 
     ui->wBottom->setCurrentIndex(0);
-    QList<UserData> list =ACTION.getUser(bRe);
+    QList<UserData> list =DATA.getUserList();
 
     m_listOwner.clear();
 
@@ -60,7 +66,9 @@ void LayerGetOrder2::refreshUser(bool bRe)
         }
     }
 
-    QList<OrderData> listOrder = ACTION.getOrder(bRe);
+    QList<OrderData> listOrder ;
+
+    listOrder= DATA.getOrder();
     qSort(listOrder.begin(),listOrder.end(),[=](const OrderData &v1, const OrderData &v2)
     {
         QString st1 =v1.OrderDate+v1.OrderTime;
@@ -198,7 +206,7 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
         QString sUserCid="";
         if(order.User.length()>2)
         {
-            sUserCid = ACTION.getUser(order.User.at(2)).Cid;
+            sUserCid = DATA.getUser(order.User.at(2)).Cid;
         }
 
 
@@ -243,7 +251,7 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
         QString sGameItemSid= order.Item.split(";;").first().split(",,").first();
         QVariantMap item=gameItem(sGameItemSid);
 
-        ui->tbOrder->setItem(i,_GameName,UI.tbItem(ACTION.getGameName(item["GameSid"].toString())));
+        ui->tbOrder->setItem(i,_GameName,UI.tbItem(DATA.getGameName(item["GameSid"].toString())));
         ui->tbOrder->setItem(i,_Bouns,UI.tbItem(order.Bouns));
 
         QString sNote="";
@@ -265,7 +273,7 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
             else
             {
 
-                ui->tbOrder->setItem(i,_Status,UI.tbItem(ACTION.getUser(order.PaddingUser,true).Name+" 處理中"));
+                ui->tbOrder->setItem(i,_Status,UI.tbItem(DATA.getUser(order.PaddingUser).Name+" 處理中"));
                 if(order.PaddingUser==ACTION.m_currentUser.Sid)
                 {
                     ui->tbOrder->setItem(i,_Action,UI.tbItem("處理訂單",true));
@@ -277,7 +285,13 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
             }
         }
 
+        if(order.Sid==m_sPreSid)
+        {
+            ui->tbOrder->setFocus();
 
+            ui->tbOrder->setCurrentCell(i, 0); // 設置當前單元格為指定的行和列
+
+        }
 
     }
 
@@ -295,6 +309,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
     ui->wBottom->setCurrentIndex(0);
     OrderData order(listData.at(row).toMap());
+    m_sPreSid = order.Sid;
 
     if(column==_Id)
     {
@@ -314,7 +329,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
         {
             bool bCheck= false;
 
-            OrderData reGet = ACTION.getOrder(order.Sid,true);
+            OrderData reGet = DATA.getOrder(order.Sid);
 
             if(reGet.Sid!=order.Sid)
                 DMSG.showMsg("","錯誤，找不到該訂單","OK");
@@ -323,7 +338,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
                 if(reGet.PaddingUser=="")
                     bCheck=true;
                 else
-                    DMSG.showMsg("","該訂單已被'"+ACTION.getUser(reGet.PaddingUser).Name+"'鎖定","OK");
+                    DMSG.showMsg("","該訂單已被'"+DATA.getUser(reGet.PaddingUser).Name+"'鎖定","OK");
 
             }
 
@@ -351,7 +366,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
         foreach(QString sUserSid,order.User)
         {
-            listName.append(ACTION.getUser(sUserSid).Name);
+            listName.append(DATA.getUser(sUserSid).Name);
         }
 
         dialogNote.setUser(listName);
@@ -390,7 +405,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
         if(sCurrency =="")
         {
-            sCurrency = ACTION.getCustomer(order.CustomerSid).Currency;
+            sCurrency = DATA.getCustomer(order.CustomerSid).Currency;
         }
 
 
@@ -527,9 +542,9 @@ void LayerGetOrder2::refresh()
 
 
 
-    ACTION.getUser(true);
+    //ACTION.getUser(true);
 
-    ACTION.getOrder(true);
+    //ACTION.getOrder(true);
 
     m_listFactory.clear();
 

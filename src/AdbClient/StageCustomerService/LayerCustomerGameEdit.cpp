@@ -74,7 +74,7 @@ void LayerCustomerGameEdit::refresh()
 
         ui->tbCusGameInfo->setRowCount(ui->tbCusGameInfo->rowCount()+1);
 
-        QString sGameName =ACTION.getGameName(data.GameSid);
+        QString sGameName =DATA.getGameName(data.GameSid);
 
 
         ui->tbCusGameInfo->setItem(iIdx,0,UI.tbItem("移除"));

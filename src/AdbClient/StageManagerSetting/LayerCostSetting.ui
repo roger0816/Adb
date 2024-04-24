@@ -73,6 +73,7 @@
         </property>
         <property name="font">
          <font>
+          <family>Microsoft JhengHei UI</family>
           <pointsize>-1</pointsize>
           <italic>false</italic>
           <bold>false</bold>
@@ -172,7 +173,7 @@
             <enum>Qt::StrongFocus</enum>
            </property>
            <property name="editTriggers">
-            <set>QAbstractItemView::DoubleClicked</set>
+            <set>QAbstractItemView::NoEditTriggers</set>
            </property>
            <property name="selectionMode">
             <enum>QAbstractItemView::SingleSelection</enum>
@@ -225,6 +226,7 @@
         </property>
         <property name="font">
          <font>
+          <family>Microsoft JhengHei UI</family>
           <pointsize>-1</pointsize>
           <italic>false</italic>
           <bold>false</bold>
@@ -253,6 +255,7 @@
            </property>
            <property name="font">
             <font>
+             <family>Microsoft JhengHei UI</family>
              <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>
@@ -273,6 +276,7 @@
            </property>
            <property name="font">
             <font>
+             <family>Microsoft JhengHei UI</family>
              <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>
@@ -462,6 +466,7 @@
           <widget class="QTableWidget" name="tbGameItem">
            <property name="font">
             <font>
+             <family>Microsoft JhengHei UI</family>
              <pointsize>-1</pointsize>
              <italic>false</italic>
              <bold>false</bold>

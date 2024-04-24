@@ -3,6 +3,8 @@
 
 #include "ActionObj.h"
 #include "DataSync.h"
+#include "UpdateData.h"
+
 
 namespace _KEY {
 static QString isRememberLogin="isRememberLogin";
@@ -57,11 +59,11 @@ public:
     void reQuertyOld();
     void reQuerty();
 
-    QList<UserData> getUser(bool bQuery=false);
-    UserData getUser(QString sSid, bool bQuery=false);
+   // QList<UserData> getUser(bool bQuery=false);
+    //UserData getUser(QString sSid, bool bQuery=false);
 
-      QList<CustomerData> getCustomerList();
-    CustomerData getCustomer(QString sSid, bool bQuery=false);
+    //  QList<CustomerData> getCustomerList();
+   // CustomerData getCustomer(QString sSid, bool bQuery=false);
     QList<DataCustomerClass> getCustomerClass(bool bQuery=false);
     DataCustomerClass getCustomerClass(QString sSid, bool bQuery=false);
 
@@ -69,8 +71,7 @@ public:
     bool editFacotryClass(QVariantMap data,QString &sError);
 
 
-    QList<DataGameList> getGameList(bool bQuery=true);
-    DataGameList getGameList(QString sSid, bool bQuery=true);
+
 
     QList<DataGameItem> getGameItem(bool bQuery = true);
 
@@ -86,8 +87,7 @@ public:
     QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool bQuery=true);
 
 
-    QString getGameName(QString sId);
-    QString getGameId(QString sName);
+
 
     QList<CustomerCost> getCustomerCost(QString sCustomerSid,bool bQuery=true);
     bool setCustomerCost(CustomerCost costData, QString &sError);
@@ -97,7 +97,7 @@ public:
       CustomerCost getCustomerLastCost(QString sCustomerSid);
 
     bool replaceOrder(OrderData order, QString &sError);
-    QString setSellMoney(OrderData &order);
+    //QString setSellMoney(OrderData &order);
     QString setPrimeMoney(OrderData &order);
 
     QList<OrderData> getOrder(bool bRequest = false);
@@ -183,18 +183,12 @@ public:
 
     DataSync sync;
 
-
-
-    QList<UserData> m_listUser;
-
     QList<DataCustomerClass> m_listCustomerClass;
-
-    QList<CustomerData> m_listCustomer;
 
     QList<DataFactory> m_listFactoryClass;
 
 
-    QList<DataGameList> m_listGameList;
+
 
     QList<DataGameItem> m_listGameItem;
 

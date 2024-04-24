@@ -17,7 +17,7 @@
 
 #define QUERY Global::Instance().m_action.m_queryObj
 
-#define DATA Global::Instance().m_data
+
 
 
 //#define DATA Global::Instance().m_action.sync
@@ -76,7 +76,6 @@ public:
 
     Action m_action;
 
-    UpdateData m_data;
 
     QVariant config(QString st);
 

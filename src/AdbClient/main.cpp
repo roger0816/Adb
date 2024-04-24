@@ -25,6 +25,12 @@ int main(int argc, char *argv[])
 
     QApplication a(argc, argv);
 
+//    ItemMargeen w1;
+//    w1.show();
+//    w1.startMarquee("abcdefghijklmnopqrstuvwxyz");
+
+//    return a.exec();
+
     Widget w;
 
 

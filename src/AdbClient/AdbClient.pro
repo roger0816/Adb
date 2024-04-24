@@ -57,6 +57,7 @@ SOURCES += \
     component/DialogBase.cpp \
     component/DialogObj.cpp \
     component/ItemClock.cpp \
+    component/ItemMargee.cpp \
     component/ItemMiniLoadbar.cpp \
     component/ItemPic.cpp \
     component/ItemPicObj.cpp \
@@ -133,6 +134,7 @@ HEADERS += \
     component/DialogBase.h \
     component/DialogObj.h \
     component/ItemClock.h \
+    component/ItemMargee.h \
     component/ItemMiniLoadbar.h \
     component/ItemPic.h \
     component/ItemPicObj.h \
@@ -196,6 +198,7 @@ FORMS += \
     DialogInput.ui \
     DialogLogin.ui \
     DialogMsg.ui \
+    component/ItemMargee.ui \
     component/ItemMiniLoadbar.ui \
     LayerBulletin.ui \
     StageAccount.ui \

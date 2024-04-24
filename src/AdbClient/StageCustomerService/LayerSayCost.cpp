@@ -102,7 +102,7 @@ void LayerSayCost::orderMode()
 
 
 
-    QList<UserData> listUser =ACTION.getUser(true);
+    QList<UserData> listUser =DATA.getUserList();
     QStringList listCb;
     //    listCb.append("艾比代");
 
@@ -198,7 +198,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
 
 
 
-        QString sName= ACTION.getGameName(tmp["GameSid"].toString());
+        QString sName= DATA.getGameName(tmp["GameSid"].toString());
 
 
         if(cbName.indexOf(sName)<0)
@@ -836,7 +836,7 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
 
     ui->cbGame->setProperty("lock",true);
 
-    m_sCurrentGameSid = ACTION.getGameId(arg1);
+    m_sCurrentGameSid = DATA.getGameId(arg1);
     qDebug()<<"game sid : "<<m_sCurrentGameSid<<" ,name "<<arg1;
 
     if(m_order.OrderDate.toInt()<=20230216)

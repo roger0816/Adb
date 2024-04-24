@@ -84,6 +84,7 @@ private:
 
     int m_iPreUserRow=-1;
     int m_iPreUserCol=-1;
+    QString m_sPreSid="";
 
     bool m_bLockLoading = false;
 

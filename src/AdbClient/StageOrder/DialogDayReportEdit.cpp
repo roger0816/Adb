@@ -54,7 +54,7 @@ void DialogDayReportEdit::refresh()
 {
     ui->lbOrder->setText(m_data.Id);
 
-    ui->lbGame->setText(ACTION.getGameName(m_data.GameSid));
+    ui->lbGame->setText(DATA.getGameName(m_data.GameSid));
 
 
 

@@ -69,7 +69,7 @@ void LayerSearchCustomer::changePage(int iPage)
     QVariantList tmp;
     QString sError;
 
-    m_listCus=ACTION.getCustomerList();
+    m_listCus=DATA.getCustomerList();
 
     if(m_listCus.length()<1 && m_iIdx>=m_listCus.length())
     {
@@ -135,7 +135,7 @@ void LayerSearchCustomer::changePage(int iPage)
             if(dataGame.GameSid == sLastGameSid)
             {
 
-                ui->lbGame->setText(ACTION.getGameName(dataGame.GameSid));
+                ui->lbGame->setText(DATA.getGameName(dataGame.GameSid));
 
                 ui->lbLoginType->setText(dataGame.LoginType);
 

@@ -51,7 +51,7 @@ private slots:
     void on_btnItemAdd_clicked();
 
 
-    void on_tbGame_cellClicked(int, int);
+    void on_tbGame_cellClicked(int row, int);
 
     void on_btnItemEdit_clicked();
 
@@ -72,19 +72,22 @@ private:
 
     void refreshItemList();
 
-    bool checkSearch(QVariantMap data);
+    bool checkSearch(DataGameList gameData);
 
     QVariantList m_listTipData;
 
-    QVariantList m_gameData;
+
+    QList<DataGameList> m_listGame;
 
     QVariantList m_gameDisplayData;
 
 
-
-    QVariantList m_listItem;
+    QList<DataGameItem> m_listGameItem;
 
     QString m_sCurrentGameSid = "";
+
+    QString m_sPreGameSid="";
+    QString m_sPreGameItemSid="";
 
 private slots:
 

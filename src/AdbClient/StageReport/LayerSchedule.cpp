@@ -237,7 +237,7 @@ void LayerSchedule::refresh()
 
                 }
 
-                QString sUserName= ACTION.getUser(data.sUserSid,false).Name;
+                QString sUserName= DATA.getUser(data.sUserSid).Name;
 
                 l->setText(data.sCost,sUserName,data.sStatus);
 
@@ -586,7 +586,7 @@ void LayerSchedule::checkUserList()
 {
     ui->tbUserList->setRowCount(0);
 
-    QList<UserData> list = ACTION.getUser(false);
+    QList<UserData> list = DATA.getUserList();
 
     int iRow=0;
 
@@ -814,7 +814,7 @@ void LayerSchedule::delayRefresh()
 
     ui->lbTitle->setText(m_sYear+" / "+m_sMonth);
 
-    ACTION.getUser(true);
+    //ACTION.getUser(true);
 
     read();
 

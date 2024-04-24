@@ -10,6 +10,11 @@ LayerBulletin::LayerBulletin(QWidget *parent) :
 
 
     ui->stackedWidget->setCurrentIndex(0);
+
+    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType){
+        if(iType==BULLETIN_DATA)
+            refresh();
+    });
 }
 
 LayerBulletin::~LayerBulletin()
@@ -43,20 +48,20 @@ void LayerBulletin::refresh(bool bRequery)
 
     QString sError;
 
-    m_listData.clear();
+    m_listData=DATA.getBulletin();
 
 
     ui->tbTop->setRowCount(0);
 
     ui->tbSys->setRowCount(0);
 
-    QVariantMap in;
-    in["DESC"] ="Sid";
-    qDebug()<<"layer Bulletin";
-    if(bRequery)
-    {
-        ACTION.action(ACT::QUERY_BULLETIN,in,m_listData,sError);
-    }
+//    QVariantMap in;
+//    in["DESC"] ="Sid";
+//    qDebug()<<"layer Bulletin";
+//    if(bRequery)
+//    {
+//        ACTION.action(ACT::QUERY_BULLETIN,in,m_listData,sError);
+//    }
     m_listTop.clear();
     m_listSys.clear();
     for(int i=0;i<m_listData.length();i++)
@@ -138,9 +143,11 @@ QString LayerBulletin::userName(QString sId)
 {
     QString sRe="";
 
-    for(int i=0;i<ACTION.m_listUser.length();i++)
+    QList<UserData> list = DATA.getUserList();
+
+    for(int i=0;i<list.length();i++)
     {
-        UserData data = ACTION.m_listUser.at(i);
+        UserData data = list.at(i);
 
         if(sId==data.Sid)
         {

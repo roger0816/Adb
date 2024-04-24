@@ -71,7 +71,7 @@ void LayerCostReport::refresh(bool bRequest)
 
         CustomerCost costData(m_listMix.at(i).toMap());
 
-        CustomerData cus=ACTION.getCustomer(costData.CustomerSid,false);
+        CustomerData cus=DATA.getCustomer(costData.CustomerSid);
 
         if(!checkFilter(cus,costData))
             continue;
@@ -93,7 +93,7 @@ void LayerCostReport::refresh(bool bRequest)
         ui->tb->setItem(iRow, _CusName,UI.tbItem(cus.Name));
         ui->tb->setItem(iRow, _Currency,UI.tbItem(cus.Currency));
         ui->tb->setItem(iRow, _Cost,UI.tbItem(costData.Total,UI._BUTTON));
-        ui->tb->setItem(iRow, _User,UI.tbItem(ACTION.getUser(costData.UserSid).Name));
+        ui->tb->setItem(iRow, _User,UI.tbItem(DATA.getUser(costData.UserSid).Name));
         //  ui->tb->setItem(iRow, _Note1,UI.tbItem(costData.Note1));
 
         QLabel *lbNote1 = new QLabel(ui->tb);
@@ -264,7 +264,7 @@ void LayerCostReport::on_tb_cellClicked(int row, int column)
 
     CustomerCost cos (m_listDisplay.at(row).toMap());
 
-    CustomerData cus=ACTION.getCustomer(cos.CustomerSid,false);
+    CustomerData cus=DATA.getCustomer(cos.CustomerSid);
 
     if(column==_CusId)
     {

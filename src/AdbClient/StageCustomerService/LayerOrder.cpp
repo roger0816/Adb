@@ -80,7 +80,7 @@ void LayerOrder::setData(OrderData order, CustomerData cus)
 
 void LayerOrder::setData(OrderData order)
 {
-    CustomerData cus =ACTION.getCustomer(order.CustomerSid,true);
+    CustomerData cus =DATA.getCustomer(order.CustomerSid);
 
     setData(order,cus);
 }

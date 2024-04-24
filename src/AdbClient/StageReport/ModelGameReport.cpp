@@ -171,8 +171,9 @@ void ModelGameReport::requestAction()
     ACTION.getGameItem(true);  //update data
 
     m_listGame.clear();
-    QList<DataGameList> listGame =ACTION.getGameList(true);
-
+    QList<DataGameList> listGame;
+   // listGame=ACTION.getGameList(true);
+    listGame = DATA.getGameList();
 
     foreach(DataGameList v,listGame)
     {

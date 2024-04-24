@@ -11,7 +11,7 @@
 #include "GlobalUi.h"
 #include "LayerTouchCheck.h"
 #include <QResizeEvent>
-
+#include "ItemMargee.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -32,6 +32,9 @@ private slots:
 
 
     void on_btnLogout_clicked();
+
+
+
 public slots:
     void slotLogin();
 
@@ -47,6 +50,7 @@ private:
     LayerTouchCheck *m_touchCheck;
     void checkUserLv();
 
+    ItemMargee *m_wMargee;
 
 };
 #endif // WIDGET_H

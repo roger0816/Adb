@@ -181,26 +181,25 @@ background-color:gray;
          <string notr="true">QWidget#wTop{background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));}</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_4">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
          <property name="topMargin">
-          <number>2</number>
+          <number>1</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
          </property>
          <property name="bottomMargin">
-          <number>2</number>
+          <number>1</number>
          </property>
-         <property name="spacing">
-          <number>2</number>
+         <property name="horizontalSpacing">
+          <number>10</number>
          </property>
-         <item row="2" column="0">
-          <widget class="QWidget" name="widget_3" native="true">
-           <property name="font">
-            <font>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3">
+         <property name="verticalSpacing">
+          <number>0</number>
+         </property>
+         <item row="1" column="2">
           <widget class="QWidget" name="widget" native="true">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -224,7 +223,69 @@ background-color:gray;
             <property name="spacing">
              <number>0</number>
             </property>
-            <item row="0" column="0">
+           </layout>
+          </widget>
+         </item>
+         <item row="0" column="1" rowspan="2">
+          <widget class="QWidget" name="widget_3" native="true">
+           <property name="maximumSize">
+            <size>
+             <width>230</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <property name="leftMargin">
+             <number>2</number>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <property name="rightMargin">
+             <number>2</number>
+            </property>
+            <property name="bottomMargin">
+             <number>2</number>
+            </property>
+            <property name="horizontalSpacing">
+             <number>2</number>
+            </property>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lbName">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>160</width>
+                <height>16777215</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">
+color: rgb(0, 85, 255);</string>
+              </property>
+              <property name="text">
+               <string>Name</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="2">
              <widget class="QPushButton" name="btnLogout">
               <property name="minimumSize">
                <size>
@@ -234,6 +295,7 @@ background-color:gray;
               </property>
               <property name="font">
                <font>
+                <family>Microsoft JhengHei UI</family>
                 <pointsize>12</pointsize>
                 <italic>false</italic>
                 <bold>false</bold>
@@ -255,34 +317,7 @@ color: rgb(95, 95, 0);</string>
               </property>
              </widget>
             </item>
-           </layout>
-          </widget>
-         </item>
-         <item row="1" column="2" colspan="2">
-          <widget class="QWidget" name="widget_4" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>230</width>
-             <height>30</height>
-            </size>
-           </property>
-           <layout class="QGridLayout" name="gridLayout_6">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <property name="spacing">
-             <number>0</number>
-            </property>
-            <item row="0" column="1">
+            <item row="1" column="0">
              <widget class="ItemClock" name="dateTimeEdit">
               <property name="minimumSize">
                <size>
@@ -297,7 +332,7 @@ color: rgb(95, 95, 0);</string>
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
+               <string notr="true">background-color: rgba(255, 255, 255);</string>
               </property>
               <property name="buttonSymbols">
                <enum>QAbstractSpinBox::NoButtons</enum>
@@ -307,104 +342,40 @@ color: rgb(95, 95, 0);</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>40</width>
-                <height>20</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
            </layout>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QLabel" name="lbName">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>100</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>160</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="font">
-            <font>
-             <italic>false</italic>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">
-color: rgb(0, 85, 255);</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0" colspan="4">
-          <spacer name="verticalSpacer_3">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="2" column="1">
-          <widget class="QWidget" name="widget_5" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>40</width>
-             <height>0</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>40</width>
-             <height>16777215</height>
-            </size>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lbTestName">
-           <property name="font">
-            <font>
-             <pointsize>-1</pointsize>
-             <italic>false</italic>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">font: 700 30px &quot;Microsoft JhengHei UI&quot;;</string>
-           </property>
-           <property name="text">
-            <string>測試模式，非正式資料</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
+         <item row="0" column="0" rowspan="2">
+          <widget class="QWidget" name="wTopLeft" native="true">
+           <layout class="QGridLayout" name="gridLayout_6">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lbTestName">
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>44</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Microsoft JhengHei UI</family>
+                <pointsize>-1</pointsize>
+                <italic>false</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">font: 700 28px &quot;Microsoft JhengHei UI&quot;;</string>
+              </property>
+              <property name="text">
+               <string>測試模式，非正式資料</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>

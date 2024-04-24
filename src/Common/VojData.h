@@ -878,6 +878,13 @@ struct DataGameItem :public DataObj
 
 struct DataRate :public DataObj
 {
+
+    DataRate(){}
+    DataRate(QVariantMap data):DataObj()
+    {
+        setData(data);
+    }
+
     void setData(QVariantMap data)
     {
         DataObj::setData(data);

@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QTcpSocket>
-
+#include <QEventLoop>
 
 class CTcpClient : public QObject
 {
@@ -43,8 +43,9 @@ public slots:
     void slotReadyRead();
 
     void slotLongRead();
+private:
 
-
+        QEventLoop *loop=new QEventLoop(this);
 };
 
 #endif // CTCPCLIENT_H

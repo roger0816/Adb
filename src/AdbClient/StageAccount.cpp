@@ -31,7 +31,7 @@ void StageAccount::readUser()
 {
     qDebug()<<"current user : "<<ACTION.m_currentUser.Sid;
 
-    m_user = ACTION.getUser(ACTION.m_currentUser.Sid);
+    m_user = DATA.getUser(ACTION.m_currentUser.Sid);
 
     ui->txId->setText(m_user.Id);
 
@@ -59,7 +59,7 @@ void StageAccount::on_btnPassword_clicked()
 {
     DialogMsg dialog;
 
-    UserData user= ACTION.getUser(ACTION.m_currentUser.Sid,true);
+    UserData user= DATA.getUser(ACTION.m_currentUser.Sid);
 
     if(user.Sid!=ACTION.m_currentUser.Sid)
 

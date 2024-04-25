@@ -69,6 +69,7 @@ Widget::Widget(QWidget *parent)
     m_touchCheck->hide();
 
     ui->btnTest->hide();
+    ui->btnTest2->hide();
 
     connect(&DATA,&UpdateData::updateNotify,[=](int iType,QStringList listSid){
         if( iType == BULLETIN_DATA)
@@ -302,7 +303,7 @@ void Widget::slotSessionError()
 
 
 
-void Widget::on_btnTest_2_clicked()
+void Widget::on_btnTest2_clicked()
 {
     UI.m_loading->setLoading(true);
 }

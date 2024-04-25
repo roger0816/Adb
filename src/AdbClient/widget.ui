@@ -412,7 +412,7 @@ color: rgb(95, 95, 0);</string>
                 <number>0</number>
                </property>
                <item row="0" column="0">
-                <widget class="QPushButton" name="btnTest_2">
+                <widget class="QPushButton" name="btnTest2">
                  <property name="text">
                   <string/>
                  </property>

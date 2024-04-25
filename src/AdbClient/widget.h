@@ -35,7 +35,7 @@ private slots:
 
 
 
-    void on_btnTest_2_clicked();
+    void on_btnTest2_clicked();
 
 public slots:
     void slotLogin();

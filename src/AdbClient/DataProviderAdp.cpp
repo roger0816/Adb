@@ -10,7 +10,7 @@ void VGameList::setData(QVariantMap data)
 {
     DataGameList::setData(data);
 
-     QList<DataGameItem> list = ACTION.getGameItem(Sid);
+     QList<DataGameItem> list = DATA.getGameItemFromGameSid(Sid);
 
      listGameItem.clear();
 

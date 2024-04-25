@@ -156,7 +156,7 @@ bool LayerCostReport::checkFilter(CustomerData cus, CustomerCost cos)
         if(cus.Vip=="1")
             Vip="VIP";
 
-        QString sGroup=ACTION.getCustomerClass(cus.Class).Name;
+        QString sGroup=DATA.getCustomerClass(cus.Class).Name;
 
         QString sKey = v.toUpper().trimmed();
         //  if(data["Name"].toString().indexOf(m_sSearchKey,Qt::CaseInsensitive)>=0)

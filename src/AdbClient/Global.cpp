@@ -20,6 +20,9 @@ Global::~Global()
     m_ping.wait(1000);
 
     m_ping.quit();
+
+
+    timerThread.start();
 }
 
 void Global::setServer(bool b, QString sIp, QString sPort)
@@ -630,6 +633,28 @@ QString Global::printTime(QString st)
     QString sRe = st+" "+dateTimeUtc8().toString("mm:ss.zzz");
     qDebug()<<sRe;
     return sRe;
+}
+
+void Global::Debug(QString st)
+{
+
+    auto convertMilliseconds=[=](long long milliseconds) {
+        // 计算小时、分钟、秒和毫秒
+        long long totalSeconds = milliseconds / 1000;
+        long long hours = totalSeconds / 3600;
+        long long minutes = (totalSeconds % 3600) / 60;
+        long long seconds = totalSeconds % 60;
+        long long milliseconds_remainder = milliseconds % 1000;
+
+        QString sRe=QString::number(minutes)+":"+QString::number(seconds)+"."+QString::number(milliseconds_remainder);
+
+        return "["+sRe+"] ";
+    };
+
+
+    QString sTmp=convertMilliseconds(timerThread.elapsedTime())+st;
+
+    qDebug()<<sTmp;
 }
 
 

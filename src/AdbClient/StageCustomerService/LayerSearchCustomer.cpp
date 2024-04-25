@@ -99,7 +99,7 @@ void LayerSearchCustomer::changePage(int iPage)
     if(iPage==1)
     {
 
-        ui->lbClass->setText(ACTION.getCustomerClass(customer.Class).Name);
+        ui->lbClass->setText(DATA.getCustomerClass(customer.Class).Name);
 
         ui->lbId->setText(customer.Id);
 

@@ -44,7 +44,8 @@ void LayerGetOrder1::refreshUser(bool bRe)
     m_bLockLoading= true;
 
 
-
+    int iRow = ui->tbUser->currentRow();
+    int iCol = ui->tbUser->currentColumn();
     ui->wBottom->setCurrentIndex(0);
 
 
@@ -154,31 +155,26 @@ void LayerGetOrder1::refreshUser(bool bRe)
         }
     }
 
-    on_tbUser_cellPressed(m_iPreUserRow,m_iPreUserCol);
 
+    qDebug()<<"AAAAAA: current "<<iRow<<", "<<iCol;
+
+    if(iRow>=0 && iRow<ui->tbUser->rowCount() && iCol>=0 && iCol<ui->tbUser->columnCount())
+    {
+        ui->tbUser->setCurrentCell(iRow,iCol);
+        on_tbUser_cellPressed(iRow,iCol);
+    }
 
     m_bLockLoading= false;
 
 
 }
 
-QVariantMap LayerGetOrder1::gameItem(QString sSid)
-{
-    QString sError;
-    QVariantMap re;
-    QVariantMap d1;
-    QVariantList listOut;
-    d1["Sid"] = sSid;
-    ACTION.action(ACT::QUERY_GAME_ITEM,d1,listOut,sError);
 
-    if(listOut.length()>0)
-        re = listOut.first().toMap();
-
-    return re;
-}
 
 void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 {
+
+
     if(row<0 || row>=ui->tbUser->rowCount())
     {
         ui->tbOrder->setRowCount(0);
@@ -201,12 +197,9 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
     }
 
     // QTableWidgetItem *item =ui->tbUser->item(row,column);
-    ui->tbUser->setCurrentCell(row,column);
+   // ui->tbUser->setCurrentCell(row,column);
 
 
-
-    m_iPreUserCol = column;
-    m_iPreUserRow = row;
 
     int iIdx = row*ui->tbUser->columnCount()+column;
     QString sKey= m_listFactory.at(iIdx).Name;
@@ -239,20 +232,10 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         ui->tbOrder->setItem(i,_Name,UI.tbItem(order.Name));
         ui->tbOrder->setItem(i,_Id,UI.tbItem(order.Id,GlobalUi::_BUTTON));
 
-        QVariantMap d;
-        QVariantList tmpOut;
-
-        d["Sid"]=order.CustomerSid;
-
-        QString sError;
-
-        ACTION.action(ACT::QUERY_CUSTOMER,d,tmpOut,sError);
 
 
-        QVariantMap customer;
+        QVariantMap customer=DATA.getCustomer(order.CustomerSid).data();
 
-        if(tmpOut.length()>0)
-            customer = tmpOut.first().toMap();
 
         QTableWidgetItem *tmpItem = UI.tbItem(customer["Id"]);
 
@@ -270,7 +253,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
         ui->tbOrder->setItem(i,_CustomerName,UI.tbItem(customer["Name"]));
 
         QString sGameItemSid= order.Item.split(";;").first().split(",,").first();
-        QVariantMap item=gameItem(sGameItemSid);
+        QVariantMap item=DATA.getGameItem(sGameItemSid).data();
 
         ui->tbOrder->setItem(i,_GameName,UI.tbItem(DATA.getGameName(item["GameSid"].toString())));
 
@@ -455,7 +438,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
         {
             DataFactory re;
 
-            QList<DataFactory> list=ACTION.getFactoryClass("",true);
+            QList<DataFactory> list=DATA.getFactoryClassList();
 
             for(int i=0;i<list.length();i++)
             {
@@ -652,7 +635,7 @@ void LayerGetOrder1::refresh()
     m_listFactory.clear();
 
 
-    m_listFactory.append(ACTION.getFactoryClass("",true));
+    m_listFactory.append(DATA.getFactoryClassList());
 
     ui->cbFacChange->clear();
 

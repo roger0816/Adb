@@ -75,14 +75,14 @@ void DialogCustomerCostHistory::setCustomer(CustomerData data)
 
     ui->lbId->setText(m_cus.Id);
 
-    QString sTmp  = ACTION.getCustomerClass(m_cus.Class).Name;
+    QString sTmp  = DATA.getCustomerClass(m_cus.Class).Name;
 
     ui->lbClass->setText(sTmp);
     ui->lbName->setText(m_cus.Name);
     ui->lbCurrency->setText(m_cus.Currency);
     ui->lbMoney->setText(ACTION.getCustomerNowMoney(m_cus.Sid));
     // ui->lbMoney->setText(m_cus.Money);
-    ACTION.costRate("",true);
+
     refresh();
 
 }
@@ -130,7 +130,7 @@ void DialogCustomerCostHistory::refresh(int)
             ui->tableWidget->setItem(i,1,UI.tbItem("加值"));
             ui->tableWidget->setItem(i,2,UI.tbItem(d.ChangeValue));
 
-            QString sRate=QString::number(ACTION.primeRate(d.Rate,false).findValue(m_cus.Currency));
+            QString sRate=QString::number(DATA.primeRate(d.Rate).findValue(m_cus.Currency));
 
             if(d.AddRate.toDouble()>0)
                 sRate=sRate+"+"+d.AddRate;
@@ -168,7 +168,7 @@ void DialogCustomerCostHistory::refresh(int)
 
             ui->tableWidget->setItem(i,2,UI.tbItem(sCost));
 
-            QString sRate=QString::number(ACTION.primeRate(d.PrimeRateSid,false).findValue(m_cus.Currency));
+            QString sRate=QString::number(DATA.primeRate(d.PrimeRateSid).findValue(m_cus.Currency));
 
             ui->tableWidget->setItem(i,3,UI.tbItem(sRate));
 

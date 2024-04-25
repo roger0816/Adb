@@ -213,7 +213,7 @@ void LayerOrder::setBuyData()
 
         ui->tbInfo->setItem(iRow,0,UI.tbItem(sGameItemSid));
 
-        QString sItemName = ACTION.getGameItemFromSid(sGameItemSid).Name;
+        QString sItemName = DATA.getGameItem(sGameItemSid).Name;
 
         ui->tbInfo->setItem(iRow,1,UI.tbItem(sItemName));
 
@@ -249,7 +249,7 @@ void LayerOrder::setCb()
 {
     QStringList canSelect = m_order.CanSelectPayType.split(";;");
 
-    QList<DataFactory> listFac = ACTION.getFactoryClass("",true);
+    QList<DataFactory> listFac = DATA.getFactoryClassList();
 
     QStringList listCb;
 

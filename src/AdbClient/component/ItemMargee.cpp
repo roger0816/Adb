@@ -6,7 +6,7 @@ ItemMargee::ItemMargee(QWidget *parent) :
     ui(new Ui::ItemMargee)
 {
     ui->setupUi(this);
-
+setAttribute(Qt::WA_TransparentForMouseEvents);
     label = new QLabel(ui->wContent);
     // label->hide();
     label->setText("abcdefghijklmnopqrstuvwxyz");
@@ -21,6 +21,8 @@ ItemMargee::ItemMargee(QWidget *parent) :
 
 
     m_timer.start(50);
+
+
 
 }
 

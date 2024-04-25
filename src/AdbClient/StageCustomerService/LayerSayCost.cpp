@@ -222,7 +222,7 @@ void LayerSayCost::setCustomer(QVariantMap data, QString sOrderSid)
     on_cbGame_currentTextChanged(ui->cbGame->currentText());
 
 
-    m_costRate = ACTION.costRate(m_order.ExRateSid,true);
+    m_costRate = DATA.costRate(m_order.ExRateSid);
 
     // m_primeRate = ACTION.primeRate(m_order.PrimeRateSid,true);
 
@@ -576,7 +576,7 @@ void LayerSayCost::addPayTypeToCb()
 
         QList<DataFactory> listRe;
 
-        QList<DataFactory> listFac = ACTION.getFactoryClass("",true);
+        QList<DataFactory> listFac = DATA.getFactoryClassList();
 
 
 

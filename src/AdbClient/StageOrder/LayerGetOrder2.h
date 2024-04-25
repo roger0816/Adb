@@ -61,13 +61,11 @@ private:
 
     QVariantMap m_data;
 
-    QVariantMap gameItem(QString sSid);
 
     QString  m_currentDataKey="";
 
     LayerOrder *m_layerCost  = nullptr;
-    int m_iPreUserRow=-1;
-    int m_iPreUserCol=-1;
+
     QString m_sPreSid="";
 
     bool m_bLockLoading = false;

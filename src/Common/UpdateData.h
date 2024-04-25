@@ -21,9 +21,12 @@ enum {
     USER_DATA,
     GAME_LIST,
     GAME_ITEM,
-    BULLETIN_DATA,
     EXCHANGE_RATE,
-    PRIMECOST_RATE
+    PRIMECOST_RATE,
+    CUSTOMER_CLASS,
+    FACTORY_CLASS,
+    BULLETIN_DATA
+
 };
 
 
@@ -42,6 +45,7 @@ public:
     bool m_bOnSync=false;
 
     int m_iTag;
+    bool m_bIsFirst= true;
 signals:
 
 };
@@ -186,6 +190,45 @@ public:
 };
 
 
+class CustomerClassProvider : public DataProvider
+{
+    Q_OBJECT
+public:
+    explicit CustomerClassProvider(int iTag,QObject *parent = nullptr):DataProvider(iTag,parent){}
+
+    void changeData() override
+    {
+        m_listData.clear();
+        foreach(const QVariant v, m_list)
+        {
+            DataCustomerClass d(v.toMap());
+            m_listData.append(d);
+        }
+    }
+
+    QList<DataCustomerClass> m_listData;
+
+};
+
+class FactoryClassProvider : public DataProvider
+{
+    Q_OBJECT
+public:
+    explicit FactoryClassProvider(int iTag,QObject *parent = nullptr):DataProvider(iTag,parent){}
+
+    void changeData() override
+    {
+        m_listData.clear();
+        foreach(const QVariant v, m_list)
+        {
+            DataFactory d(v.toMap());
+            m_listData.append(d);
+        }
+    }
+
+    QList<DataFactory> m_listData;
+
+};
 
 class BulletinDataProvider : public DataProvider
 {
@@ -233,12 +276,23 @@ public:
     QString getGameId(QString sName);
 
 
-    QList<DataGameItem> getGameItem();
+    QList<DataGameItem> getGameItemList();
+    DataGameItem getGameItem(QString sSid);
     QList<DataGameItem> getGameItemFromGameSid(QString sGameSid);
+    QString findGameSid(QString sGameItemSid);
+    double getGameItemPayCount(QString sGameItemSid, QString sPaySid);
 
     QList<DataRate> costRateList();
-
     DataRate costRate(QString sSid="");
+    QList<DataRate> primeRateList();
+    DataRate primeRate(QString sSid="");
+
+    QList<DataCustomerClass> getCustomerClassList();
+    DataCustomerClass getCustomerClass(QString sSid);
+
+    QList<DataFactory> getFactoryClassList();
+    DataFactory getFactoryClass(QString sSid);
+
 
 
     QVariantList getBulletin();
@@ -265,8 +319,12 @@ private:
 
 
     QString sHhmm="";
+
+    int m_runCount = 0;
 signals:
     void updateNotify(int iType, QStringList listSid );
+
+    void firstFinished();
 
 
 };

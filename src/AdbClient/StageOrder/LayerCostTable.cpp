@@ -96,7 +96,7 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
 
     ui->txEdit->setText(m_listGameDisplay.at(row).SellNote);
 
-    DataRate rate = ACTION.costRate("",true);
+    DataRate rate = DATA.costRate("");
 
     QVariantMap d;
 
@@ -106,7 +106,7 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
 
     QString sError;
 
-    m_currentItems =ACTION.getGameItem(sGameSid);
+    m_currentItems =DATA.getGameItemFromGameSid(sGameSid);
 
 
 

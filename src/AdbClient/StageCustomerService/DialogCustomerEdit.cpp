@@ -37,7 +37,7 @@ void DialogCustomerEdit::setCb(QVariantList listClass, QVariantList listGame)
 
     ui->cbClass->addItems(mapToList(m_listClass,"Name"));
 
-    m_lastPrimeRate=ACTION.primeRate("");
+    m_lastPrimeRate=DATA.primeRate("");
 
     ui->cbCurrency->clear();
 

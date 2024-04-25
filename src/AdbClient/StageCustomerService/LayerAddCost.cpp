@@ -28,7 +28,7 @@ void LayerAddCost::setCustomer(QVariantMap data)
 
     ui->wPic1->slotClear();
 
-    m_rate = ACTION.primeRate("",true);
+    m_rate = DATA.primeRate("");
 
 
     m_dataCustomer.setData(data);
@@ -371,7 +371,7 @@ void LayerAddCost::on_btnOk_clicked()
 
     m_dataCost.OriginValue=ui->sb->text();
 
-    m_dataCost.Rate = ACTION.primeRate("",true).Sid;
+    m_dataCost.Rate = DATA.primeRate("").Sid;
 
 
 

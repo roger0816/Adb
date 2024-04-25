@@ -96,20 +96,28 @@ LayerDayReport::~LayerDayReport()
 
 void LayerDayReport::init()
 {
+
+    if(bIsFirst)
+    {
     m_bLockDate = true;
     ui->dateEdit->setDate(GLOBAL.dateTimeUtc8().date());
     m_bLockDate = false;
 
 
     delayRefresh();
+    bIsFirst= false;
+    }
 }
 
 void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 {
 
-
+    int iRow = ui->tb->currentRow();
+    int iCol = ui->tb->currentColumn();
     updateOrderData(bRequery,true);
 
+
+     GLOBAL.Debug("AAAA: refreshTb 0");
     //  ACTION.getGameItemFromGameSid()
 
     ui->tb->setRowCount(0);
@@ -235,7 +243,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         ui->tb->setItem(iRow,_GameName,UI.tbItem(sGameName));
 
-        QTableWidgetItem *gameItem = UI.tbItem(getGameItemStr(data.Item,false));
+        QTableWidgetItem *gameItem = UI.tbItem(getGameItemStr(data.Item));
         ui->tb->setItem(iRow,_GameItem,gameItem);
 
         //        QFontMetrics fm(gameItem->font());
@@ -253,9 +261,9 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
         _LayerDayReport::OrderPayType orderPayType = getPayCount(data);
 
-        DataRate primeRate=ACTION.primeRate(data.PrimeRateSid,iRow==0);
+        DataRate primeRate=DATA.primeRate(data.PrimeRateSid);
 
-        DataRate exRate=ACTION.costRate(data.ExRateSid,iRow==0);
+        DataRate exRate=DATA.costRate(data.ExRateSid);
 
         QString sPrimeRate="";
 
@@ -354,7 +362,6 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
 
 
-        qDebug()<<"ntdcost : "<<iNtdCost<<" , "<<data.Step.toInt();
 
         if(data.Step.toInt()==5)
         {
@@ -396,7 +403,10 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         ui->cbFilter->setProperty("lock",false);
     }
 
+     ui->tb->setCurrentCell(iRow,iCol);
+      GLOBAL.Debug("AAAA: refreshTb 5 OK");
 
+      m_bLockLoading = false;
 }
 
 bool LayerDayReport::checkFilter(OrderData order)
@@ -768,6 +778,7 @@ void LayerDayReport::on_btnFilterClear_clicked()
 
 void LayerDayReport::delayRefresh()
 {
+    GLOBAL.Debug("AAAA: delayRefresh");
 
     if(m_bLockLoading)
         return;
@@ -811,11 +822,13 @@ void LayerDayReport::delayRefresh()
 
     }
 
-    ACTION.primeRate("",true);
+
+
     refreshTb();
 
-    m_bLockLoading = false;
+
 }
+
 
 
 
@@ -910,7 +923,7 @@ _LayerDayReport::OrderPayType LayerDayReport::getPayCount(OrderData data)
 
         int itemCount = listItem.at(i).split(",,").last().toInt();
 
-        double iOnePayCount =ACTION.getGameItemPayCount(itemSid,sPaySid,false);
+        double iOnePayCount =DATA.getGameItemPayCount(itemSid,sPaySid);
 
 
         double count = itemCount*iOnePayCount;
@@ -940,7 +953,7 @@ void LayerDayReport::changeVisable()
 
 void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
 {
-
+     GLOBAL.Debug("AAAA: updateOrderData");
     if(bUpdate)
     {
 
@@ -971,7 +984,7 @@ void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
         {
             m_listOrder = ACTION.getOrderByDate(ui->dateEdit->date(),bStrong);
         }
-        ACTION.getGameItem(true); // preload
+       // ACTION.getGameItem(true); // preload
     }
 }
 
@@ -1012,7 +1025,7 @@ QString LayerDayReport::statusString(QString sStep)
     return sStatus;
 }
 
-QString LayerDayReport::getGameItemStr(QString items,bool bQuery)
+QString LayerDayReport::getGameItemStr(QString items)
 {
     QString sRe="";
     QStringList listItem=items.split(";;");
@@ -1022,7 +1035,7 @@ QString LayerDayReport::getGameItemStr(QString items,bool bQuery)
         QString sSid =v.split(",,").first();
         QString sCount = v.split(",,").last();
 
-        sRe+= ACTION.getGameItemFromSid(sSid,bQuery).Name+"*"+sCount+" ";
+        sRe+= DATA.getGameItem(sSid).Name+"*"+sCount+" ";
 
     }
 

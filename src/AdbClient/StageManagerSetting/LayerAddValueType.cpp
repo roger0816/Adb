@@ -33,7 +33,7 @@ void LayerAddValueType::refresh()
     ui->tb->setRowCount(0);
 
 
-    DataRate primeRate =ACTION.primeRate("",true);
+    DataRate primeRate =DATA.primeRate("");
 
 
     for(int i=0;i<m_listData.length();i++)
@@ -74,7 +74,7 @@ void LayerAddValueType::on_btnAdd_clicked()
 {
     DialogAddValueTypeEdit dialog;
 
-    DataRate rate =ACTION.primeRate("",true);
+    DataRate rate =DATA.primeRate("");
 
 //    if(list.length()<1)
 //    {
@@ -119,7 +119,7 @@ void LayerAddValueType::on_btnEdit_clicked()
 
     DialogAddValueTypeEdit dialog;
 
-    DataRate rate =ACTION.primeRate("",true);
+    DataRate rate =DATA.primeRate("");
 
 //    if(list.length()<1)
 //    {

@@ -64,27 +64,25 @@ public:
 
     //  QList<CustomerData> getCustomerList();
    // CustomerData getCustomer(QString sSid, bool bQuery=false);
-    QList<DataCustomerClass> getCustomerClass(bool bQuery=false);
-    DataCustomerClass getCustomerClass(QString sSid, bool bQuery=false);
+//    QList<DataCustomerClass> getCustomerClass(bool bQuery=false);
+//    DataCustomerClass getCustomerClass(QString sSid, bool bQuery=false);
 
-    QList<DataFactory> getFactoryClass(QString sSid="",bool bQuery=false);
-    bool editFacotryClass(QVariantMap data,QString &sError);
-
+//    QList<DataFactory> getFactoryClass(QString sSid="",bool bQuery=false);
 
 
 
-    QList<DataGameItem> getGameItem(bool bQuery = true);
+    //QList<DataGameItem> getGameItem(bool bQuery = true);
 
-    QList<DataGameItem> getGameItem(QString sGameSid, bool bQuery=true);
+    //QList<DataGameItem> getGameItem(QString sGameSid, bool bQuery=true);
 
     void updateGameItemPrice(QString sGameSid,double iGameRate);
 
-    DataGameItem getGameItemFromSid(QString sSid,bool bQuery=false);
+   // DataGameItem getGameItemFromSid(QString sSid,bool bQuery=false);
 
-    double getGameItemPayCount(QString sGameItemSid,QString sPaySid,bool bQuery=true);
+   // double getGameItemPayCount(QString sGameItemSid,QString sPaySid,bool bQuery=true);
 
 
-    QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool bQuery=true);
+   // QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool bQuery=true);
 
 
 
@@ -129,11 +127,11 @@ public:
 
 
 
-    DataRate costRate(QString sSid="",bool bStrong=true)
-    {return listRate(sSid,true,true,bStrong).last();}
+//    DataRate costRate(QString sSid="",bool bStrong=true)
+//    {return listRate(sSid,true,true,bStrong).last();}
 
-    DataRate primeRate(QString sSid="",bool bStrong=true)
-    {return listRate(sSid,true,false,bStrong).last();}
+//    DataRate primeRate(QString sSid="",bool bStrong=true)
+//    {return listRate(sSid,true,false,bStrong).last();}
 
     QList<DataUserBonus> listBouns(QString sUserSid);
 
@@ -157,7 +155,7 @@ public:
 
     QList<DataItemCount> getItemCount(bool bQuery=false);
 
-    QString findGameSid(QString sGameItemSid, bool bQuery=false);
+   // QString findGameSid(QString sGameItemSid, bool bQuery=false);
 
     void clearCacheData(int iApi);
 
@@ -190,7 +188,7 @@ public:
 
 
 
-    QList<DataGameItem> m_listGameItem;
+   // QList<DataGameItem> m_listGameItem;
 
     QList<DataItemCount> m_listItemCount;
 

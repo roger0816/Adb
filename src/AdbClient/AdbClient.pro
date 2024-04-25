@@ -1,5 +1,5 @@
 QT       += core gui
-QT += sql network charts axcontainer
+QT += sql network charts axcontainer concurrent
 
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

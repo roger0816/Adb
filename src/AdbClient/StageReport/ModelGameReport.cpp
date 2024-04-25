@@ -168,7 +168,7 @@ void ModelGameReport::requestAction()
     using namespace _ModelGameReport;
 
 
-    ACTION.getGameItem(true);  //update data
+   // ACTION.getGameItem(true);  //update data
 
     m_listGame.clear();
     QList<DataGameList> listGame;
@@ -229,7 +229,7 @@ void ModelGameReport::requestAction()
             continue;
         QString sItemSid = listOrderItem.first().split(",,").first();
 
-        QString sGameSid = ACTION.findGameSid(sItemSid);
+        QString sGameSid = DATA.findGameSid(sItemSid);
 
         if(sGameSid=="")
             continue;

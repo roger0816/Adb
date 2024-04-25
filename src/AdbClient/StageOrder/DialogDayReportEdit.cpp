@@ -101,7 +101,7 @@ void DialogDayReportEdit::refresh()
 
         QString sGameItemCount = listGameItem.at(i).split(",,").last();
 
-        DataGameItem gameItem=ACTION.getGameItemFromSid(sGameItemSid,true);
+        DataGameItem gameItem=DATA.getGameItem(sGameItemSid);
 
         ui->tb->setItem(iRow,0, UI.tbItem(gameItem.Name));
 

@@ -30,6 +30,9 @@ Widget::Widget(QWidget *parent)
     this->setWindowTitle("艾比代管理系統      "+QString(ADP_VER));
 
     connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));
+    connect(&DATA,&UpdateData::firstFinished,this,[=](){
+        UI.slotLockLoading(false);
+    });
 
     connect(&ACTION,SIGNAL(sessionError()),this,SLOT(slotSessionError()));
 
@@ -86,7 +89,7 @@ Widget::Widget(QWidget *parent)
 
                 if(data["Type"].toString() =="0")
                 {
-                    QString sUserName = DATA.getUser(data["UserSid"].toString()).Name;
+                    QString sUserName = DATA.getUser(data["UserSid"].toString()).Name+" : ";
                    // QString st=data["Title"].toString()+" : "+data["Content"].toString();
                     m_wMargee->appendText(data["Title"].toString(),sUserName,data["Content"].toString().replace("\n","  "));
                 }
@@ -243,22 +246,19 @@ void Widget::slotLogin()
 
 
     ACTION.setStartSyanc(true);
-    int iTmp = ACTION.m_port.toInt()+10;
 
-    DATA.connectIp(ACTION.m_ip,QString::number(iTmp));
-    DATA.setRun(true);
-    QEventLoop *loop=new QEventLoop(this);
+//    QEventLoop *loop=new QEventLoop(this);
 
-    //   loop.connect(&timer,&QTimer::timeout,&loop,&QEventLoop::quit);
+//    //   loop.connect(&timer,&QTimer::timeout,&loop,&QEventLoop::quit);
 
-    QTimer::singleShot(1000,[=]()
-    {
-        loop->quit();
+//    QTimer::singleShot(1000,[=]()
+//    {
+//        loop->quit();
 
-        delete loop;
-    });
+//        delete loop;
+//    });
 
-    loop->exec();
+//    loop->exec();
 
     if(ACTION.isNewVersion())
         ACTION.reQuerty();
@@ -275,7 +275,11 @@ qDebug()<<"["+QDateTime::currentDateTimeUtc().addMSecs(60*8).toString("hh:mm:ss:
     ui->stackedWidget->setCurrentIndex(0);
 
 
+    int iTmp = ACTION.m_port.toInt()+10;
 
+    DATA.connectIp(ACTION.m_ip,QString::number(iTmp));
+    DATA.setRun(true);
+     UI.slotLockLoading(true);
 
 }
 
@@ -296,4 +300,10 @@ void Widget::slotSessionError()
 
 
 
+
+
+void Widget::on_btnTest_2_clicked()
+{
+    UI.m_loading->setLoading(true);
+}
 

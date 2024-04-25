@@ -153,7 +153,7 @@ void LayerCustomer::refresh()
 
 
 
-        QString sClassSid = ACTION.getCustomerClass(data.Class).Name;
+        QString sClassSid = DATA.getCustomerClass(data.Class).Name;
 
         ui->tb->setItem(iRow,2,UI.tbItem(sClassSid));
         ui->tb->setItem(iRow,3,UI.tbItem(data.Name));
@@ -236,7 +236,7 @@ bool LayerCustomer::checkSearch(CustomerData data)
         if(data.Vip=="1")
             Vip="VIP";
 
-        QString sGroup=ACTION.getCustomerClass(data.Class).Name;
+        QString sGroup=DATA.getCustomerClass(data.Class).Name;
 
         QString sKey = v.toUpper().trimmed();
         //  if(data["Name"].toString().indexOf(m_sSearchKey,Qt::CaseInsensitive)>=0)
@@ -486,9 +486,9 @@ void LayerCustomer::exportXml(QString sFilePath)
     //    qDebug() << xlsx.read("A6");
     //    qDebug() << xlsx.read("A7");
 
-    ACTION.getCustomerClass(true);
 
-    QString sDefaultClass=ACTION.getCustomerClass(true).first().Sid;
+
+    QString sDefaultClass=DATA.getCustomerClassList().first().Sid;
 
     int xxx=65014;
 
@@ -520,7 +520,7 @@ void LayerCustomer::exportXml(QString sFilePath)
                 if(iCol==1)   //客戶分類
                 {
 
-                    QString sClassSid = ACTION.getCustomerClass(cellData).Sid;
+                    QString sClassSid = DATA.getCustomerClass(cellData).Sid;
 
                     if(sClassSid.trimmed()=="")
                         sClassSid =sDefaultClass;

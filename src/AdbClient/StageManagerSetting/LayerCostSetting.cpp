@@ -388,7 +388,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
     double iGameRate = gameData.GameRate;
 
 
-    DataRate rate = ACTION.costRate("",true);
+    DataRate rate = DATA.costRate("");
 
     //    if(ACTION.listRate("",true,true).length()>0)
     //        rate=ACTION.listRate("",true,true).last();
@@ -497,7 +497,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     double gameRate=gameData.GameRate;
 
-    DataRate rate= ACTION.costRate("",true);
+    DataRate rate= DATA.costRate("");
 
 
     dialog.setRate(sGameName+" : 修改商品",rate);

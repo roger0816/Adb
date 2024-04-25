@@ -18,7 +18,7 @@ DialogEditFactory::~DialogEditFactory()
 void DialogEditFactory::setData(QVariantMap data)
 {
 
-    m_rate = ACTION.primeRate("",true);
+    m_rate = DATA.primeRate("");
 
     m_data = data;
 

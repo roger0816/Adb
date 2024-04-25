@@ -17,6 +17,9 @@
 #include "xlsxdocument.h"
 #include "ItemPic.h"
 #include <QFileDialog>
+#include <QFuture>
+#include <QtConcurrent/QtConcurrentRun>
+
 namespace Ui {
 class LayerDayReport;
 }
@@ -85,6 +88,9 @@ public:
 
     virtual void refreshTb(bool bRequery=true,bool bResetCb=true);
 private slots:
+
+
+
     void on_tb_cellPressed(int row, int column);
 
 
@@ -158,7 +164,9 @@ public:
 
     QString statusString(QString sStep);
 
-    QString getGameItemStr(QString items, bool bQuery);
+    QString getGameItemStr(QString items);
+
+    bool bIsFirst = true;
 
 };
 

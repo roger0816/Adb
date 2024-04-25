@@ -45,9 +45,10 @@ bool DataProvider::setData(QVariantList data)
 
     m_bOnSync = false;
 
+    if(sOldDate!="0")
+        m_bIsFirst=false;
 
-
-    return sOldDate!="0" && m_lastUpdate != sOldDate;
+    return m_lastUpdate != sOldDate;
 }
 
 
@@ -66,11 +67,16 @@ UpdateData::UpdateData(QObject *parent)
     m_data["GameItem"]= new GameItemProvider(GAME_ITEM,this);
     m_data["ExchangeRate"]= new ExchangeRateProvider(EXCHANGE_RATE,this);
     m_data["PrimeCostRate"]= new PrimeCostRateProvider(PRIMECOST_RATE,this);
+    m_data["CustomerClass"]= new CustomerClassProvider(CUSTOMER_CLASS,this);
+    m_data["FactoryClass"]= new FactoryClassProvider(FACTORY_CLASS,this);
     m_data["BulletinData"]= new BulletinDataProvider(BULLETIN_DATA,this);
 
 
-    m_listTarget<<"OrderData"<<"CustomerData"<<"UserData"<<"GameList"<<"GameItem"
-               <<"ExchangeRate"<<"PrimeCostRate"<<"BulletinData";
+    m_listTarget<<"OrderData"<<"CustomerData"<<"UserData"
+               <<"GameList"<<"GameItem"
+               <<"ExchangeRate"<<"PrimeCostRate"
+              <<"CustomerClass"<<"FactoryClass"
+              <<"BulletinData";
 
 
     sHhmm=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("hhmm");
@@ -295,14 +301,29 @@ QString UpdateData::getGameId(QString sName)
     return sRe;
 }
 
-QList<DataGameItem> UpdateData::getGameItem()
+QList<DataGameItem> UpdateData::getGameItemList()
 {
     return dynamic_cast<GameItemProvider*>(m_data["GameItem"])->m_listData;
 }
 
+DataGameItem UpdateData::getGameItem(QString sSid)
+{
+    QList<DataGameItem> list = getGameItemList();
+
+    DataGameItem re;
+
+    foreach (DataGameItem d, list) {
+        if(d.Sid==sSid)
+        {
+            re = d;
+        }
+    }
+    return re;
+}
+
 QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid)
 {
-    QList<DataGameItem> list = getGameItem();
+    QList<DataGameItem> list = getGameItemList();
 
     QList<DataGameItem> re;
 
@@ -317,6 +338,44 @@ QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid)
         return a.Sort < b.Sort;
     });
     return re;
+}
+
+QString UpdateData::findGameSid(QString sGameItemSid)
+{
+    QList<DataGameItem> list = getGameItemList();
+
+    for(int i=0;i<list.length();i++)
+    {
+        DataGameItem v =list.at(i);
+
+        if(v.Sid==sGameItemSid)
+            return v.GameSid;
+    }
+    return "";
+}
+
+double UpdateData::getGameItemPayCount(QString sGameItemSid, QString sPaySid)
+{
+    double iRe = 0;
+
+    DataGameItem item = getGameItem(sGameItemSid);
+
+    QStringList listTmp = item.AddValueTypeSid.split(";;");
+
+    for(int i=0;i<listTmp.length();i++)
+    {
+        QString pay = listTmp.at(i).split(",,").first();
+
+        double iCount = listTmp.at(i).split(",,").last().toDouble();
+
+        if(pay==sPaySid)
+        {
+            iRe=iCount;
+        }
+    }
+
+
+    return iRe;
 }
 
  QList<DataRate> UpdateData::costRateList()
@@ -336,7 +395,6 @@ QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid)
  DataRate UpdateData::costRate(QString sSid)
  {
 
-
      QList<DataRate> list = costRateList();
 
      if(sSid=="")
@@ -350,6 +408,76 @@ QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid)
              re = v;
      }
 
+     return re;
+ }
+
+ QList<DataRate> UpdateData::primeRateList()
+ {
+     QList<DataRate> list = dynamic_cast<PrimeCostRateProvider*>(m_data["PrimeCostRate"])->m_listData;
+
+     if(list.length()<1)
+         list.append(DataRate());
+
+     std::sort(list.begin(), list.end(), [](const DataRate &a, const DataRate &b) {
+         return a.Sid < b.Sid;
+     });
+
+     return list;
+ }
+
+ DataRate UpdateData::primeRate(QString sSid)
+ {
+     QList<DataRate> list = primeRateList();
+
+     if(sSid=="")
+         return list.last();
+
+     DataRate re;
+
+     foreach(DataRate v,list)
+     {
+         if(v.Sid==sSid)
+             re = v;
+     }
+
+     return re;
+ }
+
+ QList<DataCustomerClass> UpdateData::getCustomerClassList()
+ {
+      return dynamic_cast<CustomerClassProvider*>(m_data["CustomerClass"])->m_listData;
+ }
+
+ DataCustomerClass UpdateData::getCustomerClass(QString sSid)
+ {
+    QList<DataCustomerClass> list = getCustomerClassList();
+
+    DataCustomerClass re;
+
+    foreach(DataCustomerClass v, list)
+    {
+        if(v.Sid==sSid)
+            re =v;
+    }
+    return re;
+ }
+
+ QList<DataFactory> UpdateData::getFactoryClassList()
+ {
+    return dynamic_cast<FactoryClassProvider*>(m_data["FactoryClass"])->m_listData;
+ }
+
+ DataFactory UpdateData::getFactoryClass(QString sSid)
+ {
+     QList<DataFactory> list = getFactoryClassList();
+
+     DataFactory re;
+
+     foreach(DataFactory v, list)
+     {
+         if(v.Sid==sSid)
+             re =v;
+     }
      return re;
  }
 
@@ -369,6 +497,7 @@ QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid)
 void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Error)
 {
     qDebug()<<"connect : "<<sConnect<<" , sId : "<<sId;
+
     m_iWaitRecvSec=0;
     CData tmp;
     tmp.deCodeJson(data);
@@ -391,14 +520,33 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
 
             bool bIsUpdate = m_data[sTarget]->setData(list);
             if(bIsUpdate)
-                emit updateNotify(m_data[sTarget]->m_iTag,listSid);
+            {
+                if(m_data[sTarget]->m_bIsFirst)
+                {
+                    if(sTarget=="OrderData")
+                        emit updateNotify(m_data[sTarget]->m_iTag,listSid);
+                }
+                else
+                {
+                    emit updateNotify(m_data[sTarget]->m_iTag,listSid);
+                }
+            }
+
 
         }
     }
 
+    int iDelayTime=2000;
 
+    if(m_runCount<3){
+        iDelayTime=500;
+        m_runCount++;
+    }
 
-    QTimer::singleShot(2000,this,[=]{
+    if(m_runCount==2)
+        emit firstFinished();
+
+    QTimer::singleShot(iDelayTime,this,[=]{
         runUpdate();
     });
 

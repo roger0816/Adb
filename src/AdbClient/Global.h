@@ -19,11 +19,37 @@
 
 
 
+#include <QThread>
+#include <QDebug>
+#include <QElapsedTimer>
 
-//#define DATA Global::Instance().m_action.sync
+class TimerThread : public QThread {
+    Q_OBJECT
 
-//#define DATA Global::Instance().m_data
+public:
+    TimerThread(QObject *parent = nullptr) : QThread(parent), m_stop(false) {}
 
+    void stop() {
+        m_stop = true;
+    }
+
+    qint64 elapsedTime() const {
+        return m_timer.elapsed();
+    }
+
+protected:
+    void run() override {
+        m_timer.start();
+        while (!m_stop) {
+            // 每隔一段时间打印一次
+            QThread::msleep(1000); // 1秒
+        }
+    }
+
+private:
+    QElapsedTimer m_timer;
+    bool m_stop;
+};
 
 
 
@@ -99,6 +125,9 @@ public:
     bool m_bRootLogin= false;
 
     QString printTime(QString st);
+
+    void Debug(QString st);
+
 private:
     static Global *m_pInstance;
 
@@ -109,7 +138,7 @@ private:
 
     CPing m_ping;
 
-
+     TimerThread timerThread;
   //  DataSync m_dataSync;
 
 

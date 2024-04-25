@@ -25,7 +25,7 @@ void LayerCustomerSetting::refresh()
 {
 
 
-    m_primeRate= ACTION.primeRate("");
+    m_primeRate= DATA.primeRate("");
 
 
     QVariantMap tmp;

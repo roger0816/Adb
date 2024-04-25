@@ -54,7 +54,7 @@ void LayerItemCount::updateTb()
     QString sGameSid = m_listGame.at(iIdx).Sid;
  qDebug()<<"4a : "<<QDateTime::currentDateTime().toString("hh:mm:ss.zzz");
 qDebug()<<"strong : "<<m_bFlagShow;
-    m_listGameItem  = ACTION.getGameItemFromGameSid(sGameSid,m_bFlagShow);
+    m_listGameItem  = DATA.getGameItemFromGameSid(sGameSid);
 
     m_bFlagShow = false;
 

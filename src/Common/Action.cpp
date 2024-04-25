@@ -259,15 +259,15 @@ void Action::reQuertyOld()
 
    // getGameList(true);
 
-    getGameItem(true);
+   // getGameItem(true);
 
-    getFactoryClass("",true);
+   // getFactoryClass("",true);
 
-    getCustomerClass(true);
+   // getCustomerClass(true);
 
-    costRate("",true);
+   // costRate("",true);
 
-    primeRate("",true);
+   // primeRate("",true);
 
     /*
     //一進入程式，首先的公告、公告圖、圖片資料做預載
@@ -304,8 +304,7 @@ void Action::reQuerty()
     inData.iAciton=ACT::QUERY_MIX;
 
     QList<int> listAction;
-    listAction<<ACT::QUERY_GAME_ITEM
-            <<ACT::QUERY_FACTORY_CLASS<<ACT::QUERY_CUSTOM_CLASS
+    listAction<<ACT::QUERY_FACTORY_CLASS<<ACT::QUERY_CUSTOM_CLASS
            <<ACT::QUERY_EXCHANGE<<ACT::QUERY_PRIMERATE
           <<ACT::QUERY_BULLETIN;
 
@@ -342,21 +341,7 @@ void Action::reQuerty()
         int iAction = dValue.iAciton;
 
 
-        if(iAction==ACT::QUERY_GAME_ITEM)
-        {
-            m_listGameItem.clear();
 
-            foreach(QVariant v,dValue.listData)
-            {
-
-                DataGameItem tmp;
-
-                tmp.setData(v.toMap());
-
-                m_listGameItem.append(tmp);
-
-            }
-        }
 
         if(iAction==ACT::QUERY_FACTORY_CLASS)
         {
@@ -420,31 +405,6 @@ void Action::reQuerty()
     qDebug()<<" query mix recall len :"<<listKey.length();
 
     return ;
-
-
-
-
-    //    if(listKey.length()<1)
-    //    {
-
-    //       qDebug()<<" old reqeury ";
-    //        getUser(true);
-
-    //        getGameList(true);
-
-    //        getGameItem(true,true);
-
-    //        getFactoryClass("",true);
-
-    //        getCustomerList();
-
-    //        getCustomerClass(true);
-
-    //        costRate("",true);
-
-    //        primeRate("",true);
-    //    }
-
 
 
 }
@@ -537,6 +497,8 @@ CustomerData Action::getCustomer(QString sSid,bool bQuery)
 
 }
 */
+
+/*
 QList<DataCustomerClass> Action::getCustomerClass(bool bQuery)
 {
     if(bQuery)
@@ -578,6 +540,7 @@ DataCustomerClass Action::getCustomerClass(QString sSid, bool bQuery)
 
     return re;
 }
+
 
 QList<DataFactory> Action::getFactoryClass(QString sSid, bool bQuery)
 {
@@ -622,6 +585,7 @@ QList<DataFactory> Action::getFactoryClass(QString sSid, bool bQuery)
     return listRe;
 }
 
+*/
 
 /*
 
@@ -669,75 +633,74 @@ DataGameList Action::getGameList(QString sSid, bool bQuery)
     return re;
 }
 */
-QList<DataGameItem> Action::getGameItem(bool bQuery)
-{
-    if(!bQuery && m_listGameItem.length()>0)  //有可能商品被刪除了，會一直 bStrong
-        return m_listGameItem;
+//QList<DataGameItem> Action::getGameItem(bool bQuery)
+//{
+//    if(!bQuery && m_listGameItem.length()>0)  //有可能商品被刪除了，會一直 bStrong
+//        return m_listGameItem;
 
 
-    QVariantMap d;
+//    QVariantMap d;
 
-    //    d["GameSid"] = sGameSid;
+//    //    d["GameSid"] = sGameSid;
 
-    QVariantList listOut;
+//    QVariantList listOut;
 
-    QString sError;
+//    QString sError;
 
-    action(ACT::QUERY_GAME_ITEM,d,listOut,sError,true);
+//    action(ACT::QUERY_GAME_ITEM,d,listOut,sError,true);
 
-    m_listGameItem.clear();
+//    m_listGameItem.clear();
 
-    for(int i=0;i<listOut.length();i++)
-    {
-        DataGameItem item(listOut.at(i).toMap());
+//    for(int i=0;i<listOut.length();i++)
+//    {
+//        DataGameItem item(listOut.at(i).toMap());
 
-        m_listGameItem.append(item);
-    }
+//        m_listGameItem.append(item);
+//    }
 
-    return m_listGameItem;
-}
+//    return m_listGameItem;
+//}
 
-QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
-{
+//QList<DataGameItem> Action::getGameItem(QString sGameSid, bool bQuery)
+//{
 
-    QList<DataGameItem> listRe;
+//    QList<DataGameItem> listRe;
 
-    getGameItem(bQuery);
+//    getGameItem(bQuery);
 
-    auto fnGet=[=]()
-    {
-        QList<DataGameItem> list;
-        for(int i=0;i<m_listGameItem.length();i++)
-        {
-            DataGameItem data = m_listGameItem.at(i);
-            if(data.GameSid == sGameSid)
-            {
-                list.append(data);
-            }
-        }
+//    auto fnGet=[=]()
+//    {
+//        QList<DataGameItem> list;
+//        for(int i=0;i<m_listGameItem.length();i++)
+//        {
+//            DataGameItem data = m_listGameItem.at(i);
+//            if(data.GameSid == sGameSid)
+//            {
+//                list.append(data);
+//            }
+//        }
 
-        return list;
-    };
+//        return list;
+//    };
 
 
-    listRe = fnGet();
+//    listRe = fnGet();
 
-    if(!bQuery && listRe.length()<1)
-    {
+//    if(!bQuery && listRe.length()<1)
+//    {
 
-        getGameItem(true);
+//        getGameItem(true);
 
-        listRe =fnGet();
-    }
+//        listRe =fnGet();
+//    }
 
-    return listRe;
-}
+//    return listRe;
+//}
 
 void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
 {
 
-    qDebug()<<"CCCCCC3 ";
-    QList<DataGameItem> list = getGameItem(sGameSid,true);
+    QList<DataGameItem> list = DATA.getGameItemFromGameSid(sGameSid);
 
     QVariantList listSend;
 
@@ -758,7 +721,7 @@ void Action::updateGameItemPrice(QString sGameSid, double iGameRate)
     action(ACT::EDIT_GAME_ITEM,listSend,sError);
 
 }
-
+/*
 DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
 {
     DataGameItem re;
@@ -784,14 +747,7 @@ DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
 
     QList<DataGameItem> list = fnGet();
 
-//    if(!bQuery && list.length()<1)
-//    {
-//    qDebug()<<"CCCCCC5 "<<bQuery;
-//        getGameItem(true);
 
-//        list = fnGet();
-
-//    }
 
     if(list.length()>0)
         re = list.first();
@@ -799,47 +755,47 @@ DataGameItem Action::getGameItemFromSid(QString sSid,bool bQuery)
 
     return re;
 }
+*/
+//double Action::getGameItemPayCount(QString sGameItemSid, QString sPaySid, bool bQuery)
+//{
+//    double iRe = 0;
 
-double Action::getGameItemPayCount(QString sGameItemSid, QString sPaySid, bool bQuery)
-{
-    double iRe = 0;
+//    DataGameItem item = DATA.getGameItem(sGameItemSid);
 
-    DataGameItem item = getGameItemFromSid(sGameItemSid,bQuery);
+//    QStringList listTmp = item.AddValueTypeSid.split(";;");
 
-    QStringList listTmp = item.AddValueTypeSid.split(";;");
+//    for(int i=0;i<listTmp.length();i++)
+//    {
+//        QString pay = listTmp.at(i).split(",,").first();
 
-    for(int i=0;i<listTmp.length();i++)
-    {
-        QString pay = listTmp.at(i).split(",,").first();
+//        double iCount = listTmp.at(i).split(",,").last().toDouble();
 
-        double iCount = listTmp.at(i).split(",,").last().toDouble();
-
-        if(pay==sPaySid)
-        {
-            iRe=iCount;
-        }
-    }
+//        if(pay==sPaySid)
+//        {
+//            iRe=iCount;
+//        }
+//    }
 
 
-    return iRe;
-}
+//    return iRe;
+//}
 
-QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery)
-{
-    QList<DataGameItem> re;
-    qDebug()<<"CCCCCC6 ";
-    QList<DataGameItem> list = getGameItem(bQuery);
+//QList<DataGameItem> Action::getGameItemFromGameSid(QString sGameSid, bool bQuery)
+//{
+//    QList<DataGameItem> re;
+//    qDebug()<<"CCCCCC6 ";
+//    QList<DataGameItem> list = getGameItem(bQuery);
 
-    foreach(DataGameItem v, list)
-    {
-        if(v.GameSid==sGameSid)
-        {
-            re.append(v);
-        }
-    }
+//    foreach(DataGameItem v, list)
+//    {
+//        if(v.GameSid==sGameSid)
+//        {
+//            re.append(v);
+//        }
+//    }
 
-    return re;
-}
+//    return re;
+//}
 
 //QString Action::getGameName(QString sId)
 //{
@@ -1032,8 +988,8 @@ bool Action::replaceOrder(OrderData order, QString &sError)
 
     if(order.Step=="0")  //報價- 儲存匯率sid
     {
-        order.ExRateSid=costRate("",true).Sid;
-        order.PrimeRateSid= primeRate("",true).Sid;
+        order.ExRateSid=DATA.costRate("").Sid;
+        order.PrimeRateSid= DATA.primeRate("").Sid;
     }
     else if(order.Step=="1")  //下單- 計算應收
     {
@@ -1511,7 +1467,7 @@ QString Action::setPrimeMoney(OrderData &order)
     //    };
 
 
-    DataRate rate=primeRate(order.PrimeRateSid,true);
+    DataRate rate=DATA.primeRate(order.PrimeRateSid);
 
 
 
@@ -1544,7 +1500,7 @@ QString Action::setPrimeMoney(OrderData &order)
 
         int itemCount = p.second.toInt();
 
-        DataGameItem target = getGameItemFromSid(sItemSid,true);   //用game item sid取得完整料結構
+        DataGameItem target = DATA.getGameItem(sItemSid);   //用game item sid取得完整料結構
 
         CListPair payType(target.AddValueTypeSid);                // 支付方式sid 與 數量
 
@@ -1870,24 +1826,24 @@ QList<DataItemCount> Action::getItemCount(bool bQuery)
     return m_listItemCount;
 }
 
-QString Action::findGameSid(QString sGameItemSid,bool bQuery)
-{
-    //GameCount、orderData 沒寫入game sid
-    qDebug()<<"CCCCCC7 ";
-    getGameItem(bQuery);
+//QString Action::findGameSid(QString sGameItemSid,bool bQuery)
+//{
+//    //GameCount、orderData 沒寫入game sid
+//    qDebug()<<"CCCCCC7 ";
+//    DATA.getGameItem(bQuery);
 
 
-    for(int i=0;i<m_listGameItem.length();i++)
-    {
-        DataGameItem v =m_listGameItem.at(i);
+//    for(int i=0;i<m_listGameItem.length();i++)
+//    {
+//        DataGameItem v =m_listGameItem.at(i);
 
-        if(v.Sid==sGameItemSid)
-            return v.GameSid;
-    }
+//        if(v.Sid==sGameItemSid)
+//            return v.GameSid;
+//    }
 
-    return "";
+//    return "";
 
-}
+//}
 
 void Action::clearCacheData(int iApi)
 {

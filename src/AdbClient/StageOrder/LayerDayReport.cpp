@@ -118,8 +118,8 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
 
      GLOBAL.Debug("AAAA: refreshTb 0");
-    //  ACTION.getGameItemFromGameSid()
 
+    ui->tb->setUpdatesEnabled(false);
     ui->tb->setRowCount(0);
 
     m_mappingData.clear();
@@ -152,21 +152,10 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
 
         CustomerData customer;
-#if 0
-        QString sError;
 
-        QVariantMap d;
-        d["Sid"] = data.CustomerSid;
-        QVariantList listCustomer;
-        ACTION.action(ACT::QUERY_CUSTOMER,d,listCustomer,sError);
-        if(listCustomer.length()<1)
-            continue;
 
-        customer.setData(listCustomer.first().toMap());
-#else
-       // customer =ACTION.getCustomer(data.CustomerSid);
         customer = DATA.getCustomer(data.CustomerSid);
-#endif
+
 
 
         int iRow = ui->tb->rowCount();
@@ -176,9 +165,6 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         ui->tb->setItem(iRow,_Sid,UI.tbItem(data.Sid));
 
         ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
-
-        //        UserData owner =ACTION.getUser(data.Owner);
-
 
         QString sDate=data.OrderDate+data.OrderTime;
         ui->tb->setItem(iRow,_Name,UI.tbItem(data.Name,GlobalUi::_BUTTON));
@@ -321,24 +307,20 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
 
             //成本匯率是要看儲值方式的幣別
-            DataPayType dPayType;
-
-            QList<DataPayType> tmp = ACTION.getPayType(data.PayType,iRow==0);
-            if(tmp.length()>0)
-                dPayType = tmp.first();
+            DataPayType dPayType=DATA.getPayType(data.PayType);
 
             QString sPayTypeCurrency= dPayType.Currency;
             sPrimeRate = primeRate.listData.findValue(sPayTypeCurrency);
             ui->tb->setItem(iRow,_PayCount,UI.tbItem(orderPayType.iTotalCount));
 
-            ui->tb->setItem(iRow,_PayRate,UI.tbItem(ACTION.getPayRate(data.PayType,iRow==0)));
+            ui->tb->setItem(iRow,_PayRate,UI.tbItem(DATA.getPayRate(data.PayType)));
             ui->tb->setItem(iRow,_PrimeRate,UI.tbItem(sPrimeRate));
 
 
             //成本
             // ACTION.setPrimeMoney(data);
             // sNtdPrime=data.Money[1];
-            double iNtdPrime=sPrimeRate.toDouble()*orderPayType.iTotalCount*ACTION.getPayRate(data.PayType,iRow==0).toDouble();
+            double iNtdPrime=sPrimeRate.toDouble()*orderPayType.iTotalCount*DATA.getPayRate(data.PayType).toDouble();
             sNtdPrime=QString::number(iNtdPrime,'f',2);
 
 
@@ -406,6 +388,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
      ui->tb->setCurrentCell(iRow,iCol);
       GLOBAL.Debug("AAAA: refreshTb 5 OK");
 
+         ui->tb->setUpdatesEnabled(true);
       m_bLockLoading = false;
 }
 
@@ -561,21 +544,16 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
             {
                 UserData user = DATA.getUser(data.User.at(2));
 
+                QVariantMap dBonus = DATA.getUserBonus(user.Sid);
+
                 QVariantMap in;
                 QVariantList out;
 
                 double dTotalBonus=0.0;
 
                 in["UserSid"] = user.Sid;
-
-                ACTION.action(ACT::QUERY_BOUNS,in,out,sError);
-
-                if(out.length()>0)
-                {
-                    dTotalBonus = out.first().toMap()["Bonus"].toDouble();
-                    in["Pay"] = out.first().toMap()["Pay"];
-                }
-
+                 dTotalBonus = dBonus["Bonus"].toDouble();
+                 in["Pay"] = dBonus["Pay"];
 
                 in["Bonus"] = dTotalBonus+data.Bouns;
 
@@ -910,7 +888,7 @@ _LayerDayReport::OrderPayType LayerDayReport::getPayCount(OrderData data)
 
     QString sPaySid = data.PayType;
 
-    re.sPayName = ACTION.getAddValueName(sPaySid);
+    re.sPayName = DATA.getAddValueName(sPaySid);
 
 
     re.sPaySid = sPaySid;

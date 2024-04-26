@@ -42,8 +42,8 @@ void LayerGetOrder1::refreshUser(bool bRe)
         return ;
 
     m_bLockLoading= true;
-
-
+    ui->tbUser->setUpdatesEnabled(false);
+    ui->tbOrder->setUpdatesEnabled(false);
     int iRow = ui->tbUser->currentRow();
     int iCol = ui->tbUser->currentColumn();
     ui->wBottom->setCurrentIndex(0);
@@ -164,6 +164,8 @@ void LayerGetOrder1::refreshUser(bool bRe)
         on_tbUser_cellPressed(iRow,iCol);
     }
 
+    ui->tbUser->setUpdatesEnabled(true);
+    ui->tbOrder->setUpdatesEnabled(true);
     m_bLockLoading= false;
 
 
@@ -630,7 +632,7 @@ void LayerGetOrder1::refresh()
 
    // ACTION.getOrder(true);
 
-    m_listPayType = ACTION.getAddValueType(true);
+    m_listPayType = DATA.getAddValueType();
 
     m_listFactory.clear();
 

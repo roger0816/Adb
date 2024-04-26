@@ -120,7 +120,7 @@ void LayerFactory::refresh()
 
     ui->tbFactory->setRowCount(0);
 
-    CListPair listPay = ACTION.getAddValueType(true);
+    CListPair listPay = DATA.getAddValueType();
 
     for(int i=0;i<m_listFactory.length();i++)
     {

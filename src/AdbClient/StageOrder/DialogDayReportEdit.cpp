@@ -32,7 +32,7 @@ void DialogDayReportEdit::setData(OrderData data)
 
     QStringList listCb;
     foreach(QString st ,m_listPayTypeSid)
-        listCb.append(ACTION.getAddValueName(st));
+        listCb.append(DATA.getAddValueName(st));
 
     ui->comboBox->clear();
 

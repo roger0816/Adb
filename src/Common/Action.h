@@ -133,21 +133,21 @@ public:
 //    DataRate primeRate(QString sSid="",bool bStrong=true)
 //    {return listRate(sSid,true,false,bStrong).last();}
 
-    QList<DataUserBonus> listBouns(QString sUserSid);
+   // QList<DataUserBonus> listBouns(QString sUserSid);
 
 
     UserData m_currentUser;
 
-    CListPair getAddValueType(bool bRequest=true);
+   // CListPair getAddValueType(bool bRequest=true);
 
-    QList<DataPayType> getPayType(QString sSid="",bool bRequest=true);
+   // QList<DataPayType> getPayType(QString sSid="",bool bRequest=true);
 
-    QString getAddValueName(QString sSid);
+   // QString getAddValueName(QString sSid);
 
 
     double payTypeToNTDRate(QString payTypeSid, DataRate rate, QString &sOutRate);
 
-    QString getPayRate(QString sPayTypeSid, bool bRequest=false);
+   // QString getPayRate(QString sPayTypeSid, bool bRequest=false);
 
    // bool orderUpdateCount(QString sOrderSid, QString sUserSid, QString sOrderItem);
 

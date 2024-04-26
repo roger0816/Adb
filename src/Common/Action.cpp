@@ -1473,7 +1473,7 @@ QString Action::setPrimeMoney(OrderData &order)
 
 
 
-    CListPair listPay =getAddValueType();
+    CListPair listPay =DATA.getAddValueType();
     int idx = listPay.listFirst().indexOf(order.PayType);
 
     if(idx<0)
@@ -1532,149 +1532,148 @@ QString Action::setPrimeMoney(OrderData &order)
     return sRe;
 }
 
-QList<DataUserBonus> Action::listBouns(QString sUserSid)
-{
-    QList<DataUserBonus> listRe;
+//QList<DataUserBonus> Action::listBouns(QString sUserSid)
+//{
+//    QList<DataUserBonus> listRe;
 
-    QVariantList out;
+//    QVariantList out;
 
-    QVariantMap in;
+//    QVariantMap in;
 
-    QString sError;
+//    QString sError;
 
-    in["UserSid"] = sUserSid;
+//    in["UserSid"] = sUserSid;
 
-    action(ACT::QUERY_BOUNS,in,out,sError);
+//    action(ACT::QUERY_BOUNS,in,out,sError);
 
-    for(int i=0;i<out.length();i++)
-    {
-        DataUserBonus data;
+//    for(int i=0;i<out.length();i++)
+//    {
+//        DataUserBonus data;
 
-        data.setData(out.at(i).toMap());
+//        data.setData(out.at(i).toMap());
 
-        listRe.append(data);
-    }
+//        listRe.append(data);
+//    }
 
-    if(listRe.length()<1)
-        listRe.append(DataUserBonus());
+//    if(listRe.length()<1)
+//        listRe.append(DataUserBonus());
 
-    return listRe;
-}
-
-
-CListPair Action::getAddValueType(bool bRequest)
-{
-    if(!bRequest && m_listAddValueType.length()>0)
-        return m_listAddValueType;
-    else
-    {
-        getPayType("",true);
-         return m_listAddValueType;
-    }
-
-}
-
-QList<DataPayType> Action::getPayType(QString sSid, bool bRequest)
-{
-    auto fn =[=]()
-    {
-        QVariantMap in;
-        QVariantList out;
-        QString sError;
-        // in["Sid"]=sSid;
-        in["ASC"]="Sort";
-        action(ACT::QUERY_PAY_TYPE,in,out,sError);
-
-        m_listPayType.clear();
-        m_listAddValueType.clear();
-        for(int i=0;i<out.length();i++)
-        {
-            DataPayType data(out.at(i).toMap());
-            m_listPayType.append(data);
-
-              QPair<QString,QString> v;
-              v.first=data.Sid;
-              v.second=data.Name;
-              m_listAddValueType.append(v);
-        }
+//    return listRe;
+//}
 
 
-    };
+//CListPair Action::getAddValueType(bool bRequest)
+//{
+//    if(!bRequest && m_listAddValueType.length()>0)
+//        return m_listAddValueType;
+//    else
+//    {
+//        getPayType("",true);
+//         return m_listAddValueType;
+//    }
+
+//}
+
+//QList<DataPayType> Action::getPayType(QString sSid, bool bRequest)
+//{
+//    auto fn =[=]()
+//    {
+//        QVariantMap in;
+//        QVariantList out;
+//        QString sError;
+//        // in["Sid"]=sSid;
+//        in["ASC"]="Sort";
+//        action(ACT::QUERY_PAY_TYPE,in,out,sError);
+
+//        m_listPayType.clear();
+//        m_listAddValueType.clear();
+//        for(int i=0;i<out.length();i++)
+//        {
+//            DataPayType data(out.at(i).toMap());
+//            m_listPayType.append(data);
+
+//              QPair<QString,QString> v;
+//              v.first=data.Sid;
+//              v.second=data.Name;
+//              m_listAddValueType.append(v);
+//        }
 
 
-    auto query =[=](QString sSid){
-       QList<DataPayType> re;
+//    };
 
-       foreach(DataPayType v ,m_listPayType)
-       {
-           if(v.Sid==sSid)
-               re.append(v);
-       }
 
-       return re;
-    };
+//    auto query =[=](QString sSid){
+//       QList<DataPayType> re;
 
-    QList<DataPayType> listRe;
+//       foreach(DataPayType v ,m_listPayType)
+//       {
+//           if(v.Sid==sSid)
+//               re.append(v);
+//       }
 
-    if(bRequest || m_listPayType.length()<1)
-    {
-        fn();
-    }
+//       return re;
+//    };
 
-    if(sSid=="")
-    {
-        listRe = m_listPayType;
-    }
-    else
-    {
-        listRe = query(sSid);
+//    QList<DataPayType> listRe;
 
-        //retry agin
-        if(listRe.length()<1)
-        {
-            fn();
-            listRe = query(sSid);
-        }
-    }
+//    if(bRequest || m_listPayType.length()<1)
+//    {
+//        fn();
+//    }
 
-    return listRe;
-}
+//    if(sSid=="")
+//    {
+//        listRe = m_listPayType;
+//    }
+//    else
+//    {
+//        listRe = query(sSid);
 
-QString Action::getAddValueName(QString sSid)
-{
-    if(m_listAddValueType.length()<1)
-        getAddValueType(true);
+//        //retry agin
+//        if(listRe.length()<1)
+//        {
+//            fn();
+//            listRe = query(sSid);
+//        }
+//    }
 
-    QString sRe="";
+//    return listRe;
+//}
 
-    foreach(CPair v, m_listAddValueType)
-    {
-        if(v.first==sSid)
-            sRe = v.second;
-    }
+//QString Action::getAddValueName(QString sSid)
+//{
 
-    return sRe;
-}
+//    QString sRe="";
+
+//    foreach(CPair v, DATA.getAddValueType())
+//    {
+//        if(v.first==sSid)
+//            sRe = v.second;
+//    }
+
+//    return sRe;
+//}
 
 
 double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutRate)
 {
     double re=1.000;
 
-    QVariantMap input;
-    QVariantList rawData;
-    QString sError;
+//    QVariantMap input;
+//    QVariantList rawData;
+//    QString sError;
 
-    input["Sid"] = payTypeSid;
-    action(ACT::QUERY_PAY_TYPE,input,rawData,sError);
-
-
-    if(rawData.length()<1)
-        return 0;
+//    input["Sid"] = payTypeSid;
+//    action(ACT::QUERY_PAY_TYPE,input,rawData,sError);
 
 
+//    if(rawData.length()<1)
+//        return 0;
 
-    DataPayType data(rawData.first().toMap());
+
+
+//    DataPayType data(rawData.first().toMap());
+    DataPayType data =DATA.getPayType(payTypeSid);
 
     double r = rate.listData.findValue(data.Currency).toDouble();
 
@@ -1691,42 +1690,19 @@ double Action::payTypeToNTDRate(QString payTypeSid, DataRate rate,QString &sOutR
     return re;
 }
 
-QString Action::getPayRate(QString sPayTypeSid,bool bRequest)
-{
+//QString Action::getPayRate(QString sPayTypeSid,bool bRequest)
+//{
 
 
-    DataPayType data;
+//    DataPayType data=DATA.getPayType(sPayTypeSid);
 
-    QList<DataPayType> tmp=getPayType(sPayTypeSid,bRequest);
-
-    if(tmp.length()>0)
-        data = tmp.first();
-    else
-        return "";
+//    double re = data.Value[0].toDouble()*data.Value[1].toDouble()
+//            *data.Value[2].toDouble()*data.Value[3].toDouble()
+//            /data.SubValue.first().toDouble();
 
 
-    /*
-    QVariantMap input;
-    QVariantList rawData;
-    QString sError;
-
-    input["Sid"] = sPayTypeSid;
-    action(ACT::QUERY_PAY_TYPE,input,rawData,sError);
-
-
-    if(rawData.length()<1)
-        return 0;
-
-     data.setData(rawData.first().toMap());
-     */
-
-    double re = data.Value[0].toDouble()*data.Value[1].toDouble()
-            *data.Value[2].toDouble()*data.Value[3].toDouble()
-            /data.SubValue.first().toDouble();
-
-
-    return QString::number(re,'f',3);;
-}
+//    return QString::number(re,'f',3);;
+//}
 
 /*
 bool Action::orderUpdateCount(QString sOrderSid, QString sUserSid,QString sOrderItem)

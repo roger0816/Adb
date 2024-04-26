@@ -118,7 +118,7 @@ QVariantMap DialogEditGameItem::data()
 
     CListPair listAddValueType;
 
-    CListPair listCurrentType = ACTION.getAddValueType();
+    CListPair listCurrentType = DATA.getAddValueType();
 
 
     for(int i=0;i<ui->tableWidget->rowCount();i++)
@@ -162,7 +162,7 @@ void DialogEditGameItem::appendCb(int iCbIdx, double cost)
 
     QComboBox *cb = new QComboBox(ui->tableWidget);
 
-    QStringList listText = ACTION.getAddValueType().listSecond();
+    QStringList listText = DATA.getAddValueType().listSecond();
 
     cb->setProperty("items",listText);
 
@@ -364,7 +364,7 @@ void DialogEditGameItem::refreshCb()
 
     ui->tableWidget->setRowCount(0);
 
-    CListPair listCurrent = ACTION.getAddValueType();
+    CListPair listCurrent = DATA.getAddValueType();
 
     for(int i=0;i<listPairSid.length();i++)
     {

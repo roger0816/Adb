@@ -169,7 +169,7 @@ void LayerCostSetting::refreshItemList()
 
     m_listTipData.clear();
 
-    CListPair listCurrent = ACTION.getAddValueType();
+    CListPair listCurrent = DATA.getAddValueType();
 
     for(int i=0;i<m_listGameItem.length();i++)
     {
@@ -216,7 +216,7 @@ void LayerCostSetting::refreshItemList()
 
         for(int j=0;j<listSid.length() && j<listCost.length();j++)
         {
-            QString sName= ACTION.getAddValueName(listSid.at(j));
+            QString sName= DATA.getAddValueName(listSid.at(j));
 
             if(sName.trimmed()=="")
                 continue;

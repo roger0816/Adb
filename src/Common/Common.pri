@@ -9,6 +9,7 @@ HEADERS += \
     $$PWD/CSqlite.h \
     $$PWD/Common.h \
     $$PWD/DEF.h \
+    $$PWD/DataProviderObj.h \
     $$PWD/DataSync.h \
     $$PWD/Query.h \
     $$PWD/QueryApi.h \
@@ -21,6 +22,7 @@ SOURCES += \
     $$PWD/ActionObj.cpp \
     $$PWD/CSqlClass.cpp \
     $$PWD/CSqlite.cpp \
+    $$PWD/DataProviderObj.cpp \
     $$PWD/DataSync.cpp \
     $$PWD/Query.cpp \
     $$PWD/QueryApi.cpp \

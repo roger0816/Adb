@@ -1,58 +1,6 @@
 #include "UpdateData.h"
 
-DataProvider::DataProvider(int iTag, QObject *parent)
-    : QObject{parent}
-{
-    m_iTag = iTag;
-}
 
-bool DataProvider::setData(QVariantList data)
-{
-    if(data.length()<1)
-    {
-        return false;
-    }
-
-    m_bOnSync = true;
-    QVariantMap d;
-    QVariant v =d["data"];
-
-    foreach(QVariant v ,data)
-    {
-        m_oriData[v.toMap()["Sid"].toInt()]=v;
-    }
-
-
-    QString sOldDate =m_lastUpdate;
-
-    QList<int> keys=m_oriData.keys();
-    // 使用 Qt 的 qSort 函數進行排序
-    qSort(keys.begin(), keys.end());
-
-    m_list.clear();
-
-    for(int i=0;i<keys.length();i++)
-    {
-        QVariant d =m_oriData[keys[i]];
-        QString sUpdateTime = d.toMap()["UpdateTime"].toString();
-        m_list.append(d);
-        if(sUpdateTime>m_lastUpdate)
-            m_lastUpdate=sUpdateTime;
-    }
-
-
-    changeData();
-
-    m_bOnSync = false;
-
-    if(sOldDate!="0")
-        m_bIsFirst=false;
-
-    return m_lastUpdate != sOldDate;
-}
-
-
-//--------------------------------------------------
 
 UpdateData::UpdateData(QObject *parent)
 {
@@ -69,14 +17,16 @@ UpdateData::UpdateData(QObject *parent)
     m_data["PrimeCostRate"]= new PrimeCostRateProvider(PRIMECOST_RATE,this);
     m_data["CustomerClass"]= new CustomerClassProvider(CUSTOMER_CLASS,this);
     m_data["FactoryClass"]= new FactoryClassProvider(FACTORY_CLASS,this);
+    m_data["PayType"]= new PayTypeProvider(PAY_TYPE,this);
+    m_data["UserBonus"]= new UserBonusProvider(USER_BONUS,this);
     m_data["BulletinData"]= new BulletinDataProvider(BULLETIN_DATA,this);
 
 
     m_listTarget<<"OrderData"<<"CustomerData"<<"UserData"
                <<"GameList"<<"GameItem"
-               <<"ExchangeRate"<<"PrimeCostRate"
-              <<"CustomerClass"<<"FactoryClass"
-              <<"BulletinData";
+              <<"ExchangeRate"<<"PrimeCostRate"
+             <<"CustomerClass"<<"FactoryClass"
+            <<"PayType"<<"UserBonus"<<"BulletinData";
 
 
     sHhmm=QDateTime::currentDateTimeUtc().addSecs(60*60*8).toString("hhmm");
@@ -135,7 +85,7 @@ void UpdateData::runUpdate()
         QString sKey = m_listTarget.at(i);
         in[sKey] = m_data[sKey]->m_lastUpdate;
     }
-
+  //  in["OrderData"]="1";
     qDebug()<<"AAAAAA : send : "<<in;
     //in["OrderDate"]="19990101000000";
     //in["ASC"]="OrderTime";  //不能改顺序，依sid排，因为報價/下單要用
@@ -154,7 +104,7 @@ void UpdateData::runUpdate()
     qDebug()<<"send data is :"<<bOk;
     if(!bOk)
     {
-        QTimer::singleShot(1000,this,[=]{
+        QTimer::singleShot(500,this,[=]{
             runUpdate();
         });
     }
@@ -378,78 +328,78 @@ double UpdateData::getGameItemPayCount(QString sGameItemSid, QString sPaySid)
     return iRe;
 }
 
- QList<DataRate> UpdateData::costRateList()
+QList<DataRate> UpdateData::costRateList()
 {
-     QList<DataRate> list = dynamic_cast<ExchangeRateProvider*>(m_data["ExchangeRate"])->m_listData;
+    QList<DataRate> list = dynamic_cast<ExchangeRateProvider*>(m_data["ExchangeRate"])->m_listData;
 
-     if(list.length()<1)
-         list.append(DataRate());
+    if(list.length()<1)
+        list.append(DataRate());
 
-     std::sort(list.begin(), list.end(), [](const DataRate &a, const DataRate &b) {
-         return a.Sid < b.Sid;
-     });
+    std::sort(list.begin(), list.end(), [](const DataRate &a, const DataRate &b) {
+        return a.Sid < b.Sid;
+    });
 
-     return list;
- }
+    return list;
+}
 
- DataRate UpdateData::costRate(QString sSid)
- {
+DataRate UpdateData::costRate(QString sSid)
+{
 
-     QList<DataRate> list = costRateList();
+    QList<DataRate> list = costRateList();
 
-     if(sSid=="")
-         return list.last();
+    if(sSid=="")
+        return list.last();
 
-     DataRate re;
+    DataRate re;
 
-     foreach(DataRate v,list)
-     {
-         if(v.Sid==sSid)
-             re = v;
-     }
+    foreach(DataRate v,list)
+    {
+        if(v.Sid==sSid)
+            re = v;
+    }
 
-     return re;
- }
+    return re;
+}
 
- QList<DataRate> UpdateData::primeRateList()
- {
-     QList<DataRate> list = dynamic_cast<PrimeCostRateProvider*>(m_data["PrimeCostRate"])->m_listData;
+QList<DataRate> UpdateData::primeRateList()
+{
+    QList<DataRate> list = dynamic_cast<PrimeCostRateProvider*>(m_data["PrimeCostRate"])->m_listData;
 
-     if(list.length()<1)
-         list.append(DataRate());
+    if(list.length()<1)
+        list.append(DataRate());
 
-     std::sort(list.begin(), list.end(), [](const DataRate &a, const DataRate &b) {
-         return a.Sid < b.Sid;
-     });
+    std::sort(list.begin(), list.end(), [](const DataRate &a, const DataRate &b) {
+        return a.Sid < b.Sid;
+    });
 
-     return list;
- }
+    return list;
+}
 
- DataRate UpdateData::primeRate(QString sSid)
- {
-     QList<DataRate> list = primeRateList();
+DataRate UpdateData::primeRate(QString sSid)
+{
+    QList<DataRate> list = primeRateList();
 
-     if(sSid=="")
-         return list.last();
+    if(sSid=="")
+        return list.last();
 
-     DataRate re;
+    DataRate re;
 
-     foreach(DataRate v,list)
-     {
-         if(v.Sid==sSid)
-             re = v;
-     }
+    foreach(DataRate v,list)
+    {
+        if(v.Sid==sSid)
+            re = v;
+    }
 
-     return re;
- }
+    return re;
+}
 
- QList<DataCustomerClass> UpdateData::getCustomerClassList()
- {
-      return dynamic_cast<CustomerClassProvider*>(m_data["CustomerClass"])->m_listData;
- }
+QList<DataCustomerClass> UpdateData::getCustomerClassList()
+{
+    return dynamic_cast<CustomerClassProvider*>(m_data["CustomerClass"])->m_listData;
+}
 
- DataCustomerClass UpdateData::getCustomerClass(QString sSid)
- {
+DataCustomerClass UpdateData::getCustomerClass(QString sSid)
+{
     QList<DataCustomerClass> list = getCustomerClassList();
 
     DataCustomerClass re;
@@ -460,31 +410,98 @@ double UpdateData::getGameItemPayCount(QString sGameItemSid, QString sPaySid)
             re =v;
     }
     return re;
- }
+}
 
- QList<DataFactory> UpdateData::getFactoryClassList()
- {
+QList<DataFactory> UpdateData::getFactoryClassList()
+{
     return dynamic_cast<FactoryClassProvider*>(m_data["FactoryClass"])->m_listData;
- }
+}
 
- DataFactory UpdateData::getFactoryClass(QString sSid)
- {
-     QList<DataFactory> list = getFactoryClassList();
+DataFactory UpdateData::getFactoryClass(QString sSid)
+{
+    QList<DataFactory> list = getFactoryClassList();
 
-     DataFactory re;
+    DataFactory re;
 
-     foreach(DataFactory v, list)
-     {
-         if(v.Sid==sSid)
-             re =v;
-     }
-     return re;
- }
+    foreach(DataFactory v, list)
+    {
+        if(v.Sid==sSid)
+            re =v;
+    }
+    return re;
+}
 
- QVariantList UpdateData::getBulletin()
- {
-     return dynamic_cast<BulletinDataProvider*>(m_data["BulletinData"])->m_listData;
- }
+QList<DataPayType> UpdateData::getPayTypeList()
+{
+
+    return dynamic_cast<PayTypeProvider*>(m_data["PayType"])->m_listData;
+}
+
+DataPayType UpdateData::getPayType(QString sSid)
+{
+    QList<DataPayType> list = getPayTypeList();
+    DataPayType re;
+
+    foreach(DataPayType v,list)
+    {
+        if(v.Sid==sSid)
+            re = v;
+    }
+
+    return re;
+}
+
+CListPair UpdateData::getAddValueType()
+{
+    return dynamic_cast<PayTypeProvider*>(m_data["PayType"])->m_listAddValueType;
+}
+
+QString UpdateData::getAddValueName(QString sSid)
+{
+    QString sRe="";
+
+    foreach(CPair v, getAddValueType())
+    {
+        if(v.first==sSid)
+            sRe = v.second;
+    }
+
+    return sRe;
+}
+
+QString UpdateData::getPayRate(QString sPayTypeSid)
+{
+    DataPayType data=getPayType(sPayTypeSid);
+
+    double re = data.Value[0].toDouble()*data.Value[1].toDouble()
+            *data.Value[2].toDouble()*data.Value[3].toDouble()
+            /data.SubValue.first().toDouble();
+
+
+    return QString::number(re,'f',3);;
+}
+
+QVariantMap UpdateData::getUserBonus(QString sUserSid)
+{
+      QVariantList list =dynamic_cast<UserBonusProvider*>(m_data["UserBonus"])->m_listData;
+
+      QVariantMap re;
+
+      foreach(QVariant v,list)
+      {
+          if(v.toMap()["UserSid"]==sUserSid)
+              re=v.toMap();
+      }
+
+      return re;
+}
+
+
+
+QVariantList UpdateData::getBulletin()
+{
+    return dynamic_cast<BulletinDataProvider*>(m_data["BulletinData"])->m_listData;
+}
 
 
 
@@ -507,9 +524,13 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
 
     foreach(QString sTarget,m_listTarget)
     {
+
         if(reData.contains(sTarget) && m_data.contains(sTarget))
         {
             QVariantList list =reData[sTarget].toList();
+
+            if(list.length()>0)
+                qDebug()<<"AAAAAA1: "<<sTarget<<" data len : "<<list.length();
 
             QStringList listSid;
 
@@ -528,6 +549,7 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
                 }
                 else
                 {
+
                     emit updateNotify(m_data[sTarget]->m_iTag,listSid);
                 }
             }

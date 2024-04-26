@@ -29,7 +29,7 @@ void DialogEditFactory::setData(QVariantMap data)
 
 
 
-    CListPair listPaydata =ACTION.getAddValueType(true);
+    CListPair listPaydata =DATA.getAddValueType();
 
     m_listCbData = listPaydata.listSecond();
 
@@ -61,7 +61,7 @@ QVariantMap DialogEditFactory::data()
     m_data["Name"]= ui->txName->text();
 
 
-    CListPair listPaydata =ACTION.getAddValueType(true);
+    CListPair listPaydata =DATA.getAddValueType();
     QStringList listSid = listPaydata.listFirst();
     QStringList listName = listPaydata.listSecond();
 

@@ -9,6 +9,7 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
 
     connect(ui->btnCancel,&QPushButton::clicked,this,&LayerGetOrder1::slotCancel);
 
+
     m_layerCost = new LayerOrder;
 
     m_layerCost->setReadOnly();
@@ -340,7 +341,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
             {
                 bool bHas= false;
 
-                foreach(QString sFacPay,fac.PayTypdSid)
+                foreach(QString sFacPay,fac.PayTypeSid)
                 {
                     if(tmpCanType.contains(sFacPay))
                         bHas = true;
@@ -425,15 +426,17 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
         ui->wPic0->slotClear();
 
-        QVariantList list;
+//        QVariantList list;
 
-        QVariantMap in;
+//        QVariantMap in;
 
-        QString sError;
+//        QString sError;
 
-        in["ASC"]="Sort";
-        ACTION.action(ACT::QUERY_PAY_TYPE,in,list,sError);
+//        in["ASC"]="Sort";
+//        ACTION.action(ACT::QUERY_PAY_TYPE,in,list,sError);
 
+
+        QList<DataPayType> listPayType = DATA.getPayTypeList();
 
 
         auto getFac=[=]()
@@ -457,16 +460,16 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
         QStringList listCb;
 
-        for(int i=0;i<list.length();i++)
+        for(int i=0;i<listPayType.length();i++)
         {
-            QString sSid = list.at(i).toMap()["Sid"].toString();
+            QString sSid = listPayType.at(i).Sid;
 
             if(GLOBAL.toList(order.CanSelectPayType).indexOf(sSid)>=0)
             {
-                if(currentFac.PayTypdSid.contains(sSid))
+                if(currentFac.PayTypeSid.contains(sSid))
                 {
 
-                    listCb.append(list.at(i).toMap()["Name"].toString());
+                    listCb.append(listPayType.at(i).Name);
                 }
             }
         }

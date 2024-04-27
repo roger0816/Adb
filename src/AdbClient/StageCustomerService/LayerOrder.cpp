@@ -263,7 +263,7 @@ void LayerOrder::setCb()
 
             QString sFacName = fac.Name;
 
-            if(fac.PayTypdSid.contains(sPayType)
+            if(fac.PayTypeSid.contains(sPayType)
                     && !listCb.contains(sFacName))
             {
                 listCb.append(sFacName);

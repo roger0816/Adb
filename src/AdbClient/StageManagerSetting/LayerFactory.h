@@ -31,9 +31,16 @@ private slots:
 private:
     Ui::LayerFactory *ui;
 
-       QVariantList m_listFactory;
+       QList<DataFactory> m_listFactory;
 
        void showEvent(QShowEvent *) override;
+
+ private slots:
+    void slotBtnSortUp();
+    void slotBtnSortDown();
+    void slotBtnSortTop();
+    void slotBtnSortSave();
+
 };
 
 #endif // LAYERFACTORY_H

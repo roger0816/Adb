@@ -336,7 +336,7 @@ QList<DataRate> UpdateData::costRateList()
         list.append(DataRate());
 
     std::sort(list.begin(), list.end(), [](const DataRate &a, const DataRate &b) {
-        return a.Sid < b.Sid;
+        return a.Sid.toInt() < b.Sid.toInt();
     });
 
     return list;
@@ -369,7 +369,7 @@ QList<DataRate> UpdateData::primeRateList()
         list.append(DataRate());
 
     std::sort(list.begin(), list.end(), [](const DataRate &a, const DataRate &b) {
-        return a.Sid < b.Sid;
+        return a.Sid.toInt() < b.Sid.toInt();
     });
 
     return list;

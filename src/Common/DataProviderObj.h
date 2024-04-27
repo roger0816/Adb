@@ -214,6 +214,10 @@ public:
 
     void changeData() override
     {
+        std::sort(m_list.begin(), m_list.end(), [](const QVariant &a, const QVariant &b) {
+            return a.toMap()["Sort"].toInt() <b.toMap()["Sort"].toInt();
+        });
+
         m_listData.clear();
         foreach(const QVariant v, m_list)
         {
@@ -237,7 +241,7 @@ public:
     {
 
         std::sort(m_list.begin(), m_list.end(), [](const QVariant &a, const QVariant &b) {
-            return a.toMap()["Sort"].toString() <b.toMap()["Sort"].toString();
+            return a.toMap()["Sort"].toInt() <b.toMap()["Sort"].toInt();
         });
 
 

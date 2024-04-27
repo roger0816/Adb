@@ -155,6 +155,7 @@ enum _KEY
     QUERY_DEBIT_CLASS=2831,
     QUERY_COUNT,
 
+    EDIT_SORT = 2901,
 
 
     PAY_ADD=3001,  //1.07前的舊版

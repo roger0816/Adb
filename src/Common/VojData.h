@@ -708,7 +708,9 @@ struct DataFactory :public DataObj
 
         Currency = data["Currency"].toString();
 
-        PayTypdSid = data["PayTypeSid"].toString().split(SPLIT1);
+        PayTypeSid = data["PayTypeSid"].toString().split(SPLIT1);
+
+        Sort = data["Sort"].toInt();
     }
 
     QVariantMap data()
@@ -717,11 +719,14 @@ struct DataFactory :public DataObj
 
         re["Currency"] = Currency;
 
-        re["PayTypeSid"] = PayTypdSid.join(SPLIT1);
+        re["PayTypeSid"] = PayTypeSid.join(SPLIT1);
+
+        re["Sort"] = Sort;
         return re;
     }
-
-    QStringList PayTypdSid;
+    int Sort=9999;
+    QString Gounp="";
+    QStringList PayTypeSid;
     QString Currency;
 
 };

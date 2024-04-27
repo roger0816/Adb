@@ -588,7 +588,7 @@ void LayerSayCost::addPayTypeToCb()
             for(int i=0;i<list.length();i++)
             {
 
-                if(factory.PayTypdSid.indexOf(list.at(i))>=0)
+                if(factory.PayTypeSid.indexOf(list.at(i))>=0)
                 {
 
                     listRe.append(factory);

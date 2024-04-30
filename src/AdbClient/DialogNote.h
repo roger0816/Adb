@@ -2,7 +2,8 @@
 #define DIALOGNOTE_H
 
 #include <QDialog>
-
+#include <QClipboard>
+#include <QApplication>
 namespace Ui {
 class DialogNote;
 }
@@ -17,9 +18,16 @@ public:
 
     void setUser(QStringList list);
 
+    void setId(QString sId);
+
     void setData(QStringList list);
 
+    void setReportCost(QString st);
+
     void hideReport();
+
+private slots:
+    void on_btnCopyReport_clicked();
 
 private:
     Ui::DialogNote *ui;

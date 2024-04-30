@@ -10,6 +10,19 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
+    connect(&DATA,&UpdateData::callUpdate,this,[=](QByteArray data){
+            bool bOk = RPKCORE.network.sendData("",data);
+
+            qDebug()<<"send data is :"<<bOk;
+            if(!bOk)
+            {
+                QTimer::singleShot(500,this,[=]{
+                    RPKCORE.network.sendData("",data);
+                });
+            }
+    });
+
+    connect(&RPKCORE.network,&Network::singalLongConnect,&DATA,&UpdateData::slotRead);
 
 
     m_wMargee= new ItemMargee(ui->wTopLeft);
@@ -278,7 +291,10 @@ qDebug()<<"["+QDateTime::currentDateTimeUtc().addMSecs(60*8).toString("hh:mm:ss:
 
     int iTmp = ACTION.m_port.toInt()+10;
 
-    DATA.connectIp(ACTION.m_ip,QString::number(iTmp));
+   // DATA.connectIp(ACTION.m_ip,QString::number(iTmp));
+
+      RPKCORE.network.openConnect(ACTION.m_ip,QString::number(iTmp));
+
     DATA.setRun(true);
      UI.slotLockLoading(true);
 

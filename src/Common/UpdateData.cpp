@@ -4,7 +4,10 @@
 
 UpdateData::UpdateData(QObject *parent)
 {
-    connect(&RPKCORE.network,&Network::singalLongConnect,this,&UpdateData::slotRead);
+    moveToThread(&m_thread);
+    m_thread.start();
+
+   // connect(&RPKCORE.network,&Network::singalLongConnect,this,&UpdateData::slotRead);
     m_timer.connect(&m_timer,&QTimer::timeout,this,&UpdateData::slotTimer);
     m_timer.start(1000);
 
@@ -85,8 +88,8 @@ void UpdateData::runUpdate()
         QString sKey = m_listTarget.at(i);
         in[sKey] = m_data[sKey]->m_lastUpdate;
     }
-  //  in["OrderData"]="1";
-    qDebug()<<"AAAAAA : send : "<<in;
+
+
     //in["OrderDate"]="19990101000000";
     //in["ASC"]="OrderTime";  //不能改顺序，依sid排，因为報價/下單要用
     QString sError;
@@ -98,16 +101,18 @@ void UpdateData::runUpdate()
     input.dData = in;
 
     m_iWaitRecvSec=0;
-    qDebug()<<"update port send data : "<<in;
-    bool bOk = RPKCORE.network.sendData("",input.enCodeJson());
 
-    qDebug()<<"send data is :"<<bOk;
-    if(!bOk)
-    {
-        QTimer::singleShot(500,this,[=]{
-            runUpdate();
-        });
-    }
+    emit callUpdate(input.enCodeJson());
+
+//    bool bOk = RPKCORE.network.sendData("",input.enCodeJson());
+
+//    qDebug()<<"send data is :"<<bOk;
+//    if(!bOk)
+//    {
+//        QTimer::singleShot(500,this,[=]{
+//            runUpdate();
+//        });
+//    }
 
 
 
@@ -118,7 +123,6 @@ QList<OrderData> UpdateData::getOrder()
 
     QList<OrderData> list= dynamic_cast<OrderDataProvider*>(m_data["OrderData"])->m_listData;
 
-
     QDateTime currentDateTimeUtc8 = QDateTime::currentDateTimeUtc().addSecs(60*60*8);
 
     QString sToday=currentDateTimeUtc8.toString("yyyyMMdd");
@@ -127,10 +131,16 @@ QList<OrderData> UpdateData::getOrder()
     QList<OrderData> listRe;
     foreach(OrderData v ,list)
     {
-        if(v.OrderDate==sToday || v.OrderDate == sYestoday)
+       if(v.OrderDate==sToday || v.OrderDate == sYestoday)
+        {
+         //for test
+         //  int ii=QRandomGenerator::global()->bounded(1,4);
+         //   v.Step=QString::number(ii);
             listRe.append(v);
+        }
 
     }
+
 
     return listRe;
 }
@@ -539,7 +549,14 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
                 listSid.append(v.toMap()["Sid"].toString());
             }
 
-            bool bIsUpdate = m_data[sTarget]->setData(list);
+            bool bIsUpdate = true;
+
+
+            bIsUpdate= m_data[sTarget]->setData(list);
+
+
+
+
             if(bIsUpdate)
             {
                 if(m_data[sTarget]->m_bIsFirst)
@@ -553,10 +570,17 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
                     emit updateNotify(m_data[sTarget]->m_iTag,listSid);
                 }
             }
+//            else
+//            {
+//                if(sTarget=="OrderData")
+//                    emit updateNotify(m_data[sTarget]->m_iTag,listSid);
+
+//            }
 
 
         }
     }
+
 
     int iDelayTime=2000;
 

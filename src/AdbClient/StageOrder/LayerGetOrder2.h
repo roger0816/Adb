@@ -69,6 +69,12 @@ private:
     QString m_sPreSid="";
 
     bool m_bLockLoading = false;
+
+    void uiWait();
+
+signals:
+    void dataUpdate();
+
 };
 
 #endif // LAYERGETORDER2_H

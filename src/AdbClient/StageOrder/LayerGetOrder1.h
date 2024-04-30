@@ -9,6 +9,7 @@
 #include <QStringListModel>
 #include "LayerOrder.h"
 
+
 namespace Ui {
 class LayerGetOrder1;
 }
@@ -64,7 +65,7 @@ private:
 
     };
 
-    void refreshUser(bool bRe=true);
+    void refreshUser();
 
     QList<UserData> m_listOwner;
 
@@ -85,6 +86,13 @@ private:
     QString m_sPreSid="";
 
     bool m_bLockLoading = false;
+
+    void uiWait();
+
+
+
+signals:
+    void dataUpdate();
 
 };
 

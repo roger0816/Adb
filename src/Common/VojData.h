@@ -5,7 +5,7 @@
 #include "DEF.h"
 #include <QDateTime>
 #include <QVariantMap>
-
+#include <QThread>
 // name follow database fieldName
 
 
@@ -681,7 +681,7 @@ struct OrderData :public DataObj
     QStringList Note0;          //訂單流程備註
     QString Note1;              //訂單留言
     QString Note2;              //備註總金額
-    QString Note3;
+    QString Note3;              //下單回報文字
     QString Note4;
     QString Note5;
     QString Pic0;
@@ -1199,6 +1199,52 @@ struct DataPayType :public DataObj
 
 
 
+class TimerThread : public QThread {
+    Q_OBJECT
+
+public:
+    TimerThread(QObject *parent = nullptr) : QThread(parent), m_stop(false)
+    {
+        start();
+    }
+
+    void stop() {
+        m_stop = true;
+    }
+
+    qint64 elapsedTime() const {
+        return m_timer.elapsed();
+    }
+
+    QString convertMilliseconds() {
+
+        long long milliseconds = elapsedTime();
+        // 计算小时、分钟、秒和毫秒
+        long long totalSeconds = milliseconds / 1000;
+        long long hours = totalSeconds / 3600;
+        long long minutes = (totalSeconds % 3600) / 60;
+        long long seconds = totalSeconds % 60;
+        long long milliseconds_remainder = milliseconds % 1000;
+
+        QString sRe=QString::number(minutes)+":"+QString::number(seconds)+"."+QString::number(milliseconds_remainder);
+
+        return "["+sRe+"] ";
+    };
+
+
+protected:
+    void run() override {
+        m_timer.start();
+        while (!m_stop) {
+            // 每隔一段时间打印一次
+            QThread::msleep(1000); // 1秒
+        }
+    }
+
+private:
+    QElapsedTimer m_timer;
+    bool m_stop;
+};
 
 
 

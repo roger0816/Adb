@@ -7,6 +7,7 @@ LayerGetOrder2::LayerGetOrder2(QWidget *parent) :
 {
     ui->setupUi(this);
 
+     ui->wCopyArea->hide();
     m_layerCost = new LayerOrder;
 
     m_layerCost->setReadOnly();
@@ -105,10 +106,9 @@ void LayerGetOrder2::refreshUser(bool bRe)
 
     }
 
-    ui->tbOrder->setRowCount(0);
 
+    ui->tbUser->setUpdatesEnabled(false);
     ui->tbUser->setRowCount(0);
-
     ui->tbUser->setColumnCount(0);
     int row=0,col=0;
 
@@ -143,6 +143,8 @@ void LayerGetOrder2::refreshUser(bool bRe)
         }
     }
 
+      ui->tbUser->setUpdatesEnabled(true);
+
     if(iRow>=0 && iRow<ui->tbUser->rowCount() && iCol>=0 && iCol<ui->tbUser->columnCount())
     {
         ui->tbUser->setCurrentCell(iRow,iCol);
@@ -150,6 +152,18 @@ void LayerGetOrder2::refreshUser(bool bRe)
     }
     m_bLockLoading = false;
 
+}
+
+void LayerGetOrder2::uiWait()
+{
+    QEventLoop *loop=new QEventLoop(this);
+    loop->connect(this,&LayerGetOrder2::dataUpdate,loop,&QEventLoop::quit);
+
+    UI.slotLockLoading(true);
+    loop->exec();
+    UI.slotLockLoading(false);
+    loop->disconnect();
+    loop->deleteLater();
 }
 
 
@@ -274,6 +288,11 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
 
             ui->tbOrder->setCurrentCell(i, 0); // 設置當前單元格為指定的行和列
 
+            if(order.PaddingUser == ACTION.m_currentUser.Sid)
+            {
+                on_tbOrder_cellPressed(i,0);
+            }
+
         }
 
     }
@@ -292,8 +311,11 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
 
     ui->wBottom->setCurrentIndex(0);
     OrderData order(listData.at(row).toMap());
-    m_sPreSid = order.Sid;
-
+    if(m_sPreSid!=order.Sid)
+    {
+        m_sPreSid = order.Sid;
+            ui->wPic0->slotClear();
+    }
     if(column==_Id)
     {
 
@@ -332,6 +354,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
                 order.Step="3";
 
                 bool bRe = ACTION.replaceOrder(order,sError);
+                uiWait();
                 if(!bRe)
                     UI.showMsg("",sError,"OK");
             }
@@ -366,7 +389,7 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
     if(order.PaddingUser==ACTION.m_currentUser.Sid)
     {
 
-
+        /*
         QString sValue="0";
         CustomerCost costData = ACTION.getCustomerLastCost(order.CustomerSid);
 
@@ -401,11 +424,14 @@ void LayerGetOrder2::on_tbOrder_cellPressed(int row, int column)
         ui->txNote->setText(sNote0);
 
 
-        ui->wPic0->slotClear();
+
 
         double d = sValue.toDouble()-order.Cost.toDouble();
 
         ui->lbFinal->setText(QString::number(d,'f',2));
+        */
+
+
 
         ui->wBottom->setCurrentIndex(1);
 
@@ -435,6 +461,7 @@ void LayerGetOrder2::on_btnBackOrder_clicked()
 
         //ACTION.action(ACT::REPLACE_ORDER,order.data(),sError);
         ACTION.replaceOrder(order,sError);
+        uiWait();
         UI.showMsg("",sError,"OK");
 
         refreshUser();
@@ -480,6 +507,7 @@ void LayerGetOrder2::on_btnFinish_clicked()
     if(iRet==1)
     {
 
+
         qDebug()<<" Time : 1:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
 
         QString sError;
@@ -498,13 +526,51 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
 
 
-        bool bOk =ACTION.replaceOrder(order,sError);
+        QString sOriCost="0";
+        CustomerCost costData = ACTION.getCustomerLastCost(order.CustomerSid);
 
+        if(costData.CustomerSid ==order.CustomerSid)
+        {
+            sOriCost = costData.Total;
+        }
+
+        QString sCurrency=order.Currency;
+        if(sCurrency=="")
+        {
+            sCurrency =costData.Currency;
+        }
+
+        if(sCurrency =="")
+        {
+            sCurrency = DATA.getCustomer(order.CustomerSid).Currency;
+        }
+
+        double d = sOriCost.toDouble()-order.Cost.toDouble();
+
+        QString sFinisiCost = QString::number(d,'f',2);
+
+
+        QString sText ="幣別:    "+sCurrency+"\n"+
+                "原始餘額:    $"+sOriCost+"\n"+
+                "本次消費:    $"+order.Cost+"\n"+
+                "目前餘額:    $"+sOriCost+"\n";
+
+        order.Note3=sText;
+
+        bool bOk =ACTION.replaceOrder(order,sError);
+        uiWait();
         QString sMsg = "回報完成";
         qDebug()<<" Time : 3:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
 
         if(bOk)
-            UI.showMsg("","回報完成",QStringList()<<"OK");
+        {
+            UI.showMsg("","回報完成\n\n"+sText,QStringList()<<"完成，並複製文字");
+
+            UI.copyMsg(sText);
+        }
+
+
+
         refreshUser();
         qDebug()<<" Time : 4:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
 
@@ -558,7 +624,7 @@ void LayerGetOrder2::refresh()
 
     refreshUser();
 
-
+    emit dataUpdate();
 }
 
 
@@ -589,7 +655,7 @@ void LayerGetOrder2::on_btnNoteChange_clicked()
     order.Note0[4]=sNote;
 
     ACTION.replaceOrder(order,sError);
-
+    uiWait();
 
     refreshUser();
 }

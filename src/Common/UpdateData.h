@@ -3,10 +3,11 @@
 
 #include <QObject>
 #include "RpkCore.h"
+
 #include <QTimer>
 #include "DataProviderObj.h"
-
-
+#include <QRandomGenerator>
+#include <QThread>
 #define DATA UpdateData::Instance()
 
 
@@ -71,6 +72,8 @@ public:
 
     QMap< QString ,DataProvider* > m_data;
 
+    QThread m_thread;
+
 public slots:
     void slotRead(QString sConnect, QString sId,QByteArray data,int Error);
 
@@ -97,6 +100,8 @@ signals:
     void updateNotify(int iType, QStringList listSid );
 
     void firstFinished();
+
+    void callUpdate(QByteArray data);
 
 
 };

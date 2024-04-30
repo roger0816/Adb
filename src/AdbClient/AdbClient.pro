@@ -54,6 +54,7 @@ SOURCES += \
     Global.cpp \
     DataProviderAdp.cpp \
     GlobalUi.cpp \
+    component/CTableView.cpp \
     component/DialogBase.cpp \
     component/DialogObj.cpp \
     component/ItemClock.cpp \
@@ -131,6 +132,7 @@ HEADERS += \
     Global.h \
     DataProviderAdp.h \
     GlobalUi.h \
+    component/CTableView.h \
     component/DialogBase.h \
     component/DialogObj.h \
     component/ItemClock.h \
@@ -255,6 +257,8 @@ include(component/mutiScreen/mutiScreen.pri)
 
 
  include(../../libs/QtXlsxWriter-master/src/xlsx/qtxlsx.pri)
+
+DISTFILES +=
 
 
 

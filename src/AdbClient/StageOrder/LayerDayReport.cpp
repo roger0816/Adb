@@ -14,10 +14,10 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 
     connect(&DATA,&UpdateData::updateNotify,this,[=](int iType)
     {
-        if(iType==ORDER_DATA && ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
-        {
-            delayRefresh();
-        }
+//        if(iType==ORDER_DATA && ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
+//        {
+//            delayRefresh();
+//        }
     });
 
     ui->wShowArea->hide();
@@ -650,6 +650,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
     if(column==_Note ||column==_User)
     {
 
+        /*
         QString st="訂單編號:"+data.Id+"\n"
                                    "報價:     %1\n"
                                    "下單:     %2\n"
@@ -657,7 +658,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
                                    "回報:     %4\n"
                                    "確認:     %5\n";
 
-
+        */
         QStringList listName;
 
         foreach(QString sUserSid,data.User)
@@ -667,9 +668,10 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
 
         DialogNote dialog;
+        dialog.setId(data.Id);
         dialog.setUser(listName);
         dialog.setData(data.Note0);
-
+        dialog.setReportCost(data.Note3);
         dialog.exec();
 
     }
@@ -695,6 +697,8 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
         }
 
     }
+
+
 }
 
 void LayerDayReport::on_cbStep0_1_clicked()

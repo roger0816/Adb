@@ -201,9 +201,9 @@ void LayerGetOrder1::uiWait()
 
 void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 {
-       GLOBAL.Debug("aaaa 5");
-    if(ui->tbOrder->rowCount()!=0)
-        return ;
+
+//    if(ui->tbOrder->rowCount()!=0)
+//        return ;
 
     if(row<0 || row>=ui->tbUser->rowCount())
     {
@@ -243,6 +243,8 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
     QVariantList listItem = m_data[sKey].toList();
 
     ui->tbOrder->setRowCount(0);
+
+
 
     for(int i=0;i<listItem.length();i++)
     {
@@ -317,24 +319,29 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 
         }
 
+
+
+
         if(order.Sid==m_sPreSid)
         {
             ui->tbOrder->setFocus();
 
             ui->tbOrder->setCurrentCell(i, 0); // 設置當前單元格為指定的行和列
-                      qDebug()<<"BBBBBB : 1order sid : "<<order.Sid<<" ,  pre sid : "<<m_sPreSid;
+
             if(order.PaddingUser == ACTION.m_currentUser.Sid)
             {
                 on_tbOrder_cellPressed(i,0);
             }
 
-                        qDebug()<<"BBBBBB : 2order sid : "<<order.Sid<<" ,  pre sid : "<<m_sPreSid;
+
 
         }
 
 
 
     }
+
+
 
 
 

@@ -14,10 +14,10 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
 
     connect(&DATA,&UpdateData::updateNotify,this,[=](int iType)
     {
-//        if(iType==ORDER_DATA && ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
-//        {
-//            delayRefresh();
-//        }
+        if(iType==ORDER_DATA && ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
+        {
+            delayRefresh();
+        }
     });
 
     ui->wShowArea->hide();

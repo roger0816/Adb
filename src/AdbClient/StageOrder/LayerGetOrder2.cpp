@@ -7,6 +7,8 @@ LayerGetOrder2::LayerGetOrder2(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    ui->wPic0->hide();
+
      ui->wCopyArea->hide();
     m_layerCost = new LayerOrder;
 
@@ -474,12 +476,12 @@ void LayerGetOrder2::on_btnBackOrder_clicked()
 
 void LayerGetOrder2::on_btnFinish_clicked()
 {
-    if(!ui->wPic0->m_bHasPic)
-    {
-        UI.showMsg("","請先更新餘額給客戶，並上傳截圖，再完成回報。","OK");
+//    if(!ui->wPic0->m_bHasPic)
+//    {
+//        UI.showMsg("","請先更新餘額給客戶，並上傳截圖，再完成回報。","OK");
 
-        return;
-    }
+//        return;
+//    }
 
 
 
@@ -521,9 +523,8 @@ void LayerGetOrder2::on_btnFinish_clicked()
 
         order.Note0[4] =ui->txNote->toPlainText();
 
-        order.Pic1 = ui->wPic0->uploadPic();
-        qDebug()<<" Time : 2:"<<GLOBAL.dateTimeUtc8().toString("yy/MM/dd hh:mm:ss:zzz");
-
+        if(ui->wPic0->isVisible() && ui->wPic0->m_bHasPic)
+            order.Pic1 = ui->wPic0->uploadPic();
 
 
         QString sOriCost="0";
@@ -550,10 +551,11 @@ void LayerGetOrder2::on_btnFinish_clicked()
         QString sFinisiCost = QString::number(d,'f',2);
 
 
-        QString sText ="幣別:    "+sCurrency+"\n"+
+        QString sText ="客戶編號:    "+DATA.getCustomer(order.CustomerSid).Id+"\n"+
+                "幣別:    "+sCurrency+"\n"+
                 "原始餘額:    $"+sOriCost+"\n"+
                 "本次消費:    $"+order.Cost+"\n"+
-                "目前餘額:    $"+sOriCost+"\n";
+                "目前餘額:    $"+sFinisiCost+"\n";
 
         order.Note3=sText;
 

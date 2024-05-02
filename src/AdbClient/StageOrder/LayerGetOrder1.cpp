@@ -23,6 +23,13 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
         if(iType == ORDER_DATA)
         {
             refresh();
+
+
+            if(m_bLockUi)
+            {
+                UI.slotLockLoading(false);
+                m_bLockUi = false;
+            }
         }
     });
 
@@ -119,7 +126,7 @@ void LayerGetOrder1::refreshUser()
         }
     };
 
-       GLOBAL.Debug("aaaa 2");
+
     makeData();
    //GLOBAL.runWorkerThreadWithTimeout2(makeData,3000);
 
@@ -169,10 +176,10 @@ void LayerGetOrder1::refreshUser()
 
     };
 
-       GLOBAL.Debug("aaaa 3");
+
     makeUi();
 
-       GLOBAL.Debug("aaaa 4");
+
     if(iRow>=0 && iRow<ui->tbUser->rowCount() && iCol>=0 && iCol<ui->tbUser->columnCount())
     {
         ui->tbUser->setCurrentCell(iRow,iCol);
@@ -185,16 +192,23 @@ void LayerGetOrder1::refreshUser()
 
 }
 
-void LayerGetOrder1::uiWait()
+void LayerGetOrder1::uiWait(bool bLock)
 {
-    QEventLoop *loop=new QEventLoop(this);
-    loop->connect(this,&LayerGetOrder1::dataUpdate,loop,&QEventLoop::quit);
 
-    UI.slotLockLoading(true);
-    loop->exec();
-    UI.slotLockLoading(false);
-    loop->disconnect();
-    loop->deleteLater();
+    if(!m_bLockUi)
+        return ;
+
+     UI.slotLockLoading(bLock);
+
+     m_bLockUi = bLock;
+//    QEventLoop *loop=new QEventLoop(this);
+//    loop->connect(this,&LayerGetOrder1::dataUpdate,loop,&QEventLoop::quit);
+
+//    UI.slotLockLoading(true);
+//    loop->exec();
+//    UI.slotLockLoading(false);
+//    loop->disconnect();
+//    loop->deleteLater();
 }
 
 
@@ -261,25 +275,34 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 
         ui->tbOrder->setItem(i,_User,UI.tbItem(sUserCid));
 
-        ui->tbOrder->setItem(i,_Name,UI.tbItem(order.Name));
+
+
+        QTableWidgetItem *tmpItem0 = UI.tbItem(order.Name);
+        if(order.User.first().trimmed()=="")
+             tmpItem0->setForeground(QColor("#00b500"));
+
+        ui->tbOrder->setItem(i,_Name,tmpItem0);
+
+
         ui->tbOrder->setItem(i,_Id,UI.tbItem(order.Id,GlobalUi::_BUTTON));
-
-
 
         QVariantMap customer=DATA.getCustomer(order.CustomerSid).data();
 
-
         QTableWidgetItem *tmpItem = UI.tbItem(customer["Id"]);
+
 
         if(customer["Vip"].toString()=="1")
         {
-
+            //#98613D
             tmpItem->setForeground(QColor("#996515"));
         }
         else
         {
             tmpItem->setForeground(QColor(Qt::darkGray));
         }
+
+
+
 
         ui->tbOrder->setItem(i,_CustomerId,tmpItem);
         ui->tbOrder->setItem(i,_CustomerName,UI.tbItem(customer["Name"]));
@@ -350,7 +373,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 
 void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 {
-       GLOBAL.Debug("aaaa 6");
+
     QVariantList listData =m_data[m_currentDataKey].toList();
 
     if(row<0 || row>=listData.length())
@@ -370,7 +393,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
 
         return ;
     }
-       GLOBAL.Debug("aaaa 7");
+
 
     if(column==_Action && ui->tbOrder->item(row,_Action)->text()=="確認接單")
     {
@@ -551,7 +574,7 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
     }
 
 
-       GLOBAL.Debug("aaaa 8");
+
 
 }
 
@@ -680,7 +703,7 @@ void LayerGetOrder1::on_btnFinish_clicked()
 
 void LayerGetOrder1::refresh()
 {
-    GLOBAL.Debug("aaaa 0");
+
     if(m_bLockLoading)
         return ;
 
@@ -720,7 +743,7 @@ void LayerGetOrder1::refresh()
 
     m_bLockLoading= false;
 
-       GLOBAL.Debug("aaaa 1");
+
     refreshUser();
 
 

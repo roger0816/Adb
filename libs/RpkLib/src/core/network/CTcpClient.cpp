@@ -211,7 +211,7 @@ bool CTcpClient::openConnect(QString sIp, QString sPort)
 
         if(qobject_cast<QTcpSocket*>(sender())==0)
             return;
-        qDebug()<<"disconnected event";
+       // qDebug()<<"disconnected event";
         //    QTcpSocket *tcp = dynamic_cast<QTcpSocket*>(sender());
         //QString sKey = tcp->property("ip").toString()+":"+tcp->property("port").toString();
         // m_kLongConnect.remove(sKey);
@@ -230,7 +230,7 @@ bool CTcpClient::openConnect(QString sIp, QString sPort)
 
     connect(tcp, &QTcpSocket::connected,this, [=,&bConnected]() {
         if (tcp->state() == QAbstractSocket::ConnectedState) {
-            qDebug() << "Connected to host.";
+          //  qDebug() << "Connected to host.";
             bConnected = true;
             loop->quit();
         }
@@ -277,12 +277,12 @@ bool CTcpClient::sendData(QString sId, QByteArray arrInput, QString sIp, QString
     // 確保 QTcpSocket 是處於 ConnectedState 狀態
     if (tcp->state() != QAbstractSocket::ConnectedState)
     {
-        qDebug() << "Socket is not in connected state.";
+        //qDebug() << "Socket is not in connected state.";
 
         // 如果不是，嘗試重新建立連接
         if (!openConnect(sIp, sPort))
         {
-            qDebug() << "Failed to reconnect.";
+         //   qDebug() << "Failed to reconnect.";
             return false;
         }
 

@@ -31,7 +31,7 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
 
 
     connect(&DATA,&UpdateData::updateNotify,this,[=](int iType){
-        if(iType==GAME_LIST)
+        if(iType==GAME_LIST || iType==GAME_ITEM || this->isVisible())
             refresh();
     });
 }
@@ -132,6 +132,7 @@ void LayerCostSetting::refreshGameList()
 void LayerCostSetting::refreshItemList()
 {
 
+    qDebug()<<"refresh item 1";
     int iGameRow = ui->tbGame->currentRow();
 
     ui->tbGameItem->setRowCount(0);
@@ -145,6 +146,8 @@ void LayerCostSetting::refreshItemList()
         return;
     }
 
+
+      qDebug()<<"refresh item 2";
 
     DataGameList gameData(m_gameDisplayData.at(iGameRow).toMap());
 
@@ -162,7 +165,7 @@ void LayerCostSetting::refreshItemList()
 
     m_listGameItem = DATA.getGameItemFromGameSid(m_sCurrentGameSid);
 
-
+      qDebug()<<"refresh item 3";
     DataRate rate2;
    // rate2=ACTION.costRate("",true);
     rate2 = DATA.costRate();
@@ -171,11 +174,16 @@ void LayerCostSetting::refreshItemList()
 
     CListPair listCurrent = DATA.getAddValueType();
 
+      qDebug()<<"refresh item 4";
     for(int i=0;i<m_listGameItem.length();i++)
     {
         QVariantMap toolData;
         DataGameItem data= m_listGameItem.at(i);
 
+        if(data.Sid=="3518")
+        {
+            qDebug()<<data.data();
+        }
 
         ui->tbGameItem->setRowCount(i+1);
 
@@ -225,6 +233,7 @@ void LayerCostSetting::refreshItemList()
         }
 
 
+          qDebug()<<"refresh item 5";
         toolData["AddValueTypeSid"] = listData.join("\n");
 
         m_listTipData.append(toolData);
@@ -233,7 +242,7 @@ void LayerCostSetting::refreshItemList()
     }
 
 
-
+      qDebug()<<"refresh item 6";
 }
 
 bool LayerCostSetting::checkSearch(DataGameList gameData)

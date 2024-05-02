@@ -158,6 +158,7 @@ void LayerGetOrder2::refreshUser(bool bRe)
 
 void LayerGetOrder2::uiWait()
 {
+    qDebug()<<"AAAAAAAAAAAAAAAAAAAA";
     QEventLoop *loop=new QEventLoop(this);
     loop->connect(this,&LayerGetOrder2::dataUpdate,loop,&QEventLoop::quit);
 
@@ -166,6 +167,8 @@ void LayerGetOrder2::uiWait()
     UI.slotLockLoading(false);
     loop->disconnect();
     loop->deleteLater();
+
+
 }
 
 
@@ -224,7 +227,12 @@ void LayerGetOrder2::on_tbUser_cellPressed(int row, int column)
 
         ui->tbOrder->setItem(i,_User,UI.tbItem(sUserCid));
 
-        ui->tbOrder->setItem(i,_Name,UI.tbItem(order.Name));
+        QTableWidgetItem *tmpItem0 = UI.tbItem(order.Name);
+        if(order.User.first().trimmed()=="")
+             tmpItem0->setForeground(QColor("#00b500"));
+
+        ui->tbOrder->setItem(i,_Name,tmpItem0);
+
         ui->tbOrder->setItem(i,_Id,UI.tbItem(order.Id,GlobalUi::_BUTTON));
 
         QVariantMap customer=DATA.getCustomer(order.CustomerSid).data();

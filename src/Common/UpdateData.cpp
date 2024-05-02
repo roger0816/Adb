@@ -44,7 +44,7 @@ UpdateData &UpdateData::Instance()
 int UpdateData::connectIp(QString sIp, QString sPort)
 {
     int iRe = RPKCORE.network.openConnect(sIp,sPort);
-    qDebug()<<"connect update port "<<iRe;
+
     return iRe;
 }
 
@@ -65,7 +65,7 @@ void UpdateData::runUpdate()
 {
     if(!m_bRun || isOnSync())
     {
-        qDebug()<<"run is : "<<m_bRun;
+      //  qDebug()<<"run is : "<<m_bRun;
         return;
     }
 
@@ -157,6 +157,15 @@ OrderData UpdateData::getOrder(QString sSid)
     }
 
     return re;
+}
+
+QList<OrderData> UpdateData::getOrderByDate(QDate date)
+{
+    QList<OrderData> list;
+
+    //todo
+
+    return list;
 }
 
 QList<CustomerData> UpdateData::getCustomerList()
@@ -523,13 +532,13 @@ QVariantList UpdateData::getBulletin()
 
 void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Error)
 {
-    qDebug()<<"connect : "<<sConnect<<" , sId : "<<sId;
+    //qDebug()<<"connect : "<<sConnect<<" , sId : "<<sId;
 
     m_iWaitRecvSec=0;
     CData tmp;
     tmp.deCodeJson(data);
     QVariantMap reData = tmp.dData;
-    qDebug()<< reData.keys();
+   // qDebug()<< reData.keys();
 
 
     foreach(QString sTarget,m_listTarget)
@@ -615,7 +624,7 @@ bool UpdateData::isOnSync()
     {
         if(m_data[listKey.at(i)]->m_bOnSync)
         {
-            qDebug()<<listKey.at(i)<<"  is on sync";
+          //  qDebug()<<listKey.at(i)<<"  is on sync";
             return true;
         }
     }

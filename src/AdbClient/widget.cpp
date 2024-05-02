@@ -13,7 +13,7 @@ Widget::Widget(QWidget *parent)
     connect(&DATA,&UpdateData::callUpdate,this,[=](QByteArray data){
             bool bOk = RPKCORE.network.sendData("",data);
 
-            qDebug()<<"send data is :"<<bOk;
+         //   qDebug()<<"send data is :"<<bOk;
             if(!bOk)
             {
                 QTimer::singleShot(500,this,[=]{

@@ -16,7 +16,7 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
     {
         if(iType==ORDER_DATA && ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
         {
-            delayRefresh();
+         //   delayRefresh();
         }
     });
 
@@ -117,7 +117,6 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
     updateOrderData(bRequery,true);
 
 
-     GLOBAL.Debug("AAAA: refreshTb 0");
 
     ui->tb->setUpdatesEnabled(false);
     ui->tb->setRowCount(0);
@@ -163,11 +162,18 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
         int rowHeight = ui->tb->rowHeight(iRow);
 
         ui->tb->setItem(iRow,_Sid,UI.tbItem(data.Sid));
+        ui->tb->setItem(iRow,_Note,UI.tbItem(data.Sid));
 
         ui->tb->setItem(iRow,_OderId,UI.tbItem(data.Id,GlobalUi::_BUTTON));
 
         QString sDate=data.OrderDate+data.OrderTime;
-        ui->tb->setItem(iRow,_Name,UI.tbItem(data.Name,GlobalUi::_BUTTON));
+
+
+        QTableWidgetItem *tmpItem0 = UI.tbItem(data.Name);
+        if(data.User.first().trimmed()=="")
+             tmpItem0->setForeground(QColor("#00b500"));
+
+        ui->tb->setItem(iRow,_Name,tmpItem0);
         QDateTime date=QDateTime::fromString(sDate,"yyyyMMddhhmmss");
         ui->tb->setItem(iRow,_DateTime,UI.tbItem(date.toString("hh:mm:ss")));
 
@@ -189,7 +195,22 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
 
 
         ui->tb->setItem(iRow,_User,UI.tbItem(sUser,GlobalUi::_BUTTON));
-        ui->tb->setItem(iRow,_Customer,UI.tbItem(customer.Id));
+
+        QTableWidgetItem *tmp0 = UI.tbItem(customer.Id);
+
+        if(customer.Vip=="1")
+        {
+
+            tmp0->setForeground(QColor("#996515"));
+        }
+        else
+        {
+            tmp0->setForeground(QColor(Qt::darkGray));
+        }
+
+
+
+        ui->tb->setItem(iRow,_Customer,tmp0);
 
 
         QString sStatus =statusString(data.Step);
@@ -386,7 +407,7 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
     }
 
      ui->tb->setCurrentCell(iRow,iCol);
-      GLOBAL.Debug("AAAA: refreshTb 5 OK");
+
 
          ui->tb->setUpdatesEnabled(true);
       m_bLockLoading = false;
@@ -492,7 +513,7 @@ void LayerDayReport::on_tb_cellPressed(int row, int column)
 
     OrderData data(m_mappingData[orderSid].toMap());
 
-    if(column==_OderId || column==_Name)
+    if(column==_OderId)
     {
 
 //        QVariantMap d;
@@ -760,7 +781,7 @@ void LayerDayReport::on_btnFilterClear_clicked()
 
 void LayerDayReport::delayRefresh()
 {
-    GLOBAL.Debug("AAAA: delayRefresh");
+
 
     if(m_bLockLoading)
         return;
@@ -935,7 +956,7 @@ void LayerDayReport::changeVisable()
 
 void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
 {
-     GLOBAL.Debug("AAAA: updateOrderData");
+
     if(bUpdate)
     {
 
@@ -950,6 +971,11 @@ void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
         {
             QString sDate = ui->dateEdit->date().toString("yyyyMMdd");
             QList<OrderData> list = DATA.getOrder();
+
+            std::sort(list.begin(), list.end(), [](const OrderData &a, const OrderData &b) {
+                return a.OrderTime < b.OrderTime;
+            });
+
             m_listOrder.clear();
 
             for(int i=0;i<list.length();i++)
@@ -959,6 +985,10 @@ void LayerDayReport::updateOrderData(bool bUpdate, bool bStrong)
                 if(d.OrderDate==sDate)
                     m_listOrder.append(d);
             }
+
+
+
+
 
         }
 
@@ -1138,6 +1168,15 @@ void LayerDayReport::on_btnExcel_clicked()
             xlsx.setColumnWidth(iXlsxCol,iXlsxCol,16);
 
         }
+
+        QString orderSid= ui->tb->item(iRow,0)->text();
+
+        OrderData data(m_mappingData[orderSid].toMap());
+        qDebug()<<"iRow "<<iRow+2<<" sid "<<data.Sid<<" not3 "<<data.Note3;
+
+        //加一個col
+        xlsx.setColumnWidth(iXlsxCol+1,iXlsxCol+1,16);
+        xlsx.write(iRow+2,iXlsxCol+1,data.Note3);
     }
 
     xlsx.write("A"+QString::number(ui->tb->rowCount()+3),ui->lbT->text());

@@ -87,9 +87,9 @@ private:
 
     bool m_bLockLoading = false;
 
-    void uiWait();
+    void uiWait(bool bLock=true);
 
-
+    bool m_bLockUi= false;
 
 signals:
     void dataUpdate();

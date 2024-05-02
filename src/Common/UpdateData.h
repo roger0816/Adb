@@ -30,6 +30,9 @@ public:
 
     OrderData getOrder(QString sSid);
 
+    QList<OrderData> getOrderByDate(QDate date);
+
+
 
     QList<CustomerData> getCustomerList();
     CustomerData getCustomer(QString sCusId);

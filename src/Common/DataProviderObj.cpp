@@ -11,6 +11,9 @@ DataProvider::DataProvider(int iTag, QObject *parent)
 
 bool DataProvider::setData(QVariantList data)
 {
+
+    qDebug()<<"set data : "<<data.length();
+
     if(data.length()<1)
     {
         return false;

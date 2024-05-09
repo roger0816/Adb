@@ -7,7 +7,7 @@ UpdateData::UpdateData(QObject *parent)
     moveToThread(&m_thread);
     m_thread.start();
 
-   // connect(&RPKCORE.network,&Network::singalLongConnect,this,&UpdateData::slotRead);
+    // connect(&RPKCORE.network,&Network::singalLongConnect,this,&UpdateData::slotRead);
     m_timer.connect(&m_timer,&QTimer::timeout,this,&UpdateData::slotTimer);
     m_timer.start(1000);
 
@@ -25,7 +25,7 @@ UpdateData::UpdateData(QObject *parent)
     m_data["BulletinData"]= new BulletinDataProvider(BULLETIN_DATA,this);
 
 
-    m_listTarget<<"OrderData"<<"CustomerData"<<"UserData"
+    m_listTarget<<"OrderData"<<"UserData"<<"CustomerData"
                <<"GameList"<<"GameItem"
               <<"ExchangeRate"<<"PrimeCostRate"
              <<"CustomerClass"<<"FactoryClass"
@@ -41,12 +41,12 @@ UpdateData &UpdateData::Instance()
     return global;
 }
 
-int UpdateData::connectIp(QString sIp, QString sPort)
-{
-    int iRe = RPKCORE.network.openConnect(sIp,sPort);
+//int UpdateData::connectIp(QString sIp, QString sPort)
+//{
+//    int iRe = RPKCORE.network.openConnect(sIp,sPort);
 
-    return iRe;
-}
+//    return iRe;
+//}
 
 void UpdateData::setRun(bool b)
 {
@@ -65,7 +65,7 @@ void UpdateData::runUpdate()
 {
     if(!m_bRun || isOnSync())
     {
-      //  qDebug()<<"run is : "<<m_bRun;
+        //  qDebug()<<"run is : "<<m_bRun;
         return;
     }
 
@@ -87,6 +87,14 @@ void UpdateData::runUpdate()
     {
         QString sKey = m_listTarget.at(i);
         in[sKey] = m_data[sKey]->m_lastUpdate;
+
+#if TEST_ACTION
+        //if(sKey!="OrderData")
+        //     in[sKey]="1";
+
+        in[sKey]=QString::number(iForTestInt%10);
+
+#endif
     }
 
 
@@ -99,20 +107,22 @@ void UpdateData::runUpdate()
     input.iAciton = ACT::UPDATE_DATA;
 
     input.dData = in;
+    input.sUser = m_sUserSid;
+
 
     m_iWaitRecvSec=0;
 
     emit callUpdate(input.enCodeJson());
 
-//    bool bOk = RPKCORE.network.sendData("",input.enCodeJson());
+    //    bool bOk = RPKCORE.network.sendData("",input.enCodeJson());
 
-//    qDebug()<<"send data is :"<<bOk;
-//    if(!bOk)
-//    {
-//        QTimer::singleShot(500,this,[=]{
-//            runUpdate();
-//        });
-//    }
+    //    qDebug()<<"send data is :"<<bOk;
+    //    if(!bOk)
+    //    {
+    //        QTimer::singleShot(500,this,[=]{
+    //            runUpdate();
+    //        });
+    //    }
 
 
 
@@ -131,13 +141,12 @@ QList<OrderData> UpdateData::getOrder()
     QList<OrderData> listRe;
     foreach(OrderData v ,list)
     {
-       if(v.OrderDate==sToday || v.OrderDate == sYestoday)
+        if(v.OrderDate==sToday || v.OrderDate == sYestoday)
         {
-         //for test
-         //  int ii=QRandomGenerator::global()->bounded(1,4);
-         //   v.Step=QString::number(ii);
+
             listRe.append(v);
         }
+
 
     }
 
@@ -502,17 +511,17 @@ QString UpdateData::getPayRate(QString sPayTypeSid)
 
 QVariantMap UpdateData::getUserBonus(QString sUserSid)
 {
-      QVariantList list =dynamic_cast<UserBonusProvider*>(m_data["UserBonus"])->m_listData;
+    QVariantList list =dynamic_cast<UserBonusProvider*>(m_data["UserBonus"])->m_listData;
 
-      QVariantMap re;
+    QVariantMap re;
 
-      foreach(QVariant v,list)
-      {
-          if(v.toMap()["UserSid"]==sUserSid)
-              re=v.toMap();
-      }
+    foreach(QVariant v,list)
+    {
+        if(v.toMap()["UserSid"]==sUserSid)
+            re=v.toMap();
+    }
 
-      return re;
+    return re;
 }
 
 
@@ -538,7 +547,7 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
     CData tmp;
     tmp.deCodeJson(data);
     QVariantMap reData = tmp.dData;
-   // qDebug()<< reData.keys();
+    // qDebug()<< reData.keys();
 
 
     foreach(QString sTarget,m_listTarget)
@@ -546,16 +555,36 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
 
         if(reData.contains(sTarget) && m_data.contains(sTarget))
         {
+            qDebug()<<"slot read : "<<sTarget;
             QVariantList list =reData[sTarget].toList();
 
             if(list.length()>0)
-                qDebug()<<"AAAAAA1: "<<sTarget<<" data len : "<<list.length();
+                qDebug()<<sTarget<<" data len : "<<list.length();
 
             QStringList listSid;
 
-            foreach(QVariant v,list)
+            for(int i=0;i<list.length();i++)
             {
-                listSid.append(v.toMap()["Sid"].toString());
+                QVariantMap v = list.at(i).toMap();
+                listSid.append(v["Sid"].toString());
+
+#if TEST_ACTION
+
+                if(sTarget=="OrderData")
+                {
+
+                    OrderData da(v);
+
+                    //for test
+                    int ii=QRandomGenerator::global()->bounded(2,4);
+                    da.Step=QString::number(ii);
+                    da.PaddingUser = m_sUserSid;
+                    da.OrderDate=QDate::currentDate().addDays(-1).toString("yyyyMMdd");
+                    list[i]=da.data();
+                }
+
+#endif
+
             }
 
             bool bIsUpdate = true;
@@ -563,28 +592,28 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
 
             bIsUpdate= m_data[sTarget]->setData(list);
 
-
+#if TEST_ACTION
+            bIsUpdate = true;
+#endif
 
 
             if(bIsUpdate)
             {
                 if(m_data[sTarget]->m_bIsFirst)
                 {
-                    if(sTarget=="OrderData")
+                    if(sTarget=="OrderData" || sTarget=="BulletinData")
+                    {
+                             qDebug()<<"update first : "<<sTarget;
                         emit updateNotify(m_data[sTarget]->m_iTag,listSid);
+                    }
                 }
                 else
                 {
-
+                    qDebug()<<"update : "<<sTarget;
                     emit updateNotify(m_data[sTarget]->m_iTag,listSid);
                 }
             }
-//            else
-//            {
-//                if(sTarget=="OrderData")
-//                    emit updateNotify(m_data[sTarget]->m_iTag,listSid);
 
-//            }
 
 
         }
@@ -624,7 +653,7 @@ bool UpdateData::isOnSync()
     {
         if(m_data[listKey.at(i)]->m_bOnSync)
         {
-          //  qDebug()<<listKey.at(i)<<"  is on sync";
+            //  qDebug()<<listKey.at(i)<<"  is on sync";
             return true;
         }
     }

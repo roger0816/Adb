@@ -6,7 +6,7 @@
 #include "GlobalUi.h"
 #include "DialogNote.h"
 #include "LayerOrder.h"
-
+#include <QTimerEvent>
 namespace Ui {
 class LayerGetOrder2;
 }
@@ -18,6 +18,10 @@ class LayerGetOrder2 : public QWidget
 public:
     explicit LayerGetOrder2(QWidget *parent = nullptr);
     ~LayerGetOrder2();
+
+
+
+
 
     void init();
 
@@ -36,8 +40,30 @@ private slots:
 
     void on_btnNoteChange_clicked();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::LayerGetOrder2 *ui;
+
+    typedef enum{
+        _NONE,
+        _TIMEOUT,   //等待逾時
+        _CHECK,    //鎖單
+        _NO_CHECK, //解除鎖單(返回未處理)
+        _NOTE,     //更改備註
+        _FINISH    //完成送單
+
+    }_LockStatus;
+
+    _LockStatus m_uiLockStatus=_NONE;
+    QString m_sUnLockMsg="";
+
+    void uiWait(_LockStatus iType=_NONE,QString sMsg="");
+
+    int m_iUiLockTimeSec=0;
+    QString m_sWaitSid="";
+    void timerEvent(QTimerEvent *) override;
+
 
     enum _tbHeader{
         _User=0,
@@ -70,7 +96,8 @@ private:
 
     bool m_bLockLoading = false;
 
-    void uiWait();
+
+    int iTesetCount =0;
 
 signals:
     void dataUpdate();

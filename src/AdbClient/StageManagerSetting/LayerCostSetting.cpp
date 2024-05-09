@@ -31,7 +31,7 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
 
 
     connect(&DATA,&UpdateData::updateNotify,this,[=](int iType){
-        if(iType==GAME_LIST || iType==GAME_ITEM || this->isVisible())
+        if(iType==GAME_LIST || iType==GAME_ITEM )
             refresh();
     });
 }

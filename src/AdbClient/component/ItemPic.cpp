@@ -33,9 +33,12 @@ void ItemPic::setMd5(QString sMd5)
 
     ACTION.action(ACT::QUERY_PIC,sKey,sValue,out);
 
-    setData(out["Data"].toByteArray());
+    if(out.contains("Data"))
+    {
+        setData(out["Data"].toByteArray());
 
-    emit sendLock(false);
+        emit sendLock(false);
+    }
 }
 
 QString ItemPic::md5()
@@ -45,19 +48,19 @@ QString ItemPic::md5()
 
 QString ItemPic::uploadPic()
 {
-   QString sRe="";
-   QString sError;
-   QVariantMap d =data();
+    QString sRe="";
+    QString sError;
+    QVariantMap d =data();
 
-   if(!m_bHasPic)
-       return sRe;
+    if(!m_bHasPic)
+        return sRe;
 
-   bool bOk= ACTION.action(ACT::UPLOAD_PIC,d,sError);
+    bool bOk= ACTION.action(ACT::UPLOAD_PIC,d,sError);
 
-   if(bOk)
+    if(bOk)
         sRe = d["Md5"].toString();
 
-   return sRe;
+    return sRe;
 }
 
 

@@ -35,7 +35,7 @@ public:
 
 private slots:
     void on_btnCancel_clicked();
-
+public slots:
     void on_btnOk_clicked();
 
 private:

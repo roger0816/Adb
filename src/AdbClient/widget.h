@@ -54,5 +54,7 @@ private:
 
     ItemMargee *m_wMargee;
 
+    Network *m_networkUpdate;
+
 };
 #endif // WIDGET_H

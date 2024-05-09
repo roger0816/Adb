@@ -18,20 +18,22 @@ LayerGetOrder1::LayerGetOrder1(QWidget *parent) :
     ui->wBottom->setCurrentIndex(0);
 
 
-    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType)
+    connect(&DATA,&UpdateData::updateNotify,this,[=](int iType,QStringList listSid)
     {
         if(iType == ORDER_DATA)
         {
             refresh();
-
-
-            if(m_bLockUi)
+            if(m_sWaitSid!="" && listSid.contains(m_sWaitSid))
             {
-                UI.slotLockLoading(false);
-                m_bLockUi = false;
+                uiWait(_NONE);
             }
+
         }
     });
+
+    ui->wPic0->hide();
+
+    startTimer(1000);
 
 }
 
@@ -128,7 +130,7 @@ void LayerGetOrder1::refreshUser()
 
 
     makeData();
-   //GLOBAL.runWorkerThreadWithTimeout2(makeData,3000);
+    //GLOBAL.runWorkerThreadWithTimeout2(makeData,3000);
 
 
 
@@ -192,15 +194,15 @@ void LayerGetOrder1::refreshUser()
 
 }
 
-void LayerGetOrder1::uiWait(bool bLock)
-{
+//void LayerGetOrder1::uiWait(bool bLock)
+//{
 
-    if(!m_bLockUi)
-        return ;
+////    if(!m_bLockUi)
+////        return ;
 
-     UI.slotLockLoading(bLock);
+//     UI.slotLockLoading(bLock);
 
-     m_bLockUi = bLock;
+//    // m_bLockUi = bLock;
 //    QEventLoop *loop=new QEventLoop(this);
 //    loop->connect(this,&LayerGetOrder1::dataUpdate,loop,&QEventLoop::quit);
 
@@ -209,15 +211,15 @@ void LayerGetOrder1::uiWait(bool bLock)
 //    UI.slotLockLoading(false);
 //    loop->disconnect();
 //    loop->deleteLater();
-}
+//}
 
 
 
 void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 {
 
-//    if(ui->tbOrder->rowCount()!=0)
-//        return ;
+    //    if(ui->tbOrder->rowCount()!=0)
+    //        return ;
 
     if(row<0 || row>=ui->tbUser->rowCount())
     {
@@ -279,7 +281,7 @@ void LayerGetOrder1::on_tbUser_cellPressed(int row, int column)
 
         QTableWidgetItem *tmpItem0 = UI.tbItem(order.Name);
         if(order.User.first().trimmed()=="")
-             tmpItem0->setForeground(QColor("#00b500"));
+            tmpItem0->setForeground(QColor("#00b500"));
 
         ui->tbOrder->setItem(i,_Name,tmpItem0);
 
@@ -456,10 +458,17 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
                 //接單(鎖定)
                 bool bRe = ACTION.replaceOrder(order,sError);
 
-                uiWait();
 
                 if(!bRe)
-                    UI.showMsg("",sError,"OK");
+                {
+                    UI.showMsg("Error",sError,"OK");
+                }
+                else
+                {
+                    m_sWaitSid=order.Sid;
+                    uiWait(_CHECK);
+                    return;
+                }
 
 
             }
@@ -561,13 +570,24 @@ void LayerGetOrder1::on_tbOrder_cellPressed(int row, int column)
         ui->cbAddValueType->setCompleter(completer);
 
 
-        QString sNote0;
+        QString sNote0_0,sNote0_1,sNote0_2;
         if(order.Note0.length()>2)
-            sNote0=order.Note0.at(2);
+        {
+//            sNote0_0 = order.Note0.at(0);
 
-        ui->btnDelayOrder->setChecked(sNote0.contains("["+ui->btnDelayOrder->text()+"]"));
+//            sNote0_1 = order.Note0.at(1);
 
-        ui->txNote->setText(sNote0.replace("[訂單延誤]",""));
+            sNote0_2=order.Note0.at(2);
+
+        }
+
+        ui->btnDelayOrder->setChecked(sNote0_2.contains("["+ui->btnDelayOrder->text()+"]"));
+
+        ui->txNote->setText(sNote0_2.replace("[訂單延誤]",""));
+//        ui->txNote0_0->setText(sNote0_0);
+
+//        ui->txNote0_1->setText(sNote0_1);
+
 
         ui->wBottom->setCurrentIndex(1);
 
@@ -588,31 +608,36 @@ void LayerGetOrder1::on_btnBackOrder_clicked()
     OrderData order(data);
 
     int iRet= UI.showMsg("",QString("確定要將此訂單(%1) \n解除處理中的狀態？").arg(order.Id),QStringList()<<"否"<<"是");
+    if(iRet !=1)
+        return;
 
-    if(iRet==1)
+
+    QString sError;
+
+    order.PaddingUser="";
+    order.StepTime[2]="";
+
+    order.User[2] = "";
+
+
+    order.Step="1";
+    //解除鎖定
+    bool bRe =ACTION.replaceOrder(order,sError);
+
+    if(bRe)
     {
-
-        QString sError;
-
-        order.PaddingUser="";
-        order.StepTime[2]="";
-
-        order.User[2] = "";
-
-
-        order.Step="1";
-        //解除鎖定
-        ACTION.replaceOrder(order,sError);
-
-        uiWait();
-
-        UI.showMsg("",sError,"OK");
+        m_sWaitSid=order.Sid;
+        uiWait(_NO_CHECK);
+    }
+    else
+    {
+        UI.showMsg("Error",sError,"OK");
 
         refreshUser();
 
 
-        return;
     }
+
 
 }
 
@@ -651,54 +676,58 @@ void LayerGetOrder1::on_btnFinish_clicked()
 
     int iRet= UI.showMsg("",QString("請再確認訂單(%1) \n已完成儲值處理？").arg(order.Id),QStringList()<<"否"<<"是");
 
-    if(iRet==1)
+    if(iRet!=1)
+        return;
+
+
+    QString sError;
+
+    order.PaddingUser="";
+
+    int iIdxPayType = m_listPayType.listSecond().indexOf(ui->cbAddValueType->currentText());
+
+
+    if(iIdxPayType>=0)
     {
+        QString PayTypeSid = m_listPayType.listFirst().at(iIdxPayType);
+        order.PayType=PayTypeSid;
+    }
+    order.Step="3";
 
-        QString sError;
-
-        order.PaddingUser="";
-
-        int iIdxPayType = m_listPayType.listSecond().indexOf(ui->cbAddValueType->currentText());
-
-
-        if(iIdxPayType>=0)
-        {
-            QString PayTypeSid = m_listPayType.listFirst().at(iIdxPayType);
-            order.PayType=PayTypeSid;
-        }
-        order.Step="3";
-
-        order.StepTime[3]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
+    order.StepTime[3]=GLOBAL.dateTimeUtc8().toString("yyyyMMddhhmmss");
 
 
-        order.User[3] = ACTION.m_currentUser.Sid;
+    order.User[3] = ACTION.m_currentUser.Sid;
 
-        QString sNote= ui->txNote->toPlainText();
-
-
-        if(ui->btnDelayOrder->isChecked())
-        {
-            sNote="["+ui->btnDelayOrder->text()+"]"+sNote;
-        }
+    QString sNote= ui->txNote->toPlainText();
 
 
-        order.Note0[3]=sNote;
+    if(ui->btnDelayOrder->isChecked())
+    {
+        sNote="["+ui->btnDelayOrder->text()+"]"+sNote;
+    }
 
 
-        order.Pic0 = ui->wPic0->uploadPic();
+    order.Note0[3]=sNote;
 
-        ACTION.replaceOrder(order,sError);
 
-        uiWait();
+    order.Pic0 = ui->wPic0->uploadPic();
 
-        UI.showMsg("",sError,"OK");
+    bool bRe=ACTION.replaceOrder(order,sError);
 
+    if(bRe)
+    {
+        m_sWaitSid=order.Sid;
+        uiWait(_FINISH,sError);
+    }
+    else
+    {
+        UI.showMsg("Error",sError,"OK");
 
         refreshUser();
-
-
-        return;
     }
+
+
 }
 
 void LayerGetOrder1::refresh()
@@ -776,10 +805,19 @@ void LayerGetOrder1::on_btnChangeNote_clicked()
 
     order.Note0[2]=sNote;
 
-    ACTION.replaceOrder(order,sError);
-    uiWait();
+    bool bRe=ACTION.replaceOrder(order,sError);
 
-    refreshUser();
+    if(bRe)
+    {
+        m_sWaitSid=order.Sid;
+        uiWait(_NOTE);
+    }
+    else
+    {
+        UI.showMsg("Error",sError,"OK");
+
+        refreshUser();
+    }
 
 
 
@@ -791,6 +829,13 @@ void LayerGetOrder1::on_btnChangeNote_clicked()
 
 void LayerGetOrder1::slotCancel()
 {
+
+
+    if(UI.showMsg("","確定要取消訂單嗎？",QStringList()<<"否"<<"是")==0)
+        return;
+
+
+
     QVariantList listData =m_data[m_currentDataKey].toList();
 
     QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
@@ -805,15 +850,17 @@ void LayerGetOrder1::slotCancel()
     order.Pic0 = ui->wPic0->uploadPic();
     QString sError;
     bool bOk =ACTION.replaceOrder(order,sError);
-
-    uiWait();
-
-
     if(bOk)
-        sError="訂單已取消";
-    UI.showMsg("",sError,"OK");
+    {
+        m_sWaitSid=order.Sid;
+        uiWait(_CANCEL,"訂單已取消");
+    }
+    else
+    {
+        UI.showMsg("",sError,"OK");
 
-    refreshUser();
+        refreshUser();
+    }
 
 
 }
@@ -840,12 +887,21 @@ void LayerGetOrder1::on_btnFacChange_clicked()
     order.User[1]=ACTION.m_currentUser.Sid;
     QString sError;
     bool bOk =ACTION.replaceOrder(order,sError);
-    uiWait();
-    if(bOk)
-        sError="已修改訂單負責人";
-    UI.showMsg("",sError,"OK");
 
-    refreshUser();
+
+    if(bOk)
+    {
+        m_sWaitSid=order.Sid;
+        uiWait(_API_SET,"已修改訂單負責人");
+    }
+    else
+    {
+        UI.showMsg("",sError,"OK");
+
+        refreshUser();
+    }
+
+
 
 }
 
@@ -866,7 +922,7 @@ void LayerGetOrder1::on_btnFacCancel_clicked()
     //order.Pic0 = ui->wPic0->uploadPic();
     QString sError;
     bool bOk =ACTION.replaceOrder(order,sError);
-    uiWait();
+    uiWait(_API_CANCEL);
     if(bOk)
         sError="訂單已取消";
     UI.showMsg("",sError,"OK");
@@ -874,4 +930,66 @@ void LayerGetOrder1::on_btnFacCancel_clicked()
     refreshUser();
 
 }
+
+void LayerGetOrder1::uiWait(_LockStatus iType, QString sMsg)
+{
+    if(iType==_NONE && m_uiLockStatus==_NONE)
+    {
+        m_iUiLockTimeSec=0;
+
+        return;
+    }
+
+
+    if(iType!=_NONE && iType!=_TIMEOUT)
+    {
+        m_uiLockStatus = iType;
+
+        m_sUnLockMsg =sMsg;
+
+        UI.slotLockLoading(true);
+
+        return;
+    }
+
+
+
+    _LockStatus unLockStatus=m_uiLockStatus;
+
+    UI.slotLockLoading(false);
+    m_sWaitSid="";
+    m_uiLockStatus = _NONE;
+    m_iUiLockTimeSec=0;
+
+    if(iType==_TIMEOUT)
+    {
+        m_sUnLockMsg="連線逾時";
+    }
+
+    if(unLockStatus!=_CHECK && unLockStatus!=_NO_CHECK && unLockStatus!=_NOTE)
+        UI.showMsg("",m_sUnLockMsg,"OK");
+
+
+}
+
+void LayerGetOrder1::timerEvent(QTimerEvent *)
+{
+    if(m_uiLockStatus!=_NONE)
+    {
+        m_iUiLockTimeSec++;
+
+        if(m_iUiLockTimeSec>15)
+        {
+
+            uiWait(_TIMEOUT);
+
+        }
+
+
+    }
+
+
+}
+
+
 

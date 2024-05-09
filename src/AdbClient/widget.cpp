@@ -9,7 +9,7 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-
+/*
     connect(&DATA,&UpdateData::callUpdate,this,[=](QByteArray data){
             bool bOk = RPKCORE.network.sendData("",data);
 
@@ -23,7 +23,26 @@ Widget::Widget(QWidget *parent)
     });
 
     connect(&RPKCORE.network,&Network::singalLongConnect,&DATA,&UpdateData::slotRead);
+*/
+    m_networkUpdate = new Network(this);
 
+    connect(&DATA,&UpdateData::callUpdate,this,[=](QByteArray data){
+            bool bOk = m_networkUpdate->sendData("",data);
+
+         //   qDebug()<<"send data is :"<<bOk;
+            if(!bOk)
+            {
+                QTimer::singleShot(500,this,[=]{
+                    m_networkUpdate->sendData("",data);
+                });
+            }
+    });
+
+    connect(m_networkUpdate,&Network::singalLongConnect,&DATA,&UpdateData::slotRead);
+
+    connect(&DATA,&UpdateData::firstFinished,this,[=](){
+        UI.slotLockLoading(false);
+    });
 
     m_wMargee= new ItemMargee(ui->wTopLeft);
     m_wMargee->move(0,0);
@@ -43,9 +62,7 @@ Widget::Widget(QWidget *parent)
     this->setWindowTitle("艾比代管理系統      "+QString(ADP_VER));
 
     connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));
-    connect(&DATA,&UpdateData::firstFinished,this,[=](){
-        UI.slotLockLoading(false);
-    });
+
 
     connect(&ACTION,SIGNAL(sessionError()),this,SLOT(slotSessionError()));
 
@@ -87,20 +104,21 @@ Widget::Widget(QWidget *parent)
     connect(&DATA,&UpdateData::updateNotify,[=](int iType,QStringList listSid){
         if( iType == BULLETIN_DATA)
         {
+            qDebug()<<"update BULLETIN_DATA UIdata ";
             QVariantList list = DATA.getBulletin();
 
             for(int i=0;i<list.length();i++)
             {
-
+                 qDebug()<<"update BULLETIN_DATA UIdata 1";
                 QVariantMap data = list.at(i).toMap();
 
-
+                 qDebug()<<"update BULLETIN_DATA UIdata 2";
                 QDateTime End=QDateTime::fromString(data["EndTime"].toString(),"yyyyMMddhhmmss");
 
                 if(!listSid.contains(data["Sid"].toString()) ||  End.toSecsSinceEpoch()<=GLOBAL.dateTimeUtc8().toSecsSinceEpoch())
                     continue;
 
-
+                 qDebug()<<"update BULLETIN_DATA UIdata 3";
                 if(data["Type"].toString() =="0")
                 {
                     QString sUserName = DATA.getUser(data["UserSid"].toString()).Name+" : ";
@@ -111,6 +129,7 @@ Widget::Widget(QWidget *parent)
             }
 
 
+             qDebug()<<"update BULLETIN_DATA UIdata : OK";
         }
     });
 
@@ -274,13 +293,14 @@ void Widget::slotLogin()
 
 //    loop->exec();
 
+    /*
     if(ACTION.isNewVersion())
         ACTION.reQuerty();
     else
         ACTION.reQuertyOld();
+        */
 
-    ui->pageHome->setBulletinData(ACTION.m_listBulletin);
-qDebug()<<"["+QDateTime::currentDateTimeUtc().addMSecs(60*8).toString("hh:mm:ss:zzz")+"] preload ok ";
+  //  ui->pageHome->setBulletinData(ACTION.m_listBulletin);
 
     show();
 
@@ -293,8 +313,12 @@ qDebug()<<"["+QDateTime::currentDateTimeUtc().addMSecs(60*8).toString("hh:mm:ss:
 
    // DATA.connectIp(ACTION.m_ip,QString::number(iTmp));
 
-      RPKCORE.network.openConnect(ACTION.m_ip,QString::number(iTmp));
+      //RPKCORE.network.openConnect(ACTION.m_ip,QString::number(iTmp));
 
+    m_networkUpdate->openConnect(ACTION.m_ip,QString::number(iTmp));
+
+
+      DATA.m_sUserSid = ACTION.m_sCurrentUserId;
     DATA.setRun(true);
      UI.slotLockLoading(true);
 

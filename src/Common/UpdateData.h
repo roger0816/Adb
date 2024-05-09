@@ -10,6 +10,7 @@
 #include <QThread>
 #define DATA UpdateData::Instance()
 
+#define TEST_ACTION 0
 
 
 class UpdateData : public QObject
@@ -20,7 +21,7 @@ public:
 
     static UpdateData& Instance();
 
-    int connectIp(QString sIp,QString sPort);
+    //int connectIp(QString sIp,QString sPort);
     void setTarget(QStringList list);
     void setRun(bool b);
 
@@ -77,6 +78,9 @@ public:
 
     QThread m_thread;
 
+
+    QString m_sUserSid="";
+
 public slots:
     void slotRead(QString sConnect, QString sId,QByteArray data,int Error);
 
@@ -86,6 +90,7 @@ private slots:
     void slotTimer();
 private:
     static UpdateData *m_pInstance;
+
 
     QTimer m_timer;
     bool m_bRun=false;
@@ -99,6 +104,10 @@ private:
     QString sHhmm="";
 
     int m_runCount = 0;
+
+    int iForTestInt =1;
+
+
 signals:
     void updateNotify(int iType, QStringList listSid );
 

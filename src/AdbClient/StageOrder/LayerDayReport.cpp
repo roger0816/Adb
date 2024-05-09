@@ -16,7 +16,7 @@ LayerDayReport::LayerDayReport(QWidget *parent) :
     {
         if(iType==ORDER_DATA && ui->dateEdit->date()>= QDate::currentDate().addDays(-1))
         {
-         //   delayRefresh();
+            delayRefresh();
         }
     });
 
@@ -223,16 +223,16 @@ void LayerDayReport::refreshTb(bool bRequery, bool bResetCb)
             tmpItem= UI.tbItem(sStatus);
 
 
-        if(data.Note2.trimmed()!="")
-        {
-            double note2 = data.Note2.toDouble();
+//        if(data.Note2.trimmed()!="")
+//        {
+//            double note2 = data.Note2.toDouble();
 
-            if(data.Cost.toDouble()!=note2)
-            {
-                tmpItem->setForeground(QColor(255,0,0));
+//            if(data.Cost.toDouble()!=note2)
+//            {
+//                tmpItem->setForeground(QColor(255,0,0));
 
-            }
-        }
+//            }
+//        }
 
         if(data.Step.toInt()<4 && data.Note0.at(2).contains("[訂單延誤]"))
         {

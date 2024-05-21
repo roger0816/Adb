@@ -26,6 +26,13 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     m_btns.addButton(ui->btnServer5,9);
 
+#if TEST_ACTION
+    m_btns.button(0)->hide();
+    m_btns.button(1)->hide();
+    m_btns.button(2)->hide();
+
+#endif
+
 
     for(int i=0;i<m_btns.buttons().length() && i<m_listServer.length();i++)
     {

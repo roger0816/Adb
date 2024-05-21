@@ -10,6 +10,9 @@
 #include "DataSync.h"
 #include "CPing.h"
 #include "UpdateData.h"
+#include <QFutureWatcher>
+#include <QtConcurrent>
+#include <QFuture>
 
 #define GLOBAL Global::Instance()
 
@@ -23,33 +26,6 @@
 #include <QDebug>
 #include <QElapsedTimer>
 
-class TimerThread : public QThread {
-    Q_OBJECT
-
-public:
-    TimerThread(QObject *parent = nullptr) : QThread(parent), m_stop(false) {}
-
-    void stop() {
-        m_stop = true;
-    }
-
-    qint64 elapsedTime() const {
-        return m_timer.elapsed();
-    }
-
-protected:
-    void run() override {
-        m_timer.start();
-        while (!m_stop) {
-            // 每隔一段时间打印一次
-            QThread::msleep(1000); // 1秒
-        }
-    }
-
-private:
-    QElapsedTimer m_timer;
-    bool m_stop;
-};
 
 
 
@@ -128,6 +104,94 @@ public:
 
     void Debug(QString st);
 
+    // 定義通用的函數，接受任務函數和最大等待時間（毫秒）作為參數
+    template<typename Func>
+    bool runTaskWithTimeout(Func taskFunction, int timeout)
+    {
+        // 在主線程中初始化 QFutureWatcher
+        QFutureWatcher<void> watcher;
+
+        QEventLoop loop;
+
+        // 將 QFutureWatcher 的 finished() 信號連接到事件循環的 quit() 槽
+        QObject::connect(&watcher, &QFutureWatcher<void>::finished, &loop, &QEventLoop::quit);
+
+        // 启动任務
+        QFuture<void> future = QtConcurrent::run([=, &watcher]() {
+            // 在這個線程中執行任務
+            taskFunction();
+        });
+
+        // 將 QFutureWatcher 與任務關聯起來
+        watcher.setFuture(future);
+
+        // 啟動計時器，設置最大等待時間
+        QTimer timer;
+        timer.setSingleShot(true);
+        QObject::connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        timer.start(timeout);
+
+        // 開始事件循環，等待任務完成或超時
+        loop.exec();
+
+        // 檢查計時器是否超時
+        if (timer.isActive()) {
+            // 計時器沒有超時，任務已完成
+            timer.stop();
+            return true;
+        } else {
+            // 計時器已超時，任務未能在指定時間內完成
+            watcher.cancel(); // 取消任務
+            watcher.waitForFinished(); // 等待取消完成
+            return false;
+        }
+    }
+    void runWorkerThreadWithTimeout(const std::function<void()> &taskFunction, int timeout) {
+        QThread* thread = new QThread;
+        QObject::connect(thread, &QThread::started, [=]() {
+            // 在新的線程中執行任務
+            taskFunction();
+            // 任務完成後退出線程
+            thread->quit();
+            thread->deleteLater();
+        });
+        // 啟動線程
+        thread->start();
+
+        // 設置超時計時器，超時後退出線程
+//        QTimer::singleShot(timeout, [=]() {
+//            if (thread!=nullptr &&thread->isRunning()) {
+//                thread->quit();
+//                thread->deleteLater();
+//            }
+//        });
+    }
+
+
+    void runWorkerThreadWithTimeout2(const std::function<void()> &taskFunction, int timeout) {
+        QThread* thread = new QThread;
+
+               QEventLoop loop;
+        QObject::connect(thread, &QThread::started, [=,&loop]() {
+            // 在新的線程中執行任務
+            taskFunction();
+            loop.quit();
+        });
+
+        // 當任務完成後，退出線程
+        QObject::connect(thread, &QThread::finished, thread, &QThread::quit);
+
+        // 啟動線程
+        thread->start();
+
+
+        loop.exec();
+
+
+        // 設置超時計時器，超時後退出線程
+        QTimer::singleShot(timeout, thread, &QThread::quit);
+    }
+
 private:
     static Global *m_pInstance;
 
@@ -138,8 +202,9 @@ private:
 
     CPing m_ping;
 
-     TimerThread timerThread;
+    // TimerThread timerThread;
   //  DataSync m_dataSync;
+
 
 
 

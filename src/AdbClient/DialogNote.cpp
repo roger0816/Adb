@@ -41,6 +41,11 @@ void DialogNote::setUser(QStringList list)
                                  +userList.at(5));
 }
 
+void DialogNote::setId(QString sId)
+{
+    ui->lbId->setText(sId);
+}
+
 void DialogNote::setData( QStringList list)
 {
 
@@ -63,7 +68,27 @@ void DialogNote::setData( QStringList list)
 
 }
 
+void DialogNote::setReportCost(QString st)
+{
+    ui->lbCostReport->setText(st);
+}
+
 void DialogNote::hideReport()
 {
     ui->groupBox4->hide();
 }
+
+void DialogNote::on_btnCopyReport_clicked()
+{
+
+    QString sMsg = ui->lbCostReport->text();
+
+    QClipboard* clipboard = QApplication::clipboard();
+
+    clipboard->setText(sMsg, QClipboard::Clipboard);
+
+    if (clipboard->supportsSelection()) {
+        clipboard->setText(sMsg, QClipboard::Selection);
+    }
+}
+

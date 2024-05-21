@@ -8,6 +8,7 @@
 #include <QCompleter>
 #include <QStringListModel>
 #include "LayerOrder.h"
+#include <QTimerEvent>
 
 namespace Ui {
 class LayerGetOrder1;
@@ -22,6 +23,8 @@ public:
     ~LayerGetOrder1();
 
     void init();
+
+
 
 private slots:
     void on_tbUser_cellPressed(int row, int column);
@@ -46,8 +49,35 @@ private slots:
 
     void on_btnFacCancel_clicked();
 
+
+
+
+
 private:
     Ui::LayerGetOrder1 *ui;
+
+    typedef enum{
+        _NONE,
+        _TIMEOUT,   //等待逾時
+        _CANCEL,    //取消
+        _API_SET,   //API訂單取置負責人
+        _API_CANCEL,//API訂單取消
+        _CHECK,    //鎖單
+        _NO_CHECK, //解除鎖單(返回未處理)
+        _NOTE,     //更改備註
+        _FINISH    //完成送單
+
+    }_LockStatus;
+
+    _LockStatus m_uiLockStatus=_NONE;
+    QString m_sUnLockMsg="";
+    QString m_sWaitSid="";
+
+    void uiWait(_LockStatus iType=_NONE,QString sMsg="");
+
+    int m_iUiLockTimeSec=0;
+
+    void timerEvent(QTimerEvent *) override;
 
     enum _tbHeader{
         _User=0,
@@ -64,7 +94,7 @@ private:
 
     };
 
-    void refreshUser(bool bRe=true);
+    void refreshUser();
 
     QList<UserData> m_listOwner;
 
@@ -85,6 +115,11 @@ private:
     QString m_sPreSid="";
 
     bool m_bLockLoading = false;
+
+
+
+signals:
+    void dataUpdate();
 
 };
 

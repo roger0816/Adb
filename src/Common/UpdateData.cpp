@@ -4,7 +4,10 @@
 
 UpdateData::UpdateData(QObject *parent)
 {
-    connect(&RPKCORE.network,&Network::singalLongConnect,this,&UpdateData::slotRead);
+    moveToThread(&m_thread);
+    m_thread.start();
+
+    // connect(&RPKCORE.network,&Network::singalLongConnect,this,&UpdateData::slotRead);
     m_timer.connect(&m_timer,&QTimer::timeout,this,&UpdateData::slotTimer);
     m_timer.start(1000);
 
@@ -22,7 +25,7 @@ UpdateData::UpdateData(QObject *parent)
     m_data["BulletinData"]= new BulletinDataProvider(BULLETIN_DATA,this);
 
 
-    m_listTarget<<"OrderData"<<"CustomerData"<<"UserData"
+    m_listTarget<<"OrderData"<<"UserData"<<"CustomerData"
                <<"GameList"<<"GameItem"
               <<"ExchangeRate"<<"PrimeCostRate"
              <<"CustomerClass"<<"FactoryClass"
@@ -38,12 +41,12 @@ UpdateData &UpdateData::Instance()
     return global;
 }
 
-int UpdateData::connectIp(QString sIp, QString sPort)
-{
-    int iRe = RPKCORE.network.openConnect(sIp,sPort);
-    qDebug()<<"connect update port "<<iRe;
-    return iRe;
-}
+//int UpdateData::connectIp(QString sIp, QString sPort)
+//{
+//    int iRe = RPKCORE.network.openConnect(sIp,sPort);
+
+//    return iRe;
+//}
 
 void UpdateData::setRun(bool b)
 {
@@ -62,7 +65,7 @@ void UpdateData::runUpdate()
 {
     if(!m_bRun || isOnSync())
     {
-        qDebug()<<"run is : "<<m_bRun;
+        //  qDebug()<<"run is : "<<m_bRun;
         return;
     }
 
@@ -84,9 +87,17 @@ void UpdateData::runUpdate()
     {
         QString sKey = m_listTarget.at(i);
         in[sKey] = m_data[sKey]->m_lastUpdate;
+
+#if TEST_ACTION
+        //if(sKey!="OrderData")
+        //     in[sKey]="1";
+
+        in[sKey]=QString::number(iForTestInt%10);
+
+#endif
     }
-  //  in["OrderData"]="1";
-    qDebug()<<"AAAAAA : send : "<<in;
+
+
     //in["OrderDate"]="19990101000000";
     //in["ASC"]="OrderTime";  //不能改顺序，依sid排，因为報價/下單要用
     QString sError;
@@ -96,18 +107,22 @@ void UpdateData::runUpdate()
     input.iAciton = ACT::UPDATE_DATA;
 
     input.dData = in;
+    input.sUser = m_sUserSid;
+
 
     m_iWaitRecvSec=0;
-    qDebug()<<"update port send data : "<<in;
-    bool bOk = RPKCORE.network.sendData("",input.enCodeJson());
 
-    qDebug()<<"send data is :"<<bOk;
-    if(!bOk)
-    {
-        QTimer::singleShot(500,this,[=]{
-            runUpdate();
-        });
-    }
+    emit callUpdate(input.enCodeJson());
+
+    //    bool bOk = RPKCORE.network.sendData("",input.enCodeJson());
+
+    //    qDebug()<<"send data is :"<<bOk;
+    //    if(!bOk)
+    //    {
+    //        QTimer::singleShot(500,this,[=]{
+    //            runUpdate();
+    //        });
+    //    }
 
 
 
@@ -118,7 +133,6 @@ QList<OrderData> UpdateData::getOrder()
 
     QList<OrderData> list= dynamic_cast<OrderDataProvider*>(m_data["OrderData"])->m_listData;
 
-
     QDateTime currentDateTimeUtc8 = QDateTime::currentDateTimeUtc().addSecs(60*60*8);
 
     QString sToday=currentDateTimeUtc8.toString("yyyyMMdd");
@@ -128,9 +142,14 @@ QList<OrderData> UpdateData::getOrder()
     foreach(OrderData v ,list)
     {
         if(v.OrderDate==sToday || v.OrderDate == sYestoday)
+        {
+
             listRe.append(v);
+        }
+
 
     }
+
 
     return listRe;
 }
@@ -147,6 +166,15 @@ OrderData UpdateData::getOrder(QString sSid)
     }
 
     return re;
+}
+
+QList<OrderData> UpdateData::getOrderByDate(QDate date)
+{
+    QList<OrderData> list;
+
+    //todo
+
+    return list;
 }
 
 QList<CustomerData> UpdateData::getCustomerList()
@@ -483,17 +511,17 @@ QString UpdateData::getPayRate(QString sPayTypeSid)
 
 QVariantMap UpdateData::getUserBonus(QString sUserSid)
 {
-      QVariantList list =dynamic_cast<UserBonusProvider*>(m_data["UserBonus"])->m_listData;
+    QVariantList list =dynamic_cast<UserBonusProvider*>(m_data["UserBonus"])->m_listData;
 
-      QVariantMap re;
+    QVariantMap re;
 
-      foreach(QVariant v,list)
-      {
-          if(v.toMap()["UserSid"]==sUserSid)
-              re=v.toMap();
-      }
+    foreach(QVariant v,list)
+    {
+        if(v.toMap()["UserSid"]==sUserSid)
+            re=v.toMap();
+    }
 
-      return re;
+    return re;
 }
 
 
@@ -513,13 +541,13 @@ QVariantList UpdateData::getBulletin()
 
 void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Error)
 {
-    qDebug()<<"connect : "<<sConnect<<" , sId : "<<sId;
+    //qDebug()<<"connect : "<<sConnect<<" , sId : "<<sId;
 
     m_iWaitRecvSec=0;
     CData tmp;
     tmp.deCodeJson(data);
     QVariantMap reData = tmp.dData;
-    qDebug()<< reData.keys();
+    // qDebug()<< reData.keys();
 
 
     foreach(QString sTarget,m_listTarget)
@@ -527,36 +555,70 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
 
         if(reData.contains(sTarget) && m_data.contains(sTarget))
         {
+            qDebug()<<"slot read : "<<sTarget;
             QVariantList list =reData[sTarget].toList();
 
             if(list.length()>0)
-                qDebug()<<"AAAAAA1: "<<sTarget<<" data len : "<<list.length();
+                qDebug()<<sTarget<<" data len : "<<list.length();
 
             QStringList listSid;
 
-            foreach(QVariant v,list)
+            for(int i=0;i<list.length();i++)
             {
-                listSid.append(v.toMap()["Sid"].toString());
+                QVariantMap v = list.at(i).toMap();
+                listSid.append(v["Sid"].toString());
+
+#if TEST_ACTION
+
+                if(sTarget=="OrderData")
+                {
+
+                    OrderData da(v);
+
+                    //for test
+                    int ii=QRandomGenerator::global()->bounded(2,4);
+                    da.Step=QString::number(ii);
+                    da.PaddingUser = m_sUserSid;
+                    da.OrderDate=QDate::currentDate().addDays(-1).toString("yyyyMMdd");
+                    list[i]=da.data();
+                }
+
+#endif
+
             }
 
-            bool bIsUpdate = m_data[sTarget]->setData(list);
+            bool bIsUpdate = true;
+
+
+            bIsUpdate= m_data[sTarget]->setData(list);
+
+#if TEST_ACTION
+            bIsUpdate = true;
+#endif
+
+
             if(bIsUpdate)
             {
                 if(m_data[sTarget]->m_bIsFirst)
                 {
-                    if(sTarget=="OrderData")
+                    if(sTarget=="OrderData" || sTarget=="BulletinData")
+                    {
+                             qDebug()<<"update first : "<<sTarget;
                         emit updateNotify(m_data[sTarget]->m_iTag,listSid);
+                    }
                 }
                 else
                 {
-
+                    qDebug()<<"update : "<<sTarget;
                     emit updateNotify(m_data[sTarget]->m_iTag,listSid);
                 }
             }
 
 
+
         }
     }
+
 
     int iDelayTime=2000;
 
@@ -591,7 +653,7 @@ bool UpdateData::isOnSync()
     {
         if(m_data[listKey.at(i)]->m_bOnSync)
         {
-            qDebug()<<listKey.at(i)<<"  is on sync";
+            //  qDebug()<<listKey.at(i)<<"  is on sync";
             return true;
         }
     }

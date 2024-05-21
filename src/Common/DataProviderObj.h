@@ -53,12 +53,17 @@ public:
     explicit OrderDataProvider(int iTag,QObject *parent = nullptr):DataProvider(iTag,parent){}
     void changeData()override
     {
+        qDebug()<<"change data : "<<m_iTag;
+
         m_listData.clear();
         foreach(const QVariant v, m_list)
         {
             OrderData d(v.toMap());
             m_listData.append(d);
         }
+
+        qDebug()<<"change data OK";
+
     }
 
     QList<OrderData> m_listData;
@@ -93,12 +98,16 @@ public:
 
     void changeData() override
     {
+
         m_listData.clear();
         foreach(const QVariant v, m_list)
         {
             UserData d(v.toMap());
             m_listData.append(d);
         }
+
+
+
     }
 
     QList<UserData> m_listData;

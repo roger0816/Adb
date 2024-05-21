@@ -22,7 +22,7 @@ Global::~Global()
     m_ping.quit();
 
 
-    timerThread.start();
+
 }
 
 void Global::setServer(bool b, QString sIp, QString sPort)
@@ -448,45 +448,7 @@ QString Global::userLvToStr(int iLv)
     return sLv;
 }
 
-//double Global::subFloat(double v, int f)
-//{
-//    double re;
 
-//    re = QString::number(v,'f',f).toDouble();
-
-//    return re;
-
-
-//    QStringList list = QString::number(v).split(".");
-
-//    if(list.length()<2)
-//    {
-//        return list.first().toInt();
-//    }
-
-//    QString s0=list.first();
-//    QString s1 = list.last();
-
-//    if(s1.toInt()==0 || s1.length()<=f)
-//    {
-//        return v;
-//    }
-
-
-//    if(f==0)
-//    {
-//        int iTmp=s0.toInt()+1;
-//        return iTmp;
-//    }
-//    else
-//    {
-//            //to do
-//    }
-
-
-
-//    return re;
-//}
 
 bool Global::checkSearch(QString sFilterStr, QVariantMap dTarget, bool caseNeedDiff)
 {
@@ -638,23 +600,12 @@ QString Global::printTime(QString st)
 void Global::Debug(QString st)
 {
 
-    auto convertMilliseconds=[=](long long milliseconds) {
-        // 计算小时、分钟、秒和毫秒
-        long long totalSeconds = milliseconds / 1000;
-        long long hours = totalSeconds / 3600;
-        long long minutes = (totalSeconds % 3600) / 60;
-        long long seconds = totalSeconds % 60;
-        long long milliseconds_remainder = milliseconds % 1000;
+   QString t= "["+QTime::currentTime().toString("mm:ss.zzz")+"] ";
 
-        QString sRe=QString::number(minutes)+":"+QString::number(seconds)+"."+QString::number(milliseconds_remainder);
+   qDebug()<<t+st;
+//   QString sTmp=timerThread.convertMilliseconds()+st;
 
-        return "["+sRe+"] ";
-    };
-
-
-    QString sTmp=convertMilliseconds(timerThread.elapsedTime())+st;
-
-    qDebug()<<sTmp;
+//    qDebug()<<sTmp;
 }
 
 

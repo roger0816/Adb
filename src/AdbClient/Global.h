@@ -85,7 +85,9 @@ public:
 
     QString userLvToStr(int iLv);
 
-  //  double subFloat(double v,int f);  //小數點無條件進位
+    QString encryptSt(const QString &st, const QByteArray &key);
+
+    QString decryptSt(const QString &st, const QByteArray &key) ;
 
     int m_virtualSec=0;
 
@@ -94,6 +96,9 @@ public:
     QVariantMap m_copyGameItem;
 
     QString currencyStr(QString st);
+
+
+
 
 
     void ping(QString sIp);

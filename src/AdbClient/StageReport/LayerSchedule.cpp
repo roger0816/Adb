@@ -7,6 +7,23 @@ LayerSchedule::LayerSchedule(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_editHeader = new EditScheduleHeader(ui->wBg);
+
+    m_editHeader->hide();
+
+    connect(m_editHeader,&EditScheduleHeader::done,this,[=](QStringList list0,QStringList list1){
+        QStringList listF;
+        listF.append("");
+        listF.append(list0);
+        listF.append("備註");
+        listF.append(list1);
+        listF.append("備註");
+        m_listVHeader = listF;
+
+        refresh();
+
+    });
+
     ui->tb0->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//平均分配列宽
 
     //    ui->tb->verticalHeader()->setSectionResizeMode(QHeaderView::Stretch);//平均分配行宽
@@ -98,6 +115,8 @@ LayerSchedule::~LayerSchedule()
 void LayerSchedule::setEditMode(bool b)
 {
     m_bEditMode = b;
+
+    ui->btnHeader->setVisible(m_bEditMode);
 
     ui->wFn->setVisible(m_bEditMode);
 
@@ -446,7 +465,7 @@ void LayerSchedule::write()
                 sTmp=sTmp.replace("::",":");
 
 
-                listRow.append(t->text());
+                listRow.append(sTmp);
             }
             else
             {
@@ -544,6 +563,11 @@ void LayerSchedule::read()
 
     QStringList listData = data["Data"].toString().split(";;");
     QStringList listCheck = data["UserCheck"].toString().split(";;");
+  QStringList listHeader = data["Header"].toString().split(",,");
+
+  if(listHeader.length()>2)
+      m_listVHeader= listHeader;
+
 
     for(int i=0;i<128 && i<listData.length();i++)
     {
@@ -959,5 +983,38 @@ void LayerSchedule::on_btnScheduleClear_clicked()
     }
 
     refresh();
+}
+
+
+void LayerSchedule::on_btnHeader_clicked()
+{
+
+    QStringList list = m_listVHeader;
+    QStringList reHeader;
+
+    if(list.length()>0 && list.first().trimmed()=="")
+        list.pop_front();
+
+    // 找到第一个 "A" 的位置
+    int indexA = list.indexOf("備註");
+
+    // 创建两个子列表
+    QStringList a = list.mid(0, indexA); // 获取第一个 "A" 之前的元素
+
+    // 获取第一个 "A" 之后的部分，直到第二个 "A" 或列表末尾
+    QStringList b = list.mid(indexA + 1);
+    int nextAIndex = b.indexOf("備註"); // 在子列表 b 中查找下一个 "A"
+    if (nextAIndex != -1) {
+        b = b.mid(0, nextAIndex); // 如果找到了第二个 "A"，只保留之前的元素
+    }
+
+    m_editHeader->setData(a,b);
+    m_editHeader->setWindowModality(Qt::ApplicationModal); // 設置模態窗口
+    m_editHeader->setGeometry(0,0,width(),height());
+    m_editHeader->show();
+
+    m_editHeader->raise();
+
+
 }
 

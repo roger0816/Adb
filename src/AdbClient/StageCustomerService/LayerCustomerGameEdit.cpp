@@ -112,6 +112,17 @@ QVariantList LayerCustomerGameEdit::queeList(QString sCustomerSid)
 
 void LayerCustomerGameEdit::setCb(QVariantList outGame)
 {
+
+    m_listGame.clear();
+
+    foreach(QVariant v,outGame)
+    {
+        if(v.toMap().contains("IsDelete") && v.toMap()["IsDelete"]!=1)
+            m_listGame.append(v);
+
+    }
+
+
     m_listGame = outGame;
 
     auto listGameName=[=](QString sKey)

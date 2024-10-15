@@ -219,9 +219,24 @@ UserData UpdateData::getUser(QString sSid)
     return re;
 }
 
-QList<DataGameList> UpdateData::getGameList()
+QList<DataGameList> UpdateData::getGameList(bool bShowDelete)
 {
-    return dynamic_cast<GameListProvider*>(m_data["GameList"])->m_listData;
+
+    QList<DataGameList> tmp= dynamic_cast<GameListProvider*>(m_data["GameList"])->m_listData;
+
+    if(bShowDelete)
+        return tmp;
+
+    QList<DataGameList> listRe;
+
+    foreach(DataGameList d,tmp)
+    {
+        if(d.IsDelete!=1)
+            listRe.append(d);
+    }
+
+
+    return listRe;
 }
 
 DataGameList UpdateData::getGameList(QString sSid)
@@ -299,7 +314,7 @@ DataGameItem UpdateData::getGameItem(QString sSid)
     return re;
 }
 
-QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid)
+QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid, bool showDelete)
 {
     QList<DataGameItem> list = getGameItemList();
 
@@ -308,7 +323,12 @@ QList<DataGameItem> UpdateData::getGameItemFromGameSid(QString sGameSid)
     foreach (DataGameItem d, list) {
         if(d.GameSid==sGameSid)
         {
-            re.append(d);
+            if(d.IsDelete && !showDelete)
+            {
+
+            }
+            else
+                re.append(d);
         }
     }
 

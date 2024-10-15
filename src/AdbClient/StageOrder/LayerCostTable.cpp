@@ -47,7 +47,7 @@ void LayerCostTable::refreshGameList()
 
 
    // m_listGame = ACTION.getGameList(true);
-    m_listGame = DATA.getGameList();
+    m_listGame = DATA.getGameList(false);
 
     int iOldIdx = ui->tbGame->currentRow();
 
@@ -106,7 +106,7 @@ void LayerCostTable::on_tbGame_cellPressed(int row, int )
 
     QString sError;
 
-    m_currentItems =DATA.getGameItemFromGameSid(sGameSid);
+    m_currentItems =DATA.getGameItemFromGameSid(sGameSid,false);
 
 
 

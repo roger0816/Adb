@@ -886,8 +886,18 @@ void LayerSayCost::on_cbGame_currentTextChanged(const QString &arg1)
     v["ASC"]="Sort";
 
     QString sError;
+    QVariantList listOut;
+    ACTION.action(ACT::QUERY_GAME_ITEM,v,listOut,sError);
+    m_listGameItem.clear();
+    foreach(QVariant v,listOut)
+    {
+        if(v.toMap().contains("IsDelete") && v.toMap()["IsDelete"]!=1)
+            m_listGameItem.append(v);
+    }
 
-    ACTION.action(ACT::QUERY_GAME_ITEM,v,m_listGameItem,sError);
+
+
+
 
 
     ui->tbGameItem->setRowCount(0);

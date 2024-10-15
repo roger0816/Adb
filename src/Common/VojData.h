@@ -14,7 +14,7 @@ struct DataObj
 public:
     DataObj(){}
 
-    DataObj(QVariantMap data):DataObj(){setData(data);}
+    DataObj(const QVariantMap &data){setData(data);}
     QString Sid="";
 
     QString Id="";
@@ -25,7 +25,7 @@ public:
 
     QString UpdateTime;
 
-    void setData(QVariantMap data)
+    void setData(const QVariantMap &data)
     {
         Sid = data["Sid"].toString();
 
@@ -169,9 +169,9 @@ struct DataUserBonus
 struct CustomerData :public DataObj
 {
     CustomerData(){}
-    CustomerData(QVariantMap data):DataObj(){setData(data);}
+    CustomerData(const QVariantMap &data):DataObj(){setData(data);}
 
-    void setData(QVariantMap data)
+    void setData(const QVariantMap &data)
     {
 
         DataObj::setData(data);
@@ -735,15 +735,19 @@ struct DataGameList :public DataObj
 {
     bool Enable;
 
+    int IsDelete =0;
+
     double GameRate;  //這個只存最新的， 獨立開一個table GameRate, 存歷史記錄
     QString UserSid="";
     QString SellNote; //價目表
     DataGameList():DataObj(){};
-    DataGameList(QVariantMap data){setData(data);}
+    DataGameList(const QVariantMap &data){setData(data);}
 
-    void setData(QVariantMap data)
+    void setData(const QVariantMap &data)
     {
         DataObj::setData(data);
+
+        IsDelete =data["IsDelete"].toInt();
 
         Enable = data["Enable"].toBool();
 
@@ -766,6 +770,8 @@ struct DataGameList :public DataObj
         re["UserSid"] = UserSid;
 
         re["SellNote"] = SellNote;
+
+        re["IsDelete"] = IsDelete;
 
         return re;
     }
@@ -830,6 +836,7 @@ struct DataGameItem :public DataObj
         GameSid = data["GameSid"].toString();
         Sort=data["Sort"].toInt();
         Enable = data["Enable"].toBool();
+        IsDelete = data["IsDelete"].toInt();
         OrderNTD = data["OrderNTD"].toString();
         Bonus = data["Bonus"].toString();
         NTD = data["NTD"].toString();
@@ -848,6 +855,7 @@ struct DataGameItem :public DataObj
         d["GameSid"]=GameSid;
         d["Sort"]=Sort;
         d["Enable"]=Enable;
+        d["IsDelete"] = IsDelete;
         d["OrderNTD"]=OrderNTD;
         d["Bonus"]=Bonus;
         d["NTD"]=NTD;
@@ -864,6 +872,7 @@ struct DataGameItem :public DataObj
 
     QString GameSid;
     bool Enable;
+    int IsDelete =0;
     int ForApi=1;
     int Sort;
     QString OrderNTD;
@@ -991,7 +1000,7 @@ struct DataRate :public DataObj
 
 };
 
-
+/*
 // old ,waitting delete it
 struct GameList
 {
@@ -1067,6 +1076,7 @@ struct GameList
     QList<GameData> listData;
 
 };
+*/
 
 
 struct DataItemCount :public DataObj

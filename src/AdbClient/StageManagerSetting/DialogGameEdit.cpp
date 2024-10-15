@@ -80,6 +80,22 @@ void DialogGameEdit::on_btnOk_clicked()
 
     bool bHasOne = false;
 
+
+    foreach(QVariant v ,listOut)
+    {
+        DataGameList d(v.toMap());
+
+        if(d.Id.toUpper()==sId.toUpper() || d.Name.toUpper()==sName.toUpper())
+        {
+            bHasOne = true;
+            break;
+        }
+
+    }
+
+
+
+/*
     GameList gameList;
     gameList.setGameList(listOut);
 
@@ -91,6 +107,7 @@ void DialogGameEdit::on_btnOk_clicked()
             break;
         }
     }
+    */
 
     if(bHasOne && m_bIsAddType)
     {
@@ -112,6 +129,8 @@ void DialogGameEdit::on_btnOk_clicked()
     m_bEnable = ui->cbEnable->isChecked();
 
     m_iGameRate = ui->dbGameRate->value();
+
+
 
     if(m_sSid=="")
     {

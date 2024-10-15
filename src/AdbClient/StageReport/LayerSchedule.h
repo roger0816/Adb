@@ -12,6 +12,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include "Label3.h"
+#include "EditScheduleHeader.h"
 
 #define SCHEDULE_STATUS_ID "999999"
 
@@ -113,6 +114,8 @@ private:
 
     bool checkGrid(int iRow=-1,int iCol=-1);
 
+    EditScheduleHeader *m_editHeader;
+
 private slots:
     void on_btnSave_clicked();
 
@@ -144,6 +147,8 @@ private slots:
 
     void on_btnScheduleClear_clicked();
 
+
+    void on_btnHeader_clicked();
 
 public slots:
 

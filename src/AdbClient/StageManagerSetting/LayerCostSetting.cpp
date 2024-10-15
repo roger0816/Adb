@@ -10,7 +10,7 @@ LayerCostSetting::LayerCostSetting(QWidget *parent) :
     ui->tbGameItem->setColumnWidth(_Sid,60);
     ui->tbGameItem->setColumnWidth(_Name,160);
     ui->tbGameItem->setColumnWidth(_Enable,40);
-     ui->tbGameItem->setColumnWidth(_ForApi,40);
+    ui->tbGameItem->setColumnWidth(_ForApi,40);
 
     connect(ui->btnSortUp,&QPushButton::clicked,this,&LayerCostSetting::on_btnSortUp);
 
@@ -52,7 +52,7 @@ void LayerCostSetting::on_btnGameAdd_clicked()
     if(dialog.exec()==1)
     {
 
-        GameList d;
+
 
         QVariantMap data;
 
@@ -92,8 +92,8 @@ void LayerCostSetting::showEvent(QShowEvent *)
 
 void LayerCostSetting::refreshGameList()
 {
+    m_listGame = DATA.getGameList(false);
 
-    m_listGame = DATA.getGameList();
 
     ui->tbGame->setRowCount(0);
 
@@ -147,7 +147,7 @@ void LayerCostSetting::refreshItemList()
     }
 
 
-      qDebug()<<"refresh item 2";
+    qDebug()<<"refresh item 2";
 
     DataGameList gameData(m_gameDisplayData.at(iGameRow).toMap());
 
@@ -163,27 +163,24 @@ void LayerCostSetting::refreshItemList()
 
     ui->lbItemTitle1->setText("商品內容");
 
-    m_listGameItem = DATA.getGameItemFromGameSid(m_sCurrentGameSid);
+    m_listGameItem = DATA.getGameItemFromGameSid(m_sCurrentGameSid,false);
 
-      qDebug()<<"refresh item 3";
+    qDebug()<<"refresh item 3";
     DataRate rate2;
-   // rate2=ACTION.costRate("",true);
+    // rate2=ACTION.costRate("",true);
     rate2 = DATA.costRate();
 
     m_listTipData.clear();
 
     CListPair listCurrent = DATA.getAddValueType();
 
-      qDebug()<<"refresh item 4";
+    qDebug()<<"refresh item 4";
     for(int i=0;i<m_listGameItem.length();i++)
     {
         QVariantMap toolData;
         DataGameItem data= m_listGameItem.at(i);
 
-        if(data.Sid=="3518")
-        {
-            qDebug()<<data.data();
-        }
+
 
         ui->tbGameItem->setRowCount(i+1);
 
@@ -233,7 +230,7 @@ void LayerCostSetting::refreshItemList()
         }
 
 
-          qDebug()<<"refresh item 5";
+        qDebug()<<"refresh item 5";
         toolData["AddValueTypeSid"] = listData.join("\n");
 
         m_listTipData.append(toolData);
@@ -242,7 +239,7 @@ void LayerCostSetting::refreshItemList()
     }
 
 
-      qDebug()<<"refresh item 6";
+    qDebug()<<"refresh item 6";
 }
 
 bool LayerCostSetting::checkSearch(DataGameList gameData)
@@ -356,6 +353,36 @@ void LayerCostSetting::on_btnGameEdit_clicked()
     else if(iRet==3)
     {
 
+        QVariantMap data;
+
+        data["Enable"] = dialog.m_bEnable;
+
+        data["Sid"] = dialog.m_sSid;
+
+        data["Id"] = dialog.m_sId;
+
+        data["Name"] = dialog.m_sName;
+
+        data["GameRate"] = QString::number(dialog.m_iGameRate);
+        data["UserSid"] = ACTION.m_currentUser.Sid;
+        data["IsDelete"]=1;
+        QString sError;
+
+        ACTION.action(ACT::EDIT_GAME_LIST,data,sError);
+        UI.showMsg("",sError.replace("修改","刪除"),"OK");
+
+        refreshGameList();
+
+        refreshItemList();
+
+
+    }
+
+
+    /*
+    else if(iRet==3)
+    {
+
 
         QVariantMap data;
 
@@ -372,6 +399,7 @@ void LayerCostSetting::on_btnGameEdit_clicked()
 
 
     }
+    */
 
 
 }
@@ -404,6 +432,7 @@ void LayerCostSetting::on_btnItemAdd_clicked()
 
     dialog.setRate(sGameName+" : 新增商品",rate);
     QVariantMap dat;
+    dat["Sort"]=m_listGameItem.length()+1;
     dat["Enable"] = true;
     dialog.setData(iGameRate,dat);
 
@@ -474,7 +503,7 @@ void LayerCostSetting::on_tbGame_cellClicked(int row , int )
 {
     if(row>=0 && row<m_gameDisplayData.length())
     {
-     m_sPreGameSid = m_gameDisplayData.at(row).toMap()["Sid"].toString();
+        m_sPreGameSid = m_gameDisplayData.at(row).toMap()["Sid"].toString();
     }
     refreshItemList();
 }
@@ -552,6 +581,30 @@ void LayerCostSetting::on_btnItemEdit_clicked()
 
     }
 
+
+/*
+    if(iRet==3)
+    {
+        QVariantMap data =dialog.data();
+
+        data["GameSid"] = m_sCurrentGameSid;
+        data["IsDelete"]=1;
+
+        QString sError;
+
+        ACTION.action(ACT::EDIT_GAME_ITEM,data,sError);
+
+        sError.replace("修改","刪除");
+
+        UI.showMsg("",sError,"OK");
+
+
+        refreshItemList();
+
+    }
+    */
+
+
     if(iRet==3)
     {
         QVariantMap data;
@@ -574,6 +627,7 @@ void LayerCostSetting::on_btnItemEdit_clicked()
         refreshItemList();
 
     }
+
 }
 
 

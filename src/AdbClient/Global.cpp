@@ -8,7 +8,7 @@ Global::Global(QObject *parent)
     loadConfig();
 
 
-  //  m_ping.start();
+    //  m_ping.start();
 }
 
 Global::~Global()
@@ -372,36 +372,13 @@ void Global::loadConfig()
 {
     qDebug()<<"loading config";
 
-    QString file=QCoreApplication::applicationDirPath()+"/conf.ini";
+    QString file=QCoreApplication::applicationDirPath()+"/data/config.ini";
 
     QSettings conf(file, QSettings::IniFormat);
 
     QStringList list = conf.allKeys();
 
-    if(list.indexOf("ServerIp")<0)
-        list.append("ServerIp");
 
-
-    if(list.indexOf("ServerPort")<0)
-        list.append("ServerPort");
-
-    for(int i=0;i<list.length();i++)
-    {
-        QString sKey = list.at(i);
-
-        if(sKey=="ServerIp")
-        {
-            m_config[list.at(i)]= conf.value(list.at(i),"127.0.0.1");
-        }
-        else if(sKey=="ServerPort")
-        {
-            m_config[list.at(i)]= conf.value(list.at(i),"6000");
-        }
-        else
-        {
-            m_config[list.at(i)]= conf.value(list.at(i));
-        }
-    }
 
 
 }
@@ -446,6 +423,25 @@ QString Global::userLvToStr(int iLv)
         sLv = "會計";
 
     return sLv;
+}
+
+QString Global::encryptSt(const QString &st, const QByteArray &key)
+{
+    // 使用 QCryptographicHash 进行加密
+    QByteArray hashKey = QCryptographicHash::hash(key, QCryptographicHash::Sha256);
+    QByteArray encryptedIp = st.toUtf8() + hashKey;
+    return QString(encryptedIp.toBase64());
+}
+
+QString Global::decryptSt(const QString &st, const QByteArray &key)
+{
+
+    // 解密流程（仅为示例，实际需要更复杂的处理）
+    QByteArray hashKey = QCryptographicHash::hash(key, QCryptographicHash::Sha256);
+    QByteArray decodedIp = QByteArray::fromBase64(st.toUtf8());
+    QByteArray originalIp = decodedIp.chopped(hashKey.size());
+    return QString(originalIp);
+
 }
 
 
@@ -600,12 +596,12 @@ QString Global::printTime(QString st)
 void Global::Debug(QString st)
 {
 
-   QString t= "["+QTime::currentTime().toString("mm:ss.zzz")+"] ";
+    QString t= "["+QTime::currentTime().toString("mm:ss.zzz")+"] ";
 
-   qDebug()<<t+st;
-//   QString sTmp=timerThread.convertMilliseconds()+st;
+    qDebug()<<t+st;
+    //   QString sTmp=timerThread.convertMilliseconds()+st;
 
-//    qDebug()<<sTmp;
+    //    qDebug()<<sTmp;
 }
 
 

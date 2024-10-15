@@ -299,6 +299,9 @@ color: rgb(0, 85, 255);</string>
                 <underline>true</underline>
                </font>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="styleSheet">
                <string notr="true">font: 12pt &quot;Microsoft JhengHei UI&quot;;
 
@@ -327,6 +330,9 @@ color: rgb(95, 95, 0);</string>
                 <width>220</width>
                 <height>16777215</height>
                </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="styleSheet">
                <string notr="true">background-color: rgba(255, 255, 255);</string>
@@ -413,6 +419,9 @@ color: rgb(95, 95, 0);</string>
                </property>
                <item row="0" column="0">
                 <widget class="QPushButton" name="btnTest2">
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>

@@ -41,7 +41,7 @@ public:
     QList<UserData> getUserList();
     UserData getUser(QString sSid);
 
-    QList<DataGameList> getGameList();
+    QList<DataGameList> getGameList(bool bShowDelete =true);
     DataGameList getGameList(QString sSid);
     QString getGameName(QString sId);
     QString getGameId(QString sName);
@@ -49,7 +49,7 @@ public:
 
     QList<DataGameItem> getGameItemList();
     DataGameItem getGameItem(QString sSid);
-    QList<DataGameItem> getGameItemFromGameSid(QString sGameSid);
+    QList<DataGameItem> getGameItemFromGameSid(QString sGameSid,bool showDelete= true);
     QString findGameSid(QString sGameItemSid);
     double getGameItemPayCount(QString sGameItemSid, QString sPaySid);
 

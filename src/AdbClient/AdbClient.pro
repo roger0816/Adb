@@ -35,6 +35,7 @@ SOURCES += \
     StageOrder/DialogEditOwner.cpp \
     StageOrder/ItemOrderSelector.cpp \
     StageOrder/LayerDayDebit.cpp \
+    StageReport/EditScheduleHeader.cpp \
     StageReport/LayerCostReport.cpp \
     StageReport/LayerGameReport.cpp \
     StageReport/LayerUserReport.cpp \
@@ -113,6 +114,7 @@ HEADERS += \
     StageOrder/DialogEditOwner.h \
     StageOrder/ItemOrderSelector.h \
     StageOrder/LayerDayDebit.h \
+    StageReport/EditScheduleHeader.h \
     StageReport/LayerCostReport.h \
     StageReport/LayerGameReport.h \
     StageReport/LayerUserReport.h \
@@ -190,6 +192,7 @@ FORMS += \
     StageOrder/DialogEditOwner.ui \
     StageOrder/ItemOrderSelector.ui \
     StageOrder/LayerDayDebit.ui \
+    StageReport/EditScheduleHeader.ui \
     StageReport/LayerCostReport.ui \
     StageReport/LayerGameReport.ui \
     StageReport/LayerUserReport.ui \

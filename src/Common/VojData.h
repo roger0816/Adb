@@ -740,6 +740,7 @@ struct DataGameList :public DataObj
     double GameRate;  //這個只存最新的， 獨立開一個table GameRate, 存歷史記錄
     QString UserSid="";
     QString SellNote; //價目表
+    QString BK;
     DataGameList():DataObj(){};
     DataGameList(const QVariantMap &data){setData(data);}
 
@@ -756,6 +757,7 @@ struct DataGameList :public DataObj
         UserSid=data["UserSid"].toString();
 
         SellNote = data["SellNote"].toString();
+        BK = data["BK"].toString();
 
     }
 
@@ -772,6 +774,7 @@ struct DataGameList :public DataObj
         re["SellNote"] = SellNote;
 
         re["IsDelete"] = IsDelete;
+        re["BK"] = BK;
 
         return re;
     }
@@ -782,6 +785,7 @@ struct DataGameRate
     DataGameRate(){}
     DataGameRate(QVariantMap data){setData(data);}
 
+    QString BK;
     void setData(QVariantMap data)
     {
         Sid =data["Sid"].toString();
@@ -790,6 +794,7 @@ struct DataGameRate
         Rate =data["Rate"].toString();
         UserSid =data["UserSid"].toString();
         UpdateTime =data["UpdateTime"].toString();
+        BK = data["BK"].toString();
 
     }
 
@@ -803,7 +808,7 @@ struct DataGameRate
         re["Rate"]=Rate;
         re["UserSid"]=UserSid;
         re["UpdateTime"]=UpdateTime;
-
+        re["BK"] = BK;
 
         return re;
     }

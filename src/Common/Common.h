@@ -20,6 +20,8 @@ public:
 
     static Common &INS();
 
+    QString toBkString(QVariantMap d);
+
 
     QString toJsonString(QString sKey,QString sValue);
 

@@ -27,6 +27,8 @@ public:
 
     void runUpdate();
 
+
+
     QList<OrderData> getOrder();
 
     OrderData getOrder(QString sSid);
@@ -41,7 +43,7 @@ public:
     QList<UserData> getUserList();
     UserData getUser(QString sSid);
 
-    QList<DataGameList> getGameList(bool bShowDelete =true);
+    QList<DataGameList> getGameList();
     DataGameList getGameList(QString sSid);
     QString getGameName(QString sId);
     QString getGameId(QString sName);
@@ -80,6 +82,8 @@ public:
 
 
     QString m_sUserSid="";
+
+
 
 public slots:
     void slotRead(QString sConnect, QString sId,QByteArray data,int Error);

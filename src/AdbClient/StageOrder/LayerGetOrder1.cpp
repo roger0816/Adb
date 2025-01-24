@@ -908,6 +908,8 @@ void LayerGetOrder1::on_btnFacChange_clicked()
 
 void LayerGetOrder1::on_btnFacCancel_clicked()
 {
+
+
     QVariantList listData =m_data[m_currentDataKey].toList();
 
     QVariantMap data =listData.at(qBound(0,ui->tbOrder->currentRow(),listData.length()-1)).toMap();
@@ -922,12 +924,21 @@ void LayerGetOrder1::on_btnFacCancel_clicked()
     //order.Pic0 = ui->wPic0->uploadPic();
     QString sError;
     bool bOk =ACTION.replaceOrder(order,sError);
-    uiWait(_API_CANCEL);
-    if(bOk)
-        sError="訂單已取消";
-    UI.showMsg("",sError,"OK");
 
-    refreshUser();
+    if(bOk)
+    {
+        m_sWaitSid=order.Sid;
+
+        uiWait(_API_CANCEL,"訂單已取消");
+    }
+    else
+    {
+        UI.showMsg("",sError,"OK");
+
+        refreshUser();
+    }
+
+
 
 }
 

@@ -16,6 +16,32 @@ Common &Common::INS()
   return *m_pInstance;
 }
 
+QString Common::toBkString(QVariantMap d)
+{
+    QString sRe="";
+    QStringList listKey = d.keys();
+
+    foreach(QString key,listKey)
+    {
+        if(key.toUpper()=="SID" || key.toUpper()=="UPDATETIME")
+            continue;
+
+        if(sRe!="")
+            sRe+=",";
+
+        QString sValue = d[key].toString();
+
+        if(sValue.trimmed()=="")
+            continue;
+
+        sRe+=key+":"+sValue;
+
+    }
+
+    return sRe;
+
+}
+
 QString Common::toJsonString(QString sKey, QString sValue)
 {
 

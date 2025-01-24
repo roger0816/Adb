@@ -1,6 +1,8 @@
 #include "LayerCostSetting.h"
 #include "ui_LayerCostSetting.h"
 
+
+
 LayerCostSetting::LayerCostSetting(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::LayerCostSetting)
@@ -92,7 +94,7 @@ void LayerCostSetting::showEvent(QShowEvent *)
 
 void LayerCostSetting::refreshGameList()
 {
-    m_listGame = DATA.getGameList(false);
+    m_listGame = DATA.getGameList();
 
 
     ui->tbGame->setRowCount(0);
@@ -325,21 +327,25 @@ void LayerCostSetting::on_btnGameEdit_clicked()
 
     if(iRet==2)
     {
-        QVariantMap data;
 
-        data["Enable"] = dialog.m_bEnable;
 
-        data["Sid"] = dialog.m_sSid;
+        DataGameList d;
+        d.Enable=dialog.m_bEnable;
+        d.Sid=dialog.m_sSid;
+        d.Id=dialog.m_sId;
+        d.Name=dialog.m_sName;
+        d.GameRate=dialog.m_iGameRate;
+        d.UserSid= ACTION.m_currentUser.Sid;
 
-        data["Id"] = dialog.m_sId;
+        QVariantMap old =DATA.getGameList(dialog.m_sSid).data();
 
-        data["Name"] = dialog.m_sName;
+        old.remove("SellNote");
+        d.BK=COMMON.toBkString(old);
 
-        data["GameRate"] = QString::number(dialog.m_iGameRate);
-        data["UserSid"] = ACTION.m_currentUser.Sid;
         QString sError;
 
-        ACTION.action(ACT::EDIT_GAME_LIST,data,sError);
+         ACTION.action(ACT::EDIT_GAME_LIST,d.data(),sError);
+
         UI.showMsg("",sError,"OK");
 
         if(!ACTION.isNewVersion())
@@ -353,23 +359,20 @@ void LayerCostSetting::on_btnGameEdit_clicked()
     else if(iRet==3)
     {
 
-        QVariantMap data;
+        DataGameList d;
+        d.Enable=dialog.m_bEnable;
+        d.Sid=dialog.m_sSid;
+        d.Id=dialog.m_sId;
+        d.Name=dialog.m_sName;
+        d.GameRate=dialog.m_iGameRate;
+        d.UserSid= ACTION.m_currentUser.Sid;
+        d.IsDelete=1;
 
-        data["Enable"] = dialog.m_bEnable;
-
-        data["Sid"] = dialog.m_sSid;
-
-        data["Id"] = dialog.m_sId;
-
-        data["Name"] = dialog.m_sName;
-
-        data["GameRate"] = QString::number(dialog.m_iGameRate);
-        data["UserSid"] = ACTION.m_currentUser.Sid;
-        data["IsDelete"]=1;
         QString sError;
 
-        ACTION.action(ACT::EDIT_GAME_LIST,data,sError);
+         ACTION.action(ACT::EDIT_GAME_LIST,d.data(),sError);
         UI.showMsg("",sError.replace("修改","刪除"),"OK");
+
 
         refreshGameList();
 

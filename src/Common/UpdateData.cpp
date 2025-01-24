@@ -128,6 +128,8 @@ void UpdateData::runUpdate()
 
 }
 
+
+
 QList<OrderData> UpdateData::getOrder()
 {
 
@@ -219,13 +221,11 @@ UserData UpdateData::getUser(QString sSid)
     return re;
 }
 
-QList<DataGameList> UpdateData::getGameList(bool bShowDelete)
+QList<DataGameList> UpdateData::getGameList()
 {
 
     QList<DataGameList> tmp= dynamic_cast<GameListProvider*>(m_data["GameList"])->m_listData;
 
-    if(bShowDelete)
-        return tmp;
 
     QList<DataGameList> listRe;
 
@@ -586,6 +586,10 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
             for(int i=0;i<list.length();i++)
             {
                 QVariantMap v = list.at(i).toMap();
+
+            //    if(v.contains("IsDelete") && v["IsDelete"].toInt()==1)
+            //        continue;
+
                 listSid.append(v["Sid"].toString());
 
 #if TEST_ACTION

@@ -33,37 +33,41 @@ void LayerAccountManager::refresh()
 
     ui->tb->setRowCount(0);
 
+    int iRow=0;
+
     for(int i=0;i<m_listUser.length();i++)
     {
         UserData user = m_listUser.at(i);
 
-        ui->tb->setRowCount(i+1);
+        if(user.Name=="root")
+            continue;
+        ui->tb->setRowCount(iRow+1);
 
-        ui->tb->setItem(i,0, UI.tbItem(user.Id));
+        ui->tb->setItem(iRow,0, UI.tbItem(user.Id));
 
-        ui->tb->setItem(i,1, UI.tbItem(user.Name));
+        ui->tb->setItem(iRow,1, UI.tbItem(user.Name));
 
-        ui->tb->setItem(i,2, UI.tbItem(user.Cid));
+        ui->tb->setItem(iRow,2, UI.tbItem(user.Cid));
 
         int iLv =user.Lv;
         QString sLv = GLOBAL.userLvToStr(iLv);
 
 
 
-        ui->tb->setItem(i,3, UI.tbItem(sLv));
+        ui->tb->setItem(iRow,3, UI.tbItem(sLv));
         QString sDate = QDate::fromString(user.StartDay,"yyyyMMdd").toString("yyyy/MM/dd");
-        ui->tb->setItem(i,4, UI.tbItem(sDate));
+        ui->tb->setItem(iRow,4, UI.tbItem(sDate));
         sDate = QDate::fromString(user.BirthDay,"yyyyMMdd").toString("yyyy/MM/dd");
-        ui->tb->setItem(i,5, UI.tbItem(sDate));
-        ui->tb->setItem(i,6, UI.tbItem(user.Tel));
-        ui->tb->setItem(i,7, UI.tbItem(user.Email));
+        ui->tb->setItem(iRow,5, UI.tbItem(sDate));
+        ui->tb->setItem(iRow,6, UI.tbItem(user.Tel));
+        ui->tb->setItem(iRow,7, UI.tbItem(user.Email));
 
         sDate = QDateTime::fromString(user.CreateTime,"yyyyMMddhhmmss").toString("yyyy/MM/dd");
-        ui->tb->setItem(i,8, UI.tbItem(sDate));
+        ui->tb->setItem(iRow,8, UI.tbItem(sDate));
         sDate = QDateTime::fromString(user.UpdateTime,"yyyyMMddhhmmss").toString("yyyy/MM/dd");
-        ui->tb->setItem(i,9, UI.tbItem(sDate));
+        ui->tb->setItem(iRow,9, UI.tbItem(sDate));
 
-
+        iRow++;
     }
 }
 

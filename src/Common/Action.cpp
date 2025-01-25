@@ -197,7 +197,24 @@ QString Action::getKeyValue(QString key, bool inLocal)
     CData re = query(data);
 
     if(re.dData.values().length()>0)
+    {
+        qDebug()<<"DDDDDDDD : "<<re.dData.values();
         sRe = re.dData["svalue"].toString();
+
+        if(sRe.trimmed()=="")
+        {
+            sRe="EA00";
+        }
+
+    }
+    else
+    {
+        if(re.iState==ACT_RECALL)
+        {
+            sRe = "EA00";
+        }
+
+    }
 
     return sRe;
 

@@ -16,5 +16,9 @@
         <file>user.png</file>
         <file>style.qss</file>
         <file>serverConf.ini</file>
+        <file>server/adb.ini</file>
+        <file>server/adt1.ini</file>
+        <file>server/adt2.ini</file>
+        <file>server/adt3.ini</file>
     </qresource>
 </RCC>

@@ -39,9 +39,13 @@ int main(int argc, char *argv[])
 
     login.connect(&login,&DialogLogin::signalLogin,&w,&Widget::slotLogin);
 
+    login.connect(&login,&DialogLogin::signalVerInfo,&w,&Widget::slotVerInfo);
+
+
+
     UI.m_dialogLogin = &login;
 
-
+    QString license="";
     QString sServerIp ="167.172.87.35";
     QString sPort="6000";
 
@@ -175,6 +179,18 @@ int main(int argc, char *argv[])
 #ifdef _BUSY_TEST
     GLOBAL.m_bRootLogin=true;
 #endif
+
+
+    if(argc==1)
+    {
+        QString sTmp(argv[1]);
+
+        if(sTmp.length()>24)
+            GLOBAL.license=sTmp;
+
+    }
+
+
     if(argc>2)
     {
         GLOBAL.m_bRootLogin=true;

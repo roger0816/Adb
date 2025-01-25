@@ -23,6 +23,18 @@ namespace _DialogLogin {
 enum{ _Close=-1,_LoginFail, _LoginOk=1};
 }
 
+
+class DataLicense{
+public:
+    QString uuid;
+    QString name;
+    QString color1;
+    QString txColor;
+
+
+};
+
+
 class DialogLogin : public QDialog
 {
     Q_OBJECT
@@ -52,6 +64,7 @@ public:
 
 private:
 
+
     void showEvent(QShowEvent *) override;
 
     void timerEvent(QTimerEvent *) override;
@@ -68,7 +81,11 @@ private:
 
     QButtonGroup m_btns;
 
-    void loadServerConf();
+    QString checkLicense();
+
+    void loadServerConf(QString sPath);
+
+    void initBtn();
 
 private slots:
     void on_btnLogin_clicked();
@@ -85,6 +102,7 @@ private slots:
 
 signals:
     void signalLogin();
+    void signalVerInfo(QVariantList list);
 private:
     Ui::DialogLogin *ui;
 private:

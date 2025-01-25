@@ -9,6 +9,8 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
+
+    ui->wMenu->setObjectName("wMenu");
 /*
     connect(&DATA,&UpdateData::callUpdate,this,[=](QByteArray data){
             bool bOk = RPKCORE.network.sendData("",data);
@@ -59,7 +61,6 @@ Widget::Widget(QWidget *parent)
         qApp->setStyleSheet(style);
         file.close();
     }
-    this->setWindowTitle("艾比代管理系統      "+QString(ADP_VER));
 
     connect(&ACTION,SIGNAL(lockLoading(bool)),&UI,SLOT(slotLockLoading(bool)));
 
@@ -336,6 +337,32 @@ void Widget::slotSessionError()
     UI.m_dialogLogin->exec();
 
     // DMSG.showMsg("","連線失敗，網路狀態異常或帳密重複登入","OK");
+}
+
+void Widget::slotVerInfo(QVariantList list)
+{
+
+    if(list.length()>0)
+        this->setWindowTitle(list.at(0).toString()+"      "+QString(ADP_VER));
+
+
+
+//    QWidget#wMenu{
+
+//    background-color: rgb(0, 37, 88);
+//    }
+
+
+
+    if(list.length()>1)
+    {
+
+        QString style="QWidget#wMenu{ background-color:"+list.at(1).toString()+";}";
+         qDebug()<<ui->wMenu->objectName()<< " , "<<style;
+        ui->wMenu->setStyleSheet(style);
+        ui->wMenu->update(); // 强制刷新
+    }
+
 }
 
 

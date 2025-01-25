@@ -138,10 +138,24 @@ void LayerCustomerGameEdit::setCb(QVariantList outGame)
         return listRe;
     };
 
+   // ui->cbGame->clear();
+
+
+//    ui->cbGame->addItems(listGameName("Name"));
+
+    ui->cbGame->setProperty("lock",true);
     ui->cbGame->clear();
 
-
     ui->cbGame->addItems(listGameName("Name"));
+
+    ui->cbGame->setEditable(true);
+
+    QCompleter *completer=new QCompleter(ui->cbGame->model(),this);
+    //    //        completer->setCompletionMode(QCompleter::PopupCompletion);
+    ui->cbGame->setCompleter(completer);
+
+    ui->cbGame->setProperty("lock",false);
+
 
 
 }

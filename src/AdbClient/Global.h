@@ -97,7 +97,10 @@ public:
 
     QString currencyStr(QString st);
 
-
+    QString license="";
+    QString titleName="";
+    QString color1="";
+    QString txtColor="";
 
 
 

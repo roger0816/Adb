@@ -369,6 +369,7 @@ void DialogCustomerEdit::on_cbClass_currentIndexChanged(int index)
 
     bool bOk = ACTION.getNewCustomerId(sId);
 
+    qDebug()<<"SSSSSSSSS : "<<sId;
 
     if(!bOk)
         return;

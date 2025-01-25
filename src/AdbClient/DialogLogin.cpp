@@ -1,5 +1,6 @@
 #include "DialogLogin.h"
 #include "ui_DialogLogin.h"
+#include <QSettings>
 
 DialogLogin::DialogLogin(QWidget *parent) :
     QDialog(parent),
@@ -7,11 +8,11 @@ DialogLogin::DialogLogin(QWidget *parent) :
 {
     ui->setupUi(this);
 
+
     ui->stackIp->setCurrentWidget(ui->pageIpNone);
 
     setVer(ADP_VER);
 
-    loadServerConf();
 
 
     m_btns.addButton(ui->btnServer0,0);
@@ -26,25 +27,17 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     m_btns.addButton(ui->btnServer5,9);
 
+    foreach(QAbstractButton *btn,m_btns.buttons())
+    {
+        btn->hide();
+    }
+
 #if TEST_ACTION
     m_btns.button(0)->hide();
     m_btns.button(1)->hide();
     m_btns.button(2)->hide();
 
 #endif
-
-
-    for(int i=0;i<m_btns.buttons().length() && i<m_listServer.length();i++)
-    {
-        QString sName = m_listServer.at(i).toMap()["name"].toString();
-
-        QAbstractButton *btn = m_btns.buttons()[i];
-        btn->setText(sName);
-
-        qDebug()<<sName;
-        //m_btns.button(i)->setText();
-    }
-
 
 
     connect(&m_btns,&QButtonGroup::idClicked,this,&DialogLogin::slotBtnClicked);
@@ -54,8 +47,8 @@ DialogLogin::DialogLogin(QWidget *parent) :
 
     setWindowFlags(windowFlags()  &  ~Qt::WindowContextHelpButtonHint);
 
-    setWindowIcon(QIcon("://th.jpg"));
 
+    setWindowIcon(QIcon(" "));
     setWindowTitle(" ");
 
     m_loading->setLoading(false);
@@ -173,6 +166,10 @@ void DialogLogin::showEvent(QShowEvent *)
 
 
     preload(true);
+
+    loadServerConf(checkLicense());
+
+    initBtn();
 }
 
 void DialogLogin::timerEvent(QTimerEvent *)
@@ -219,54 +216,163 @@ void DialogLogin::preload(bool bTrue)
     ui->btnLogin->setDisabled(bTrue);
 }
 
-void DialogLogin::loadServerConf()
+QString DialogLogin::checkLicense()
 {
-    QSettings conf(":/serverConf.ini",QSettings::IniFormat);
+    ui->btnLogin->hide();
+
+    QString sRe="";
+
+    QString sUuid;
+
+    if(GLOBAL.license.trimmed()!="")
+    {
+        sUuid = GLOBAL.license;
+        GLOBAL.color1="#002558";
+        GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="艾比代儲管理系統";
+    }
+
+    else
+    {
+
+        QString exeDirPath = QCoreApplication::applicationDirPath();
+
+        QString configFilePath = exeDirPath + "/data/config.ini";
+
+        QFileInfo configFileInfo(configFilePath);
+        if (!configFileInfo.exists() || !configFileInfo.isFile()) {
+
+            ui->lbMsg->setText("找不到檔案: \n程式路徑/data/config.ini");
+
+            return sRe;
+        }
+
+
+        QSettings *conf = new QSettings(configFilePath,QSettings::IniFormat);
+        conf->setIniCodec("utf-8"); // 设置编码为UTF-8
+        sUuid=conf->value("uuid").toString();
+        GLOBAL.color1 = conf->value("color1").toString();
+
+    }
+
+
+    if(sUuid.toLower().trimmed()=="0178d501-2140-49c8-baa9-aea23267544f")
+    {
+        sRe=":/server/adb.ini";
+      //  GLOBAL.color1="#002558";
+      //  GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="艾比代儲管理系統";
+
+        setWindowIcon(QIcon("://th.jpg"));
+
+    }
+
+    else if(sUuid.toLower().trimmed()=="19563777-66a5-42de-a5bd-116f0b99799a")
+    {
+        sRe=":/server/adt1.ini";
+     //   GLOBAL.color1="#147068";
+      //  GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT1管理系統";
+
+        setWindowIcon(QIcon(""));
+    }
+
+    else if(sUuid.toLower().trimmed()=="2b98bd7a-2d36-48cd-a5ad-77cb0d30565b")
+    {
+        sRe=":/server/adt2.ini";
+      //  GLOBAL.color1="#cd5c5c";
+      //  GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT2管理系統";
+    }
+
+    else if(sUuid.toLower().trimmed()=="32594600-a422-4287-aa48-a5b7b7d76ed2")
+    {
+        sRe=":/server/adt3.ini";
+       // GLOBAL.color1="#8b4513";
+       // GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT3管理系統";
+    }
+    //adp
+    // 0178d501-2140-49c8-baa9-aea23267544f
+
+    //adt1
+    //19563777-66a5-42de-a5bd-116f0b99799a
+    //2b98bd7a-2d36-48cd-a5ad-77cb0d30565b
+    //32594600-a422-4287-aa48-a5b7b7d76ed2
+    qDebug()<<"path : "<<sRe;
+
+
+    ui->lbTitle->setText(GLOBAL.titleName);
+    QVariantList list;
+
+    list.append(GLOBAL.titleName);
+    list.append(GLOBAL.color1);
+
+    emit signalVerInfo(list);
+    return sRe;
+}
+
+void DialogLogin::loadServerConf(QString sPath )
+{
+
+
+    // QSettings conf(":/serverConf.ini",QSettings::IniFormat);
+
+    QSettings conf(sPath,QSettings::IniFormat);
     conf.setIniCodec("UTF-8"); // 设置编码为UTF-8
-
-    QVariantMap s0;
-    s0["ip"]= conf.value("server0/ip").toString();
-    s0["port"]= conf.value("server0/port").toString();
-    s0["name"]=conf.value("server0/name").toString();
-
-    QVariantMap s1;
-    s1["ip"]= conf.value("server1/ip").toString();
-    s1["port"]= conf.value("server1/port").toString();
-    s1["name"]=conf.value("server1/name").toString();
-
-
-    QVariantMap s2;
-    s2["ip"]= conf.value("server2/ip").toString();
-    s2["port"]= conf.value("server2/port").toString();
-    s2["name"]=conf.value("server2/name").toString();
-
-
-    QVariantMap s3;
-    s3["ip"]= conf.value("server3/ip").toString();
-    s3["port"]= conf.value("server3/port").toString();
-    s3["name"]=conf.value("server3/name").toString();
-
-
-    QVariantMap s4;
-    s4["ip"]= conf.value("server4/ip").toString();
-    s4["port"]= conf.value("server4/port").toString();
-    s4["name"]=conf.value("server4/name").toString();
-
-
-    QVariantMap s5;
-    s5["ip"]= conf.value("server5/ip").toString();
-    s5["port"]= conf.value("server5/port").toString();
-    s5["name"]=conf.value("server5/name").toString();
-
-
 
 
     m_listServer.clear();
 
 
-    m_listServer<<s0<<s1<<s2<<s3<<s4<<s5;
+    QStringList groups = conf.childGroups();
+    foreach (const QString &group, groups) {
+        if (group.startsWith("server")) {
+            conf.beginGroup(group);  // 進入 [server*] 節點
 
-    GLOBAL.setServer(true,s0["ip"].toString(),s0["port"].toString());
+            QVariantMap s;
+            s["ip"] = conf.value("ip").toString();
+            s["port"] = conf.value("port").toInt();
+            s["db"] = conf.value("db").toString();
+            s["name"] = conf.value("name").toString();
+            s["isRelease"]=conf.value("isRelease").toInt();
+
+            m_listServer<<s;
+            conf.endGroup();  // 離開 [server*] 節點
+        }
+    }
+
+
+    if(m_listServer.length()>0)
+    {
+        GLOBAL.setServer(true,m_listServer.first().toMap()["ip"].toString(),m_listServer.first().toMap()["port"].toString());
+        ui->btnLogin->show();
+
+    }
+
+}
+
+void DialogLogin::initBtn()
+{
+    for(int i=0;i<m_btns.buttons().length() && i<m_listServer.length();i++)
+    {
+        QString sName = m_listServer.at(i).toMap()["name"].toString();
+
+        QAbstractButton *btn = m_btns.buttons()[i];
+
+        if(sName.trimmed()!="" &&
+                m_listServer.at(i).toMap()["ip"].toString().trimmed()!="" &&
+                m_listServer.at(i).toMap()["port"].toString().trimmed()!="")
+        {
+            btn->show();
+        }
+
+
+        btn->setText(sName);
+
+        qDebug()<<sName;
+        //m_btns.button(i)->setText();
+    }
 
 }
 
@@ -288,7 +394,7 @@ void DialogLogin::doLogin(bool bIsTestMode)
         QString s=out["ServerVersion"].toString();
         if(s.length()>0)
         {
-           ACTION.m_fServerVersion= s.toFloat();
+            ACTION.m_fServerVersion= s.toFloat();
         }
     }
 
@@ -366,7 +472,7 @@ void DialogLogin::slotBtnClicked(int iId)
 
     QString sIp,sPort;
 
-
+    bool bIsRelease=true;
 
     if(iId<=m_listServer.length())
     {
@@ -375,6 +481,8 @@ void DialogLogin::slotBtnClicked(int iId)
         sIp=m_listServer.at(iId).toMap()["ip"].toString();
 
         sPort=m_listServer.at(iId).toMap()["port"].toString();
+
+        bIsRelease = m_listServer.at(iId).toMap()["isRelease"].toInt();
 
         ui->stackIp->setCurrentWidget(ui->pageIpNone);
 
@@ -396,7 +504,7 @@ void DialogLogin::slotBtnClicked(int iId)
     GLOBAL.setServer(true,sIp,sPort);
 
 
-    setRelease(iId<3);
+    setRelease(bIsRelease);
 
     //GLOBAL.ping(sIp);
 
@@ -434,14 +542,16 @@ void DialogLogin::setOnlyTest()
 }
 
 
+
+
 void DialogLogin::on_txIp_textChanged(const QString &)
 {
-     GLOBAL.setServer(true,ui->txIp->text().trimmed(),ui->txPort->text().trimmed());
+    GLOBAL.setServer(true,ui->txIp->text().trimmed(),ui->txPort->text().trimmed());
 }
 
 
 void DialogLogin::on_txPort_textChanged(const QString &)
 {
-     GLOBAL.setServer(true,ui->txIp->text().trimmed(),ui->txPort->text().trimmed());
+    GLOBAL.setServer(true,ui->txIp->text().trimmed(),ui->txPort->text().trimmed());
 }
 

@@ -271,6 +271,8 @@ CData ActionObj::callServer(CData data, bool bStrong)
     qDebug()<<sApi+"已完成送出 : "<<iTmp;
 
 
+       qDebug()<<"send state : "<<data.iState;
+
     re.deCodeJson(out);
 
 
@@ -321,6 +323,8 @@ CData ActionObj::callServer(CData data, bool bStrong)
 
 
     qDebug()<<"server return : "<<re.iAciton<<" , "<<QTime::currentTime().toString("hh:mm:ss:zzzz");
+
+    qDebug()<<"re state : "<<re.iState;
     //    if(data.iAciton==ACT::QUERY_PIC)
     //        qDebug()<<"pic size : "<<out.length();
     //    else

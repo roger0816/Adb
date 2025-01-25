@@ -67,7 +67,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="lbTitle">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -76,7 +76,7 @@
         </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(109, 109, 109);
-font: 700 28pt &quot;Microsoft JhengHei UI&quot;;</string>
+font: 700 28px &quot;Microsoft JhengHei UI&quot;;</string>
         </property>
         <property name="text">
          <string>艾比代管理系統</string>

@@ -41,6 +41,8 @@ public slots:
     void slotLogin();
 
     void slotSessionError();
+
+    void slotVerInfo(QVariantList list);
 private:
     Ui::Widget *ui;
     QButtonGroup m_btns;

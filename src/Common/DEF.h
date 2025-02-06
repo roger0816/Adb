@@ -13,7 +13,7 @@
 
 //#define _BUSY_TEST
 
-#define ADP_VER "v2.2.0121"
+#define ADP_VER "v2.3.0203"
 static int SERVER_MIN_VER = 12;
 
 static QString SPLIT1 =";;" ;

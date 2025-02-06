@@ -162,7 +162,6 @@ void LayerCustomerGameEdit::setCb(QVariantList outGame)
 
 void LayerCustomerGameEdit::on_tbCusGameInfo_cellClicked(int row, int col)
 {
-    qDebug()<<"irow : "<<row;
 
     if(row >=m_listCustomerInfo.length() || row<0 )
     {
@@ -208,8 +207,12 @@ void LayerCustomerGameEdit::on_tbCusGameInfo_cellClicked(int row, int col)
     else
     {
 
+        QString sGameItem = ui->tbCusGameInfo->item(row,1)->text();
 
-        ui->cbGame->setCurrentText(ui->tbCusGameInfo->item(row,1)->text());
+       ui->cbGame->setCurrentIndex(ui->cbGame->findText(sGameItem));
+
+       // ui->cbGame->setCurrentText(ui->tbCusGameInfo->item(row,1)->text());
+
         ui->txGameAccount->setText(ui->tbCusGameInfo->item(row,2)->text());
         ui->txChr->setText(ui->tbCusGameInfo->item(row,3)->text());
         ui->txPassword->setText(ui->tbCusGameInfo->item(row,4)->text());
@@ -282,6 +285,8 @@ void LayerCustomerGameEdit::slotChange()
         DMSG.showMsg("","請先選擇要修改的資料","OK");
         return;
     }
+
+
     DataGameList select(m_listGame.at(ui->cbGame->currentIndex()).toMap());
     CustomerGameInfo data(m_listCustomerInfo.at(row).toMap());
 

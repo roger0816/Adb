@@ -12,9 +12,9 @@ make clean
 make
 
 cd ../AdbApi
-#qmake AdbApi.pro
-#make clean
-#make
+qmake AdbApi.pro
+make clean
+make
 
 
 cd ../../bin

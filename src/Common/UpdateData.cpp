@@ -579,8 +579,15 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
             QVariantList list =reData[sTarget].toList();
 
             if(list.length()>0)
+                {
                 qDebug()<<sTarget<<" data len : "<<list.length();
 
+                if(list.length()==1)
+                {
+                    qDebug()<<"AAAA: "<<list;
+                }
+               // qDebug()<<list;
+                }
             QStringList listSid;
 
             for(int i=0;i<list.length();i++)
@@ -590,7 +597,13 @@ void UpdateData::slotRead(QString sConnect, QString sId, QByteArray data, int Er
             //    if(v.contains("IsDelete") && v["IsDelete"].toInt()==1)
             //        continue;
 
-                listSid.append(v["Sid"].toString());
+
+                if(!v.contains("Sid"))
+                {
+                    qDebug()<<"not find sid";
+                }
+                else
+                    listSid.append(v["Sid"].toString());
 
 #if TEST_ACTION
 

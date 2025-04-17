@@ -41,7 +41,15 @@ int Action::checkLogin(QString sUser, QString sPass, QString &sError)
 
     data.iAciton = ACT::LOGIN;
 
-    data.listData<<sUser<<sPass;
+    QString sTmp(ADP_VER);
+    QString sVer= sTmp.replace("V","v").replace("v","");
+
+    if(sVer.split(".").length()>1)
+        sVer=sVer.split(".").first()+"."+sVer.split(".")[1];
+
+    qDebug()<<sVer;
+
+    data.listData<<sUser<<sPass<<sVer;
 
     data.sMsg=ADP_VER;
 

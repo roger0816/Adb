@@ -87,6 +87,8 @@ private:
 
     void initBtn();
 
+    QStringList iniFiles;
+
 private slots:
     void on_btnLogin_clicked();
 

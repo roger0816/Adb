@@ -19,5 +19,11 @@
         <file>server/adt1.ini</file>
         <file>server/adt2.ini</file>
         <file>server/adt3.ini</file>
+        <file>server/adt4.ini</file>
+        <file>server/adt5.ini</file>
+        <file>server/adt6.ini</file>
+        <file>server/adt7.ini</file>
+        <file>server/adt8.ini</file>
+        <file>server/adt9.ini</file>
     </qresource>
 </RCC>

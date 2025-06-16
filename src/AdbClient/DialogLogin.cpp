@@ -224,6 +224,9 @@ QString DialogLogin::checkLicense()
 
     QString sUuid;
 
+
+
+
     if(GLOBAL.license.trimmed()!="")
     {
         sUuid = GLOBAL.license;
@@ -235,14 +238,20 @@ QString DialogLogin::checkLicense()
     else
     {
 
-        QString exeDirPath = QCoreApplication::applicationDirPath();
+        QString exeDirPath = QCoreApplication::applicationDirPath()+"/data/";
 
-        QString configFilePath = exeDirPath + "/data/config.ini";
+        iniFiles = QDir(exeDirPath).entryList(QStringList() << "*.ini", QDir::Files);
+
+
+        QString configFilePath;
+
+        if(iniFiles.contains("config.ini"))
+            configFilePath= exeDirPath +"config.ini";
 
         QFileInfo configFileInfo(configFilePath);
         if (!configFileInfo.exists() || !configFileInfo.isFile()) {
 
-            ui->lbMsg->setText("找不到檔案: \n程式路徑/data/config.ini");
+            ui->lbMsg->setText("找不到檔案: \n程式路徑/data/*.ini");
 
             return sRe;
         }
@@ -292,6 +301,61 @@ QString DialogLogin::checkLicense()
        // GLOBAL.txtColor="#000000";
         GLOBAL.titleName="ADT3管理系統";
     }
+
+    else if(sUuid.toLower().trimmed()=="4f3e63f5-cef8-4f00-bb13-6d111a93abcb")
+    {
+        sRe=":/server/adt4.ini";
+        //   GLOBAL.color1="#147068";
+        //  GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT4管理系統";
+
+        setWindowIcon(QIcon(""));
+    }
+
+    else if(sUuid.toLower().trimmed()=="5cbe5c50-3cbe-4c4b-b16e-b6468a59674a")
+    {
+        sRe=":/server/adt5.ini";
+        //  GLOBAL.color1="#cd5c5c";
+        //  GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT5管理系統";
+    }
+
+    else if(sUuid.toLower().trimmed()=="6b964d53-1626-493a-8fdd-60f79a6d8739")
+    {
+        sRe=":/server/adt6.ini";
+        // GLOBAL.color1="#8b4513";
+        // GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT6管理系統";
+    }
+
+    else if(sUuid.toLower().trimmed()=="7afedb90-4c70-42a5-9f58-5a7582d52863")
+    {
+        sRe=":/server/adt7.ini";
+        //   GLOBAL.color1="#147068";
+        //  GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT7管理系統";
+
+        setWindowIcon(QIcon(""));
+    }
+
+    else if(sUuid.toLower().trimmed()=="8c6b7ce2-3a5b-46c5-9d66-0c18cafb1e22")
+    {
+        sRe=":/server/adt8.ini";
+        //  GLOBAL.color1="#cd5c5c";
+        //  GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT8管理系統";
+    }
+
+    else if(sUuid.toLower().trimmed()=="9ee24ead-32fd-4340-9d89-216daf8b8e1c")
+    {
+        sRe=":/server/adt9.ini";
+        // GLOBAL.color1="#8b4513";
+        // GLOBAL.txtColor="#000000";
+        GLOBAL.titleName="ADT9管理系統";
+    }
+
+
+
     //adp
     // 0178d501-2140-49c8-baa9-aea23267544f
 
@@ -299,6 +363,14 @@ QString DialogLogin::checkLicense()
     //19563777-66a5-42de-a5bd-116f0b99799a
     //2b98bd7a-2d36-48cd-a5ad-77cb0d30565b
     //32594600-a422-4287-aa48-a5b7b7d76ed2
+    //
+    //4f3e63f5-cef8-4f00-bb13-6d111a93abcb
+    //5cbe5c50-3cbe-4c4b-b16e-b6468a59674a
+    //6b964d53-1626-493a-8fdd-60f79a6d8739
+    //
+    //7afedb90-4c70-42a5-9f58-5a7582d52863
+    //8c6b7ce2-3a5b-46c5-9d66-0c18cafb1e22
+    //9ee24ead-32fd-4340-9d89-216daf8b8e1c
     qDebug()<<"path : "<<sRe;
 
 
